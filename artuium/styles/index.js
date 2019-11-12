@@ -195,11 +195,36 @@ const styles = StyleSheet.create({
         color: 'white',
         includeFontPadding: false
     },
+    black: {
+        color: 'black',
+        includeFontPadding: false
+    },
+    grayA7: {
+        color: '#a7a7a7',
+        includeFontPadding: false
+    },
+    gray12: {
+        color: '#121212',
+        includeFontPadding: false
+    },
+    grayD1: {
+        color: '#D1D1D1',
+        includeFontPadding: false
+    },
     bgBlack: {
         backgroundColor: '#000000'
     },
     bgWhite: {
         backgroundColor: '#FFFFFF'
+    },
+    bgGrayA7: {
+        backgroundColor: '#a7a7a7'
+    },
+    bgGray12: {
+        backgroundColor: '#121212'
+    },
+    bgGrayD1: {
+        backgroundColor: '#D1D1D1'
     },
     justifyContentCenter: {
         justifyContent: 'center'
@@ -573,6 +598,36 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         elevation: 1,
     },
+    textUnderline: {
+        textDecorationLine: 'underline'
+    },
+    artworkImage: {
+        width: '100%',
+        height: 125
+    },
+    artworkBorder: {
+        borderRadius: 5,
+        borderWidth: .5,
+        borderColor: 'rgb(226,226,226)'
+    },
+    profileImage30: {
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+    },
+    profileImage40: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+    },
+    emoji: {
+        width: 14,
+        height: 14
+    },
+    icon12: {
+        width: 12,
+        height: 12
+    }
 })
 
 export default styles; 

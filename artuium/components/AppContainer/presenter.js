@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, StatusBar, ActivityIndicator, SafeAreaView, Animated } from 'react-native';
+import { View, StatusBar, ActivityIndicator, Animated } from 'react-native';
 import styles from '../../styles';
 import GeneralContainer from '../../navigation/GeneralNavigation';
 
