@@ -43,7 +43,7 @@ LOCALE_PATHS = [ROOT_DIR.path("locale")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
 DATABASES = {
-    "default": env.db("DATABASE_URL", default="postgres:///artuium_server")
+    "default": env.db("DATABASE_URL", default="postgres://seungminkim:TMDALS236!@@127.0.0.1:5432/artuium")
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
@@ -76,6 +76,9 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "artuium_server.users.apps.UsersConfig",
+    "artuium_server.artwork.apps.ArtworkConfig",
+    "artuium_server.statics.apps.StaticsConfig",
+    "artuium_server.exhibition.apps.ExhibitionConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -256,7 +259,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "username"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION = "none"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ADAPTER = "artuium_server.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
