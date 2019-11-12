@@ -531,6 +531,10 @@ const styles = StyleSheet.create({
     alignSelfCenter: {
         alignSelf: 'center'
     },
+    center: {
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     borderRadius5: {
         borderRadius: 5
     },
@@ -552,7 +556,23 @@ const styles = StyleSheet.create({
     iconTab: {
         width: 30,
         height: 30
-    }
+    },
+    spaceBetween: {
+        justifyContent: 'space-between'
+    },
+    spaceAround: {
+        justifyContent: 'space-around'
+    },
+    spaceEvenly: {
+        justifyContent: 'space-evenly'
+    },
+    homeMenuShadow: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 1,
+    },
 })
 
 export default styles; 

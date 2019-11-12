@@ -13,9 +13,10 @@ const TabNavigation = createBottomTabNavigator({
     홈: {
         screen: HomeContainer,
         navigationOptions: {
+            header: null,
             tabBarIcon: ({focused}) => (
                 <Image source={focused ? require('../assets/images/icon_home.png') : require('../assets/images/icon_home.png')} style={styles.iconTab} />
-            )
+            ),
         }
     },
     전시: {

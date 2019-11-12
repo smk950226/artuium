@@ -21,6 +21,12 @@ class App extends React.Component {
         require('./assets/images/icon_exhibition.png'),
         require('./assets/images/icon_artwork.png'),
         require('./assets/images/icon_profile.png'),
+        require('./assets/images/mona.jpeg'),
+        require('./assets/images/recommend.png'),
+        require('./assets/images/total.png'),
+        require('./assets/images/follow.png'),
+        require('./assets/images/notification.png'),
+        require('./assets/images/search.png'),
       ]),
       Font.loadAsync({
         ...Ionicons.font,

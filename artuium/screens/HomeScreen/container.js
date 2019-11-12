@@ -6,7 +6,9 @@ class Container extends Component{
 
     render(){
         return(
-            <HomeScreen />
+            <HomeScreen 
+                {...this.props}
+            />
         )
     }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, StatusBar, ActivityIndicator, SafeAreaView } from 'react-native';
+import { View, StatusBar, ActivityIndicator, SafeAreaView, Animated } from 'react-native';
 import styles from '../../styles';
 import GeneralContainer from '../../navigation/GeneralNavigation';
 
@@ -12,7 +12,8 @@ class AppContainer extends Component {
 
     state = {
         loading: true,
-        isLoggedIn: false
+        isLoggedIn: false,
+        scrollY: new Animated.Value(0),
     }
 
     componentDidMount = async() => {
@@ -35,9 +36,13 @@ class AppContainer extends Component {
             return(
                 <View style={styles.container}>
                 <StatusBar hidden={false} />
-                    <SafeAreaView style={styles.container}>
-                        <GeneralContainer />
-                    </SafeAreaView>
+                    <View style={styles.container}>
+                        <GeneralContainer
+                            screenProps={{
+                                scrollY: this.state.scrollY,
+                            }}
+                        />
+                    </View>
                 </View>)
         }
 
