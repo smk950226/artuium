@@ -38,6 +38,8 @@ class App extends React.Component {
         require('./assets/images/icon_dotted.png'),
         require('./assets/images/icon_comment.png'),
         require('./assets/images/icon_like.png'),
+        require('./assets/images/icon_back.png'),
+        require('./assets/images/icon_sort.png'),
 
       ]),
       Font.loadAsync({

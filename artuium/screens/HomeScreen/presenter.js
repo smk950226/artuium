@@ -154,18 +154,24 @@ class HomeScreen extends React.Component {
                             {width: menuWidth, height: menuHeight, borderRadius: menuRadius, bottom: menuPosition, marginLeft: menuMarginL}
                         ]}>
                             <View style={[styles.row, styles.spaceAround, styles.width80, styles.height100]}>
-                                <View style={[styles.center]}>
-                                    <Image style={{width: 24, height: 24}} source={require('../../assets/images/recommend.png')} />
-                                    <Text style={[styles.font12, styles.mt5]}>추천 감상</Text>
-                                </View>
-                                <View style={[styles.center]}>
-                                    <Image style={{width: 24, height: 24}} source={require('../../assets/images/total.png')} />
-                                    <Text style={[styles.font12, styles.mt5]}>전체 감상</Text>
-                                </View>
-                                <View style={[styles.center]}>
-                                    <Image style={{width: 24, height: 24}} source={require('../../assets/images/follow.png')} />
-                                    <Text style={[styles.font12, styles.mt5]}>팔로우 감상</Text>
-                                </View>
+                                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('RecommendArtwork')}>
+                                    <View style={[styles.center]}>
+                                        <Image style={{width: 24, height: 24}} source={require('../../assets/images/recommend.png')} />
+                                        <Text style={[styles.font12, styles.mt5]}>추천 감상</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
+                                    <View style={[styles.center]}>
+                                        <Image style={{width: 24, height: 24}} source={require('../../assets/images/total.png')} />
+                                        <Text style={[styles.font12, styles.mt5]}>전체 감상</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('FollowArtwork')}>
+                                    <View style={[styles.center]}>
+                                        <Image style={{width: 24, height: 24}} source={require('../../assets/images/follow.png')} />
+                                        <Text style={[styles.font12, styles.mt5]}>팔로우 감상</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
                             </View>
                         </Animated.View>
                     </Animated.View>
@@ -173,7 +179,9 @@ class HomeScreen extends React.Component {
                         <Text style={[styles.fontMedium, styles.font15]}>아틔움이 엄선한 감상</Text>
                         <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb10]}>
                             <Text style={[styles.fontBold, styles.font20]}>주간 아틔움</Text>
-                            <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('RecommendArtwork')}>
+                                <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                            </TouchableWithoutFeedback>
                         </View>
                         <View style={[styles.row, styles.justifyContentBetween, styles.flexWrap, styles.widthFull]}>
                         {data.map((da, index) => {
@@ -187,7 +195,9 @@ class HomeScreen extends React.Component {
                         <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7]}>지금 아틔움에서는</Text>
                         <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb15]}>
                             <Text style={[styles.fontBold, styles.font20]}>새로운 감상</Text>
-                            <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
+                                <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                            </TouchableWithoutFeedback>
                         </View>
                         <ScrollView
                         horizontal={true}
@@ -210,7 +220,9 @@ class HomeScreen extends React.Component {
                         <Text style={[styles.fontMedium, styles.font15, {marginTop: 60}, styles.grayA7]}>친구들의 이야기를 들어보세요</Text>
                         <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb15]}>
                             <Text style={[styles.fontBold, styles.font20]}>친구들의 감상</Text>
-                            <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('FollowArtwork')}>
+                                <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                            </TouchableWithoutFeedback>
                         </View>
                         <ScrollView
                         horizontal={true}

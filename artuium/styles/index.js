@@ -215,6 +215,10 @@ const styles = StyleSheet.create({
         color: '#C9C9C9',
         includeFontPadding: false
     },
+    grayDb: {
+        color: '#DbDbDb',
+        includeFontPadding: false
+    },
     bgBlack: {
         backgroundColor: '#000000'
     },
@@ -232,6 +236,9 @@ const styles = StyleSheet.create({
     },
     bgGrayC9: {
         backgroundColor: '#C9C9C9'
+    },
+    bgGrayDb: {
+        backgroundColor: '#DbDbDb'
     },
     justifyContentCenter: {
         justifyContent: 'center'
@@ -581,6 +588,10 @@ const styles = StyleSheet.create({
     },
     borderRadiusRound: {
         borderRadius: 9999
+    },
+    borderBtmGrayDb: {
+        borderBottomColor: '#dbdbdb',
+        borderBottomWidth: 1
     },
     overflowHidden: {
         overflow: 'hidden'
