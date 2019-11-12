@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Artuium",
+    "name": "아틔움",
     "slug": "artuium",
     "privacy": "public",
     "sdkVersion": "35.0.0",
@@ -11,9 +11,9 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/images/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
