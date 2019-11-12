@@ -3,14 +3,14 @@ import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 
-const ArtworkScreen = (props) => (
+const HomeScreen = (props) => (
     <View style={[styles.container]}>
-        <Text style={[styles.fontBold]}>Artwork</Text>
+        <Text style={[styles.fontBold]}>Home</Text>
     </View>
 )
 
-ArtworkScreen.propTypes = {
+HomeScreen.propTypes = {
 
 }
 
-export default ArtworkScreen;
+export default HomeScreen;

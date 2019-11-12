@@ -1,16 +1,4 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import PropTypes from 'prop-types';
-import styles from '../../styles';
+import { connect } from 'react-redux';
+import Container from './container';
 
-const HomeScreen = (props) => (
-    <View style={[styles.container]}>
-        <Text style={[styles.fontBold]}>hihi</Text>
-    </View>
-)
-
-HomeScreen.propTypes = {
-
-}
-
-export default HomeScreen;
+export default connect()(Container);

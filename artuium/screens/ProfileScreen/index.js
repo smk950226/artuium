@@ -5,7 +5,7 @@ import styles from '../../styles';
 
 const ProfileScreen = (props) => (
     <View style={[styles.container]}>
-        <Text style={[styles.fontBold]}>hihi</Text>
+        <Text style={[styles.fontBold]}>Profile</Text>
     </View>
 )
 

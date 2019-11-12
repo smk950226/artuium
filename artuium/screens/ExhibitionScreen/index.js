@@ -5,7 +5,7 @@ import styles from '../../styles';
 
 const ExhibitionScreen = (props) => (
     <View style={[styles.container]}>
-        <Text style={[styles.fontBold]}>hihi</Text>
+        <Text style={[styles.fontBold]}>Exhibition</Text>
     </View>
 )
 

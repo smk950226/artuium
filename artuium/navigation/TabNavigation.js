@@ -7,6 +7,7 @@ import HomeContainer from '../routes/HomeRoute';
 import ExhibitionContainer from '../routes/ExhibitionRoute';
 import ArtworkContainer from '../routes/ArtworkRoute';
 import ProfileContainer from '../routes/ProfileRoute';
+import TabBar from '../components/TabBar';
 
 const TabNavigation = createBottomTabNavigator({
     홈: {
@@ -58,7 +59,10 @@ const TabNavigation = createBottomTabNavigator({
             fontFamily: 'NotoSansKR-Medium',
             includeFontPadding: false,
         }
-    }
+    },
+    tabBarComponent: props => (
+        <TabBar {...props} />
+    )
 });
 
 const TabContainer = createAppContainer(TabNavigation);
