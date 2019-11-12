@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Animated, View, Text, ScrollView, Image, Platform, Dimensions, FlatList, TouchableOpacity } from 'react-native';
+import { Animated, View, Text, ScrollView, Image, Platform, Dimensions, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import styles from '../../styles';
 import ArtuiumCard from '../../components/ArtuiumCard';
@@ -9,6 +9,7 @@ const { width, height } = Dimensions.get('window')
 
 const data = [
     {
+        id: 1,
         image: 'http://chedulife.com.au/wp-content/uploads/%EA%B3%A0%ED%9D%90-%EB%B0%A4%EC%9D%98-%EC%B9%B4%ED%8E%98-%ED%85%8C%EB%9D%BC%EC%8A%A4-456x300.jpg',
         title: '그랑드 자트 섬의 일요일...',
         author: '조르주 쇠라',
@@ -16,11 +17,13 @@ const data = [
         emoji: require('../../assets/images/icon_sad.png'),
         rating: 4.5,
         name: '라쿤',
-        date: '5 일전',
+        date: '5일 전',
         comments: 32,
-        likes: 32
+        likes: 32,
+        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
     },
     {
+        id: 2,
         image: 'http://mblogthumb3.phinf.naver.net/MjAxOTAxMDNfOTEg/MDAxNTQ2NDgxOTgwNTcz.I3sUkC74k5K1fExm6woYSK8DhlgA6MZsqmB91SLCsIcg.vb2MUoFo6xYjZnWOBvnI_jDklXM3jKR8xrbj5tlDjFwg.JPEG.allthat_art/01_5347.JPG?type=w800',
         title: '그랑드 자트 섬의 일요일...',
         author: '조르주 쇠라',
@@ -28,11 +31,13 @@ const data = [
         emoji: require('../../assets/images/icon_sad.png'),
         rating: 1,
         name: '라쿤',
-        date: '5 일전',
+        date: '5일 전',
         comments: 32,
-        likes: 32
+        likes: 32,
+        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
     },
     {
+        id: 3,
         image: 'https://t1.daumcdn.net/cfile/tistory/2218C34D55096EE51F',
         title: '그랑드 자트 섬의 일요일...',
         author: '조르주 쇠라',
@@ -40,11 +45,13 @@ const data = [
         emoji: require('../../assets/images/icon_sad.png'),
         rating: 5,
         name: '라쿤',
-        date: '5 일전',
+        date: '5일 전',
         comments: 32,
-        likes: 32
+        likes: 32,
+        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
     },
     {
+        id: 4,
         image: 'http://chedulife.com.au/wp-content/uploads/%EA%B3%A0%ED%9D%90-%EB%B0%A4%EC%9D%98-%EC%B9%B4%ED%8E%98-%ED%85%8C%EB%9D%BC%EC%8A%A4-456x300.jpg',
         title: '그랑드 자트 섬의 일요일...',
         author: '조르주 쇠라',
@@ -52,11 +59,13 @@ const data = [
         emoji: require('../../assets/images/icon_sad.png'),
         rating: 4,
         name: '라쿤',
-        date: '5 일전',
+        date: '5일 전',
         comments: 32,
-        likes: 32
+        likes: 32,
+        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
     },
     {
+        id: 5,
         image: 'http://chedulife.com.au/wp-content/uploads/%EA%B3%A0%ED%9D%90-%EB%B0%A4%EC%9D%98-%EC%B9%B4%ED%8E%98-%ED%85%8C%EB%9D%BC%EC%8A%A4-456x300.jpg',
         title: '그랑드 자트 섬의 일요일...',
         author: '조르주 쇠라',
@@ -64,9 +73,10 @@ const data = [
         emoji: require('../../assets/images/icon_sad.png'),
         rating: 3.5,
         name: '라쿤',
-        date: '5 일전',
+        date: '5일 전',
         comments: 32,
-        likes: 32
+        likes: 32,
+        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
     }
 ]
 
@@ -159,11 +169,11 @@ class HomeScreen extends React.Component {
                             </View>
                         </Animated.View>
                     </Animated.View>
-                    <View style={[styles.px15, { marginTop: 40 }]}>
+                    <View style={[styles.px15, styles.mt40]}>
                         <Text style={[styles.fontMedium, styles.font15]}>아틔움이 엄선한 감상</Text>
-                        <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween]}>
-                            <Text style={[styles.fontBold, styles.font20, styles.mb10]}>주간 아틔움</Text>
-                            <Text style={[styles.fontMedium, styles.font15, styles.mb10, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                        <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb10]}>
+                            <Text style={[styles.fontBold, styles.font20]}>주간 아틔움</Text>
+                            <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
                         </View>
                         <View style={[styles.row, styles.justifyContentBetween, styles.flexWrap, styles.widthFull]}>
                         {data.map((da, index) => {
@@ -173,6 +183,52 @@ class HomeScreen extends React.Component {
                                 )
                             }
                         })}
+                        </View>
+                        <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7]}>지금 아틔움에서는</Text>
+                        <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb15]}>
+                            <Text style={[styles.fontBold, styles.font20]}>새로운 감상</Text>
+                            <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                        </View>
+                        <ScrollView
+                        horizontal={true}
+                        pagingEnabled={true}
+                        showsHorizontalScrollIndicator={false}
+                        >
+                        {data.map((da, index) => {
+                            return(
+                                <ArtuiumCard key={index} artwork={da} size={'large'} />
+                            )
+                        })}
+                        </ScrollView>
+                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15]}>
+                            <TouchableWithoutFeedback>
+                                <View style={[styles.bgBlack, styles.borderRadius5, styles.py10, { width: 220 }]}>
+                                    <Text style={[styles.textCenter, styles.fontMedium, styles.font16, styles.white]}>새로운 감상 확인하기 </Text>
+                                </View>
+                            </TouchableWithoutFeedback>
+                        </View>
+                        <Text style={[styles.fontMedium, styles.font15, {marginTop: 60}, styles.grayA7]}>친구들의 이야기를 들어보세요</Text>
+                        <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb15]}>
+                            <Text style={[styles.fontBold, styles.font20]}>친구들의 감상</Text>
+                            <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                        </View>
+                        <ScrollView
+                        horizontal={true}
+                        pagingEnabled={true}
+                        showsHorizontalScrollIndicator={false}
+                        >
+                        {data.map((da, index) => {
+                            return(
+                                <ArtuiumCard key={index} artwork={da} size={'large'} />
+                            )
+                        })}
+                        </ScrollView>
+                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15, { marginBottom: 60 }]}>
+                            <TouchableWithoutFeedback>
+                                <View style={[styles.bgBlack, styles.borderRadius5, styles.py10, { width: 220 }]}>
+                                    <Text style={[styles.textCenter, styles.fontMedium, styles.font16, styles.white]}>친구들의 감상 확인하기 </Text>
+                                </View>
+                            </TouchableWithoutFeedback>
                         </View>
                     </View>
                 </Animated.ScrollView>

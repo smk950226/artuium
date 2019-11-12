@@ -211,6 +211,10 @@ const styles = StyleSheet.create({
         color: '#D1D1D1',
         includeFontPadding: false
     },
+    grayC9: {
+        color: '#C9C9C9',
+        includeFontPadding: false
+    },
     bgBlack: {
         backgroundColor: '#000000'
     },
@@ -225,6 +229,9 @@ const styles = StyleSheet.create({
     },
     bgGrayD1: {
         backgroundColor: '#D1D1D1'
+    },
+    bgGrayC9: {
+        backgroundColor: '#C9C9C9'
     },
     justifyContentCenter: {
         justifyContent: 'center'
@@ -342,6 +349,9 @@ const styles = StyleSheet.create({
     },
     mt30: {
         marginTop: 30
+    },
+    mt40: {
+        marginTop: 40
     },
     mb5: {
         marginBottom: 5
@@ -605,6 +615,10 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 125
     },
+    artworkImageLg: {
+        width: '100%',
+        height: 225
+    },
     artworkBorder: {
         borderRadius: 5,
         borderWidth: .5,
@@ -624,9 +638,39 @@ const styles = StyleSheet.create({
         width: 14,
         height: 14
     },
+    emojiLg: {
+        width: 18,
+        height: 18
+    },
     icon12: {
         width: 12,
         height: 12
+    },
+    icon20: {
+        width: 20,
+        height: 20
+    },
+    icon30: {
+        width: 30,
+        height: 30
+    },
+    lineHeight20: {
+        lineHeight: 20
+    },
+    sliderDot: {
+        borderColor: '#C9C9C9',
+        borderWidth: 1,
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: '#C9C9C9'
+    },
+    sliderDotEmpty: {
+        borderColor: '#C9C9C9',
+        borderWidth: 1,
+        width: 8,
+        height: 8,
+        borderRadius: 4
     }
 })
 
