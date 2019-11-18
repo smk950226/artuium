@@ -8,8 +8,8 @@ const TabNavigation = props =>{
         if(props.navigation.state.routes[props.navigation.state.index].index === 0){
             return(
                 <Animated.View style={{height: props.screenProps.scrollY.interpolate({
-                    inputRange: [0, 60],
-                    outputRange: [0, 60],
+                    inputRange: [0, 100],
+                    outputRange: [0, 80],
                     extrapolate: 'clamp'
                 })
                 }}>

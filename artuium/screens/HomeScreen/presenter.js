@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Animated, View, Text, ScrollView, Image, Platform, Dimensions, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { Animated, View, Text, ScrollView, Image, Alert, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import styles from '../../styles';
 import ArtuiumCard from '../../components/ArtuiumCard';
@@ -83,43 +83,48 @@ const data = [
 class HomeScreen extends React.Component {
     render() {
         const imageHeight = this.props.screenProps.scrollY.interpolate({
-            inputRange: [0, 50],
+            inputRange: [0, 100],
             outputRange: [height*8/9, height/3],
             extrapolate: 'clamp'
         });
         const menuWidth = this.props.screenProps.scrollY.interpolate({
-            inputRange: [0, 50],
+            inputRange: [0, 100],
             outputRange: [width, width*0.9],
             extrapolate: 'clamp'
         });
         const menuHeight = this.props.screenProps.scrollY.interpolate({
-            inputRange: [0, 50],
+            inputRange: [0, 100],
             outputRange: [height/9, 80],
             extrapolate: 'clamp'
         });
         const menuRadius = this.props.screenProps.scrollY.interpolate({
-            inputRange: [0, 50],
+            inputRange: [0, 100],
             outputRange: [0, 10],
             extrapolate: 'clamp'
         });
         const statusBarMargin = this.props.screenProps.scrollY.interpolate({
-            inputRange: [0, 50],
-            outputRange: [0, getStatusBarHeight()+50],
+            inputRange: [0, 100],
+            outputRange: [0, getStatusBarHeight() + 50],
             extrapolate: 'clamp'
         });
         const menuMarginL = this.props.screenProps.scrollY.interpolate({
-            inputRange: [0, 50],
+            inputRange: [0, 100],
             outputRange: [0, width*0.05],
             extrapolate: 'clamp'
         });
         const headerOpacity = this.props.screenProps.scrollY.interpolate({
-            inputRange: [0, 50],
+            inputRange: [0, 100],
             outputRange: [0, 1],
             extrapolate: 'clamp'
         });
         const menuPosition = this.props.screenProps.scrollY.interpolate({
-            inputRange: [0, 50],
+            inputRange: [0, 100],
             outputRange: [0, 40],
+            extrapolate: 'clamp'
+        });
+        const bottomView = this.props.screenProps.scrollY.interpolate({
+            inputRange: [0, 100],
+            outputRange: [height, (height/3) + getStatusBarHeight() + 90],
             extrapolate: 'clamp'
         });
         return (
@@ -134,6 +139,8 @@ class HomeScreen extends React.Component {
                 </Animated.View>
                 <Animated.View style={{width: width, height: statusBarMargin, backgroundColor: 'white', opacity: headerOpacity}} />
                 <Animated.ScrollView
+                    ref="scrollView"
+                    showsVerticalScrollIndicator={false}
                     onScroll={Animated.event(
                         [{ nativeEvent: {
                             contentOffset: {
@@ -141,6 +148,7 @@ class HomeScreen extends React.Component {
                             }
                         }}]
                     )}
+                    bounces={false}
                     scrollEventThrottle={16}
                     stickyHeaderIndices={[0]}
                 >
@@ -151,9 +159,9 @@ class HomeScreen extends React.Component {
                             <Animated.Image resizeMode={'cover'} source={require('../../assets/images/goh.jpeg')} style={[{width: width, height: imageHeight}]} />
                         </Animated.ScrollView>
                         <Animated.View style={[styles.center, styles.bgWhite, styles.homeMenuShadow,
-                            {width: menuWidth, height: menuHeight, borderRadius: menuRadius, bottom: menuPosition, marginLeft: menuMarginL}
+                            {width: menuWidth, height: menuHeight, borderRadius: menuRadius, bottom: menuPosition, marginLeft: menuMarginL, zIndex: 998}
                         ]}>
-                            <View style={[styles.row, styles.spaceAround, styles.width80, styles.height100]}>
+                            <View style={[styles.row, styles.spaceAround, styles.width80, styles.height200]}>
                                 <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('RecommendArtwork')}>
                                     <View style={[styles.center]}>
                                         <Image style={{width: 24, height: 24}} source={require('../../assets/images/recommend.png')} />
@@ -175,73 +183,75 @@ class HomeScreen extends React.Component {
                             </View>
                         </Animated.View>
                     </Animated.View>
-                    <View style={[styles.px15, styles.mt40]}>
-                        <Text style={[styles.fontMedium, styles.font15]}>아틔움이 엄선한 감상</Text>
-                        <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb10]}>
-                            <Text style={[styles.fontBold, styles.font20]}>주간 아틔움</Text>
-                            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('RecommendArtwork')}>
-                                <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
-                            </TouchableWithoutFeedback>
-                        </View>
-                        <View style={[styles.row, styles.justifyContentBetween, styles.flexWrap, styles.widthFull]}>
-                        {data.map((da, index) => {
-                            if(index < 4){
-                                return(
-                                    <ArtuiumCard key={index} artwork={da} size={'small'} />
-                                )
-                            }
-                        })}
-                        </View>
-                        <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7]}>지금 아틔움에서는</Text>
-                        <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb15]}>
-                            <Text style={[styles.fontBold, styles.font20]}>새로운 감상</Text>
-                            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
-                                <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
-                            </TouchableWithoutFeedback>
-                        </View>
-                        <ScrollView
-                        horizontal={true}
-                        pagingEnabled={true}
-                        showsHorizontalScrollIndicator={false}
-                        >
-                        {data.map((da, index) => {
+                    <Animated.View style={{height: (height*2/3)-getStatusBarHeight()-100, zIndex: 1}} />
+                    <View style={{height: 0}} />
+                </Animated.ScrollView>
+                <Animated.ScrollView style={[styles.px15, styles.pt20, {position: 'absolute', top: bottomView, zIndex: 999, height: (height*2/3)-getStatusBarHeight()-170}]}>
+                    <Text style={[styles.fontMedium, styles.font15]}>아틔움이 엄선한 감상</Text>
+                    <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb10]}>
+                        <Text style={[styles.fontBold, styles.font20]}>주간 아틔움</Text>
+                        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('RecommendArtwork')}>
+                            <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                        </TouchableWithoutFeedback>
+                    </View>
+                    <View style={[styles.row, styles.justifyContentBetween, styles.flexWrap, styles.widthFull]}>
+                    {data.map((da, index) => {
+                        if(index < 4){
                             return(
-                                <ArtuiumCard key={index} artwork={da} size={'large'} />
+                                <ArtuiumCard key={index} artwork={da} size={'small'} />
                             )
-                        })}
-                        </ScrollView>
-                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15]}>
-                            <TouchableWithoutFeedback>
-                                <View style={[styles.bgBlack, styles.borderRadius5, styles.py10, { width: 220 }]}>
-                                    <Text style={[styles.textCenter, styles.fontMedium, styles.font16, styles.white]}>새로운 감상 확인하기 </Text>
-                                </View>
-                            </TouchableWithoutFeedback>
-                        </View>
-                        <Text style={[styles.fontMedium, styles.font15, {marginTop: 60}, styles.grayA7]}>친구들의 이야기를 들어보세요</Text>
-                        <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb15]}>
-                            <Text style={[styles.fontBold, styles.font20]}>친구들의 감상</Text>
-                            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('FollowArtwork')}>
-                                <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
-                            </TouchableWithoutFeedback>
-                        </View>
-                        <ScrollView
-                        horizontal={true}
-                        pagingEnabled={true}
-                        showsHorizontalScrollIndicator={false}
-                        >
-                        {data.map((da, index) => {
-                            return(
-                                <ArtuiumCard key={index} artwork={da} size={'large'} />
-                            )
-                        })}
-                        </ScrollView>
-                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15, { marginBottom: 60 }]}>
-                            <TouchableWithoutFeedback>
-                                <View style={[styles.bgBlack, styles.borderRadius5, styles.py10, { width: 220 }]}>
-                                    <Text style={[styles.textCenter, styles.fontMedium, styles.font16, styles.white]}>친구들의 감상 확인하기 </Text>
-                                </View>
-                            </TouchableWithoutFeedback>
-                        </View>
+                        }
+                    })}
+                    </View>
+                    <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7]}>지금 아틔움에서는</Text>
+                    <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb15]}>
+                        <Text style={[styles.fontBold, styles.font20]}>새로운 감상</Text>
+                        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
+                            <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                        </TouchableWithoutFeedback>
+                    </View>
+                    <ScrollView
+                    horizontal={true}
+                    pagingEnabled={true}
+                    showsHorizontalScrollIndicator={false}
+                    >
+                    {data.map((da, index) => {
+                        return(
+                            <ArtuiumCard key={index} artwork={da} size={'large'} />
+                        )
+                    })}
+                    </ScrollView>
+                    <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15]}>
+                        <TouchableWithoutFeedback>
+                            <View style={[styles.bgBlack, styles.borderRadius5, styles.py10, { width: 220 }]}>
+                                <Text style={[styles.textCenter, styles.fontMedium, styles.font16, styles.white]}>새로운 감상 확인하기 </Text>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
+                    <Text style={[styles.fontMedium, styles.font15, {marginTop: 60}, styles.grayA7]}>친구들의 이야기를 들어보세요</Text>
+                    <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb15]}>
+                        <Text style={[styles.fontBold, styles.font20]}>친구들의 감상</Text>
+                        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('FollowArtwork')}>
+                            <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                        </TouchableWithoutFeedback>
+                    </View>
+                    <ScrollView
+                    horizontal={true}
+                    pagingEnabled={true}
+                    showsHorizontalScrollIndicator={false}
+                    >
+                    {data.map((da, index) => {
+                        return(
+                            <ArtuiumCard key={index} artwork={da} size={'large'} />
+                        )
+                    })}
+                    </ScrollView>
+                    <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15, { marginBottom: 60 }]}>
+                        <TouchableWithoutFeedback>
+                            <View style={[styles.bgBlack, styles.borderRadius5, styles.py10, { width: 220 }]}>
+                                <Text style={[styles.textCenter, styles.fontMedium, styles.font16, styles.white]}>친구들의 감상 확인하기 </Text>
+                            </View>
+                        </TouchableWithoutFeedback>
                     </View>
                 </Animated.ScrollView>
             </View>

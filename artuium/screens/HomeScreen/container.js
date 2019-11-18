@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import HomeScreen from './presenter';
 
 class Container extends Component{
-
     render(){
         return(
             <HomeScreen 
                 {...this.props}
+                {...this.state}
             />
         )
     }
