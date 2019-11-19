@@ -154,7 +154,7 @@ class ExhibitionScreen extends React.Component {
                     </View>
                 </View>
                 <ScrollView contentContainerStyle={[styles.pt30]}>
-                    <View style={{height: 350, backgroundColor: 'rgba(0, 155, 0, 0.2)'}}>
+                    <View style={{height: 350}}>
                         <View style={[styles.ml15, styles.mb10]}>
                             <Text style={[styles.fontMedium, styles.font15, {color: '#a7a7a7'}]}>당신을 위한 추천</Text>
                             <Text style={[styles.fontBold, styles.font20, {color: '#222222'}]}>추천하는 전시</Text>
