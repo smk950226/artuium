@@ -24,7 +24,7 @@ const HomeRoute = createStackNavigator(
             screen: AllArtworkScreen,
             navigationOptions: ({screenProps, navigation}) => ({
                 header: (
-                    <View style={[{height: 50, marginTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
+                    <View style={[{height: statusBarHeight+50, paddingTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
                         <TouchableWithoutFeedback onPress={() => navigation.goBack(null)}>
                             <Image source={require('../assets/images/icon_back.png')} style={[{width: 9, height: 17}]} />
                         </TouchableWithoutFeedback>
@@ -38,7 +38,7 @@ const HomeRoute = createStackNavigator(
             screen: FollowArtworkScreen,
             navigationOptions: ({screenProps, navigation}) => ({
                 header: (
-                    <View style={[{height: 50, marginTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
+                    <View style={[{height: statusBarHeight+50, paddingTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
                         <TouchableWithoutFeedback onPress={() => navigation.goBack(null)}>
                             <Image source={require('../assets/images/icon_back.png')} style={[{width: 9, height: 17}]} />
                         </TouchableWithoutFeedback>
@@ -52,7 +52,7 @@ const HomeRoute = createStackNavigator(
             screen: RecommendArtworkScreen,
             navigationOptions: ({screenProps, navigation}) => ({
                 header: (
-                    <View style={[{height: 50, marginTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
+                    <View style={[{height: statusBarHeight+50, paddingTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
                         <TouchableWithoutFeedback onPress={() => navigation.goBack(null)}>
                             <Image source={require('../assets/images/icon_back.png')} style={[{width: 9, height: 17}]} />
                         </TouchableWithoutFeedback>

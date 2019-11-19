@@ -7,9 +7,9 @@ const { width, height } = Dimensions.get('window')
 
 const ExhibitionCard = (props) => (
     <TouchableWithoutFeedback>
-        <View style={[styles.px15, {width: width, height: height/4}]}>
-            <View style={[styles.exCardShadow, {width: width - 30, height: height/4}, styles.recommend]}>
-                <Image source={{uri: props.exhibition.image}} style={[styles.width40, styles.heightFull, {borderRadius: 5}]} resizeMode={'cover'} />
+        <View style={[styles.px15, props.full ? styles.mb10 : null, {width: width, height: height/4}]}>
+            <View style={[{width: width - 30, height: height/4}, props.full ? styles.exhibitionFull : [styles.recommend, styles.exCardShadow]]}>
+                <Image source={{uri: props.exhibition.image}} style={[styles.width40, styles.heightFull, props.full ? null : {borderRadius: 5}]} resizeMode={'cover'} />
                 <View style={[styles.px15, styles.py10, props.full ? styles.width60 : {width: '55%'}]}>
                     <Text style={[styles.fontBold, styles.font18]}>{props.exhibition.title}</Text>
                     <Text style={[styles.fontMedium, styles.font10]}>{props.exhibition.date}</Text>

@@ -756,6 +756,11 @@ const styles = StyleSheet.create({
         height: 8,
         borderRadius: 4,
     },
+    exhibitionFull: {
+        flexDirection: 'row',
+        borderWidth: 1,
+        borderColor: '#ededed',
+    }
 })
 
 export default styles; 
