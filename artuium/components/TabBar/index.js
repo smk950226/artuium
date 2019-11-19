@@ -19,7 +19,7 @@ const TabNavigation = props =>{
         }
         else{
             return(
-                <View style={{height: 60}}>
+                <View style={{height: 80}}>
                     <BottomTabBar {...props} />
                 </View>
             )
@@ -27,7 +27,7 @@ const TabNavigation = props =>{
     }
     else{
         return(
-            <View style={{height: 60}}>
+            <View style={{height: 80}}>
                 <BottomTabBar {...props} />
             </View>
         )

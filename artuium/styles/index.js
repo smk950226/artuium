@@ -43,6 +43,14 @@ const styles = StyleSheet.create({
     flex10: {
         flex: 10
     },
+    font8: {
+        fontSize: 8,
+        includeFontPadding: false
+    },
+    font9: {
+        fontSize: 9,
+        includeFontPadding: false
+    },
     font10: {
         fontSize: 10,
         includeFontPadding: false
@@ -619,6 +627,13 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         elevation: 1,
     },
+    exMenuShadow: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 1,
+    },
     textUnderline: {
         textDecorationLine: 'underline'
     },
@@ -682,7 +697,65 @@ const styles = StyleSheet.create({
         width: 8,
         height: 8,
         borderRadius: 4
-    }
+    },
+    recommend: {
+        borderRadius: 5,
+        flexDirection: 'row',
+        backgroundColor: '#fff'
+    },
+    exCardShadow: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 1,
+    },
+    hole: {
+        width: 9,
+        height: 7,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#dbdbdb',
+        marginVertical: 5
+    },
+    line: {
+        borderWidth: 1,
+        borderColor: '#efefef',
+        backgroundColor: '#f7f7f7',
+        height: 5,
+        width: width,
+        marginBottom: 35
+    },
+    sliderDotWhite: {
+        borderColor: '#fff',
+        borderWidth: 1,
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+        backgroundColor: '#fff'
+    },
+    sliderDotWhiteEmpty: {
+        borderColor: '#fff',
+        borderWidth: 1,
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+    },
+    sliderDotWhiteLg: {
+        borderColor: '#fff',
+        borderWidth: 1,
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: '#fff'
+    },
+    sliderDotWhiteEmptyLg: {
+        borderColor: '#fff',
+        borderWidth: 1,
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+    },
 })
 
 export default styles; 
