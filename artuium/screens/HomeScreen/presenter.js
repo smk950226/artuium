@@ -198,7 +198,7 @@ class HomeScreen extends React.Component {
                     {data.map((da, index) => {
                         if(index < 4){
                             return(
-                                <ArtuiumCard key={index} artwork={da} size={'small'} />
+                                <ArtuiumCard key={index} artwork={da} size={'small'} navigation={this.props.navigation} />
                             )
                         }
                     })}

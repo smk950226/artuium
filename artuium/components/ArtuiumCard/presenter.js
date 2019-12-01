@@ -7,7 +7,7 @@ import StarRating from 'react-native-star-rating';
 const { width, height } = Dimensions.get('window')
 
 const ArtuiumCard = (props) => (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={()=>props.navigation.navigate('ExhibitionDetail')}>
         <View style={[(props.size === 'small') ? {width: (width/2)-20} : { width: width-30 }, styles.mb10, styles.artworkBorder, styles.overflowHidden]}>
             <Image source={{uri: props.artwork.image}} style={[props.size === 'small' ? styles.artworkImage : styles.artworkImageLg]} resizeMode={'cover'} />
             <View style={[styles.py10, styles.px10]}>

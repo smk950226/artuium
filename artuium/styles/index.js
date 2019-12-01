@@ -1,6 +1,8 @@
 import { StyleSheet, Dimensions, Platform } from 'react-native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 const { width, height } = Dimensions.get('window');
+const iosStatusBarHeight = getStatusBarHeight()
 
 const styles = StyleSheet.create({
     container: {
@@ -205,6 +207,10 @@ const styles = StyleSheet.create({
     },
     black: {
         color: 'black',
+        includeFontPadding: false
+    },
+    gray8B: {
+        color: '#8b8b8b',
         includeFontPadding: false
     },
     grayA7: {
@@ -458,6 +464,9 @@ const styles = StyleSheet.create({
     my30: {
         marginVertical: 30
     },
+    paddingIOS: {
+        paddingTop: iosStatusBarHeight
+    },
     pt5: {
         paddingTop: 5
     },
@@ -672,6 +681,10 @@ const styles = StyleSheet.create({
         width: 12,
         height: 12
     },
+    icon15: {
+        width: 15,
+        height: 15
+    },
     icon20: {
         width: 20,
         height: 20
@@ -760,6 +773,52 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderWidth: 1,
         borderColor: '#ededed',
+    },
+    exitBtn: {
+        width: 75,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        backgroundColor: 'rgba(0,0,0,0.2)',
+        borderWidth: 1,
+        borderColor: '#c3c3c3',
+    },
+    transExitBtn: {
+        width: 75,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#c3c3c3',
+    }, 
+    relatedBtn: {
+        width: 150,
+        height: 35,
+        borderRadius: 35/2,
+        borderWidth: 1,
+        borderColor: '#c3c3c3',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff'
+    },
+    upBtn: {
+        width: 50, 
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#676767',
+        borderRadius: 25,
+        opacity: 0.2,
+    },
+    divView: {
+        width: "100%",
+        height: 4,
+        backgroundColor: '#fafafa',
+        borderWidth: 1,
+        borderColor: '#e8e8e8',
     }
 })
 
