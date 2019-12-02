@@ -1,16 +1,4 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import PropTypes from 'prop-types';
-import styles from '../../styles';
+import { connect } from 'react-redux';
+import Container from './container';
 
-const ProfileScreen = (props) => (
-    <View style={[styles.container]}>
-        <Text style={[styles.fontBold]}>Profile</Text>
-    </View>
-)
-
-ProfileScreen.propTypes = {
-
-}
-
-export default ProfileScreen;
+export default connect()(Container);

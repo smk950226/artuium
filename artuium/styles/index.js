@@ -669,6 +669,11 @@ const styles = StyleSheet.create({
         height: 40,
         borderRadius: 20,
     },
+    profileImage70: {
+        width: 70,
+        height: 70,
+        borderRadius: 35,
+    },
     emoji: {
         width: 14,
         height: 14
@@ -819,7 +824,23 @@ const styles = StyleSheet.create({
         backgroundColor: '#fafafa',
         borderWidth: 1,
         borderColor: '#e8e8e8',
-    }
+    },
+    profileBtn: {
+        width: 85,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#a8a8a8'
+    },
+    profileBox: {
+        width: '100%',
+        height: 120,
+        borderRadius: 10,
+        backgroundColor: '#fff',
+        paddingVertical: 20
+    },
 })
 
 export default styles; 
