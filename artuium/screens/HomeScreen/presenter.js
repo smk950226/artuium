@@ -231,17 +231,7 @@ class HomeScreen extends Component {
         console.log(this.state.scrollY)
         return (
             <View style={[styles.container]}>
-                <ScrollView style={[styles.bgGrayA7, {position: 'absolute', width, height}]} 
-                horizontal={true}
-                pagingEnabled={true}
-                onScroll={(e) => console.log(22, e.nativeEvent.contentOffset)}
-                >
-                    <Image resizeMode={'cover'} source={require('../../assets/images/mona.jpeg')} style={[styles.screenWidth, styles.screenHeight]} />
-                    <Image resizeMode={'cover'} source={require('../../assets/images/monc.jpg')} style={[styles.screenWidth, styles.screenHeight]} />
-                    <Image resizeMode={'cover'} source={require('../../assets/images/goh.jpeg')} style={[styles.screenWidth, styles.screenHeight]} />
-                </ScrollView>
-
-                {/* <Animated.View
+                <Animated.View
                     style={[styles.row, styles.alignItemsCenter, styles.spaceBetween, styles.px15,
                     {width: width, height: 50, position: 'absolute', top: getStatusBarHeight(), zIndex: 900}
                 ]}>
@@ -365,7 +355,7 @@ class HomeScreen extends Component {
                             </View>
                         </TouchableWithoutFeedback>
                     </View>
-                </Animated.ScrollView> */}
+                </Animated.ScrollView>
             </View>
         );
     }
