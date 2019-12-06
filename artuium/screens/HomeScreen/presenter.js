@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Animated, View, Text, ScrollView, Image, Alert, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { Animated, View, PanResponder, Text, ScrollView, Image, Alert, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import styles from '../../styles';
 import ArtuiumCard from '../../components/ArtuiumCard';
@@ -80,7 +80,102 @@ const data = [
     }
 ]
 
-class HomeScreen extends React.Component {
+class HomeScreen extends Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            panY: new Animated.ValueXY(),
+            scrollY: new Animated.Value(height),
+            isMovedUp: false
+        }
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onStartShouldSetPanResponderCapture: () => false,
+            onMoveShouldSetPanResponder: () => false,
+            onMoveShouldSetPanResponderCapture: () => false,
+            onPanResponderMove: ( event, gestureState ) => {
+                console.log(gestureState.dx, gestureState.dy)
+                if(gestureState.dy < 0){
+                    if(!this.state.isMovedUp){
+                        this.state.panY.setValue({ y: gestureState.dy });
+                    }
+                }
+            },
+            onPanResponderTerminationRequest: () => false,
+            onPanResponderRelease: ( event, gestureState ) => {
+                if(gestureState.dy <= 0){
+                    if(gestureState.dy < -100){
+                        Animated.timing( this.state.scrollY, {
+                            toValue: 0.3,
+                            duration: 200,
+                        } ).start(() => {
+                            this.setState({
+                                isMovedUp: true
+                            })
+                        });
+                    }
+                    else{
+                        if(!this.state.isMovedUp){
+                            Animated.timing( this.state.scrollY, {
+                                toValue: 1,
+                                duration: 200,
+                            } ).start(() => {
+                                this.setState({
+                                    isMovedUp: false
+                                })
+                            });
+                        }
+                    }
+                }
+                else{
+                    if(gestureState.dy > 100){
+                        if(this.state.isMovedUp){
+                            Animated.timing( this.state.scrollY, {
+                                toValue: 1,
+                                duration: 200,
+                            } ).start(() => {
+                                this.setState({
+                                    isMovedUp: false
+                                })
+                            });
+                        }
+                        else{
+                            Animated.timing( this.state.scrollY, {
+                                toValue: 0.3,
+                                duration: 200,
+                            } ).start(() => {
+                                this.setState({
+                                    isMovedUp: true
+                                })
+                            });
+                        }
+                    }
+                    else{
+                        if(!this.state.isMovedUp){
+                            Animated.timing( this.state.scrollY, {
+                                toValue: 1,
+                                duration: 200,
+                            } ).start(() => {
+                                this.setState({
+                                    isMovedUp: false
+                                })
+                            });
+                        }
+                        else{
+                            Animated.timing( this.state.scrollY, {
+                                toValue: 0.3,
+                                duration: 200,
+                            } ).start(() => {
+                                this.setState({
+                                    isMovedUp: true
+                                })
+                            });
+                        }
+                    }
+                }
+            },
+        })
+    }
     render() {
         const imageHeight = this.props.screenProps.scrollY.interpolate({
             inputRange: [0, 100],
@@ -127,9 +222,26 @@ class HomeScreen extends React.Component {
             outputRange: [height, (height/3) + getStatusBarHeight() + 90],
             extrapolate: 'clamp'
         });
+        const imgHeight = this.state.scrollY.interpolate({
+            inputRange: [0, 100],
+            outputRange: [height, 600],
+            extrapolate: 'clamp'
+        })
+        const { isMovedUp } = this.state;
+        console.log(this.state.scrollY)
         return (
             <View style={[styles.container]}>
-                <Animated.View
+                <ScrollView style={[styles.bgGrayA7, {position: 'absolute', width, height}]} 
+                horizontal={true}
+                pagingEnabled={true}
+                onScroll={(e) => console.log(22, e.nativeEvent.contentOffset)}
+                >
+                    <Image resizeMode={'cover'} source={require('../../assets/images/mona.jpeg')} style={[styles.screenWidth, styles.screenHeight]} />
+                    <Image resizeMode={'cover'} source={require('../../assets/images/monc.jpg')} style={[styles.screenWidth, styles.screenHeight]} />
+                    <Image resizeMode={'cover'} source={require('../../assets/images/goh.jpeg')} style={[styles.screenWidth, styles.screenHeight]} />
+                </ScrollView>
+
+                {/* <Animated.View
                     style={[styles.row, styles.alignItemsCenter, styles.spaceBetween, styles.px15,
                     {width: width, height: 50, position: 'absolute', top: getStatusBarHeight(), zIndex: 900}
                 ]}>
@@ -253,7 +365,7 @@ class HomeScreen extends React.Component {
                             </View>
                         </TouchableWithoutFeedback>
                     </View>
-                </Animated.ScrollView>
+                </Animated.ScrollView> */}
             </View>
         );
     }
