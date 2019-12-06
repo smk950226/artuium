@@ -43,6 +43,7 @@ class App extends React.Component {
         require('./assets/images/lie.jpg'),
         require('./assets/images/changdong.jpg'),
         require('./assets/images/stars.jpg'),
+        require('./assets/images/icon_setting.png'),
 
       ]),
       Font.loadAsync({
