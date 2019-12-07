@@ -228,7 +228,6 @@ class HomeScreen extends Component {
             extrapolate: 'clamp'
         })
         const { isMovedUp } = this.state;
-        console.log(this.state.scrollY)
         return (
             <View style={[styles.container]}>
                 <Animated.View

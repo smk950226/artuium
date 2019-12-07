@@ -841,6 +841,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         paddingVertical: 20
     },
+    loginBtn: {
+        width: '80%',
+        minWidth: 300,
+        maxWidth: 500,
+    }
 })
 
 export default styles; 

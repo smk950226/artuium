@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { View, StatusBar, ActivityIndicator, Animated } from 'react-native';
 import styles from '../../styles';
 import GeneralContainer from '../../navigation/GeneralNavigation';
+import LoggedOutContainer from '../../navigation/LoggedOutNavigation';
 
 class AppContainer extends Component {
     static propTypes = {
@@ -37,11 +38,16 @@ class AppContainer extends Component {
                 <View style={styles.container}>
                 <StatusBar hidden={false} />
                     <View style={styles.container}>
-                        <GeneralContainer
-                            screenProps={{
-                                scrollY: this.state.scrollY,
-                            }}
-                        />
+                        {/* change */}
+                        {!this.state.isLoggedIn ? (
+                            <GeneralContainer
+                                screenProps={{
+                                    scrollY: this.state.scrollY,
+                                }}
+                            />
+                        ) : (
+                            <LoggedOutContainer />
+                        )}
                     </View>
                 </View>)
         }
