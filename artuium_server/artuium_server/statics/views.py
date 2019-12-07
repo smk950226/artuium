@@ -17,7 +17,7 @@ class InitialReview(APIView):
 
         new_reviews = reviews.order_by('-time')[:5]
         recommended_reviews = reviews.filter(recommended = True)[:5]
-        following_reviews = reviews.filter(author__id__in = following)
+        following_reviews = reviews.filter(author__id__in = following)[:5]
 
         return Response(status = status.HTTP_200_OK, data = {
             'status': 'ok',

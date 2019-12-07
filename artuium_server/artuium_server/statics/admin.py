@@ -23,3 +23,9 @@ class ReplyAdmin(admin.ModelAdmin):
 class LikeAdmin(admin.ModelAdmin):
     list_display = ["id", "user", 'time']
     list_display_links = ["id", "user"]
+
+
+@admin.register(models.Follow)
+class FollowAdmin(admin.ModelAdmin):
+    list_display = ["id", "following", 'follower']
+    list_display_links = ["id"]

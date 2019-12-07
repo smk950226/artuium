@@ -12,7 +12,7 @@ urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
-    path("users/", include("artuium_server.users.urls", namespace="users")),
+    path("api/users/", include("artuium_server.users.urls", namespace="users")),
     path("api/artwork/", include("artuium_server.artwork.urls", namespace="artwork")),
     path("api/statics/", include("artuium_server.statics.urls", namespace="statics")),
     path("api/exhibition/", include("artuium_server.exhibition.urls", namespace="exhibition")),

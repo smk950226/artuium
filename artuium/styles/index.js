@@ -254,6 +254,9 @@ const styles = StyleSheet.create({
     bgGrayDb: {
         backgroundColor: '#DbDbDb'
     },
+    bgBlue: {
+        backgroundColor: '#1162D0'
+    },
     justifyContentCenter: {
         justifyContent: 'center'
     },
@@ -855,7 +858,14 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20
-    }
+    },
+    profileModalShadow: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 1,
+    },
 })
 
 export default styles; 

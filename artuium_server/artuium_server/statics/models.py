@@ -77,3 +77,16 @@ class Like(models.Model):
         ordering = ['-id']
         verbose_name = '좋아요'
         verbose_name_plural = '좋아요'
+
+
+class Follow(models.Model):
+    following = models.ForeignKey('users.User', on_delete = models.CASCADE, related_name = 'following')
+    follower = models.ForeignKey('users.User', on_delete = models.CASCADE, related_name = 'follower')
+
+    def __str__(self):
+        return  self.following.nickname + ' > ' + self.follower.nickname
+    
+    class Meta:
+        ordering = ['-id']
+        verbose_name = '팔로우'
+        verbose_name_plural = '팔로우'
