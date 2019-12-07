@@ -4,7 +4,7 @@ import ArtuiumCard from './presenter';
 
 class Container extends Component{
     static propTypes = {
-        artwork: PropTypes.object.isRequired,
+        review: PropTypes.object.isRequired,
         size: PropTypes.string.isRequired
     }
     

@@ -845,6 +845,16 @@ const styles = StyleSheet.create({
         width: '80%',
         minWidth: 300,
         maxWidth: 500,
+    },
+    circle30: {
+        width: 30,
+        height: 30,
+        borderRadius: 15
+    },
+    circle40: {
+        width: 40,
+        height: 40,
+        borderRadius: 20
     }
 })
 

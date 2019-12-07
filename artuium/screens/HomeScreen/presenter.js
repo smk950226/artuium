@@ -81,6 +81,12 @@ const data = [
 ]
 
 class HomeScreen extends Component {
+        static propTypes = {
+            newReviews: PropTypes.array,
+            recommendedReviews: PropTypes.array,
+            followingReviews: PropTypes.array,
+        }
+
     constructor(props){
         super(props)
         this.state = {
@@ -227,7 +233,7 @@ class HomeScreen extends Component {
             outputRange: [height, 600],
             extrapolate: 'clamp'
         })
-        const { isMovedUp } = this.state;
+        const { newReviews, recommendedReviews, followingReviews } = this.props;
         return (
             <View style={[styles.container]}>
                 <Animated.View
@@ -287,7 +293,7 @@ class HomeScreen extends Component {
                     <Animated.View style={{height: (height*2/3)-getStatusBarHeight()-100, zIndex: 1}} />
                     <View style={{height: 0}} />
                 </Animated.ScrollView>
-                <Animated.ScrollView style={[styles.px15, styles.pt20, {position: 'absolute', top: bottomView, zIndex: 999, height: (height*2/3)-getStatusBarHeight()-170}]}>
+                <Animated.ScrollView style={[styles.px15, styles.pt20, styles.widthFull, {position: 'absolute', top: bottomView, zIndex: 999, height: (height*2/3)-getStatusBarHeight()-170}]}>
                     <Text style={[styles.fontMedium, styles.font15]}>아틔움이 엄선한 감상</Text>
                     <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb10]}>
                         <Text style={[styles.fontBold, styles.font20]}>주간 아틔움</Text>
@@ -295,14 +301,14 @@ class HomeScreen extends Component {
                             <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
                         </TouchableWithoutFeedback>
                     </View>
-                    <View style={[styles.row, styles.justifyContentBetween, styles.flexWrap, styles.widthFull]}>
-                    {data.map((da, index) => {
-                        if(index < 4){
-                            return(
-                                <ArtuiumCard key={index} artwork={da} size={'small'} navigation={this.props.navigation} />
-                            )
-                        }
-                    })}
+                    <View style={[styles.row, (recommendedReviews && (recommendedReviews.length > 0)) ? styles.justifyContentBetween : styles.justifyContentCenter, styles.flexWrap, styles.widthFull]}>
+                        {(recommendedReviews && (recommendedReviews.length > 0)) ? (
+                            recommendedReviews.map((review, index) => (
+                                <ArtuiumCard key={index} review={review} size={'small'} navigation={this.props.navigation} />
+                            ))
+                        ) : (
+                            <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
+                        )}
                     </View>
                     <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7]}>지금 아틔움에서는</Text>
                     <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb15]}>
@@ -312,15 +318,18 @@ class HomeScreen extends Component {
                         </TouchableWithoutFeedback>
                     </View>
                     <ScrollView
-                    horizontal={true}
-                    pagingEnabled={true}
+                    horizontal={(newReviews && (newReviews.length > 0)) ? true : false}
+                    pagingEnabled={(newReviews && (newReviews.length > 0)) ? true : false}
+                    scrollEnabled={(newReviews && (newReviews.length > 0)) ? true : false}
                     showsHorizontalScrollIndicator={false}
                     >
-                    {data.map((da, index) => {
-                        return(
-                            <ArtuiumCard key={index} artwork={da} size={'large'} />
-                        )
-                    })}
+                        {(newReviews && (newReviews.length > 0)) ? (
+                            newReviews.map((review, index) => (
+                                <ArtuiumCard key={index} review={review} size={'large'} navigation={this.props.navigation} />
+                            ))
+                        ) : (
+                            <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
+                        )}
                     </ScrollView>
                     <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15]}>
                         <TouchableWithoutFeedback>
@@ -337,15 +346,18 @@ class HomeScreen extends Component {
                         </TouchableWithoutFeedback>
                     </View>
                     <ScrollView
-                    horizontal={true}
-                    pagingEnabled={true}
+                    horizontal={(followingReviews && (followingReviews.length > 0)) ? true : false}
+                    pagingEnabled={(followingReviews && (followingReviews.length > 0)) ? true : false}
+                    scrollEnabled={(followingReviews && (followingReviews.length > 0)) ? true : false}
                     showsHorizontalScrollIndicator={false}
                     >
-                    {data.map((da, index) => {
-                        return(
-                            <ArtuiumCard key={index} artwork={da} size={'large'} />
-                        )
-                    })}
+                        {(followingReviews && (followingReviews.length > 0)) ? (
+                            followingReviews.map((review, index) => (
+                                <ArtuiumCard key={index} review={review} size={'large'} navigation={this.props.navigation} />
+                            ))
+                        ) : (
+                            <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
+                        )}
                     </ScrollView>
                     <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15, { marginBottom: 60 }]}>
                         <TouchableWithoutFeedback>
@@ -358,10 +370,6 @@ class HomeScreen extends Component {
             </View>
         );
     }
-}
-
-HomeScreen.propTypes = {
-
 }
 
 export default HomeScreen;

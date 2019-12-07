@@ -29,9 +29,9 @@ class App extends React.Component {
         require('./assets/images/follow.png'),
         require('./assets/images/notification.png'),
         require('./assets/images/icon_good.png'),
-        require('./assets/images/icon_notgood.png'),
+        require('./assets/images/icon_soso.png'),
         require('./assets/images/icon_sad.png'),
-        require('./assets/images/icon_wow.png'),
+        require('./assets/images/icon_surprise.png'),
         require('./assets/images/search.png'),
         require('./assets/images/icon_star.png'),
         require('./assets/images/icon_star_disabled.png'),
@@ -43,7 +43,10 @@ class App extends React.Component {
         require('./assets/images/lie.jpg'),
         require('./assets/images/changdong.jpg'),
         require('./assets/images/stars.jpg'),
-        require('./assets/images/icon_setting.png'),
+        require('./assets/images/bg_login.jpg'),
+        require('./assets/images/logo_with_text.png'),
+        require('./assets/images/login_kakao.png'),
+
 
       ]),
       Font.loadAsync({

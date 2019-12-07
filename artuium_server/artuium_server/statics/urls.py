@@ -3,5 +3,5 @@ from . import views
 
 app_name = "statics"
 urlpatterns = [
-    
+    path('init/', views.InitialReview.as_view()),
 ]

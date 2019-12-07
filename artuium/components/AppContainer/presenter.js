@@ -13,14 +13,11 @@ class AppContainer extends Component {
 
     state = {
         loading: true,
-        isLoggedIn: false,
         scrollY: new Animated.Value(0),
     }
 
     componentDidMount = async() => {
-        const { isLoggedIn } = this.props;
         this.setState({
-            isLoggedIn,
             loading: false
         })
     }
@@ -38,8 +35,7 @@ class AppContainer extends Component {
                 <View style={styles.container}>
                 <StatusBar hidden={false} />
                     <View style={styles.container}>
-                        {/* change */}
-                        {!this.state.isLoggedIn ? (
+                        {this.props.isLoggedIn ? (
                             <GeneralContainer
                                 screenProps={{
                                     scrollY: this.state.scrollY,

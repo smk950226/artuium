@@ -1,5 +1,4 @@
 import { FETCH_URL } from '../../config/urls';
-import { Notifications } from 'expo';
 
 const LOGOUT = 'LOGOUT';
 const SAVE_TOKEN = 'SAVE_TOKEN';
@@ -34,6 +33,79 @@ function getLogout(){
 function getSaveToken(token){
     return (dispatch) => {
         dispatch(saveToken(token))
+    }
+}
+
+function signUp(username, password, name, agreeTerms, code, birth, gender, phoneNumber){
+    return (dispatch) => {
+        return fetch(`${FETCH_URL}/api/center/check/?code=${code}`)
+        .then(response => {
+            if(response.status === 200){
+                return fetch(`${FETCH_URL}/rest-auth/registration/`, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username,
+                        email: username,
+                        password1: password,
+                        password2: password,
+                        name,
+                        agreeTerms, 
+                        code, 
+                        birth, 
+                        gender, 
+                        phoneNumber
+                    })
+                 })
+                 .then(response => response.json())
+                 .then(json => {
+                     if(json.token){
+                         return {
+                             token: json.token
+                         }
+                     }
+                     else{
+                         return false
+                     }
+                 })
+                 .catch(err => console.log(err));
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function login(username, password){
+    return (dispatch) => {
+        return fetch(`${FETCH_URL}/rest-auth/login/`, {
+            method: 'POST',
+            headers: {
+               "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: 'smk950226',
+                password: 'TMDALS236',
+            })
+        })
+        .then(response => {
+            return response.json()
+        })
+        .then((json) => {
+            if(json.token){
+                return {
+                    token: json.token
+                }
+            }
+            else{
+                return false
+            }
+        })
+        .catch(err => console.log(err));
     }
 }
 
@@ -102,7 +174,9 @@ function applySetProfile(state, action){
 const actionCreators = {
     getLogout,
     getSaveToken,
-    getProfile
+    getProfile,
+    signUp,
+    login
 }
 
 export { actionCreators }

@@ -3,6 +3,7 @@ import { persistStore, persistCombineReducers } from 'redux-persist';
 import { AsyncStorage } from 'react-native';
 import thunk from 'redux-thunk';
 import user from './modules/user';
+import review from './modules/review';
 
 const middlewares = [thunk];
 
@@ -12,7 +13,8 @@ const persistConfig = {
 };
 
 const reducer = persistCombineReducers(persistConfig, {
-    user
+    user,
+    review
 });
 
 const configureStore = () => {

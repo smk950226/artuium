@@ -9,7 +9,7 @@ class NoticeAdmin(admin.ModelAdmin):
 
 @admin.register(models.Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ["id", "author", 'time']
+    list_display = ["id", "author", 'time', 'rate', 'recommended']
     list_display_links = ["id", "author"]
 
 

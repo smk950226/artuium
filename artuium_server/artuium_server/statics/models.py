@@ -23,7 +23,13 @@ class Review(models.Model):
     exhibition = models.ForeignKey('exhibition.Exhibition', on_delete = models.CASCADE, blank = True, null = True, related_name = 'reviews')
     artwork = models.ForeignKey('artwork.Artwork', on_delete = models.CASCADE, blank = True, null = True, related_name = 'reviews')
     rate = models.FloatField('평점')
-    expression = models.CharField(max_length = 100)
+    expression = models.CharField(max_length = 100, choices = (
+        ('good', 'Good'),
+        ('soso', 'Soso'),
+        ('sad', 'Sad'),
+        ('surprise', 'Surprise')
+    ))
+    recommended = models.BooleanField('추천 여부', default = False)
 
     def __str__(self):
         return self.author.nickname + '-' + str(self.rate)
@@ -32,6 +38,14 @@ class Review(models.Model):
         ordering = ['-id']
         verbose_name = '리뷰'
         verbose_name_plural = '리뷰'
+    
+    @property
+    def reply_count(self):
+        return self.replies.all().count()
+    
+    @property
+    def like_count(self):
+        return self.likes.all().count()
 
 
 class Reply(models.Model):
