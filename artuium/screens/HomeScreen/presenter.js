@@ -86,6 +86,7 @@ class HomeScreen extends Component {
         this.state = {
             panY: new Animated.ValueXY(),
             scrollY: new Animated.Value(height),
+            scrollY2: new Animated.Value(height),
             isMovedUp: false
         }
         this.panResponder = PanResponder.create({
@@ -288,7 +289,18 @@ class HomeScreen extends Component {
                     <Animated.View style={{height: (height*2/3)-getStatusBarHeight()-100, zIndex: 1}} />
                     <View style={{height: 0}} />
                 </Animated.ScrollView>
-                <Animated.ScrollView style={[styles.px15, styles.pt20, {position: 'absolute', top: bottomView, zIndex: 999, height: (height*2/3)-getStatusBarHeight()-170}]}>
+                <Animated.ScrollView
+                    style={[styles.px15, styles.pt20, {position: 'absolute', top: bottomView, zIndex: 999, height: (height*2/3)-getStatusBarHeight()-170}]}
+                    onScroll={Animated.event(
+                        [{ nativeEvent: {
+                            contentOffset: {
+                                y: this.props.screenProps.scrollY2
+                            }
+                        }}]
+                    )}
+                    bounces={false}
+                    scrollEventThrottle={16}
+                >
                     <Text style={[styles.fontMedium, styles.font15]}>아틔움이 엄선한 감상</Text>
                     <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb10]}>
                         <Text style={[styles.fontBold, styles.font20]}>주간 아틔움</Text>
@@ -313,15 +325,15 @@ class HomeScreen extends Component {
                         </TouchableWithoutFeedback>
                     </View>
                     <ScrollView
-                    horizontal={true}
-                    pagingEnabled={true}
-                    showsHorizontalScrollIndicator={false}
+                        horizontal={true}
+                        pagingEnabled={true}
+                        showsHorizontalScrollIndicator={false}
                     >
-                    {data.map((da, index) => {
-                        return(
-                            <ArtuiumCard key={index} artwork={da} size={'large'} />
-                        )
-                    })}
+                        {data.map((da, index) => {
+                            return(
+                                <ArtuiumCard key={index} artwork={da} size={'large'} />
+                            )
+                        })}
                     </ScrollView>
                     <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15]}>
                         <TouchableWithoutFeedback>
@@ -338,15 +350,15 @@ class HomeScreen extends Component {
                         </TouchableWithoutFeedback>
                     </View>
                     <ScrollView
-                    horizontal={true}
-                    pagingEnabled={true}
-                    showsHorizontalScrollIndicator={false}
+                        horizontal={true}
+                        pagingEnabled={true}
+                        showsHorizontalScrollIndicator={false}
                     >
-                    {data.map((da, index) => {
-                        return(
-                            <ArtuiumCard key={index} artwork={da} size={'large'} />
-                        )
-                    })}
+                        {data.map((da, index) => {
+                            return(
+                                <ArtuiumCard key={index} artwork={da} size={'large'} />
+                            )
+                        })}
                     </ScrollView>
                     <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15, { marginBottom: 60 }]}>
                         <TouchableWithoutFeedback>

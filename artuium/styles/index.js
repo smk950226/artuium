@@ -254,6 +254,9 @@ const styles = StyleSheet.create({
     bgGrayDb: {
         backgroundColor: '#DbDbDb'
     },
+    bgGrayf0: {
+        backgroundColor: '#f0f0f0'
+    },
     justifyContentCenter: {
         justifyContent: 'center'
     },
@@ -610,6 +613,10 @@ const styles = StyleSheet.create({
         borderBottomColor: '#dbdbdb',
         borderBottomWidth: 1
     },
+    borderBtmGrayD1: {
+        borderBottomColor: '#d1d1d1',
+        borderBottomWidth: 1
+    },
     overflowHidden: {
         overflow: 'hidden'
     },
@@ -840,6 +847,30 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: '#fff',
         paddingVertical: 20
+    },
+    blueBtn: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 15,
+        paddingVertical: 5,
+        borderColor: '#044ae6',
+        borderRadius: 5,
+        borderWidth: 1
+    },
+    divGray: {
+        borderWidth: 1,
+        borderColor: '#e0e0e0',
+        backgroundColor: '#e8e8e8',
+        width,
+        height: 6
+    },
+    GrayXBtn: {
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+        backgroundColor: '#969696',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 })
 
