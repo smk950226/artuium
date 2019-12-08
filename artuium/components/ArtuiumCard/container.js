@@ -7,7 +7,8 @@ class Container extends Component{
         review: PropTypes.object.isRequired,
         size: PropTypes.string.isRequired,
         followUser: PropTypes.func.isRequired,
-        unfollowUser: PropTypes.func.isRequired
+        unfollowUser: PropTypes.func.isRequired,
+        initialReview: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -20,6 +21,18 @@ class Container extends Component{
             showProfileModal: false,
             following_count,
             follower_count
+        }
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        if(prevProps.review !== this.props.review){
+            const { review : { author : { is_me, is_following, following_count, follower_count } } } = this.props;
+            this.setState({
+                is_me,
+                is_following,
+                following_count,
+                follower_count
+            })
         }
     }
 
@@ -37,7 +50,7 @@ class Container extends Component{
 
     _follow = async() => {
         const { is_following, is_me, isSubmitting } = this.state;
-        const { followUser, review : { author : { id } } } = this.props;
+        const { followUser, initialReview, review : { author : { id } } } = this.props;
         if(!isSubmitting){
             if(!is_me){
                 if(!is_following){
@@ -51,6 +64,7 @@ class Container extends Component{
                             isSubmitting: false,
                             follower_count: this.state.follower_count + 1
                         })
+                        initialReview()
                     }
                     else{
                         this.setState({
@@ -64,7 +78,7 @@ class Container extends Component{
 
     _unfollow = async() => {
         const { is_following, is_me, isSubmitting } = this.state;
-        const { unfollowUser, review : { author : { id } } } = this.props;
+        const { unfollowUser, initialReview, review : { author : { id } } } = this.props;
         if(!isSubmitting){
             if(!is_me){
                 if(is_following){
@@ -78,6 +92,7 @@ class Container extends Component{
                             isSubmitting: false,
                             follower_count: this.state.follower_count - 1
                         })
+                        initialReview()
                     }
                     else{
                         this.setState({
