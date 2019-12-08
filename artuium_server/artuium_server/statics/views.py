@@ -38,3 +38,22 @@ class Notice(APIView):
         serializer = serializers.NoticeSerializer(result_page, many = True, context = {'request': request})
 
         return Response(status = status.HTTP_200_OK, data = serializer.data)
+
+
+class NoticeCheck(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, format = None):
+        user = request.user
+        notice_id = request.data.get('noticeId', None)
+        
+        try:
+            notice = models.Notice.objects.get(id = notice_id)
+            pre = models.NoticeCheck.objects.filter(user = user, notice = notice)
+            if pre.count() > 0:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            else:
+                notice_check = models.NoticeCheck.objects.create(user = user, notice = notice)
+                notice_check.save()
+                return Response(status = status.HTTP_200_OK)
+        except:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)

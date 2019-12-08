@@ -90,3 +90,17 @@ class Follow(models.Model):
         ordering = ['-id']
         verbose_name = '팔로우'
         verbose_name_plural = '팔로우'
+
+
+class NoticeCheck(models.Model):
+    user = models.ForeignKey('users.User', on_delete = models.CASCADE, related_name = 'checked_notices')
+    notice = models.ForeignKey(Notice, on_delete = models.CASCADE, related_name = 'checked_notices')
+    date = models.DateTimeField('Checked Time', auto_now_add = True)
+
+    def __str__(self):
+        return  self.user.nickname + ' - ' + self.notice.title
+    
+    class Meta:
+        ordering = ['-id']
+        verbose_name = '공지 확인 여부'
+        verbose_name_plural = '공지 확인 여부'

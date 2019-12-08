@@ -29,3 +29,9 @@ class LikeAdmin(admin.ModelAdmin):
 class FollowAdmin(admin.ModelAdmin):
     list_display = ["id", "following", 'follower']
     list_display_links = ["id"]
+
+
+@admin.register(models.NoticeCheck)
+class NoticeCheckAdmin(admin.ModelAdmin):
+    list_display = ["id", "user", 'notice']
+    list_display_links = ["id"]

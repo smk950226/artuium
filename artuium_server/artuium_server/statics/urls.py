@@ -5,4 +5,5 @@ app_name = "statics"
 urlpatterns = [
     path('init/', views.InitialReview.as_view()),
     path('notice/', views.Notice.as_view()),
+    path('notice/check/', views.NoticeCheck.as_view()),
 ]

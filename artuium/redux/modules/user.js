@@ -239,6 +239,34 @@ function getNoticeMore(page){
     }
 }
 
+function checkNotice(noticeId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/notice/check/`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            },
+            body: JSON.stringify({
+                noticeId
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+            }
+            else if(response.status === 200){
+                return true
+            }
+            else{
+                return false
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     isLoggedIn: false,
     token: null,
@@ -301,7 +329,8 @@ const actionCreators = {
     unfollowUser,
     getInitial,
     getNotice,
-    getNoticeMore
+    getNoticeMore,
+    checkNotice
 }
 
 export { actionCreators }

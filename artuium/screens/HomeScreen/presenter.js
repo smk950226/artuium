@@ -5,6 +5,7 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 import styles from '../../styles';
 import ArtuiumCard from '../../components/ArtuiumCard';
 import NoticeScreen from '../../screens/NoticeScreen';
+import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
 const iosStatusBarHeight = getStatusBarHeight()
 
@@ -28,7 +29,12 @@ class HomeScreen extends Component {
             panY: new Animated.ValueXY(),
             scrollY: new Animated.Value(height),
             scrollY2: new Animated.Value(height),
-            isMovedUp: false
+            isMovedUp: false,
+            index: 0,
+            routes: [
+                { key: 'first', title: '알림' },
+                { key: 'second', title: '공지사항' },
+            ],
         }
         this.panResponder = PanResponder.create({
             onStartShouldSetPanResponder: () => true,
@@ -350,7 +356,7 @@ class HomeScreen extends Component {
                 transparent={true}
                 >
                     <View style={[styles.container, styles.bgWhite]}>
-                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentEnd, styles.px15, { marginTop: iosStatusBarHeight, height: 50 }]}>
+                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentEnd, styles.px15, styles.borderBtmGrayE6, { marginTop: iosStatusBarHeight, height: 50 }]}>
                             <TouchableWithoutFeedback onPress={this.props.closeNoticeModal}>
                                 <View>
                                     <Text style={[styles.fontMedium, styles.font16, styles.gray93]}>
@@ -359,9 +365,27 @@ class HomeScreen extends Component {
                                 </View>
                             </TouchableWithoutFeedback>
                         </View>
-
+                        <TabView
+                            navigationState={this.state}
+                            onIndexChange={index => this.setState({ index })}
+                            swipeEnabled={false}
+                            renderScene={SceneMap({
+                                first: NoticeScreen,
+                                second: NoticeScreen
+                            })}
+                            renderTabBar={props =>
+                                <TabBar
+                                    {...props}
+                                    activeColor = {'#1162d0'}
+                                    inactiveColor = {'#e6e6e6'}
+                                    labelStyle = {[styles.font15, styles.fontMedium]}
+                                    bounces={false}
+                                    indicatorStyle={{ backgroundColor: '#1162d0', height: 1 }}
+                                    style={[styles.bgGrayF8]}
+                                />
+                            }
+                        />
                     </View>
-                    <NoticeScreen />
                 </Modal>
             </View>
         );

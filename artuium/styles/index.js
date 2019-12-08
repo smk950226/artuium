@@ -209,6 +209,10 @@ const styles = StyleSheet.create({
         color: 'black',
         includeFontPadding: false
     },
+    red: {
+        color: '#ff0000',
+        includeFontPadding: false
+    },
     gray8B: {
         color: '#8b8b8b',
         includeFontPadding: false
@@ -237,6 +241,10 @@ const styles = StyleSheet.create({
         color: '#939393',
         includeFontPadding: false
     },
+    gray71: {
+        color: '#717171',
+        includeFontPadding: false
+    },
     bgBlack: {
         backgroundColor: '#000000'
     },
@@ -245,6 +253,9 @@ const styles = StyleSheet.create({
     },
     bgWhite: {
         backgroundColor: '#FFFFFF'
+    },
+    bgRed: {
+        backgroundColor: '#FF0000'
     },
     bgGrayA7: {
         backgroundColor: '#a7a7a7'
@@ -263,6 +274,12 @@ const styles = StyleSheet.create({
     },
     bgGrayF8: {
         backgroundColor: '#F8F8F8'
+    },
+    bgGrayE6: {
+        backgroundColor: '#E6E6E6'
+    },
+    bgGray71: {
+        backgroundColor: '#717171'
     },
     bgBlue: {
         backgroundColor: '#1162D0'
@@ -630,6 +647,10 @@ const styles = StyleSheet.create({
         borderBottomColor: '#d1d1d1',
         borderBottomWidth: 1
     },
+    borderBtmGrayE6: {
+        borderBottomColor: '#E6E6E6',
+        borderBottomWidth: 1
+    },
     overflowHidden: {
         overflow: 'hidden'
     },
@@ -861,11 +882,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         paddingVertical: 20
     },
-<<<<<<< HEAD
     loginBtn: {
         width: '80%',
         minWidth: 300,
         maxWidth: 500,
+    },
+    circle6: {
+        width: 6,
+        height: 6,
+        borderRadius: 3
     },
     circle30: {
         width: 30,
@@ -883,7 +908,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.8,
         shadowRadius: 2,
         elevation: 1,
-=======
+    },
     blueBtn: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -907,7 +932,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#969696',
         alignItems: 'center',
         justifyContent: 'center',
->>>>>>> 1d578fab18cdea2e0f586d14de8382cd9d6cd0b4
     },
 })
 

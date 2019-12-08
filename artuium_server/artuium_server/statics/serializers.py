@@ -15,9 +15,21 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class NoticeSerializer(serializers.ModelSerializer):
+    is_new = serializers.SerializerMethodField()
     class Meta:
         model = models.Notice
-        fields = ['id', 'title', 'date', 'content', 'image', 'is_banner']
+        fields = ['id', 'title', 'date', 'content', 'image', 'is_banner', 'is_new']
+    
+    def get_is_new(self, obj):
+        if 'request' in self.context:
+            request = self.context['request']
+            user = request.user
+            notice_check = models.NoticeCheck.objects.filter(user = user, notice = obj)
+            if notice_check.count() > 0:
+                return False
+            else:
+                return True
+        return False
 
 
 class ReplySerializer(serializers.ModelSerializer):
