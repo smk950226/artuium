@@ -21,6 +21,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         getInitial: (initial) => {
             dispatch(userActions.getInitial(initial))
+        },
+        checkNoticeAll: () => {
+            return dispatch(userActions.checkNoticeAll())
         }
     }
 }

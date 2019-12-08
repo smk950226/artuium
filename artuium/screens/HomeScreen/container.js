@@ -12,7 +12,8 @@ class Container extends Component{
         followingReviews: PropTypes.array,
         initialReview: PropTypes.func.isRequired,
         getInitial: PropTypes.func.isRequired,
-        initial: PropTypes.bool.isRequired
+        initial: PropTypes.bool.isRequired,
+        checkNoticeAll: PropTypes.func.isRequired
     }
 
     state = {
@@ -26,7 +27,13 @@ class Container extends Component{
     }
 
     componentDidMount = async() => {
-        const { initialReview } = this.props;
+        const { initialReview, checkNoticeAll } = this.props;
+        const noticeNew = await checkNoticeAll()
+        if(noticeNew.is_new){
+            this.setState({
+                noticeNew: true
+            })
+        }
         await initialReview()
     }
 

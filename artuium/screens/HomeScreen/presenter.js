@@ -209,7 +209,12 @@ class HomeScreen extends Component {
                     {width: width, height: 50, position: 'absolute', top: getStatusBarHeight(), zIndex: 900}
                 ]}>
                     <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
-                        <Image style={{width: 24, height: 24, zIndex: 999}} source={require('../../assets/images/notification.png')} />
+                        <View>
+                            <Image style={{width: 24, height: 24, zIndex: 999}} source={require('../../assets/images/notification.png')} />
+                            {noticeNew && (
+                                <View style={[styles.bgRed, styles.circle6, {position: 'absolute', top: 0, right: 0}]} />
+                            )}
+                        </View>
                     </TouchableWithoutFeedback>
                     <Animated.Text style={{opacity: headerOpacity}}>아틔움 로고자리</Animated.Text>
                     <Image style={{width: 24, height: 24, zIndex: 999}} source={require('../../assets/images/search.png')} />

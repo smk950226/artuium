@@ -57,6 +57,16 @@ class Notice(APIView):
 
 class NoticeCheck(APIView):
     permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user = request.user
+        notice_check = models.NoticeCheck.objects.filter(user = user).count()
+        notice = models.Notice.objects.all().count()
+
+        if notice_check == notice:
+            return Response(status = status.HTTP_200_OK, data = {'is_new': False})
+        else:
+            return Response(status = status.HTTP_200_OK, data = {'is_new': True})
+
     def post(self, request, format = None):
         user = request.user
         notice_id = request.data.get('noticeId', None)
