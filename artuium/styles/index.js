@@ -233,6 +233,10 @@ const styles = StyleSheet.create({
         color: '#DbDbDb',
         includeFontPadding: false
     },
+    gray93: {
+        color: '#939393',
+        includeFontPadding: false
+    },
     bgBlack: {
         backgroundColor: '#000000'
     },
@@ -256,6 +260,9 @@ const styles = StyleSheet.create({
     },
     bgGrayDb: {
         backgroundColor: '#DbDbDb'
+    },
+    bgGrayF8: {
+        backgroundColor: '#F8F8F8'
     },
     bgBlue: {
         backgroundColor: '#1162D0'

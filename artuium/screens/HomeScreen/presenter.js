@@ -1,84 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Animated, View, PanResponder, Text, ScrollView, Image, Alert, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { Animated, View, PanResponder, Text, ScrollView, Image, Modal, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import styles from '../../styles';
 import ArtuiumCard from '../../components/ArtuiumCard';
+import NoticeScreen from '../../screens/NoticeScreen';
+
+const iosStatusBarHeight = getStatusBarHeight()
 
 const { width, height } = Dimensions.get('window')
-
-const data = [
-    {
-        id: 1,
-        image: 'http://chedulife.com.au/wp-content/uploads/%EA%B3%A0%ED%9D%90-%EB%B0%A4%EC%9D%98-%EC%B9%B4%ED%8E%98-%ED%85%8C%EB%9D%BC%EC%8A%A4-456x300.jpg',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 4.5,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
-    },
-    {
-        id: 2,
-        image: 'http://mblogthumb3.phinf.naver.net/MjAxOTAxMDNfOTEg/MDAxNTQ2NDgxOTgwNTcz.I3sUkC74k5K1fExm6woYSK8DhlgA6MZsqmB91SLCsIcg.vb2MUoFo6xYjZnWOBvnI_jDklXM3jKR8xrbj5tlDjFwg.JPEG.allthat_art/01_5347.JPG?type=w800',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 1,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
-    },
-    {
-        id: 3,
-        image: 'https://t1.daumcdn.net/cfile/tistory/2218C34D55096EE51F',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 5,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
-    },
-    {
-        id: 4,
-        image: 'http://chedulife.com.au/wp-content/uploads/%EA%B3%A0%ED%9D%90-%EB%B0%A4%EC%9D%98-%EC%B9%B4%ED%8E%98-%ED%85%8C%EB%9D%BC%EC%8A%A4-456x300.jpg',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 4,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
-    },
-    {
-        id: 5,
-        image: 'http://chedulife.com.au/wp-content/uploads/%EA%B3%A0%ED%9D%90-%EB%B0%A4%EC%9D%98-%EC%B9%B4%ED%8E%98-%ED%85%8C%EB%9D%BC%EC%8A%A4-456x300.jpg',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 3.5,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
-    }
-]
 
 class HomeScreen extends Component {
         static propTypes = {
@@ -86,7 +16,10 @@ class HomeScreen extends Component {
             recommendedReviews: PropTypes.array,
             followingReviews: PropTypes.array,
             initial: PropTypes.bool.isRequired,
-            getInitial: PropTypes.func.isRequired
+            getInitial: PropTypes.func.isRequired,
+            openNoticeModal: PropTypes.func.isRequired,
+            closeNoticeModal: PropTypes.func.isRequired,
+            showNoticeModal :PropTypes.bool.isRequired
         }
 
     constructor(props){
@@ -253,14 +186,16 @@ class HomeScreen extends Component {
             outputRange: [height, 600],
             extrapolate: 'clamp'
         })
-        const { newReviews, recommendedReviews, followingReviews, initial } = this.props;
+        const { newReviews, recommendedReviews, followingReviews, initial, showNoticeModal } = this.props;
         return (
             <View style={[styles.container]}>
                 <Animated.View
                     style={[styles.row, styles.alignItemsCenter, styles.spaceBetween, styles.px15,
                     {width: width, height: 50, position: 'absolute', top: getStatusBarHeight(), zIndex: 900}
                 ]}>
-                    <Image style={{width: 24, height: 24, zIndex: 999}} source={require('../../assets/images/notification.png')} />
+                    <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
+                        <Image style={{width: 24, height: 24, zIndex: 999}} source={require('../../assets/images/notification.png')} />
+                    </TouchableWithoutFeedback>
                     <Animated.Text style={{opacity: headerOpacity}}>아틔움 로고자리</Animated.Text>
                     <Image style={{width: 24, height: 24, zIndex: 999}} source={require('../../assets/images/search.png')} />
                 </Animated.View>
@@ -396,6 +331,26 @@ class HomeScreen extends Component {
                         </Text>
                     </Animated.View>
                 )}
+                <Modal
+                visible={showNoticeModal}
+                onRequestClose={this.props.closeNoticeModal}
+                animationType={'fade'}
+                transparent={true}
+                >
+                    <View style={[styles.container, styles.bgWhite]}>
+                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentEnd, styles.px15, { marginTop: iosStatusBarHeight, height: 50 }]}>
+                            <TouchableWithoutFeedback onPress={this.props.closeNoticeModal}>
+                                <View>
+                                    <Text style={[styles.fontMedium, styles.font16, styles.gray93]}>
+                                        닫기
+                                    </Text>
+                                </View>
+                            </TouchableWithoutFeedback>
+                        </View>
+
+                    </View>
+                    <NoticeScreen />
+                </Modal>
             </View>
         );
     }

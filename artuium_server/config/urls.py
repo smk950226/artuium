@@ -16,6 +16,7 @@ urlpatterns = [
     path("api/artwork/", include("artuium_server.artwork.urls", namespace="artwork")),
     path("api/statics/", include("artuium_server.statics.urls", namespace="statics")),
     path("api/exhibition/", include("artuium_server.exhibition.urls", namespace="exhibition")),
+    path("api/common/", include("artuium_server.common.urls", namespace="common")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

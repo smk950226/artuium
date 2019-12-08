@@ -194,6 +194,51 @@ function unfollowUser(userId){
     }
 }
 
+function getNotice(){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/notice/?page=1`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function getNoticeMore(page){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/notice/?page=${page}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+            }
+            else if(response.status === 404){
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     isLoggedIn: false,
     token: null,
@@ -254,7 +299,9 @@ const actionCreators = {
     login,
     followUser,
     unfollowUser,
-    getInitial
+    getInitial,
+    getNotice,
+    getNoticeMore
 }
 
 export { actionCreators }

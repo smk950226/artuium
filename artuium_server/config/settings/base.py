@@ -83,6 +83,7 @@ LOCAL_APPS = [
     "artuium_server.artwork.apps.ArtworkConfig",
     "artuium_server.statics.apps.StaticsConfig",
     "artuium_server.exhibition.apps.ExhibitionConfig",
+    "artuium_server.common.apps.CommonConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

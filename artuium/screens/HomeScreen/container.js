@@ -20,7 +20,8 @@ class Container extends Component{
         fetchedNew: false,
         fetchedRecommended: false,
         fetchedFollowing: false,
-        fetchClear: false
+        fetchClear: false,
+        showNoticeModal: false
     }
 
     componentDidMount = async() => {
@@ -58,6 +59,18 @@ class Container extends Component{
         }
     }
 
+    _openNoticeModal = () => {
+        this.setState({
+            showNoticeModal: true
+        })
+    }
+
+    _closeNoticeModal = () => {
+        this.setState({
+            showNoticeModal: false
+        })
+    }
+
     render(){
         const { loading } = this.state;
         if(loading){
@@ -72,6 +85,8 @@ class Container extends Component{
                 <HomeScreen 
                     {...this.props}
                     {...this.state}
+                    openNoticeModal={this._openNoticeModal}
+                    closeNoticeModal={this._closeNoticeModal}
                 />
             )
         }

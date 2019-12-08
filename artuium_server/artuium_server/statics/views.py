@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
 from . import models, serializers
+from artuium_server.common.pagination import MainPageNumberPagination
 
 class InitialReview(APIView):
     permission_classes = [IsAuthenticated]
@@ -25,3 +26,15 @@ class InitialReview(APIView):
             'recommended_reviews': serializers.ReviewSerializer(recommended_reviews, many = True, context = {'request': request}).data,
             'following_reviews': serializers.ReviewSerializer(following_reviews, many = True, context = {'request': request}).data,
         })
+
+
+class Notice(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        notice = models.Notice.objects.all().order_by('-date')
+
+        paginator = MainPageNumberPagination()
+        result_page = paginator.paginate_queryset(notice, request)
+        serializer = serializers.NoticeSerializer(result_page, many = True, context = {'request': request})
+
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
