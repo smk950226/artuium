@@ -21,7 +21,8 @@ class Container extends Component{
         fetchedRecommended: false,
         fetchedFollowing: false,
         fetchClear: false,
-        showNoticeModal: false
+        showNoticeModal: false,
+        noticeNew: false
     }
 
     componentDidMount = async() => {
@@ -70,6 +71,11 @@ class Container extends Component{
             showNoticeModal: false
         })
     }
+    _handleNoticeNewChange = (noticeNew) => {
+        this.setState({
+            noticeNew
+        })
+    }
 
     render(){
         const { loading } = this.state;
@@ -87,6 +93,7 @@ class Container extends Component{
                     {...this.state}
                     openNoticeModal={this._openNoticeModal}
                     closeNoticeModal={this._closeNoticeModal}
+                    handleNoticeNewChange={this._handleNoticeNewChange}
                 />
             )
         }

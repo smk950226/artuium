@@ -31,13 +31,28 @@ class InitialReview(APIView):
 class Notice(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, format = None):
+        user = request.user
         notice = models.Notice.objects.all().order_by('-date')
+        if notice.count() > 0:
+            notice_check = models.NoticeCheck.objects.filter(user = user)
+            if notice_check.count() == notice.count():
+                paginator = MainPageNumberPagination()
+                result_page = paginator.paginate_queryset(notice, request)
+                serializer = serializers.NoticeSerializer(result_page, many = True, context = {'request': request})
 
-        paginator = MainPageNumberPagination()
-        result_page = paginator.paginate_queryset(notice, request)
-        serializer = serializers.NoticeSerializer(result_page, many = True, context = {'request': request})
+                return Response(status = status.HTTP_200_OK, data = {'is_new': False, 'notice': serializer.data})
+            else:
+                paginator = MainPageNumberPagination()
+                result_page = paginator.paginate_queryset(notice, request)
+                serializer = serializers.NoticeSerializer(result_page, many = True, context = {'request': request})
 
-        return Response(status = status.HTTP_200_OK, data = serializer.data)
+                return Response(status = status.HTTP_200_OK, data = {'is_new': True, 'notice': serializer.data})
+        else:
+            paginator = MainPageNumberPagination()
+            result_page = paginator.paginate_queryset(notice, request)
+            serializer = serializers.NoticeSerializer(result_page, many = True, context = {'request': request})
+
+            return Response(status = status.HTTP_200_OK, data = {'is_new': False, 'notice': serializer.data})
 
 
 class NoticeCheck(APIView):
@@ -54,6 +69,9 @@ class NoticeCheck(APIView):
             else:
                 notice_check = models.NoticeCheck.objects.create(user = user, notice = notice)
                 notice_check.save()
-                return Response(status = status.HTTP_200_OK)
+                if models.Notice.objects.all().count() == models.NoticeCheck.objects.filter(user = user).count():
+                    return Response(status = status.HTTP_201_CREATED)
+                else:
+                    return Response(status = status.HTTP_200_OK)
         except:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)

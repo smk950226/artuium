@@ -13,7 +13,7 @@ const NoticeScreen = (props) => (
             <FlatList 
             data={props.notice} 
             renderItem={({item}) => (
-                <Notice notice={item} />
+                <Notice notice={item} handleNoticeNewChange={props.handleNoticeNewChange} />
             )} 
             numColumns={1} 
             keyExtractor={item => String(item.id)} 
@@ -43,7 +43,8 @@ NoticeScreen.propTypes = {
     isLoadingMore: PropTypes.bool.isRequired,
     noticeMore: PropTypes.func.isRequired,
     refreshing: PropTypes.bool.isRequired,
-    refresh: PropTypes.func.isRequired
+    refresh: PropTypes.func.isRequired,
+    handleNoticeNewChange: PropTypes.func.isRequired
 }
 
 export default gestureHandlerRootHOC(NoticeScreen);

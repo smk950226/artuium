@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styles from '../../styles';
 
 const Notice = (props) => (
-    <View style={[styles.borderBtmGrayE6]}>
+    <View style={[styles.borderBtmGrayE6, styles.bgGrayF8]}>
         <View style={[styles.pt25, styles.pb20, styles.px20]}>
             <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween]}>
                 <View style={[styles.flex9]}>

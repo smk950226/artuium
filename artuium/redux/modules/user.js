@@ -259,6 +259,9 @@ function checkNotice(noticeId){
             else if(response.status === 200){
                 return true
             }
+            else if(response.status === 201){
+                return 'clear'
+            }
             else{
                 return false
             }

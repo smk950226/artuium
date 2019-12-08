@@ -213,6 +213,10 @@ const styles = StyleSheet.create({
         color: '#ff0000',
         includeFontPadding: false
     },
+    blue: {
+        color: '#1162d0',
+        includeFontPadding: false
+    },
     gray8B: {
         color: '#8b8b8b',
         includeFontPadding: false
@@ -243,6 +247,10 @@ const styles = StyleSheet.create({
     },
     gray71: {
         color: '#717171',
+        includeFontPadding: false
+    },
+    grayE6: {
+        color: '#E6E6E6',
         includeFontPadding: false
     },
     bgBlack: {

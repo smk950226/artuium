@@ -7,7 +7,8 @@ import NoticeScreen from './presenter';
 class Container extends Component{
     static propTypes = {
         getNotice: PropTypes.func.isRequired,
-        getNoticeMore: PropTypes.func.isRequired
+        getNoticeMore: PropTypes.func.isRequired,
+        handleNoticeNewChange: PropTypes.func.isRequired
     }
 
     state = {
@@ -16,20 +17,23 @@ class Container extends Component{
         page: 1,
         hasNextPage: true,
         isLoadingMore: false,
-        refreshing: false
+        refreshing: false,
+        is_new: false
     }
 
     componentDidMount = async() => {
-        const { getNotice } = this.props;
+        const { getNotice, handleNoticeNewChange } = this.props;
         const notice = await getNotice()
+        handleNoticeNewChange(notice.is_new)
         this.setState({
-            notice,
+            notice: notice.notice,
+            is_new: notice.is_new,
             loading: false
         })
     }
 
     _noticeMore = async() => {
-        const { getNoticeMore } = this.props;
+        const { getNoticeMore, handleNoticeNewChange } = this.props;
         const { page, hasNextPage, isLoadingMore } = this.state;
         if(hasNextPage){
             if(!isLoadingMore){
@@ -38,10 +42,12 @@ class Container extends Component{
                 });
                 const result = await getNoticeMore(page+1);
                 if(result){
+                    handleNoticeNewChange(result.is_new)
                     await this.setState({
                         page: this.state.page+1,
                         isLoadingMore: false,
-                        notice: [...this.state.notice, ...result]
+                        notice: [...this.state.notice, ...result.notice],
+                        is_new: result.is_new
                     })
                 }
                 else{
@@ -75,7 +81,7 @@ class Container extends Component{
         const { loading } = this.state;
         if(loading){
             return(
-                <View style={[styles.container, styles.alignItemsCenter, styles.justifyContentCenter]}>
+                <View style={[styles.container, styles.alignItemsCenter, styles.justifyContentCenter, styles.bgGrayF8]}>
                     <ActivityIndicator size={'small'} color={'#000'} />
                 </View>
             )

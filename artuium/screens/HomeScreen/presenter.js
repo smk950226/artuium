@@ -20,7 +20,8 @@ class HomeScreen extends Component {
             getInitial: PropTypes.func.isRequired,
             openNoticeModal: PropTypes.func.isRequired,
             closeNoticeModal: PropTypes.func.isRequired,
-            showNoticeModal :PropTypes.bool.isRequired
+            showNoticeModal :PropTypes.bool.isRequired,
+            noticeNew: PropTypes.bool.isRequired
         }
 
     constructor(props){
@@ -142,6 +143,13 @@ class HomeScreen extends Component {
             },
         })
     }
+
+    _renderNoticeRouter = () => {
+        return (
+            <NoticeScreen handleNoticeNewChange={this.props.handleNoticeNewChange} />
+        )
+    }
+
     render() {
         const imageHeight = this.props.screenProps.scrollY.interpolate({
             inputRange: [0, 100],
@@ -193,7 +201,7 @@ class HomeScreen extends Component {
             outputRange: [height, 600],
             extrapolate: 'clamp'
         })
-        const { newReviews, recommendedReviews, followingReviews, initial, showNoticeModal } = this.props;
+        const { newReviews, recommendedReviews, followingReviews, initial, showNoticeModal, noticeNew } = this.props;
         return (
             <View style={[styles.container]}>
                 <Animated.View
@@ -370,8 +378,8 @@ class HomeScreen extends Component {
                             onIndexChange={index => this.setState({ index })}
                             swipeEnabled={false}
                             renderScene={SceneMap({
-                                first: NoticeScreen,
-                                second: NoticeScreen
+                                first: this._renderNoticeRouter,
+                                second: this._renderNoticeRouter
                             })}
                             renderTabBar={props =>
                                 <TabBar
@@ -379,6 +387,16 @@ class HomeScreen extends Component {
                                     activeColor = {'#1162d0'}
                                     inactiveColor = {'#e6e6e6'}
                                     labelStyle = {[styles.font15, styles.fontMedium]}
+                                    renderLabel={({ route, focused }) => (
+                                        <View>
+                                             <Text style={[styles.fontMedium, styles.font15, focused ? styles.blue : styles.grayE6]}>
+                                                 {route.title}
+                                             </Text>
+                                             {(route.title === '공지사항') && noticeNew && (
+                                                 <View style={[styles.bgRed, styles.circle6, focused ? null : {opacity: 0.4}, {position: 'absolute', top: 0, right: -5}]} />
+                                             )}
+                                        </View>
+                                      )}
                                     bounces={false}
                                     indicatorStyle={{ backgroundColor: '#1162d0', height: 1 }}
                                     style={[styles.bgGrayF8]}

@@ -5,7 +5,8 @@ import Notice from './presenter';
 class Container extends Component{
     static propTypes = {
         notice: PropTypes.object.isRequired,
-        checkNotice: PropTypes.func.isRequired
+        checkNotice: PropTypes.func.isRequired,
+        handleNoticeNewChange: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -20,7 +21,7 @@ class Container extends Component{
 
     componentDidUpdate = async(prevProps, prevState) => {
         if(!prevState.expand && this.state.expand){
-            const { checkNotice, notice : { id } } = this.props;
+            const { checkNotice, handleNoticeNewChange, notice : { id } } = this.props;
             const { is_new, isSubmitting } = this.state;
             if(!isSubmitting){
                 if(is_new){
@@ -28,7 +29,14 @@ class Container extends Component{
                         isSubmitting: true
                     })
                     const result = await checkNotice(id)
-                    if(result){
+                    if(result === 'clear'){
+                        handleNoticeNewChange(false)
+                        this.setState({
+                            is_new: false,
+                            isSubmitting: false
+                        })
+                    }
+                    else if(result){
                         this.setState({
                             is_new: false,
                             isSubmitting: false
