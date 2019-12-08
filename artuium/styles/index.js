@@ -236,6 +236,9 @@ const styles = StyleSheet.create({
     bgBlack: {
         backgroundColor: '#000000'
     },
+    bgBlack07: {
+        backgroundColor: 'rgba(0,0,0,0.7)'
+    },
     bgWhite: {
         backgroundColor: '#FFFFFF'
     },

@@ -10,7 +10,9 @@ class Container extends Component{
         newReviews: PropTypes.array,
         recommendedReviews: PropTypes.array,
         followingReviews: PropTypes.array,
-        initialReview: PropTypes.func.isRequired
+        initialReview: PropTypes.func.isRequired,
+        getInitial: PropTypes.func.isRequired,
+        initial: PropTypes.bool.isRequired
     }
 
     state = {

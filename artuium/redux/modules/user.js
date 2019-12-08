@@ -3,6 +3,7 @@ import { FETCH_URL } from '../../config/urls';
 const LOGOUT = 'LOGOUT';
 const SAVE_TOKEN = 'SAVE_TOKEN';
 const SET_PROFILE = 'SET_PROFILE';
+const SET_INITIAL = 'SET_INITIAL';
 
 function logout(){
     return {
@@ -24,6 +25,13 @@ function setProfile(profile){
     }
 }
 
+function setInitial(initial){
+    return {
+        type: SET_INITIAL,
+        initial
+    }
+}
+
 function getLogout(){
     return (dispatch) => {
         dispatch(logout());
@@ -33,6 +41,12 @@ function getLogout(){
 function getSaveToken(token){
     return (dispatch) => {
         dispatch(saveToken(token))
+    }
+}
+
+function getInitial(initial){
+    return (dispatch) => {
+        dispatch(setInitial(initial))
     }
 }
 
@@ -183,6 +197,7 @@ function unfollowUser(userId){
 const initialState = {
     isLoggedIn: false,
     token: null,
+    initial: true
 };
 
 function reducer(state = initialState, action){
@@ -193,6 +208,8 @@ function reducer(state = initialState, action){
             return applySaveToken(state, action);
         case SET_PROFILE:
             return applySetProfile(state, action);
+        case SET_INITIAL:
+            return applySetInitial(state, action);
         default:
            return state;
     }
@@ -221,6 +238,14 @@ function applySetProfile(state, action){
     }
 }
 
+function applySetInitial(state, action){
+    const { initial } = action;
+    return {
+        ...state,
+        initial
+    }
+}
+
 const actionCreators = {
     getLogout,
     getSaveToken,
@@ -228,7 +253,8 @@ const actionCreators = {
     signUp,
     login,
     followUser,
-    unfollowUser
+    unfollowUser,
+    getInitial
 }
 
 export { actionCreators }

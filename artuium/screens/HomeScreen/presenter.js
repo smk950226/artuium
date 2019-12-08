@@ -85,6 +85,8 @@ class HomeScreen extends Component {
             newReviews: PropTypes.array,
             recommendedReviews: PropTypes.array,
             followingReviews: PropTypes.array,
+            initial: PropTypes.bool.isRequired,
+            getInitial: PropTypes.func.isRequired
         }
 
     constructor(props){
@@ -181,6 +183,24 @@ class HomeScreen extends Component {
                 }
             },
         })
+
+        this.initialResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onStartShouldSetPanResponderCapture: () => false,
+            onMoveShouldSetPanResponder: () => false,
+            onMoveShouldSetPanResponderCapture: () => false,
+            onPanResponderMove: ( event, gestureState ) => {
+                
+            },
+            onPanResponderTerminationRequest: () => false,
+            onPanResponderRelease: ( event, gestureState ) => {
+                if(gestureState.dy <= 0){
+                    if(gestureState.dy < -100){
+                        this.props.getInitial(false)
+                    }
+                }
+            },
+        })
     }
     render() {
         const imageHeight = this.props.screenProps.scrollY.interpolate({
@@ -233,7 +253,7 @@ class HomeScreen extends Component {
             outputRange: [height, 600],
             extrapolate: 'clamp'
         })
-        const { newReviews, recommendedReviews, followingReviews } = this.props;
+        const { newReviews, recommendedReviews, followingReviews, initial } = this.props;
         return (
             <View style={[styles.container]}>
                 <Animated.View
@@ -367,6 +387,15 @@ class HomeScreen extends Component {
                         </TouchableWithoutFeedback>
                     </View>
                 </Animated.ScrollView>
+                {initial && (
+                    <Animated.View { ...this.initialResponder.panHandlers } style={[styles.widthFull, styles.heightFull, styles.justifyContentEnd, styles.alignItemsCenter, styles.bgBlack07, styles.overflowHidden, {position: 'absolute', width: '100%'}]} >
+                        <Text style={[styles.fontMedium, styles.font16, styles.white, styles.textCenter, { lineHeight: 26 }]}>
+                            <Text style={[styles.fontBold]}>위로 스와이프</Text>하면{'\n'}
+                            <Text style={[styles.fontBold]}>홈 화면</Text>이 나타납니다.{'\n'}
+                            아틔움에서 즐거운 시간 보내세요.
+                        </Text>
+                    </Animated.View>
+                )}
             </View>
         );
     }
