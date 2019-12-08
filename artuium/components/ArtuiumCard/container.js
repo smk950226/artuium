@@ -20,7 +20,9 @@ class Container extends Component{
             isSubmitting: false,
             showProfileModal: false,
             following_count,
-            follower_count
+            follower_count,
+            mode: 'follower',
+            showFollowModal: false
         }
     }
 
@@ -38,13 +40,29 @@ class Container extends Component{
 
     _openProfileModal = () => {
         this.setState({
-            showProfileModal: true            
+            showProfileModal: true,
+            showFollowModal: false      
         })
     }
 
     _closeProfileModal = () => {
         this.setState({
             showProfileModal: false
+        })
+    }
+
+    _openFollowModal = (mode) => {
+        this.setState({
+            showFollowModal: true,
+            showProfileModal: false,
+            mode        
+        })
+    }
+
+    _closeFollowModal = () => {
+        this.setState({
+            showFollowModal: false,
+            mode: 'follower'
         })
     }
 
@@ -111,6 +129,8 @@ class Container extends Component{
             {...this.state}
             openProfileModal={this._openProfileModal}
             closeProfileModal={this._closeProfileModal}
+            openFollowModal={this._openFollowModal}
+            closeFollowModal={this._closeFollowModal}
             follow={this._follow}
             unfollow={this._unfollow}
             />

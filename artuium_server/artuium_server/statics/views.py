@@ -3,16 +3,20 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import get_user_model
 
 from . import models, serializers
 from artuium_server.common.pagination import MainPageNumberPagination
+from artuium_server.users import serializers as users_serializers
+
+User = get_user_model()
 
 class InitialReview(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, format = None):
         user = request.user
 
-        following = user.following.values_list('id', flat = True)
+        following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
 
         reviews = models.Review.objects.all()
 
@@ -85,3 +89,45 @@ class NoticeCheck(APIView):
                     return Response(status = status.HTTP_200_OK)
         except:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+
+class Follower(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user_id = request.query_params.get('userId', None)
+        if user_id:
+            try:
+                user = User.objects.get(id = user_id)
+                following = models.Follow.objects.filter(follower = user).values_list('following__id', flat = True)
+                user_list = User.objects.filter(id__in = following)
+
+                paginator = MainPageNumberPagination()
+                result_page = paginator.paginate_queryset(user_list, request)
+                serializer = users_serializers.ProfileSerializer(result_page, many = True, context = {'request': request})
+
+                return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'user_list': serializer.data})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '회원이 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '회원을 선택해주세요.'})
+
+
+class Following(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user_id = request.query_params.get('userId', None)
+        if user_id:
+            try:
+                user = User.objects.get(id = user_id)
+                follower = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
+                user_list = User.objects.filter(id__in = follower)
+
+                paginator = MainPageNumberPagination()
+                result_page = paginator.paginate_queryset(user_list, request)
+                serializer = users_serializers.ProfileSerializer(result_page, many = True, context = {'request': request})
+
+                return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'user_list': serializer.data})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '회원이 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '회원을 선택해주세요.'})

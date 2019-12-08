@@ -912,7 +912,7 @@ const styles = StyleSheet.create({
     },
     profileModalShadow: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 3 },
+        shadowOffset: { width: 5, height: 3 },
         shadowOpacity: 0.8,
         shadowRadius: 2,
         elevation: 1,

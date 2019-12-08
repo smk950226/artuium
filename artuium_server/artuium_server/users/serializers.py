@@ -1,7 +1,10 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
 
 from . import models
 from artuium_server.statics import models as statics_models
+
+User = get_user_model()
 
 class ProfileSerializer(serializers.ModelSerializer):
     is_me = serializers.SerializerMethodField()

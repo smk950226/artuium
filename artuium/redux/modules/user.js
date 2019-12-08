@@ -135,6 +135,7 @@ function getProfile(){
         .then(response => {
             if(response.status === 401){
                 dispatch(getLogout())
+                return false
             }
             else{
                 return response.json()
@@ -160,6 +161,7 @@ function followUser(userId){
         .then(response => {
             if(response.status === 401){
                 dispatch(getLogout())
+                return false
             }
             else{
                 return response.json()
@@ -185,6 +187,7 @@ function unfollowUser(userId){
         .then(response => {
             if(response.status === 401){
                 dispatch(getLogout())
+                return false
             }
             else{
                 return response.json()
@@ -206,6 +209,7 @@ function getNotice(){
         .then(response => {
             if(response.status === 401){
                 dispatch(getLogout())
+                return false
             }
             else{
                 return response.json()
@@ -227,6 +231,7 @@ function getNoticeMore(page){
         .then(response => {
             if(response.status === 401){
                 dispatch(getLogout())
+                return false
             }
             else if(response.status === 404){
                 return false
@@ -251,6 +256,7 @@ function checkNoticeAll(){
         .then(response => {
             if(response.status === 401){
                 dispatch(getLogout())
+                return false
             }
             else{
                 return response.json()
@@ -276,6 +282,7 @@ function checkNotice(noticeId){
         .then(response => {
             if(response.status === 401){
                 dispatch(getLogout())
+                return false
             }
             else if(response.status === 200){
                 return true
@@ -285,6 +292,100 @@ function checkNotice(noticeId){
             }
             else{
                 return false
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function followerList(userId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/follower/list/?userId=${userId}&page=1`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function followerListMore(userId, page){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/follower/list/?userId=${userId}&page=${page}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else if(response.status === 404){
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function followingList(userId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/following/list/?userId=${userId}&page=1`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function followingListMore(userId, page){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/following/list/?userId=${userId}&page=${page}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else if(response.status === 404){
+                return false
+            }
+            else{
+                return response.json()
             }
         })
         .then(json => json)
@@ -355,7 +456,11 @@ const actionCreators = {
     getNotice,
     getNoticeMore,
     checkNotice,
-    checkNoticeAll
+    checkNoticeAll,
+    followerList,
+    followerListMore,
+    followingList,
+    followingListMore
 }
 
 export { actionCreators }
