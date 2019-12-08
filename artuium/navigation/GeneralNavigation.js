@@ -5,6 +5,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import TabContainer from './TabNavigation';
 import ExhibitionDetailScreen from '../screens/ExhibitionDetailScreen';
 import ExhibitionContentScreen from '../screens/ExhibitionContentScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
 
 const GeneralNavigation = createStackNavigator({
     Root: {
@@ -25,6 +26,12 @@ const GeneralNavigation = createStackNavigator({
             header: null
         })
     },
+    EditProfile: {
+        screen: EditProfileScreen,
+        navigationOptions: ({screenProps, navigation}) => ({
+            header: null
+        })
+    }
 },
 {
     mode: 'modal',
