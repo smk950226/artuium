@@ -1,94 +1,125 @@
-import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import React, { Fragment } from 'react';
+import { View, Text, ScrollView, TouchableWithoutFeedback, Image, Dimensions, ActivityIndicator, FlatList, RefreshControl } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
-import ArtuiumCard2 from '../../components/ArtuiumCard2'
+import ArtuiumCard from '../../components/ArtuiumCard';
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import Modal from "react-native-modal";
 
-const data = [
+const statusBarHeight = getStatusBarHeight()
+
+const { width, height } = Dimensions.get('window');
+
+const filter = [
     {
-        id: 1,
-        image: 'http://chedulife.com.au/wp-content/uploads/%EA%B3%A0%ED%9D%90-%EB%B0%A4%EC%9D%98-%EC%B9%B4%ED%8E%98-%ED%85%8C%EB%9D%BC%EC%8A%A4-456x300.jpg',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 4.5,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
+        label: '신규순',
+        value: 'new'
     },
     {
-        id: 2,
-        image: 'http://mblogthumb3.phinf.naver.net/MjAxOTAxMDNfOTEg/MDAxNTQ2NDgxOTgwNTcz.I3sUkC74k5K1fExm6woYSK8DhlgA6MZsqmB91SLCsIcg.vb2MUoFo6xYjZnWOBvnI_jDklXM3jKR8xrbj5tlDjFwg.JPEG.allthat_art/01_5347.JPG?type=w800',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 1,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
+        label: '많은 댓글 순',
+        value: 'comment'
     },
     {
-        id: 3,
-        image: 'https://t1.daumcdn.net/cfile/tistory/2218C34D55096EE51F',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 5,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
+        label: '많은 좋아요 순',
+        value: 'like'
     },
     {
-        id: 4,
-        image: 'http://chedulife.com.au/wp-content/uploads/%EA%B3%A0%ED%9D%90-%EB%B0%A4%EC%9D%98-%EC%B9%B4%ED%8E%98-%ED%85%8C%EB%9D%BC%EC%8A%A4-456x300.jpg',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 4,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
-    },
-    {
-        id: 5,
-        image: 'http://chedulife.com.au/wp-content/uploads/%EA%B3%A0%ED%9D%90-%EB%B0%A4%EC%9D%98-%EC%B9%B4%ED%8E%98-%ED%85%8C%EB%9D%BC%EC%8A%A4-456x300.jpg',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 3.5,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름  신인상주의의 창시자인 조 신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파...'
+        label: '높은 별점 순',
+        value: 'rate'
     }
 ]
 
 const RecommendArtworkScreen = (props) => (
+    <Fragment>
     <View style={[styles.container]}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-            {data.map((da,index) => (
-                <ArtuiumCard2 key={index} artwork={da} />
-            ))}
-        </ScrollView>
+        <View style={[{height:50, marginTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
+            <TouchableWithoutFeedback onPress={() => props.navigation.goBack(null)}>
+                <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9, height: 17}]} />
+            </TouchableWithoutFeedback>
+            <Text style={[styles.fontBold, styles.font18]}>추천 감상</Text>
+            <TouchableWithoutFeedback onPress={props.openFilterModal}>
+                <View>
+                    <Image source={require('../../assets/images/icon_sort.png')} style={[{width: 20, height: 17}]} />
+                </View>
+            </TouchableWithoutFeedback>
+        </View>
+        {props.loading ? (
+            <View style={[styles.container, styles.alignItemsCenter, styles.justifyContentCenter]}>
+                <ActivityIndicator size={'small'} color={'#000'} />
+            </View>
+        ) : (
+            props.reviews && props.reviews.length > 0 ? (
+                <FlatList 
+                data={props.reviews} 
+                renderItem={({item}) => (
+                    <ArtuiumCard review={item} size={'xlarge'} navigation={props.navigation} />
+                )} 
+                numColumns={1} 
+                keyExtractor={item => String(item.id)} 
+                refreshing={props.refreshing} 
+                onRefresh={props.refresh} 
+                onEndReached={props.hasNextPage ? props.reviewMore : null} 
+                onEndReachedThreshold={0.5} 
+                bounces={true} 
+                ListFooterComponent={props.isLoadingMore ? (
+                    <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.mt5, styles.py5]}>
+                        <ActivityIndicator size={'small'} color={'#000000'} />
+                    </View>
+                ): null} />
+            ) : (
+                <ScrollView 
+                refreshControl={<RefreshControl refreshing={props.refreshing} onRefresh={props.refresh} tintColor={'#000000'} />}
+                >
+                    <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
+                </ScrollView>
+            )
+        )}
     </View>
+        <Modal 
+        isVisible={props.showFilterModal}
+        backdropOpacity={0.26}
+        onBackButtonPress={props.closeFilterModal}
+        onBackdropPress={props.closeFilterModal}
+        style={[styles.justifyContentEnd, {margin: 0}]}
+        >
+            <TouchableWithoutFeedback onPress={props.closeFilterModal}>
+                <View style={[styles.container, styles.px0, styles.justifyContentEnd]}>
+                    <TouchableWithoutFeedback>
+                        <View style={[styles.bgWhite, styles.borderTopRadius10, { paddingBottom: 150 }]}>
+                            <View style={[styles.borderBtmGray70, styles.py10]}>
+                                <Text style={[styles.fontMedium, styles.font17, styles.textCenter]}>
+                                    정렬
+                                </Text>
+                            </View>
+                            {filter.map((fil, index) => (
+                                <TouchableWithoutFeedback key={index} onPress={() => props.handleFilterChange(fil.value)}>
+                                    <View style={[styles.borderBtmGray70, styles.py10, styles.px25]}>
+                                        <Text style={[styles.fontRegular, styles.font15]}>
+                                            {fil.label}
+                                        </Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            ))}
+                        </View>
+                    </TouchableWithoutFeedback>
+                </View>
+            </TouchableWithoutFeedback>
+        </Modal>
+    </Fragment>
 )
 
 RecommendArtworkScreen.propTypes = {
-
+    openFilterModal: PropTypes.func.isRequired,
+    closeFilterModal: PropTypes.func.isRequired,
+    showFilterModal: PropTypes.bool.isRequired,
+    handleFilterChange: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired,
+    hasNextPage: PropTypes.bool.isRequired,
+    isLoadingMore: PropTypes.bool.isRequired,
+    reviews: PropTypes.array,
+    reviewMore: PropTypes.func.isRequired,
+    refresh: PropTypes.func.isRequired,
+    refreshing: PropTypes.bool.isRequired 
 }
 
 export default RecommendArtworkScreen;

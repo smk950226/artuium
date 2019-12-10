@@ -42,17 +42,9 @@ const HomeRoute = createStackNavigator(
         },
         RecommendArtwork: {
             screen: RecommendArtworkScreen,
-            navigationOptions: ({screenProps, navigation}) => ({
-                header: (
-                    <View style={[{height: statusBarHeight+50, paddingTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
-                        <TouchableWithoutFeedback onPress={() => navigation.goBack(null)}>
-                            <Image source={require('../assets/images/icon_back.png')} style={[{width: 9, height: 17}]} />
-                        </TouchableWithoutFeedback>
-                        <Text style={[styles.fontBold, styles.font18]}>추천 감상</Text>
-                        <Image source={require('../assets/images/icon_sort.png')} style={[{width: 20, height: 17}]} />
-                    </View>
-                )
-            })
+            navigationOptions: {
+                header: null
+            }
         },
         ...sharedRoutes
     },
