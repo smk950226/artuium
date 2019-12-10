@@ -8,15 +8,20 @@ class Container extends Component{
         size: PropTypes.string.isRequired,
         followUser: PropTypes.func.isRequired,
         unfollowUser: PropTypes.func.isRequired,
-        initialReview: PropTypes.func.isRequired
+        initialReview: PropTypes.func.isRequired,
+        likeReview: PropTypes.func.isRequired,
+        unlikeReview: PropTypes.func.isRequired
     }
 
     constructor(props){
         super(props);
-        const { review : { author : { is_me, is_following, following_count, follower_count } } } = props;
+        const { review : { author : { is_me, is_following, following_count, follower_count }, is_liked, like_count, reply_count } } = props;
         this.state = {
             is_me,
             is_following,
+            is_liked,
+            like_count,
+            reply_count,
             isSubmitting: false,
             showProfileModal: false,
             following_count,
@@ -28,12 +33,15 @@ class Container extends Component{
 
     componentDidUpdate = (prevProps, prevState) => {
         if(prevProps.review !== this.props.review){
-            const { review : { author : { is_me, is_following, following_count, follower_count } } } = this.props;
+            const { review : { author : { is_me, is_following, following_count, follower_count }, is_liked, like_count, reply_count } } = this.props;
             this.setState({
                 is_me,
                 is_following,
                 following_count,
-                follower_count
+                follower_count, 
+                is_liked, 
+                like_count, 
+                reply_count
             })
         }
     }
@@ -121,6 +129,58 @@ class Container extends Component{
             }
         }
     }
+
+    _like = async() => {
+        const { is_liked, isSubmitting } = this.state;
+        const { likeReview, initialReview, review : { id } } = this.props;
+        if(!isSubmitting){
+            if(!is_liked){
+                this.setState({
+                    isSubmitting: true
+                })
+                const result = await likeReview(id)
+                if(result.status === 'ok'){
+                    this.setState({
+                        is_liked: true,
+                        isSubmitting: false,
+                        like_count: this.state.like_count + 1
+                    })
+                    initialReview()
+                }
+                else{
+                    this.setState({
+                        isSubmitting: false
+                    })
+                }
+            }
+        }
+    }
+
+    _unlike = async() => {
+        const { is_liked, isSubmitting } = this.state;
+        const { unlikeReview, initialReview, review : { id } } = this.props;
+        if(!isSubmitting){
+            if(is_liked){
+                this.setState({
+                    isSubmitting: true
+                })
+                const result = await unlikeReview(id)
+                if(result.status === 'ok'){
+                    this.setState({
+                        is_liked: false,
+                        isSubmitting: false,
+                        like_count: this.state.like_count - 1
+                    })
+                    initialReview()
+                }
+                else{
+                    this.setState({
+                        isSubmitting: false
+                    })
+                }
+            }
+        }
+    }
     
     render(){
         return(
@@ -133,6 +193,8 @@ class Container extends Component{
             closeFollowModal={this._closeFollowModal}
             follow={this._follow}
             unfollow={this._unfollow}
+            like={this._like}
+            unlike={this._unlike}
             />
         )
     }

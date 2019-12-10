@@ -23,6 +23,105 @@ function initialReview(){
     }
 }
 
+function getReviewList(type, filter){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/review/?page=1&type=${type}&filter=${filter}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function getReviewListMore(type, filter, page){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/review/?page=${page}&type=${type}&filter=${filter}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else if(response.status === 404){
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function likeReview(reviewId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/like/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            },
+            body: JSON.stringify({
+                reviewId
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function unlikeReview(reviewId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/like/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            },
+            body: JSON.stringify({
+                reviewId
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     
 };
@@ -48,7 +147,11 @@ function applySetInitialReview(state, action){
 };
 
 const actionCreators = {
-    initialReview
+    initialReview,
+    getReviewList,
+    getReviewListMore,
+    likeReview,
+    unlikeReview
 }
 
 export { actionCreators }

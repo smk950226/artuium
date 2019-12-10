@@ -4,23 +4,118 @@ import ArtuiumCard2 from './presenter';
 
 class Container extends Component{
     static propTypes = {
-        artwork: PropTypes.object.isRequired
+        review: PropTypes.object.isRequired,
+        followUser: PropTypes.func.isRequired,
+        unfollowUser: PropTypes.func.isRequired
     }
 
-    state = {
-        isLiked: false
+    constructor(props){
+        super(props);
+        const { review : { author : { is_me, is_following, following_count, follower_count } } } = props;
+        this.state = {
+            is_me,
+            is_following,
+            isSubmitting: false,
+            showProfileModal: false,
+            following_count,
+            follower_count,
+            mode: 'follower',
+            showFollowModal: false
+        }
     }
 
-    _like = () => {
+    componentDidUpdate = (prevProps, prevState) => {
+        if(prevProps.review !== this.props.review){
+            const { review : { author : { is_me, is_following, following_count, follower_count } } } = this.props;
+            this.setState({
+                is_me,
+                is_following,
+                following_count,
+                follower_count
+            })
+        }
+    }
+
+    _openProfileModal = () => {
         this.setState({
-            isLiked: true
+            showProfileModal: true,
+            showFollowModal: false      
         })
     }
 
-    _unLike = () => {
+    _closeProfileModal = () => {
         this.setState({
-            isLiked: false
+            showProfileModal: false
         })
+    }
+
+    _openFollowModal = (mode) => {
+        this.setState({
+            showFollowModal: true,
+            showProfileModal: false,
+            mode        
+        })
+    }
+
+    _closeFollowModal = () => {
+        this.setState({
+            showFollowModal: false,
+            mode: 'follower'
+        })
+    }
+
+    _follow = async() => {
+        const { is_following, is_me, isSubmitting } = this.state;
+        const { followUser, review : { author : { id } } } = this.props;
+        if(!isSubmitting){
+            if(!is_me){
+                if(!is_following){
+                    this.setState({
+                        isSubmitting: true
+                    })
+                    const result = await followUser(id)
+                    if(result.status === 'ok'){
+                        this.setState({
+                            is_following: true,
+                            isSubmitting: false,
+                            follower_count: this.state.follower_count + 1
+                        })
+                    }
+                    else{
+                        this.setState({
+                            isSubmitting: false
+                        })
+                    }
+                }
+            }
+        }
+    }
+
+    _unfollow = async() => {
+        const { is_following, is_me, isSubmitting } = this.state;
+        const { unfollowUser, review : { author : { id } } } = this.props;
+        if(!isSubmitting){
+            if(!is_me){
+                if(is_following){
+                    this.setState({
+                        isSubmitting: true
+                    })
+                    const result = await unfollowUser(id)
+                    if(result.status === 'ok'){
+                        this.setState({
+                            is_following: false,
+                            isSubmitting: false,
+                            follower_count: this.state.follower_count - 1
+                        })
+                    }
+                    else{
+                        this.setState({
+                            isSubmitting: false
+                        })
+                    }
+                }
+            }
+        }
     }
     
     render(){
@@ -28,8 +123,12 @@ class Container extends Component{
             <ArtuiumCard2 
             {...this.props}
             {...this.state}
-            like={this._like}
-            unLike={this._unLike}
+            openProfileModal={this._openProfileModal}
+            closeProfileModal={this._closeProfileModal}
+            openFollowModal={this._openFollowModal}
+            closeFollowModal={this._closeFollowModal}
+            follow={this._follow}
+            unfollow={this._unfollow}
             />
         )
     }

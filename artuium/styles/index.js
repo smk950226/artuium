@@ -647,6 +647,10 @@ const styles = StyleSheet.create({
     borderRadiusRound: {
         borderRadius: 9999
     },
+    borderTopRadius10: {
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10
+    },
     borderBtmGrayDb: {
         borderBottomColor: '#dbdbdb',
         borderBottomWidth: 1
@@ -658,6 +662,10 @@ const styles = StyleSheet.create({
     borderBtmGrayE6: {
         borderBottomColor: '#E6E6E6',
         borderBottomWidth: 1
+    },
+    borderBtmGray70: {
+        borderBottomColor: '#707070',
+        borderBottomWidth: StyleSheet.hairlineWidth
     },
     overflowHidden: {
         overflow: 'hidden'

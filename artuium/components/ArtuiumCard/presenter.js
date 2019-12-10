@@ -9,6 +9,23 @@ import FollowingList from '../FollowingList';
 
 const { width, height } = Dimensions.get('window')
 
+function abbreviateNumber(value) {
+    var newValue = value;
+    if (value >= 1000) {
+        var suffixes = ["", "k", "m", "b","t"];
+        var suffixNum = Math.floor( (""+value).length/3 );
+        var shortValue = '';
+        for (var precision = 2; precision >= 1; precision--) {
+            shortValue = parseFloat( (suffixNum != 0 ? (value / Math.pow(1000,suffixNum) ) : value).toPrecision(precision));
+            var dotLessShortValue = (shortValue + '').replace(/[^a-zA-Z 0-9]+/g,'');
+            if (dotLessShortValue.length <= 2) { break; }
+        }
+        if (shortValue % 1 != 0)  shortValue = shortValue.toFixed(1);
+        newValue = shortValue+suffixes[suffixNum];
+    }
+    return newValue;
+}
+
 class ArtuiumCard extends Component{
     static propTypes = {
         review: PropTypes.object.isRequired,
@@ -25,7 +42,12 @@ class ArtuiumCard extends Component{
         follow: PropTypes.func.isRequired,
         unfollow: PropTypes.func.isRequired,
         follower_count: PropTypes.number.isRequired,
-        following_count: PropTypes.number.isRequired
+        following_count: PropTypes.number.isRequired,
+        like: PropTypes.func.isRequired,
+        unlike: PropTypes.func.isRequired,
+        is_liked: PropTypes.bool.isRequired,
+        like_count: PropTypes.number.isRequired,
+        reply_count: PropTypes.number.isRequired,
     }
 
     constructor(props){
@@ -66,12 +88,11 @@ class ArtuiumCard extends Component{
     }
 
     render(){
-        const { review, size, showProfileModal, showFollowModal, is_me, is_following, follower_count, following_count } = this.props;
-        console.log(showFollowModal)
+        const { review, size, showProfileModal, showFollowModal, is_me, is_following, follower_count, following_count, is_liked, like_count, reply_count } = this.props;
         return(
             <TouchableWithoutFeedback onPress={()=>props.navigation.navigate('ExhibitionDetail')}>
                 <Fragment>
-                <View style={[(size === 'small') ? {width: (width/2)-20} : { width: width-30 }, styles.mb10, styles.artworkBorder, styles.overflowHidden]}>
+                <View style={[(size === 'small') ? {width: (width/2)-20} : null, (size === 'large') ? { width: width-30 } : null, (size === 'xlarge') ? { width: width } : null, styles.mb10, (size === 'xlarge') ? null : styles.artworkBorder, styles.overflowHidden]}>
                     <ImageBackground source={{uri: review.artwork ? review.artwork.image : review.exhibition ? (review.exhibition.images && (review.exhibition.images.length > 0)) ? review.exhibition.images[0].image : null : null}} style={[size === 'small' ? styles.artworkImage : styles.artworkImageLg, size === 'small' ? styles.py5 : styles.py20, size === 'small' ? styles.px10 : styles.px15, styles.justifyContentEnd]} resizeMode={'cover'} >
                         <Text style={[styles.fontBold, (size === 'small') ? styles.font15 : styles.font20, styles.white]}>
                             {review.artwork ? review.artwork.name : review.exhibition ? review.exhibition.name : ""}
@@ -80,7 +101,7 @@ class ArtuiumCard extends Component{
                             {review.artwork ? review.artwork.author.name : review.exhibition ? (review.exhibition.artists && (review.exhibition.artists.length > 0)) ? review.exhibition.artists[0].name : "" : ""}
                         </Text>
                     </ImageBackground>
-                    <View style={[styles.py10, styles.px10]}>
+                    <View style={[(size === 'xlarge') ? styles.py20 : styles.py10, (size === 'xlarge') ? styles.px30 : styles.px10]}>
                         {size === 'small' ? (
                             <Fragment>
                                 <View style={[styles.row, styles.justifyContentBetween]}>
@@ -140,9 +161,13 @@ class ArtuiumCard extends Component{
                                     </View>
                                     <View style={[styles.row, styles.alignItemsCenter]}>
                                         <Image source={require('../../assets/images/icon_comment.png')} style={[styles.icon12]} />
-                                        <Text style={[styles.fontMedium, styles.font10, styles.grayD1]}>{review.reply_count}</Text>
-                                        <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon12, styles.ml10]} />
-                                        <Text style={[styles.fontMedium, styles.font10, styles.grayD1]}>{review.like_count}</Text>
+                                        <Text style={[styles.fontMedium, styles.font10, styles.grayD1]}>{abbreviateNumber(reply_count)}</Text>
+                                        <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
+                                            <View style={[styles.row, styles.alignItemsCenter]}>
+                                                <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon12, styles.ml10]} />
+                                                <Text style={[styles.fontMedium, styles.font10, styles.grayD1]}>{abbreviateNumber(like_count)}</Text>
+                                            </View>
+                                        </TouchableWithoutFeedback>
                                     </View>
                                 </View>
                             </Fragment>
@@ -202,9 +227,13 @@ class ArtuiumCard extends Component{
                                 </View>
                                 <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt10]}>
                                     <Image source={require('../../assets/images/icon_comment.png')} style={[styles.icon30]} />
-                                    <Text style={[styles.fontMedium, styles.font15, styles.grayD1, styles.ml5]}>{review.reply_count}</Text>
-                                    <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon30, styles.ml20]} />
-                                    <Text style={[styles.fontMedium, styles.font15, styles.grayD1, styles.ml5]}>{review.like_count}</Text>
+                                    <Text style={[styles.fontMedium, styles.font15, styles.grayD1, styles.ml5]}>{abbreviateNumber(reply_count)}</Text>
+                                    <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
+                                        <View style={[styles.row, styles.alignItemsCenter]}>
+                                            <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon30, styles.ml20]} />
+                                            <Text style={[styles.fontMedium, styles.font15, styles.grayD1, styles.ml5]}>{abbreviateNumber(like_count)}</Text>
+                                        </View>
+                                    </TouchableWithoutFeedback>
                                 </View>
                             </Fragment>
                         )}

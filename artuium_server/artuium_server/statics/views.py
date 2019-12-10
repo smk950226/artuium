@@ -32,6 +32,45 @@ class InitialReview(APIView):
         })
 
 
+class Review(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        list_type = request.query_params.get('type', None)
+        filter_type = request.query_params.get('filter', None)
+
+        reviews = []
+
+        if list_type:
+            if list_type == 'all':
+                reviews = models.Review.objects.all()
+            elif list_type == 'recommended':
+                reviews = models.Review.objects.filter(recommended = True)
+            else:
+                reviews = models.Review.objects.all()
+        else:
+            reviews = models.Review.objects.all()
+
+        if filter_type:
+            if filter_type == 'new':
+                reviews = reviews.order_by('-time')
+            elif filter_type == 'like':
+                reviews =  sorted(reviews, key=lambda t: t.like_count, reverse=True)
+            elif filter_type == 'comment':
+                sorted(reviews, key=lambda t: t.reply_count, reverse=True)
+            elif filter_type == 'rate':
+                reviews = reviews.order_by('-rate')
+            else:
+                reviews = reviews.order_by('-time')
+        else:
+            reviews = reviews.order_by('-time')
+        
+        paginator = MainPageNumberPagination()
+        result_page = paginator.paginate_queryset(reviews, request)
+        serializer = serializers.ReviewSerializer(result_page, many = True, context = {'request': request})
+
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+
+
 class Notice(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, format = None):
@@ -131,3 +170,41 @@ class Following(APIView):
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '회원이 존재하지 않습니다.'})
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '회원을 선택해주세요.'})
+
+
+class Like(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self ,request, format = None):
+        review_id = request.data.get('reviewId', None)
+        user = request.user
+        if review_id:
+            try:
+                review = models.Review.objects.get(id = review_id)
+                pre = models.Like.objects.filter(user = user, review = review)
+                if pre.count() > 0:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 좋아하는 감상입니다.'})
+                else:
+                    like = models.Like.objects.create(user = user, review = review)
+                    like.save()
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상을 선택해주세요.'})
+    
+    def delete(self ,request, format = None):
+        review_id = request.data.get('reviewId', None)
+        user = request.user
+        if review_id:
+            try:
+                review = models.Review.objects.get(id = review_id)
+                pre = models.Like.objects.filter(user = user, review = review)
+                if pre.count() == 0:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '좋아하는 감상이 아닙니다.'})
+                else:
+                    pre.delete()
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상을 선택해주세요.'})

@@ -9,9 +9,21 @@ class ReviewSerializer(serializers.ModelSerializer):
     author = users_serializers.ProfileSerializer()
     exhibition = exhibition_serializers.ExhibitionSerializer()
     artwork = artwork_serializers.ArtworkSerializer()
+    is_liked = serializers.SerializerMethodField()
     class Meta:
         model = models.Review
-        fields = ['id', 'author', 'time', 'content', 'exhibition', 'artwork', 'rate', 'expression', 'recommended', 'reply_count', 'like_count']
+        fields = ['id', 'author', 'time', 'content', 'exhibition', 'artwork', 'rate', 'expression', 'recommended', 'reply_count', 'like_count', 'is_liked']
+    
+    def get_is_liked(self, obj):
+        if 'request' in self.context:
+            request = self.context['request']
+            user = request.user
+            like_check = models.Like.objects.filter(user = user, review = obj)
+            if like_check.count() > 0:
+                return True
+            else:
+                return False
+        return False
 
 
 class NoticeSerializer(serializers.ModelSerializer):

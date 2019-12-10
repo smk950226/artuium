@@ -13,6 +13,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         initialReview: () => {
             dispatch(reviewActions.initialReview())
+        },
+        likeReview: (reviewId) => {
+            return dispatch(reviewActions.likeReview(reviewId))
+        },
+        unlikeReview: (reviewId) => {
+            return dispatch(reviewActions.unlikeReview(reviewId))
         }
     }
 }
