@@ -217,7 +217,11 @@ class HomeScreen extends Component {
                         </View>
                     </TouchableWithoutFeedback>
                     <Animated.Text style={{opacity: headerOpacity}}>아틔움 로고자리</Animated.Text>
-                    <Image style={{width: 24, height: 24, zIndex: 999}} source={require('../../assets/images/search.png')} />
+                    <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Search')}>
+                        <View>
+                            <Image style={{width: 24, height: 24, zIndex: 999}} source={require('../../assets/images/search.png')} />
+                        </View>
+                    </TouchableWithoutFeedback>
                 </Animated.View>
                 <Animated.View style={{width: width, height: statusBarMargin, backgroundColor: 'white', opacity: headerOpacity}} />
                 <Animated.ScrollView

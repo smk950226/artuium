@@ -45,11 +45,11 @@ const period = [
 const scale = [
     {
         label: '중대형',
-        value: 'large'
+        value: '중대형'
     },
     {
         label: '소형',
-        value: 'small'
+        value: '소형'
     }
 ]
 
@@ -290,7 +290,7 @@ const AllExhibitionScreen = (props) => (
                         <View style={[styles.bgWhite, styles.borderTopRadius10, { paddingBottom: 150 }]}>
                             <View style={[styles.borderBtmGray70, styles.py10]}>
                                 <Text style={[styles.fontMedium, styles.font17, styles.textCenter]}>
-                                    
+                                    지역
                                 </Text>
                             </View>
                             {region.map((fil, index) => (

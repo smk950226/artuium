@@ -23,7 +23,7 @@ class Exhibition(models.Model):
     notopendate = models.DateField()
     region = models.CharField('지역', max_length = 255)
     address = models.CharField('주소', max_length = 500)
-    scale = models.CharField('규모', choices = (('large', '중대형'), ('small', '소형')), max_length = 500)
+    scale = models.CharField('규모', choices = (('중대형', '중대형'), ('소형', '소형')), max_length = 500)
     fee = models.FloatField('요금')
     artists = models.ManyToManyField('artwork.Artist', related_name = 'exhibitions')
     artworks = models.ManyToManyField('artwork.Artwork', related_name = 'exhibitions')

@@ -261,6 +261,10 @@ const styles = StyleSheet.create({
         color: '#EbEbEb',
         includeFontPadding: false
     },
+    grayF4: {
+        color: '#F4F4F4',
+        includeFontPadding: false
+    },
     bgBlack: {
         backgroundColor: '#000000'
     },
@@ -269,6 +273,9 @@ const styles = StyleSheet.create({
     },
     bgWhite: {
         backgroundColor: '#FFFFFF'
+    },
+    bgTransparent: {
+        backgroundColor: 'transparent'
     },
     bgRed: {
         backgroundColor: '#FF0000'
@@ -311,6 +318,9 @@ const styles = StyleSheet.create({
     },
     bgGrayf0: {
         backgroundColor: '#f0f0f0'
+    },
+    bgGrayF4: {
+        backgroundColor: '#F4F4F4'
     },
     justifyContentCenter: {
         justifyContent: 'center'
@@ -976,7 +986,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#969696',
         alignItems: 'center',
         justifyContent: 'center',
-    },
+    }
 })
 
 export default styles; 

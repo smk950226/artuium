@@ -4,9 +4,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 from . import models, serializers
 from artuium_server.statics import models as statics_models
+from artuium_server.artwork import models as artwork_models
+from artuium_server.artwork import serializers as artwork_serializers
+from artuium_server.exhibition import models as exhibition_models
+from artuium_server.exhibition import serializers as exhibition_serializers
 
 User = get_user_model()
 
@@ -48,3 +53,36 @@ class Follow(APIView):
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '회원이 존재하지 않습니다.'})
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '회원을 선택해주세요.'})
+
+
+class Search(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        q = request.query_params.get('q', None)
+        if q:
+            q_artwork_name = Q(name__icontains = q)
+            q_artwork_author_name = Q(author__name__icontains = q)
+            q_artwork_material = Q(material__icontains = q)
+
+            q_exhibition_name = Q(name__icontains = q)
+            q_exhibition_content = Q(content__icontains = q)
+            q_exhibition_region = Q(region__icontains = q)
+            q_exhibition_address = Q(address__icontains = q)
+            q_exhibition_scale = Q(scale__icontains = q)
+            q_exhibition_gallery_name = Q(gallery__name__icontains = q)
+            q_exhibition_gallery_location = Q(gallery__location__icontains = q)
+            q_exhibition_artist_name = Q(artists__name__icontains = q)
+            q_exhibition_artwork_name = Q(artworks__name__icontains = q)
+
+            artworks = artwork_models.Artwork.objects.filter(q_artwork_name | q_artwork_author_name | q_artwork_material).distinct()[:10]
+            exhibitions = exhibition_models.Exhibition.objects.filter(q_exhibition_name | q_exhibition_content | q_exhibition_region | q_exhibition_address | q_exhibition_scale | q_exhibition_gallery_name | q_exhibition_gallery_location | q_exhibition_artist_name | q_exhibition_artwork_name).distinct()[:10]
+
+            artwork_serializer = artwork_serializers.ArtworkSerializer(artworks, many = True, context = {'request': request})
+            exhibition_serializer = exhibition_serializers.ExhibitionSerializer(exhibitions, many = True, context = {'request': request})
+
+            return Response(status = status.HTTP_200_OK, data = {
+                'artworks': artwork_serializer.data,
+                'exhibitions': exhibition_serializer.data
+            })
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)

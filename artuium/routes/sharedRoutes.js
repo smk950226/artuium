@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Image, Text, View, TouchableWithoutFeedback, Platform } from 'react-native';
-import LikeListScreen from '../screens/LikeListScreen'
+import LikeListScreen from '../screens/LikeListScreen';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import styles from '../styles';
 
@@ -21,7 +21,7 @@ const sharedRoutes = {
                 </View>
             )
         })
-    },
+    }
 };
 
 const sharedOptions = {

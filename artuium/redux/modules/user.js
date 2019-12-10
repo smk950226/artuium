@@ -392,6 +392,31 @@ function followingListMore(userId, page){
     }
 }
 
+function search(q){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/users/search/?q=${q}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else if(response.status === 203){
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     isLoggedIn: false,
     token: null,
@@ -460,7 +485,8 @@ const actionCreators = {
     followerList,
     followerListMore,
     followingList,
-    followingListMore
+    followingListMore,
+    search
 }
 
 export { actionCreators }

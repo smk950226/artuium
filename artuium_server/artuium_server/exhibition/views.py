@@ -70,10 +70,10 @@ class Exhibition(APIView):
                 exhibitions = exhibitions.filter(open_date__gt = today)
         
         if scale:
-            if scale == 'large':
-                exhibitions = exhibitions.filter(scale = 'large')
-            elif scale == 'small':
-                exhibitions = exhibitions.filter(scale = 'small')
+            if scale == '중대형':
+                exhibitions = exhibitions.filter(scale = '중대형')
+            elif scale == '소형':
+                exhibitions = exhibitions.filter(scale = '소형')
         
         if region:
             if region != 'else':

@@ -6,6 +6,7 @@ import TabContainer from './TabNavigation';
 import ExhibitionDetailScreen from '../screens/ExhibitionDetailScreen';
 import ExhibitionContentScreen from '../screens/ExhibitionContentScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
+import SearchScreen from '../screens/SearchScreen';
 
 const GeneralNavigation = createStackNavigator({
     Root: {
@@ -31,6 +32,12 @@ const GeneralNavigation = createStackNavigator({
         navigationOptions: ({screenProps, navigation}) => ({
             header: null
         })
+    },
+    Search: {
+        screen: SearchScreen,
+        navigationOptions: {
+            header: null
+        }
     }
 },
 {
