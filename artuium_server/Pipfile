@@ -38,6 +38,8 @@ Sphinx = "==2.2.1"
 django_coverage_plugin = "==1.6.0"
 django-rest-auth = "*"
 djangorestframework-jwt = "*"
+awsebcli = "*"
+requests = "*"
 
 [requires]
 python_version = "3.7"
