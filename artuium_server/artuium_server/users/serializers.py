@@ -9,9 +9,10 @@ User = get_user_model()
 class ProfileSerializer(serializers.ModelSerializer):
     is_me = serializers.SerializerMethodField()
     is_following = serializers.SerializerMethodField()
+    following_friends_count = serializers.SerializerMethodField()
     class Meta:
         model = models.User
-        fields = ['id', 'nickname', 'profile_image', 'background_image', 'following_count', 'follower_count', 'is_me', 'is_following']
+        fields = ['id', 'nickname', 'profile_image', 'background_image', 'following_count', 'follower_count', 'is_me', 'is_following', 'following_friends_count']
     
 
     def get_is_me(self, obj):
@@ -21,7 +22,8 @@ class ProfileSerializer(serializers.ModelSerializer):
                 return True
             else:
                 return False
-        return False
+        else:
+            return False
 
     def get_is_following(self, obj):
         if 'request' in self.context:
@@ -31,4 +33,18 @@ class ProfileSerializer(serializers.ModelSerializer):
                 return True
             else:
                 return False
-        return False
+        else:
+            return False
+
+
+    def get_following_friends_count(self, obj):
+        if 'request' in self.context:
+            request = self.context['request']
+            user = request.user
+            following = statics_models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
+            follow = statics_models.Follow.objects.filter(follower = obj, following__id__in = following)
+            print(4, follow)
+            return follow.count()
+        else:
+            print(1)
+            return 0

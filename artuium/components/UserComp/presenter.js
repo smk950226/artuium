@@ -24,7 +24,7 @@ class UserComp extends Component{
                     )}
                     <View style={[styles.ml10]}>
                         <Text style={[styles.fontMedium, styles.font16]}>{user.nickname}</Text>
-                        <Text style={[styles.fontRegular, styles.font12]}>{`팔로우하는 내 친구`}</Text>
+                        <Text style={[styles.fontRegular, styles.font12]}>{`팔로우하는 내 친구 ${user.following_friends_count}명`}</Text>
                     </View>
                 </View>
                 <View style={[styles.row, styles.alignItemsCenter]}>

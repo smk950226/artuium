@@ -318,7 +318,7 @@ class HomeScreen extends Component {
                         )}
                     </ScrollView>
                     <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15]}>
-                        <TouchableWithoutFeedback>
+                        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
                             <View style={[styles.bgBlack, styles.borderRadius5, styles.py10, { width: 220 }]}>
                                 <Text style={[styles.textCenter, styles.fontMedium, styles.font16, styles.white]}>새로운 감상 확인하기 </Text>
                             </View>
@@ -346,7 +346,7 @@ class HomeScreen extends Component {
                         )}
                     </ScrollView>
                     <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15, { marginBottom: 60 }]}>
-                        <TouchableWithoutFeedback>
+                        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('FollowArtwork')}>
                             <View style={[styles.bgBlack, styles.borderRadius5, styles.py10, { width: 220 }]}>
                                 <Text style={[styles.textCenter, styles.fontMedium, styles.font16, styles.white]}>친구들의 감상 확인하기 </Text>
                             </View>

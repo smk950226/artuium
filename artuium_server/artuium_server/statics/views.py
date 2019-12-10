@@ -38,6 +38,7 @@ class Review(APIView):
     def get(self, request, format = None):
         list_type = request.query_params.get('type', None)
         filter_type = request.query_params.get('filter', None)
+        user = request.user
 
         reviews = []
 
@@ -46,6 +47,9 @@ class Review(APIView):
                 reviews = models.Review.objects.all()
             elif list_type == 'recommended':
                 reviews = models.Review.objects.filter(recommended = True)
+            elif list_type == 'friend':
+                following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
+                reviews = models.Review.objects.filter(author__id__in = following)
             else:
                 reviews = models.Review.objects.all()
         else:
