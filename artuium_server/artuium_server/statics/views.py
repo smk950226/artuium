@@ -50,6 +50,8 @@ class Review(APIView):
             elif list_type == 'friend':
                 following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
                 reviews = models.Review.objects.filter(author__id__in = following)
+            elif list_type == 'exhibition':
+                reviews = models.Review.objects.filter(exhibition__isnull = False)
             else:
                 reviews = models.Review.objects.all()
         else:

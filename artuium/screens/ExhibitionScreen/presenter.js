@@ -216,7 +216,7 @@ class ExhibitionScreen extends React.Component {
                                     <Text style={[styles.font12, styles.mt5]}>전체 전시</Text>
                                 </View>
                             </TouchableWithoutFeedback>
-                            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
+                            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllExhibitionReview')}>
                                 <View style={[styles.center]}>
                                     <Image style={{width: 24, height: 24}} source={require('../../assets/images/follow.png')} />
                                     <Text style={[styles.font12, styles.mt5]}>전시 감상</Text>
