@@ -27,3 +27,15 @@ class User(AbstractUser):
     @property
     def follower_count(self):
         return self.follower.all().count()
+
+    @property
+    def like_exhibition_count(self):
+        return self.likes.filter(exhibition__isnull = False).count()
+    
+    @property
+    def like_artwork_count(self):
+        return self.likes.filter(artwork__isnull = False).count()
+    
+    @property
+    def like_review_count(self):
+        return self.likes.filter(review__isnull = False).count()

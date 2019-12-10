@@ -6,26 +6,55 @@ import LoginScreen from './presenter';
 class Container extends Component{
     static propTypes = {
         login: PropTypes.func.isRequired,
-        getSaveToken: PropTypes.func.isRequired
+        getSaveToken: PropTypes.func.isRequired,
+        getProfileByToken: PropTypes.func.isRequired,
+        profile: PropTypes.object
     }
 
     state = {
-        isSubmitting: false
+        isSubmitting: false,
+        fetchedProfile: false,
+        fetchClear: false
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState){
+        const { fetchedProfile } = prevState;
+        if((!fetchedProfile)){
+            let update = {}
+            if((nextProps.profile)){
+                update.fetchedProfile = true
+            }
+
+            return update
+        }
+        else{
+            return null
+        }
+    }
+
+    componentDidUpdate = () => {
+        if(this.state.fetchedProfile && !this.state.fetchClear){
+            this.props.getSaveToken(this.state.token)
+            this.setState({
+                isSubmitting: false,
+                fetchClear: true
+            })
+        }
     }
 
     _login = async() => {
         const { isSubmitting } = this.state;
-        const { login, getSaveToken } = this.props;
+        const { login, getSaveToken, getProfileByToken } = this.props;
         if(!isSubmitting){
             this.setState({
                 isSubmitting: true
             })
             const result = await login()
             if(result.token){
-                this.setState({
-                    isSubmitting: false
+                await this.setState({
+                    token: result.token
                 })
-                getSaveToken(result.token)
+                await getProfileByToken(result.token)
             }
             else{
                 this.setState({

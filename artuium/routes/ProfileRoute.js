@@ -1,7 +1,7 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import ProfileScreen from '../screens/ProfileScreen/presenter';
+import ProfileScreen from '../screens/ProfileScreen';
 import sharedRoutes, { sharedOptions } from './sharedRoutes';
 
 const ProfileRoute = createStackNavigator(

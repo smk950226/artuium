@@ -260,9 +260,9 @@ class ArtuiumCard extends Component{
                 >
                     <TouchableWithoutFeedback onPress={this.props.closeProfileModal}>
                         <View style={[styles.widthFull, styles.heightFull, styles.alignItemsCenter, styles.justifyContentCenter]}>
-                            <View style={[styles.borderRadius10, styles.exMenuShadow]}>
+                            <View style={[styles.borderRadius10, styles.exMenuShadow, styles.overflowHidden]}>
                                 {review.author.background_image ? (
-                                    <Image source={{uri: review.author.background_image}} resizeMode={'cover'} style={[{height: 140, width: width - 40}]} />
+                                    <Image source={{uri: review.author.background_image}} resizeMode={'cover'} style={[{height: 140, width: width - 40}, styles.borderTopRadius10, styles.overflowHidden]} />
                                 ) : (
                                     <View style={[{height: 140, width: width - 40}, styles.bgGrayD1, styles.borderTopRadius10]} />
                                 )}
