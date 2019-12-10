@@ -59,9 +59,9 @@ class Review(APIView):
             if filter_type == 'new':
                 reviews = reviews.order_by('-time')
             elif filter_type == 'like':
-                reviews =  sorted(reviews, key=lambda t: t.like_count, reverse=True)
+                reviews = sorted(reviews, key=lambda t: t.like_count, reverse=True)
             elif filter_type == 'comment':
-                sorted(reviews, key=lambda t: t.reply_count, reverse=True)
+                reviews = sorted(reviews, key=lambda t: t.reply_count, reverse=True)
             elif filter_type == 'rate':
                 reviews = reviews.order_by('-rate')
             else:

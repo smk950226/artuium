@@ -25,7 +25,7 @@ class ExhibitionSerializer(serializers.ModelSerializer):
     is_liked = serializers.SerializerMethodField()
     class Meta:
         model = models.Exhibition
-        fields = ['id', 'name', 'content', 'open_date', 'close_date', 'open_time', 'close_time', 'notopendate', 'region', 'address', 'scale', 'fee', 'artists', 'artworks', 'gallery', 'images', 'review_count', 'like_count', 'is_liked']
+        fields = ['id', 'name', 'content', 'open_date', 'close_date', 'open_time', 'close_time', 'notopendate', 'region', 'address', 'scale', 'fee', 'artists', 'artworks', 'gallery', 'images', 'review_count', 'like_count', 'is_liked', 'total_rate']
 
     def get_is_liked(self, obj):
         if 'request' in self.context:

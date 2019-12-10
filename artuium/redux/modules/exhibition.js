@@ -75,6 +75,53 @@ function unlikeExhibition(exhibitionId){
     }
 }
 
+function getExhibitionList(type, filter, period, scale, region){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/exhibition/exhibition/?page=1&type=${type}&filter=${filter}${period ? `&period=${period}` : ``}${scale ? `&scale=${scale}` : ``}${region ? `&region=${region}` : ``}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function getExhibitionListMore(type, filter, period, scale, region, page){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/review/?page=${page}&type=${type}&filter=${filter}${period ? `&period=${period}` : ``}${scale ? `&scale=${scale}` : ``}${region ? `&region=${region}` : ``}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else if(response.status === 404){
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     
 };
@@ -103,7 +150,9 @@ function applySetInitialExhibition(state, action){
 const actionCreators = {
     initialExhibition,
     likeExhibition,
-    unlikeExhibition
+    unlikeExhibition,
+    getExhibitionList,
+    getExhibitionListMore
 }
 
 export { actionCreators }

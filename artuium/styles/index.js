@@ -306,6 +306,9 @@ const styles = StyleSheet.create({
     bgBlue: {
         backgroundColor: '#1162D0'
     },
+    bgLightBlue: {
+        backgroundColor: '#E0EDFF'
+    },
     bgGrayf0: {
         backgroundColor: '#f0f0f0'
     },

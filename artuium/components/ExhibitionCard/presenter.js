@@ -7,8 +7,8 @@ const { width, height } = Dimensions.get('window')
 
 const ExhibitionCard = (props) => (
     <TouchableWithoutFeedback>
-        <View style={[styles.px15, props.full ? styles.mb10 : null, {width: width}, props.full ? {height: 210} : {height: 210}]}>
-            <View style={[{width: width - 30}, props.full ? {height: 210} : {height: 210}, props.full ? styles.exhibitionFull : [styles.recommend, styles.exCardShadow]]}>
+        <View style={[styles.px15, styles.alignItemsCenter, props.full ? styles.mb10 : null, {width: width}, props.full ? {height: 210} : {height: 210}]}>
+            <View style={[props.full ? {width: width - 10} : {width: width - 30}, props.full ? {height: 210} : {height: 210}, props.full ? styles.exhibitionFull : [styles.recommend, styles.exCardShadow]]}>
                 <ImageBackground source={{uri: props.exhibition ? (props.exhibition.images && (props.exhibition.images.length > 0)) ? props.exhibition.images[0].image : null : null}} style={[styles.width40, styles.heightFull, props.full ? null : styles.borderLeftRadius5, styles.overflowHidden]} resizeMode={'cover'} />
                 <View style={[styles.px15, styles.py10, props.full ? styles.width60 : {width: '55%'}]}>
                     <Text style={[styles.fontBold, styles.font18]}>{props.exhibition.name}</Text>

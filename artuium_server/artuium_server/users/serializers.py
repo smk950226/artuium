@@ -43,8 +43,6 @@ class ProfileSerializer(serializers.ModelSerializer):
             user = request.user
             following = statics_models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
             follow = statics_models.Follow.objects.filter(follower = obj, following__id__in = following)
-            print(4, follow)
             return follow.count()
         else:
-            print(1)
             return 0

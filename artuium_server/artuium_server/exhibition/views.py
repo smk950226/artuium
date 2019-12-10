@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from django.db.models import Q
 import datetime
 
 from . import models, serializers
@@ -35,3 +36,71 @@ class InitialExhibition(APIView):
             'hot_exhibitions': serializers.ExhibitionSerializer(hot_exhibitions, many = True, context = {'request': request}).data,
             'past_exhibitions': serializers.ExhibitionSerializer(past_exhibitions, many = True, context = {'request': request}).data,
         })
+
+
+class Exhibition(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        list_type = request.query_params.get('type', None)
+        filter_type = request.query_params.get('filter', None)
+        period = request.query_params.get('period', None)
+        scale = request.query_params.get('scale', None)
+        region = request.query_params.get('region', None)
+        user = request.user
+
+        now = timezone.localtime()
+        today = datetime.date(now.year, now.month, now.day)
+
+        exhibitions = []
+
+        if list_type:
+            if list_type == 'all':
+                exhibitions = models.Exhibition.objects.all()
+            else:
+                exhibitions = models.Exhibition.objects.all()
+        else:
+            exhibitions = models.Exhibition.objects.all()
+        
+        if period:
+            if period == 'past':
+                exhibitions = exhibitions.filter(close_date__lte = today)
+            elif period == 'now':
+                exhibitions = exhibitions.filter(open_date__lte = today, close_date__gte = today)
+            elif period == 'upcomming':
+                exhibitions = exhibitions.filter(open_date__gt = today)
+        
+        if scale:
+            if scale == 'large':
+                exhibitions = exhibitions.filter(scale = 'large')
+            elif scale == 'small':
+                exhibitions = exhibitions.filter(scale = 'small')
+        
+        if region:
+            if region != 'else':
+                region_list = region.split('/')
+                q_regions = Q()
+                for region in region_list:
+                    q_regions |= Q(region__contains = region)
+                
+                exhibitions = exhibitions.filter(q_regions)
+
+
+        if filter_type:
+            if filter_type == 'new':
+                exhibitions = exhibitions.order_by('-open_date')
+            elif filter_type == 'like':
+                exhibitions = sorted(exhibitions, key=lambda t: t.like_count, reverse=True)
+            elif filter_type == 'comment':
+                exhibitions = sorted(exhibitions, key=lambda t: t.review_count, reverse=True)
+            elif filter_type == 'rate':
+                exhibitions = sorted(exhibitions, key=lambda t: t.total_rate, reverse=True)
+            else:
+                exhibitions = exhibitions.order_by('-open_date')
+        else:
+            exhibitions = exhibitions.order_by('-open_date')
+        
+        paginator = MainPageNumberPagination()
+        result_page = paginator.paginate_queryset(exhibitions, request)
+        serializer = serializers.ExhibitionSerializer(result_page, many = True, context = {'request': request})
+
+        return Response(status = status.HTTP_200_OK, data = serializer.data)

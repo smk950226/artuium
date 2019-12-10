@@ -23,7 +23,7 @@ class Exhibition(models.Model):
     notopendate = models.DateField()
     region = models.CharField('지역', max_length = 255)
     address = models.CharField('주소', max_length = 500)
-    scale = models.FloatField()
+    scale = models.CharField('규모', choices = (('large', '중대형'), ('small', '소형')), max_length = 500)
     fee = models.FloatField('요금')
     artists = models.ManyToManyField('artwork.Artist', related_name = 'exhibitions')
     artworks = models.ManyToManyField('artwork.Artwork', related_name = 'exhibitions')
@@ -45,6 +45,17 @@ class Exhibition(models.Model):
     @property
     def like_count(self):
         return self.likes.all().count()
+    
+    @property
+    def total_rate(self):
+        reviews = self.reviews.all()
+        if reviews.count() == 0:
+            return 0
+        else:
+            total = 0
+            for review in reviews:
+                total += review.rate
+            return total/reviews.count()
 
 
 class ExhibitionImage(models.Model):
