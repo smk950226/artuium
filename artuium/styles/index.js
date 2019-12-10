@@ -442,6 +442,9 @@ const styles = StyleSheet.create({
     mt40: {
         marginTop: 40
     },
+    mt50: {
+        marginTop: 50
+    },
     mb5: {
         marginBottom: 5
     },
@@ -516,6 +519,9 @@ const styles = StyleSheet.create({
     },
     mx30: {
         marginHorizontal: 30
+    },
+    mx40: {
+        marginHorizontal: 40
     },
     my5: {
         marginVertical: 5
@@ -681,6 +687,10 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10
     },
+    borderBtmRadius10: {
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10
+    },
     borderLeftRadius5: {
         borderTopLeftRadius: 5,
         borderBottomLeftRadius: 5
@@ -763,6 +773,11 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
+    },
+    profileImage50: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
     },
     profileImage70: {
         width: 70,

@@ -9,16 +9,17 @@ class UserComp extends Component{
     static propTypes = {
         user: PropTypes.object.isRequired,
         is_following: PropTypes.bool.isRequired,
-        is_me: PropTypes.bool.isRequired
+        is_me: PropTypes.bool.isRequired,
+        size: PropTypes.string
     }
 
     render(){
-        const { user, is_following, is_me } = this.props;
+        const { user, is_following, is_me, size } = this.props;
         return(
             <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px20, styles.py15]}>
                  <View style={[styles.row, styles.alignItemsCenter]}>
                     {user.profile_image ? (
-                        <Image source={{uri: user.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
+                        <Image source={{uri: user.profile_image}} style={[size === 'large' ? styles.profileImage50 : styles.profileImage40]} resizeMode={'cover'} />
                     ) : (
                         <View style={[styles.circle40, styles.bgGrayD1]} />
                     )}

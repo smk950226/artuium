@@ -12,6 +12,7 @@ class User(AbstractUser):
     nickname = CharField('닉네임', max_length = 255)
     profile_image = models.ImageField('Profile Image', upload_to = 'user/profile/', blank = True, null = True)
     background_image = models.ImageField('Profile Image', upload_to = 'user/background/', blank = True, null = True)
+    recommended = models.BooleanField('추천 여부', default = False)
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})
