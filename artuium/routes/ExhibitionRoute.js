@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableWithoutFeedback, Image } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import ExhibitionScreen from '../screens/ExhibitionScreen/presenter';
+import ExhibitionScreen from '../screens/ExhibitionScreen';
 import AllExhibitionScreen from '../screens/AllExhibitionScreen';
 import sharedRoutes, { sharedOptions } from './sharedRoutes';
 import styles from '../styles';

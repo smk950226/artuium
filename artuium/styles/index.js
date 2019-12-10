@@ -213,6 +213,10 @@ const styles = StyleSheet.create({
         color: '#ff0000',
         includeFontPadding: false
     },
+    yellow: {
+        color: '#ffbd40',
+        includeFontPadding: false
+    },
     blue: {
         color: '#1162d0',
         includeFontPadding: false
@@ -253,6 +257,10 @@ const styles = StyleSheet.create({
         color: '#E6E6E6',
         includeFontPadding: false
     },
+    grayEb: {
+        color: '#EbEbEb',
+        includeFontPadding: false
+    },
     bgBlack: {
         backgroundColor: '#000000'
     },
@@ -264,6 +272,9 @@ const styles = StyleSheet.create({
     },
     bgRed: {
         backgroundColor: '#FF0000'
+    },
+    bgYellow: {
+        backgroundColor: '#ffbd40'
     },
     bgGrayA7: {
         backgroundColor: '#a7a7a7'
@@ -285,6 +296,9 @@ const styles = StyleSheet.create({
     },
     bgGrayE6: {
         backgroundColor: '#E6E6E6'
+    },
+    bgGrayEb: {
+        backgroundColor: '#EbEbEb'
     },
     bgGray71: {
         backgroundColor: '#717171'
@@ -432,6 +446,9 @@ const styles = StyleSheet.create({
     },
     mb30: {
         marginBottom: 30
+    },
+    mb50: {
+        marginBottom: 50
     },
     ml5: {
         marginLeft: 5
@@ -650,6 +667,14 @@ const styles = StyleSheet.create({
     borderTopRadius10: {
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10
+    },
+    borderLeftRadius5: {
+        borderTopLeftRadius: 5,
+        borderBottomLeftRadius: 5
+    },
+    borderLeftRadius10: {
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10
     },
     borderBtmGrayDb: {
         borderBottomColor: '#dbdbdb',

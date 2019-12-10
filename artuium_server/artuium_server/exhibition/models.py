@@ -28,6 +28,7 @@ class Exhibition(models.Model):
     artists = models.ManyToManyField('artwork.Artist', related_name = 'exhibitions')
     artworks = models.ManyToManyField('artwork.Artwork', related_name = 'exhibitions')
     gallery = models.ForeignKey(Gallery, on_delete = models.CASCADE, related_name = 'exhibitions')
+    recommended = models.BooleanField('추천 여부', default = False)
 
     def __str__(self):
         return  self.name
@@ -36,6 +37,14 @@ class Exhibition(models.Model):
         ordering = ['-id']
         verbose_name = '전시'
         verbose_name_plural = '전시'
+    
+    @property
+    def review_count(self):
+        return self.reviews.all().count()
+    
+    @property
+    def like_count(self):
+        return self.likes.all().count()
 
 
 class ExhibitionImage(models.Model):

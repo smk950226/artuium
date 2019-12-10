@@ -4,6 +4,7 @@ import ExhibitionCard2 from './presenter';
 
 class Container extends Component{
     static propTypes = {
+        exhibition: PropTypes.object.isRequired
     }
     
     render(){

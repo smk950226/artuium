@@ -4,6 +4,7 @@ import { AsyncStorage } from 'react-native';
 import thunk from 'redux-thunk';
 import user from './modules/user';
 import review from './modules/review';
+import exhibition from './modules/exhibition';
 
 const middlewares = [thunk];
 
@@ -14,7 +15,8 @@ const persistConfig = {
 
 const reducer = persistCombineReducers(persistConfig, {
     user,
-    review
+    review,
+    exhibition
 });
 
 const configureStore = () => {

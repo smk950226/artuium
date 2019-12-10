@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from . import models, serializers
 from artuium_server.common.pagination import MainPageNumberPagination
 from artuium_server.users import serializers as users_serializers
+from artuium_server.exhibition import models as exhibition_models
 
 User = get_user_model()
 
@@ -172,7 +173,7 @@ class Following(APIView):
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '회원을 선택해주세요.'})
 
 
-class Like(APIView):
+class LikeReview(APIView):
     permission_classes = [IsAuthenticated]
     def post(self ,request, format = None):
         review_id = request.data.get('reviewId', None)
@@ -208,3 +209,41 @@ class Like(APIView):
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상을 선택해주세요.'})
+
+
+class LikeExhibition(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self ,request, format = None):
+        exhibition_id = request.data.get('exhibitionId', None)
+        user = request.user
+        if exhibition_id:
+            try:
+                exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
+                pre = models.Like.objects.filter(user = user, exhibition = exhibition)
+                if pre.count() > 0:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 좋아하는 전시입니다.'})
+                else:
+                    like = models.Like.objects.create(user = user, exhibition = exhibition)
+                    like.save()
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
+    
+    def delete(self ,request, format = None):
+        exhibition_id = request.data.get('exhibitionId', None)
+        user = request.user
+        if exhibition_id:
+            try:
+                exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
+                pre = models.Like.objects.filter(user = user, exhibition = exhibition)
+                if pre.count() == 0:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '좋아하는 전시가 아닙니다.'})
+                else:
+                    pre.delete()
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})

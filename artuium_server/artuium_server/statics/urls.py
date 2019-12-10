@@ -9,5 +9,6 @@ urlpatterns = [
     path('following/list/', views.Following.as_view()),
     path('follower/list/', views.Follower.as_view()),
     path('review/', views.Review.as_view()),
-    path('like/', views.Like.as_view()),
+    path('like/review/', views.LikeReview.as_view()),
+    path('like/exhibition/', views.LikeExhibition.as_view()),
 ]

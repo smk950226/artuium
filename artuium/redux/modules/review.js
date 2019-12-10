@@ -73,7 +73,7 @@ function getReviewListMore(type, filter, page){
 function likeReview(reviewId){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
-        return fetch(`${FETCH_URL}/api/statics/like/`, {
+        return fetch(`${FETCH_URL}/api/statics/like/review/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ function likeReview(reviewId){
 function unlikeReview(reviewId){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
-        return fetch(`${FETCH_URL}/api/statics/like/`, {
+        return fetch(`${FETCH_URL}/api/statics/like/review/`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
