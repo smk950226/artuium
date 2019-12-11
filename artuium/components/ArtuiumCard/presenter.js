@@ -92,30 +92,30 @@ class ArtuiumCard extends Component{
         return(
             <TouchableWithoutFeedback onPress={()=>props.navigation.navigate('ExhibitionDetail')}>
                 <Fragment>
-                <View style={[(size === 'small') ? {width: (width/2)-20} : null, (size === 'large') ? { width: width-30 } : null, (size === 'xlarge') ? { width: width } : null, styles.mb10, (size === 'xlarge') ? null : styles.artworkBorder, styles.overflowHidden]}>
-                    <ImageBackground source={{uri: review.artwork ? review.artwork.image : review.exhibition ? (review.exhibition.images && (review.exhibition.images.length > 0)) ? review.exhibition.images[0].image : null : null}} style={[size === 'small' ? styles.artworkImage : styles.artworkImageLg, size === 'small' ? styles.py5 : styles.py20, size === 'small' ? styles.px10 : styles.px15, styles.justifyContentEnd]} resizeMode={'cover'} >
+                <View style={[(size === 'xsmall') ? {width: (width/2)-30} : null, (size === 'small') ? {width: (width/2)-20} : null, (size === 'large') ? { width: width-30 } : null, (size === 'xlarge') ? { width: width } : null, styles.mb10, (size === 'xlarge') ? null : styles.artworkBorder, styles.overflowHidden]}>
+                    <ImageBackground source={{uri: review.artwork ? review.artwork.image : review.exhibition ? (review.exhibition.images && (review.exhibition.images.length > 0)) ? review.exhibition.images[0].image : null : null}} style={[((size === 'small') || (size === 'xsmall')) ? styles.artworkImage : styles.artworkImageLg, ((size === 'small') || (size === 'xsmall')) ? styles.py5 : styles.py20, ((size === 'small') || (size === 'xsmall')) ? styles.px10 : styles.px15, styles.justifyContentEnd]} resizeMode={'cover'} >
                         {review.artwork ? (
                             <Fragment>
-                                <Text style={[styles.fontBold, (size === 'small') ? styles.font15 : styles.font20, styles.white]}>
+                                <Text style={[styles.fontBold, ((size === 'small') || (size === 'xsmall')) ? styles.font15 : styles.font20, styles.white]}>
                                     {review.artwork.name}
                                 </Text>
-                                <Text style={[styles.fontMedium, (size === 'small') ? styles.font8 : styles.font11, styles.white]}>
+                                <Text style={[styles.fontMedium, ((size === 'small') || (size === 'xsmall')) ? styles.font8 : styles.font11, styles.white]}>
                                     {review.artwork.author.name}
                                 </Text>
                             </Fragment>
                         ) : (
                             <Fragment>
-                                <Text style={[styles.fontBold, (size === 'small') ? styles.font15 : styles.font20, styles.white]}>
+                                <Text style={[styles.fontBold, ((size === 'small') || (size === 'xsmall')) ? styles.font15 : styles.font20, styles.white]}>
                                     <Text style={[styles.yellow]}>{'전시  '}</Text>{review.exhibition ? review.exhibition.name : ""}
                                 </Text>
-                                <Text style={[styles.fontMedium, (size === 'small') ? styles.font8 : styles.font11, styles.white]}>
+                                <Text style={[styles.fontMedium, ((size === 'small') || (size === 'xsmall')) ? styles.font8 : styles.font11, styles.white]}>
                                     {review.exhibition ? `${review.exhibition.open_date.slice(0,4)}.${review.exhibition.open_date.slice(5,7)}.${review.exhibition.open_date.slice(8,10)}-${review.exhibition.close_date.slice(0,4)}.${review.exhibition.close_date.slice(5,7)}.${review.exhibition.close_date.slice(8,10)} ${review.exhibition.gallery.name}` : ""}
                                 </Text>
                             </Fragment>
                         )}
                     </ImageBackground>
                     <View style={[(size === 'xlarge') ? styles.py20 : styles.py10, (size === 'xlarge') ? styles.px30 : styles.px10]}>
-                        {size === 'small' ? (
+                        {((size === 'small') || (size === 'xsmall')) ? (
                             <Fragment>
                                 <View style={[styles.row, styles.justifyContentBetween]}>
                                     <View style={[styles.row]}>
@@ -260,13 +260,13 @@ class ArtuiumCard extends Component{
                 >
                     <TouchableWithoutFeedback onPress={this.props.closeProfileModal}>
                         <View style={[styles.widthFull, styles.heightFull, styles.alignItemsCenter, styles.justifyContentCenter]}>
-                            <View style={[styles.borderRadius10, styles.overflowHidden, styles.profileModalShadow]}>
+                            <View style={[styles.borderRadius10, styles.exMenuShadow, styles.overflowHidden]}>
                                 {review.author.background_image ? (
-                                    <Image source={{uri: review.author.background_image}} resizeMode={'cover'} style={[{height: 140, width: width - 40}]} />
+                                    <Image source={{uri: review.author.background_image}} resizeMode={'cover'} style={[{height: 140, width: width - 40}, styles.borderTopRadius10, styles.overflowHidden]} />
                                 ) : (
-                                    <View style={[{height: 140, width: width - 40}, styles.bgGrayD1]} />
+                                    <View style={[{height: 140, width: width - 40}, styles.bgGrayD1, styles.borderTopRadius10]} />
                                 )}
-                                <View style={[styles.bgWhite, styles.px20, styles.py15, styles.row, styles.alignItemsCenter, styles.justifyContentBetween]}>
+                                <View style={[styles.bgWhite, styles.px20, styles.py15, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.borderBtmRadius10]}>
                                     <View style={[styles.row, styles.alignItemsCenter]}>
                                         {review.author.profile_image ? (
                                             <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
@@ -322,7 +322,7 @@ class ArtuiumCard extends Component{
                 >
                     <TouchableWithoutFeedback onPress={this.props.closeFollowModal}>
                         <View style={[styles.widthFull, styles.heightFull, styles.alignItemsCenter, styles.justifyContentCenter]}>
-                            <View style={[styles.borderRadius10, styles.overflowHidden, styles.profileModalShadow, styles.height80, styles.bgWhite, { width: width - 40 }]}>
+                            <View style={[styles.borderRadius10, styles.exMenuShadow, styles.height80, styles.bgWhite, { width: width - 40 }]}>
                                 <TabView
                                 navigationState={this.state}
                                 onIndexChange={index => this.setState({ index })}
@@ -331,6 +331,7 @@ class ArtuiumCard extends Component{
                                     first: this._renderFollowerList,
                                     second: this._renderFollowingList
                                 })}
+                                style={[styles.borderBtmRadius10]}
                                 renderTabBar={props =>
                                     <TabBar
                                         {...props}
@@ -339,7 +340,7 @@ class ArtuiumCard extends Component{
                                         labelStyle = {[styles.font15, styles.fontMedium]}
                                         bounces={false}
                                         indicatorStyle={{ backgroundColor: '#1162d0', height: 1 }}
-                                        style={[styles.bgWhite]}
+                                        style={[styles.bgWhite, styles.borderTopRadius10]}
                                     />
                                 }
                                 />

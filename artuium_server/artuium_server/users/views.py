@@ -8,10 +8,12 @@ from django.db.models import Q
 
 from . import models, serializers
 from artuium_server.statics import models as statics_models
+from artuium_server.statics import serializers as statics_serializers
 from artuium_server.artwork import models as artwork_models
 from artuium_server.artwork import serializers as artwork_serializers
 from artuium_server.exhibition import models as exhibition_models
 from artuium_server.exhibition import serializers as exhibition_serializers
+from artuium_server.common.pagination import MainPageNumberPagination
 
 User = get_user_model()
 
@@ -86,3 +88,38 @@ class Search(APIView):
             })
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+
+class Recommended(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        recommended_reviews = statics_models.Review.objects.filter(recommended = True)
+        artwork_list = recommended_reviews.filter(artwork__isnull = False)
+        exhibition_list = recommended_reviews.filter(exhibition__isnull = False)
+        user_list = User.objects.filter(recommended = True)[:5]
+
+        return Response(status = status.HTTP_200_OK, data = {
+            'users': serializers.ProfileSerializer(user_list, many = True, context = {'request': request}).data,
+            'artworks': statics_serializers.ReviewSerializer(artwork_list, many  = True, context = {'request': request}).data,
+            'exhibitions': statics_serializers.ReviewSerializer(exhibition_list, many = True, context = {'request': request}).data
+        })
+
+
+class Profile(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, foramt = None):
+        user = request.user
+        serializer = serializers.ProfileSerializer(user, context = {'request': request})
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+
+
+class ReviewList(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user = request.user
+        reviews = statics_models.Review.objects.filter(author = user)
+        paginator = MainPageNumberPagination()
+        result_page = paginator.paginate_queryset(reviews, request)
+        serializer = statics_serializers.ReviewSerializer(result_page, many = True, context = {'request': request})
+
+        return Response(status = status.HTTP_200_OK, data = serializer.data)

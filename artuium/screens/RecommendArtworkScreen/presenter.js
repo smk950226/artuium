@@ -1,8 +1,9 @@
-import React, { Fragment } from 'react';
-import { View, Text, ScrollView, TouchableWithoutFeedback, Image, Dimensions, ActivityIndicator, FlatList, RefreshControl } from 'react-native';
+import React, { Component, Fragment } from 'react';
+import { View, Text, ScrollView, TouchableWithoutFeedback, Image, Dimensions, ActivityIndicator, Animated } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import ArtuiumCard from '../../components/ArtuiumCard';
+import UserComp from '../../components/UserComp';
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Modal from "react-native-modal";
 
@@ -10,116 +11,145 @@ const statusBarHeight = getStatusBarHeight()
 
 const { width, height } = Dimensions.get('window');
 
-const filter = [
+const dummyList = [
     {
-        label: '신규순',
-        value: 'new'
-    },
-    {
-        label: '많은 댓글 순',
-        value: 'comment'
-    },
-    {
-        label: '많은 좋아요 순',
-        value: 'like'
-    },
-    {
-        label: '높은 별점 순',
-        value: 'rate'
+        id: -1
     }
 ]
 
-const RecommendArtworkScreen = (props) => (
-    <Fragment>
-    <View style={[styles.container]}>
-        <View style={[{height:50, marginTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
-            <TouchableWithoutFeedback onPress={() => props.navigation.goBack(null)}>
-                <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9, height: 17}]} />
-            </TouchableWithoutFeedback>
-            <Text style={[styles.fontBold, styles.font18]}>추천 감상</Text>
-            <TouchableWithoutFeedback onPress={props.openFilterModal}>
-                <View>
-                    <Image source={require('../../assets/images/icon_sort.png')} style={[{width: 20, height: 17}]} />
-                </View>
-            </TouchableWithoutFeedback>
-        </View>
-        {props.loading ? (
-            <View style={[styles.container, styles.alignItemsCenter, styles.justifyContentCenter]}>
-                <ActivityIndicator size={'small'} color={'#000'} />
-            </View>
-        ) : (
-            props.reviews && props.reviews.length > 0 ? (
-                <FlatList 
-                data={props.reviews} 
-                renderItem={({item}) => (
-                    <ArtuiumCard review={item} size={'xlarge'} navigation={props.navigation} />
-                )} 
-                numColumns={1} 
-                keyExtractor={item => String(item.id)} 
-                refreshing={props.refreshing} 
-                onRefresh={props.refresh} 
-                onEndReached={props.hasNextPage ? props.reviewMore : null} 
-                onEndReachedThreshold={0.5} 
-                bounces={true} 
-                ListFooterComponent={props.isLoadingMore ? (
-                    <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.mt5, styles.py5]}>
-                        <ActivityIndicator size={'small'} color={'#000000'} />
-                    </View>
-                ): null} />
-            ) : (
-                <ScrollView 
-                refreshControl={<RefreshControl refreshing={props.refreshing} onRefresh={props.refresh} tintColor={'#000000'} />}
-                >
-                    <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
-                </ScrollView>
-            )
-        )}
-    </View>
-        <Modal 
-        isVisible={props.showFilterModal}
-        backdropOpacity={0.26}
-        onBackButtonPress={props.closeFilterModal}
-        onBackdropPress={props.closeFilterModal}
-        style={[styles.justifyContentEnd, {margin: 0}]}
-        >
-            <TouchableWithoutFeedback onPress={props.closeFilterModal}>
-                <View style={[styles.container, styles.px0, styles.justifyContentEnd]}>
-                    <TouchableWithoutFeedback>
-                        <View style={[styles.bgWhite, styles.borderTopRadius10, { paddingBottom: 150 }]}>
-                            <View style={[styles.borderBtmGray70, styles.py10]}>
-                                <Text style={[styles.fontMedium, styles.font17, styles.textCenter]}>
-                                    정렬
+class RecommendArtworkScreen extends Component{
+    static propTypes = {
+        loading: PropTypes.bool.isRequired,
+        users: PropTypes.array,
+        artworks: PropTypes.array,
+        exhibitions: PropTypes.array
+    }
+
+    constructor(props){
+        super(props);
+        this.state = {
+            scrollX: new Animated.Value(0),
+        }
+    }
+
+    render(){
+        const { loading, users, artworks, exhibitions  } = this.props;
+        let position = Animated.divide(this.state.scrollX, width);
+        return(
+            <Fragment>
+                <View style={[styles.container]}>
+                    <View style={[{height:50, marginTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentEnd, styles.px25, styles.borderBtmGrayDb]}>
+                        <TouchableWithoutFeedback onPress={() => this.props.navigation.goBack(null)}>
+                            <View>
+                                <Text style={[styles.fontMedium, styles.font16, styles.gray93]}>
+                                    닫기
                                 </Text>
                             </View>
-                            {filter.map((fil, index) => (
-                                <TouchableWithoutFeedback key={index} onPress={() => props.handleFilterChange(fil.value)}>
-                                    <View style={[styles.borderBtmGray70, styles.py10, styles.px25]}>
-                                        <Text style={[styles.fontRegular, styles.font15]}>
-                                            {fil.label}
-                                        </Text>
-                                    </View>
-                                </TouchableWithoutFeedback>
-                            ))}
+                        </TouchableWithoutFeedback>
+                    </View>
+                    {loading ? (
+                        <View style={[styles.container, styles.alignItemsCenter, styles.justifyContentCenter]}>
+                            <ActivityIndicator size={'small'} color={'#000'} />
                         </View>
-                    </TouchableWithoutFeedback>
+                    ) : (
+                        <ScrollView>
+                            <Text style={[styles.fontBold, styles.font25, styles.mt20, styles.px20]}>추천하는 멤버</Text>
+                            <View style={[{width, height: 105}]}>
+                                {users && users.length > 0 ? (
+                                    <ScrollView
+                                        horizontal={true}
+                                        pagingEnabled={true}
+                                        showsHorizontalScrollIndicator={false}
+                                        onScroll={Animated.event(
+                                            [{ nativeEvent: {
+                                                contentOffset: {
+                                                    x: this.state.scrollX
+                                                }
+                                            }}]
+                                        )}
+                                        scrollEventThrottle={16}
+                                    >
+                                        {users.map((user, index) => {
+                                            return(
+                                                <View key={index} style={[styles.borderRadius10, styles.bgWhite, {width: width - 40}, styles.mx20, styles.alignSelfCenter, styles.exMenuShadow]}>
+                                                    <UserComp user={user} size={'large'} />
+                                                </View>
+                                            )
+                                        })}
+                                    </ScrollView>
+                                ) : (
+                                    <View style={[{width, height: '100%'}, styles.alignItemsCenter, styles.justifyContentCenter]}>
+                                        <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>추천하는 멤버가 없습니다.</Text>
+                                    </View>
+                                )}
+                            </View>
+                            <View style={[{ zIndex: 999 }, styles.row, styles.justifyContentCenter]}>
+                                {users && users.length > 0 ? (
+                                    users.map((_, i) => {
+                                        let opacity = position.interpolate({
+                                            inputRange: [i - 1, i, i + 1],
+                                            outputRange: [0, 1, 0],
+                                            extrapolate: 'clamp'
+                                        });
+                                        return (
+                                            <View key={i} style={[styles.sliderDotWhiteEmpty, styles.center, {marginRight: 6}]}>
+                                                <Animated.View
+                                                    style={[styles.sliderDotWhite, {opacity}]}
+                                                />
+                                            </View>
+                                        );
+                                    })
+                                ) : (
+                                    dummyList.map((_, i) => {
+                                        let opacity = position.interpolate({
+                                            inputRange: [i - 1, i, i + 1],
+                                            outputRange: [0, 1, 0],
+                                            extrapolate: 'clamp'
+                                        });
+                                        return (
+                                            <View key={i} style={[styles.sliderDotWhiteEmpty, styles.center, {marginRight: 6}]}>
+                                                <Animated.View
+                                                    style={[styles.sliderDotWhite, {opacity}]}
+                                                />
+                                            </View>
+                                        );
+                                    })
+                                )}
+                            </View>
+                            <Text style={[styles.fontBold, styles.font25, styles.mt25, styles.px20]}>추천하는 작품 감상</Text>
+                            <View style={[styles.mt15, styles.px20, styles.row, styles.flexWrap, styles.justifyContentBetween]}>
+                                {artworks && artworks.length > 0 ? (
+                                    artworks.map((review, index) => {
+                                        return(
+                                            <ArtuiumCard key={index} review={review} size={'xsmall'} navigation={this.props.navigation} />
+                                        )
+                                    })
+                                ) : (
+                                    <View style={[{height: 300}, styles.widthFull, styles.alignItemsCenter, styles.justifyContentCenter]}>
+                                        <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>작품 감상이 없습니다.</Text>
+                                    </View>
+                                )}
+                            </View>
+                            <Text style={[styles.fontBold, styles.font25, styles.mt50, styles.px20]}>추천하는 전시 감상</Text>
+                            <View style={[styles.mt15, styles.px20, styles.row, styles.flexWrap, styles.justifyContentBetween]}>
+                                {exhibitions && exhibitions.length > 0 ? (
+                                    exhibitions.map((review, index) => {
+                                        return(
+                                            <ArtuiumCard key={index} review={review} size={'xsmall'} navigation={this.props.navigation} />
+                                        )
+                                    })
+                                ) : (
+                                    <View style={[{height: 300}, styles.widthFull, styles.alignItemsCenter, styles.justifyContentCenter]}>
+                                        <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>전시 감상이 없습니다.</Text>
+                                    </View>
+                                )}
+                            </View>
+                        </ScrollView>
+                    )}
                 </View>
-            </TouchableWithoutFeedback>
-        </Modal>
-    </Fragment>
-)
-
-RecommendArtworkScreen.propTypes = {
-    openFilterModal: PropTypes.func.isRequired,
-    closeFilterModal: PropTypes.func.isRequired,
-    showFilterModal: PropTypes.bool.isRequired,
-    handleFilterChange: PropTypes.func.isRequired,
-    loading: PropTypes.bool.isRequired,
-    hasNextPage: PropTypes.bool.isRequired,
-    isLoadingMore: PropTypes.bool.isRequired,
-    reviews: PropTypes.array,
-    reviewMore: PropTypes.func.isRequired,
-    refresh: PropTypes.func.isRequired,
-    refreshing: PropTypes.bool.isRequired 
+            </Fragment>
+        )
+    }
 }
 
 export default RecommendArtworkScreen;

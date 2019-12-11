@@ -54,7 +54,7 @@ class ReplySerializer(serializers.ModelSerializer):
 
 class LikeSerializer(serializers.ModelSerializer):
     user = users_serializers.ProfileSerializer()
-    review = ReplySerializer()
+    review = ReviewSerializer()
     artwork = artwork_serializers.ArtworkSerializer()
     exhibition = exhibition_serializers.ExhibitionSerializer()
     class Meta:

@@ -12,7 +12,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     following_friends_count = serializers.SerializerMethodField()
     class Meta:
         model = models.User
-        fields = ['id', 'nickname', 'profile_image', 'background_image', 'following_count', 'follower_count', 'is_me', 'is_following', 'following_friends_count']
+        fields = ['id', 'nickname', 'profile_image', 'background_image', 'following_count', 'follower_count', 'is_me', 'is_following', 'following_friends_count', 'like_exhibition_count', 'like_artwork_count', 'like_review_count']
     
 
     def get_is_me(self, obj):

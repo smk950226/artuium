@@ -4,7 +4,8 @@ import UserComp from './presenter';
 
 class Container extends Component{
     static propTypes = {
-        user: PropTypes.object.isRequired
+        user: PropTypes.object.isRequired,
+        size: PropTypes.string
     }
 
     constructor(props){

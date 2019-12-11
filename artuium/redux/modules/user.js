@@ -102,8 +102,8 @@ function login(username, password){
                "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                username: 'smk950226',
-                password: 'TMDALS236',
+                username: 'fov@artuium.com',
+                password: 'fov959697',
             })
         })
         .then(response => {
@@ -126,6 +126,27 @@ function login(username, password){
 function getProfile(){
     return (dispatch, getState) => {
         const { user : { token } } = getState();
+        fetch(`${FETCH_URL}/api/users/profile/`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => dispatch(setProfile(json)))
+    }
+}
+
+function getProfileByToken(token){
+    return (dispatch) => {
         fetch(`${FETCH_URL}/api/users/profile/`, {
             headers: {
                 "Content-Type": "application/json",
@@ -417,6 +438,75 @@ function search(q){
     }
 }
 
+function recommended(){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/users/recommended/`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function getReviewList(){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/users/list/review/?page=1`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function getReviewListMore(page){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/users/list/review/?page=${page}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else if(response.status === 404){
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     isLoggedIn: false,
     token: null,
@@ -473,6 +563,7 @@ const actionCreators = {
     getLogout,
     getSaveToken,
     getProfile,
+    getProfileByToken,
     signUp,
     login,
     followUser,
@@ -486,7 +577,10 @@ const actionCreators = {
     followerListMore,
     followingList,
     followingListMore,
-    search
+    search,
+    recommended,
+    getReviewList,
+    getReviewListMore
 }
 
 export { actionCreators }

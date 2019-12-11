@@ -1,14 +1,11 @@
 import { connect } from 'react-redux';
 import Container from './container';
-import { actionCreators as reviewActions } from '../../redux/modules/review';
+import { actionCreators as userActions } from '../../redux/modules/user';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        getReviewList: (type, filter) => {
-            return dispatch(reviewActions.getReviewList(type, filter))
-        },
-        getReviewListMore: (type, filter, page) => {
-            return dispatch(reviewActions.getReviewListMore(type, filter, page))
+        recommended: () => {
+            return dispatch(userActions.recommended())
         }
     }
 }
