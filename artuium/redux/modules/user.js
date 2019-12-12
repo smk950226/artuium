@@ -1,4 +1,5 @@
 import { FETCH_URL } from '../../config/urls';
+import uuidv1 from 'uuid'
 
 const LOGOUT = 'LOGOUT';
 const SAVE_TOKEN = 'SAVE_TOKEN';
@@ -507,6 +508,98 @@ function getReviewListMore(page){
     }
 }
 
+function changeNickname(nickname){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        fetch(`${FETCH_URL}/api/users/change/nickname/`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            },
+            body: JSON.stringify({
+                nickname,
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(logout());
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => dispatch(setProfile(json)))
+    }
+}
+
+function changeProfileImg(profileImg){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        let formData = new FormData();
+        if(profileImg){
+            const temp = profileImg.type.split('/')
+            const ext = temp[temp.length - 1]
+            formData.append('profileImg',{
+                uri: profileImg.uri,
+                type: profileImg.type,
+                name: `${uuidv1()}.` + ext
+            })
+        }
+        fetch(`${FETCH_URL}/api/users/change/profileimg/`, {
+            method: 'PUT',
+            headers: {
+                "Authorization": `JWT ${token}`
+            },
+            body: formData
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(logout());
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => dispatch(setProfile(json)))
+    }
+}
+
+function changeBackgroundImg(backgroundImg){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        let formData = new FormData();
+        if(backgroundImg){
+            const temp = backgroundImg.type.split('/')
+            const ext = temp[temp.length - 1]
+            formData.append('backgroundImg',{
+                uri: backgroundImg.uri,
+                type: backgroundImg.type,
+                name: `${uuidv1()}.` + ext
+            })
+        }
+        fetch(`${FETCH_URL}/api/users/change/backgroundimg/`, {
+            method: 'PUT',
+            headers: {
+                "Authorization": `JWT ${token}`
+            },
+            body: formData
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(logout());
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => dispatch(setProfile(json)))
+    }
+}
+
 const initialState = {
     isLoggedIn: false,
     token: null,
@@ -580,7 +673,10 @@ const actionCreators = {
     search,
     recommended,
     getReviewList,
-    getReviewListMore
+    getReviewListMore,
+    changeNickname,
+    changeProfileImg,
+    changeBackgroundImg,
 }
 
 export { actionCreators }

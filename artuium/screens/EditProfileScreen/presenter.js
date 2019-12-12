@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, SafeAreaView, Image, ScrollView, Animated, Dimensions, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
+import { View, Text, SafeAreaView, Image, ScrollView, Animated, TextInput, Dimensions, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import styles from '../../styles';
@@ -21,35 +21,46 @@ class EditProfileScreen extends React.Component {
                         <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9, height: 17}]} />
                     </TouchableWithoutFeedback>
                     <Text style={[styles.fontBold, styles.font20]}>프로필 변경</Text>
-                    <TouchableOpacity onPress={() => this.props.navigation.goBack(null)}>
+                    <TouchableOpacity onPress={() => this.props.handleChangeNickname(this.props.nickname)}>
                         <Text style={[styles.fontMedium, styles.font16, {color: '#044ae6'}]}>완료</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={[styles.alignItemsCenter]}>
                     <Image
-                        source={{uri: 'http://mblogthumb1.phinf.naver.net/20130714_4/doyacart_1373813913596rsdT3_JPEG/%C1%F8%C1%D6%B1%CD%B0%ED%B8%AE%B8%A6_%C7%D1_%BC%D2%B3%E0.jpg?type=w2'}}
+                        source={{uri: this.props.profile.background_image}}
                         style={[{width, height: 210}]} resizeMode={'cover'}
                     />
-                    <View style={[styles.blueBtn, styles.my15]}>
-                        <Text style={[styles.fontMedium, styles.font12, {color: '#044ae6'}]}>커버 사진 바꾸기</Text>
-                    </View> 
+                    <TouchableWithoutFeedback onPress={this.props.handleChangeBackgroundImg}>
+                        <View style={[styles.blueBtn, styles.my15]}>
+                            <Text style={[styles.fontMedium, styles.font12, {color: '#044ae6'}]}>커버 사진 바꾸기</Text>
+                        </View> 
+                    </TouchableWithoutFeedback>
                 </View>
                 <View style={[styles.divGray]} />
                 <View style={[styles.center, {height: 150}]}>
-                    <Image source={{uri: 'https://thumb.named.com/normal/resize/origin/file/photo/editor/1804/176ef5cda5edd31a2d453c0446649a57_nE72y9HJLoBrgI7LFPq.jpg'}} style={[styles.profileImage70]} />
-                    <View style={[styles.blueBtn, styles.mt15]}>
-                        <Text style={[styles.fontMedium, styles.font12, {color: '#044ae6'}]}>프로필 사진 바꾸기</Text>
-                    </View> 
+                    <Image source={{uri: this.props.profile.profile_image}} style={[styles.profileImage70]} />
+                    <TouchableWithoutFeedback onPress={this.props.handleChangeProfileImg}>
+                        <View style={[styles.blueBtn, styles.mt15]}>
+                            <Text style={[styles.fontMedium, styles.font12, {color: '#044ae6'}]}>프로필 사진 바꾸기</Text>
+                        </View> 
+                    </TouchableWithoutFeedback>
                 </View>
                 <View style={[styles.divGray]} />
                 <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.borderBtmGrayD1, styles.px30, {height: 80}]}>
                     <Text style={[styles.fontMedium, styles.font16]}>이름</Text>
                     <View style={{width: width/2}}>
-                        <Text style={[styles.fontMedium, styles.font16]}>빠밤밤밤밤빰</Text>
+                        <TextInput
+                            style={[styles.fontMedium, styles.font16]}
+                            underlineColorAndroid={'transparent'} 
+                            autoCapitalize={'none'} 
+                            autoCorrect={false} 
+                            value={this.props.nickname} 
+                            onChangeText={this.props.handleNicknameChange} 
+                        />
                     </View>
-                    <View style={[styles.GrayXBtn]}>
+                    <TouchableOpacity style={[styles.GrayXBtn]} onPress={()=>this.props.handleNicknameClear()}>
                         <Text style={[styles.font14, {color: '#bababa'}]}>X</Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         )

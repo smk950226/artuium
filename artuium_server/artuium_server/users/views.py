@@ -123,3 +123,42 @@ class ReviewList(APIView):
         serializer = statics_serializers.ReviewSerializer(result_page, many = True, context = {'request': request})
 
         return Response(status = status.HTTP_200_OK, data = serializer.data)
+
+class ChangeProfileImg(APIView):
+    def put(self, request, format = None):
+        profile_image = request.data.get('profileImg', None)
+
+        user = request.user
+        user.profile_image = profile_image
+
+        user.save()
+
+        serializer = serializers.ProfileSerializer(user, context = {'request': request})
+
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+
+class ChangeBackgroundImg(APIView):
+    def put(self, request, format = None):
+        background_image = request.data.get('backgroundImg', None)
+
+        user = request.user
+        user.background_image = background_image
+
+        user.save()
+
+        serializer = serializers.ProfileSerializer(user, context = {'request': request})
+
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+
+class ChangeNickname(APIView):
+    def put(self, request, format = None):
+        nickname = request.data.get('nickname', None)
+
+        user = request.user
+        user.nickname = nickname
+
+        user.save()
+
+        serializer = serializers.ProfileSerializer(user, context = {'request': request})
+
+        return Response(status = status.HTTP_200_OK, data = serializer.data)

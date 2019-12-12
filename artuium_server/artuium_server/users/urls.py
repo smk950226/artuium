@@ -8,4 +8,7 @@ urlpatterns = [
     path('recommended/', views.Recommended.as_view()),
     path('profile/', views.Profile.as_view()),
     path('list/review/', views.ReviewList.as_view()),
+    path('change/nickname/', views.ChangeNickname.as_view()),
+    path('change/profileimg/', views.ChangeProfileImg.as_view()),
+    path('change/backgroundimg/', views.ChangeBackgroundImg.as_view()),
 ]

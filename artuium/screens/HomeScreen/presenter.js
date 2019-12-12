@@ -84,6 +84,10 @@ class HomeScreen extends Component {
                                 toValue: 1,
                                 duration: 200,
                             }),
+                            Animated.timing( this.props.screenProps.scrollY, {
+                                toValue: 100,
+                                duration: 200,
+                            }),
                         ]).start(() => {
                             this.setState({
                                 isMovedUp: true
@@ -131,7 +135,7 @@ class HomeScreen extends Component {
                 <Animated.View style={[styles.bgWhite, {width: width, height: headerHeight, position: 'absolute', top: 0, opacity: headerOpacity, zIndex: 995}]} />
                 <Animated.View
                     style={[styles.row, styles.alignItemsCenter, styles.spaceBetween, styles.px15,
-                    {width: width, height: 50, position: 'absolute', top: getStatusBarHeight(), zIndex: 999}
+                    {width: width, height: 50, position: 'absolute', top: getStatusBarHeight(), zIndex: 998}
                 ]}>
                     <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
                         <View>
@@ -290,7 +294,7 @@ class HomeScreen extends Component {
                     </View>
                 </ScrollView>
                 {initial && (
-                    <Animated.View { ...this.initialResponder.panHandlers } style={[styles.widthFull, styles.heightFull, styles.justifyContentEnd, styles.alignItemsCenter, styles.bgBlack07, styles.overflowHidden, {position: 'absolute', width: '100%'}]} >
+                    <Animated.View { ...this.initialResponder.panHandlers } style={[styles.widthFull, styles.heightFull, styles.justifyContentEnd, styles.alignItemsCenter, styles.bgBlack07, styles.overflowHidden, {position: 'absolute', width: '100%', zIndex: 999}]} >
                         <Text style={[styles.fontMedium, styles.font16, styles.white, styles.textCenter, { lineHeight: 26 }]}>
                             <Text style={[styles.fontBold]}>위로 스와이프</Text>하면{'\n'}
                             <Text style={[styles.fontBold]}>홈 화면</Text>이 나타납니다.{'\n'}
