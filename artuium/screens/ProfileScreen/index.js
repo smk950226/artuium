@@ -22,6 +22,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         getReviewListMore: (page) => {
             return dispatch(userActions.getReviewListMore(page))
+        },
+        logout: () => {
+            dispatch(userActions.getLogout());
         }
     }
 }

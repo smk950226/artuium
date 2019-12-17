@@ -111,6 +111,9 @@ class ProfileScreen extends React.Component {
                     <LinearGradient colors={['#fff', '#ff0000', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#fff']} start={[0, 0.5]} end={[1, 0.5]} style={[styles.px15, {paddingBottom: 35}]}>
                         <View style={[styles.row, styles.pt20, styles.px5, styles.justifyContentBetween]}>
                             <Text style={[styles.fontBold, styles.font25]}>{profile.nickname}</Text>
+                            <TouchableOpacity style={[styles.profileBtn]} onPress={()=>this.props.logout()}>
+                                <Text style={[styles.fontMedium, styles.font15, {color: '#a8a8a8'}]}>로그아웃</Text>
+                            </TouchableOpacity>
                             <TouchableOpacity style={[styles.profileBtn]} onPress={()=>this.props.navigation.navigate('EditProfile')}>
                                 <Text style={[styles.fontMedium, styles.font15, {color: '#a8a8a8'}]}>프로필 변경</Text>
                             </TouchableOpacity>

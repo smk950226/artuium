@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 app_name = "users"
@@ -11,4 +11,5 @@ urlpatterns = [
     path('change/nickname/', views.ChangeNickname.as_view()),
     path('change/profileimg/', views.ChangeProfileImg.as_view()),
     path('change/backgroundimg/', views.ChangeBackgroundImg.as_view()),
+    path('accounts/', include('allauth.urls')),
 ]
