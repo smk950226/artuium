@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Animated, View, PanResponder, Text, ScrollView, Image, Modal, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { getStatusBarHeight } from "react-native-status-bar-height";
@@ -27,20 +27,21 @@ class HomeScreen extends Component {
     constructor(props){
         super(props)
         this.state = {
-            topHeight: new Animated.Value(height),
-            imageHeight: new Animated.Value(height*8/9),
-            menuHeight: new Animated.Value(height/9),
+            topHeight: new Animated.Value(height - (height/9)),
             menuWidth: new Animated.Value(width),
             menuRadius: new Animated.Value(0),
             menuPosition: new Animated.Value(0),
             headerHeight: new Animated.Value(0),
             headerOpacity: new Animated.Value(0),
+            containerPosition: new Animated.ValueXY(),
             isMovedUp: false,
             index: 0,
             routes: [
                 { key: 'first', title: '알림' },
                 { key: 'second', title: '공지사항' },
             ],
+            changedScrollView: false,
+            isTop: true
         }
         this.panResponder = PanResponder.create({
             onStartShouldSetPanResponder: () => true,
@@ -56,14 +57,6 @@ class HomeScreen extends Component {
                                 toValue: height/3+80,
                                 duration: 200,
                             }), 
-                            Animated.timing( this.state.imageHeight, {
-                                toValue: height/3,
-                                duration: 200,
-                            }),
-                            Animated.timing( this.state.menuHeight, {
-                                toValue: 80,
-                                duration: 200,
-                            }),
                             Animated.timing( this.state.menuWidth, {
                                 toValue: width*0.9,
                                 duration: 200,
@@ -73,7 +66,7 @@ class HomeScreen extends Component {
                                 duration: 200,
                             }),
                             Animated.timing( this.state.menuPosition, {
-                                toValue: 40,
+                                toValue: 500,
                                 duration: 200,
                             }),
                             Animated.timing( this.state.headerHeight, {
@@ -120,7 +113,146 @@ class HomeScreen extends Component {
                 }
             },
         })
+
+        this.bannerResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => true,
+            onStartShouldSetPanResponderCapture: () => false,
+            onMoveShouldSetPanResponder: () => true,
+            onMoveShouldSetPanResponderCapture: () => false,
+            onPanResponderMove: ( event, gestureState ) => {
+                if(gestureState.dy < 0){
+                    if(!this.state.isMovedUp){
+                        if(gestureState.dy >-100){
+                            this.state.containerPosition.setValue({ x: this.state.containerPosition.x, y: gestureState.dy });
+                        }
+                    }
+                }
+                else{
+                    if(this.state.isMovedUp){
+                        if(gestureState.dy < 50){
+                            this.state.containerPosition.setValue({ x: this.state.containerPosition.x, y: gestureState.dy });
+                        }
+                    }
+                }
+            },
+            onPanResponderTerminationRequest: () => false,
+            onPanResponderRelease: ( event, gestureState ) => {
+                if(gestureState.dy <= 0){
+                    if(gestureState.dy < -100){
+                        if(!this.state.isMovedUp){
+                            Animated.parallel([
+                                Animated.timing( this.state.containerPosition, {
+                                    toValue: 0,
+                                    duration: 200,
+                                }),
+                                Animated.timing( this.state.topHeight, {
+                                    toValue: height - 500,
+                                    duration: 200,
+                                }), 
+                                Animated.timing( this.state.menuWidth, {
+                                    toValue: width*0.9,
+                                    duration: 200,
+                                }),
+                                Animated.timing( this.state.menuRadius, {
+                                    toValue: 10,
+                                    duration: 200,
+                                }),
+                                Animated.timing( this.state.menuPosition, {
+                                    toValue: 380,
+                                    duration: 200,
+                                }),
+                                Animated.timing( this.state.headerHeight, {
+                                    toValue: getStatusBarHeight()+50,
+                                    duration: 200,
+                                }),
+                                Animated.timing( this.state.headerOpacity, {
+                                    toValue: 1,
+                                    duration: 200,
+                                }),
+                                Animated.timing( this.props.screenProps.scrollY, {
+                                    toValue: 100,
+                                    duration: 200,
+                                }),
+                            ]).start(() => {
+                                this.setState({
+                                    isMovedUp: true,
+                                    changedScrollView: true
+                                })
+                            });
+                        }
+                    }
+                    else{
+                        Animated.timing( this.state.containerPosition, {
+                            toValue: 0,
+                            duration: 200,
+                        } ).start(() => {
+                            
+                        });
+                    }
+                }
+                else{
+                    if(gestureState.dy > 50){
+                        if(this.state.isMovedUp){
+                            this.setState({
+                                isMovedUp: false,
+                                changedScrollView: false
+                            }, () => {
+                                Animated.parallel([
+                                    Animated.timing( this.state.containerPosition, {
+                                        toValue: 0,
+                                        duration: 200,
+                                    }),
+                                    Animated.timing( this.state.topHeight, {
+                                        toValue: height - 80,
+                                        duration: 200,
+                                    }), 
+                                    Animated.timing( this.state.menuWidth, {
+                                        toValue: width,
+                                        duration: 200,
+                                    }),
+                                    Animated.timing( this.state.menuRadius, {
+                                        toValue: 0,
+                                        duration: 200,
+                                    }),
+                                    Animated.timing( this.state.menuPosition, {
+                                        toValue: 0,
+                                        duration: 200,
+                                    }),
+                                    Animated.timing( this.state.headerHeight, {
+                                        toValue: 0,
+                                        duration: 200,
+                                    }),
+                                    Animated.timing( this.state.headerOpacity, {
+                                        toValue: 0,
+                                        duration: 200,
+                                    }),
+                                    Animated.timing( this.props.screenProps.scrollY, {
+                                        toValue: 0,
+                                        duration: 200,
+                                    }),
+                                ]).start(() => {
+                                    this.setState({
+                                        isMovedUp: false,
+                                        changedScrollView: false
+                                    })
+                                });
+                            })
+                            
+                        }
+                    }
+                    else{
+                        Animated.timing( this.state.containerPosition, {
+                            toValue: 0,
+                            duration: 200,
+                        } ).start(() => {
+                            
+                        });
+                    }
+                }
+            },
+        })
     }
+
     _renderNoticeRouter = () => {
         return (
             <NoticeScreen handleNoticeNewChange={this.props.handleNoticeNewChange} />
@@ -128,7 +260,7 @@ class HomeScreen extends Component {
     }
 
     render() {
-        const { topHeight, imageHeight, menuHeight, menuWidth, menuRadius, headerOpacity, menuPosition, headerHeight } = this.state;
+        const { topHeight, menuWidth, menuRadius, headerOpacity, menuPosition, headerHeight, changedScrollView, startScroll } = this.state;
         const { newReviews, recommendedReviews, followingReviews, initial, showNoticeModal, noticeNew } = this.props;
         return (
             <View style={[styles.container]}>
@@ -152,7 +284,148 @@ class HomeScreen extends Component {
                         </View>
                     </TouchableWithoutFeedback>
                 </Animated.View>
-                <ScrollView style={{zIndex: 900}} scrollEnabled={this.state.isMovedUp} bounces={false}>
+                {changedScrollView ? (
+                    <ScrollView>
+                        <Animated.ScrollView scrollEventThrottle={16} horizontal={true} pagingEnabled={true} style={[styles.bgWhite, {width, height: height - 500, zIndex: 99, position: 'absolute', top: 0}, {transform: [{ translateY: this.state.containerPosition.y },{ scale: 1.0 }]}]} >
+                            <Image resizeMode={'cover'} source={require('../../assets/images/mona.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
+                            <Image resizeMode={'cover'} source={require('../../assets/images/monc.jpg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
+                            <Image resizeMode={'cover'} source={require('../../assets/images/goh.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
+                        </Animated.ScrollView>
+                        <Animated.View { ...this.bannerResponder.panHandlers } style={[styles.center, styles.alignSelfCenter, styles.bgWhite, styles.homeMenuShadow,
+                            {width: width*0.9, height: 80, borderRadius: 10, marginTop: -40},
+                            {position: 'absolute', top: height - 500, zIndex: 99, transform: [{ translateY: this.state.containerPosition.y },{ scale: 1.0 }]}
+                        ]}>
+                            <View style={[styles.row, styles.spaceAround, styles.width80]}>
+                                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('RecommendArtwork')}>
+                                    <View style={[styles.center]}>
+                                        <Image style={{width: 24, height: 24}} source={require('../../assets/images/recommend.png')} />
+                                        <Text style={[styles.font12, styles.mt5]}>추천 감상</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
+                                    <View style={[styles.center]}>
+                                        <Image style={{width: 24, height: 24}} source={require('../../assets/images/total.png')} />
+                                        <Text style={[styles.font12, styles.mt5]}>전체 감상</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('FollowArtwork')}>
+                                    <View style={[styles.center]}>
+                                        <Image style={{width: 24, height: 24}} source={require('../../assets/images/follow.png')} />
+                                        <Text style={[styles.font12, styles.mt5]}>팔로우 감상</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </View>
+                        </Animated.View>
+                        <View style={[styles.px15, styles.widthFull, {zIndex: 900, marginTop: height - 500}]}>
+                            <Text style={[styles.fontMedium, styles.font15, {marginTop: 80}]}>아틔움이 엄선한 감상</Text>
+                            <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb10]}>
+                                <Text style={[styles.fontBold, styles.font20]}>주간 아틔움</Text>
+                                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('RecommendArtwork')}>
+                                    <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                                </TouchableWithoutFeedback>
+                            </View>
+                            <View style={[styles.row, (recommendedReviews && (recommendedReviews.length > 0)) ? styles.justifyContentBetween : styles.justifyContentCenter, styles.flexWrap, styles.widthFull]}>
+                                {(recommendedReviews && (recommendedReviews.length > 0)) ? (
+                                    recommendedReviews.map((review, index) => (
+                                        <ArtuiumCard key={index} review={review} size={'small'} navigation={this.props.navigation} />
+                                    ))
+                                ) : (
+                                    <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
+                                )}
+                            </View>
+                            <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7]}>지금 아틔움에서는</Text>
+                            <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb15]}>
+                                <Text style={[styles.fontBold, styles.font20]}>새로운 감상</Text>
+                                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
+                                    <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                                </TouchableWithoutFeedback>
+                            </View>
+                            <ScrollView
+                            horizontal={(newReviews && (newReviews.length > 0)) ? true : false}
+                            pagingEnabled={(newReviews && (newReviews.length > 0)) ? true : false}
+                            scrollEnabled={(newReviews && (newReviews.length > 0)) ? true : false}
+                            showsHorizontalScrollIndicator={false}
+                            >
+                                {(newReviews && (newReviews.length > 0)) ? (
+                                    newReviews.map((review, index) => (
+                                        <ArtuiumCard key={index} review={review} size={'large'} navigation={this.props.navigation} />
+                                    ))
+                                ) : (
+                                    <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
+                                )}
+                            </ScrollView>
+                            <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15]}>
+                                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
+                                    <View style={[styles.bgBlack, styles.borderRadius5, styles.py10, { width: 220 }]}>
+                                        <Text style={[styles.textCenter, styles.fontMedium, styles.font16, styles.white]}>새로운 감상 확인하기 </Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </View>
+                            <Text style={[styles.fontMedium, styles.font15, {marginTop: 60}, styles.grayA7]}>친구들의 이야기를 들어보세요</Text>
+                            <View style={[styles.row, styles.alignItemsEnd, styles.justifyContentBetween, styles.mb15]}>
+                                <Text style={[styles.fontBold, styles.font20]}>친구들의 감상</Text>
+                                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('FollowArtwork')}>
+                                    <Text style={[styles.fontMedium, styles.font15, styles.textUnderline, styles.grayA7]}>더보기</Text>
+                                </TouchableWithoutFeedback>
+                            </View>
+                            <ScrollView
+                            horizontal={(followingReviews && (followingReviews.length > 0)) ? true : false}
+                            pagingEnabled={(followingReviews && (followingReviews.length > 0)) ? true : false}
+                            scrollEnabled={(followingReviews && (followingReviews.length > 0)) ? true : false}
+                            showsHorizontalScrollIndicator={false}
+                            >
+                                {(followingReviews && (followingReviews.length > 0)) ? (
+                                    followingReviews.map((review, index) => (
+                                        <ArtuiumCard key={index} review={review} size={'large'} navigation={this.props.navigation} />
+                                    ))
+                                ) : (
+                                    <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
+                                )}
+                            </ScrollView>
+                            <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15, { marginBottom: 60 }]}>
+                                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('FollowArtwork')}>
+                                    <View style={[styles.bgBlack, styles.borderRadius5, styles.py10, { width: 220 }]}>
+                                        <Text style={[styles.textCenter, styles.fontMedium, styles.font16, styles.white]}>친구들의 감상 확인하기 </Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </View>
+                        </View>
+                    </ScrollView>
+                ) : (
+                    <Fragment>
+                        <Animated.ScrollView { ...this.bannerResponder.panHandlers } scrollEventThrottle={16} horizontal={true} pagingEnabled={true} style={[styles.bgWhite, {position: 'absolute', width, height: topHeight, zIndex: 10, transform: [{ translateY: this.state.containerPosition.y },{ scale: 1.0 }]}]} >
+                            <Image resizeMode={'cover'} source={require('../../assets/images/mona.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
+                            <Image resizeMode={'cover'} source={require('../../assets/images/monc.jpg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
+                            <Image resizeMode={'cover'} source={require('../../assets/images/goh.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
+                        </Animated.ScrollView>
+                        <Animated.View style={[styles.center, styles.alignSelfCenter, styles.bgWhite, styles.homeMenuShadow,
+                            {width: menuWidth, height: 80, borderRadius: menuRadius, position: 'absolute', bottom: menuPosition, transform: [{ translateY: this.state.containerPosition.y },{ scale: 1.0 }]}
+                        ]}>
+                            <View style={[styles.row, styles.spaceAround, styles.width80]}>
+                                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('RecommendArtwork')}>
+                                    <View style={[styles.center]}>
+                                        <Image style={{width: 24, height: 24}} source={require('../../assets/images/recommend.png')} />
+                                        <Text style={[styles.font12, styles.mt5]}>추천 감상</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
+                                    <View style={[styles.center]}>
+                                        <Image style={{width: 24, height: 24}} source={require('../../assets/images/total.png')} />
+                                        <Text style={[styles.font12, styles.mt5]}>전체 감상</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('FollowArtwork')}>
+                                    <View style={[styles.center]}>
+                                        <Image style={{width: 24, height: 24}} source={require('../../assets/images/follow.png')} />
+                                        <Text style={[styles.font12, styles.mt5]}>팔로우 감상</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </View>
+                        </Animated.View>
+                    </Fragment>
+                )}
+                
+                {/* <ScrollView style={{zIndex: 900}} scrollEnabled={this.state.isMovedUp} bounces={false}>
                     {this.state.isMovedUp ? 
                     <View style={[styles.alignItemsCenter, {height: height/3+80, marginTop: getStatusBarHeight()+50}]}>
                         <ScrollView scrollEventThrottle={16} onScroll={() => console.log('scrolled')} style={[{width, height: height/3}]} horizontal={true} pagingEnabled={true}>
@@ -187,10 +460,10 @@ class HomeScreen extends Component {
                     </View>
                     :
                     <Animated.View {...this.panResponder.panHandlers} style={[styles.alignItemsCenter, {height: topHeight, marginTop: headerHeight}]}>
-                        <Animated.ScrollView ref={x => this._scrollView = x} style={[{width, height: imageHeight}]} horizontal={true} pagingEnabled={true}>
-                            <Animated.Image resizeMode={'cover'} source={require('../../assets/images/mona.jpeg')} style={[{width: width, height: imageHeight}]} />
-                            <Animated.Image resizeMode={'cover'} source={require('../../assets/images/monc.jpg')} style={[{width: width, height: imageHeight}]} />
-                            <Animated.Image resizeMode={'cover'} source={require('../../assets/images/goh.jpeg')} style={[{width: width, height: imageHeight}]} />
+                        <Animated.ScrollView ref={x => this._scrollView = x} style={[{width}]} horizontal={true} pagingEnabled={true}>
+                            <Animated.Image resizeMode={'cover'} source={require('../../assets/images/mona.jpeg')} style={[{width: width}]} />
+                            <Animated.Image resizeMode={'cover'} source={require('../../assets/images/monc.jpg')} style={[{width: width}]} />
+                            <Animated.Image resizeMode={'cover'} source={require('../../assets/images/goh.jpeg')} style={[{width: width}]} />
                         </Animated.ScrollView>
                         <Animated.View style={[styles.center, styles.bgWhite, styles.homeMenuShadow,
                             {width: menuWidth, height: menuHeight, borderRadius: menuRadius, bottom: menuPosition}
@@ -301,7 +574,7 @@ class HomeScreen extends Component {
                             아틔움에서 즐거운 시간 보내세요.
                         </Text>
                     </Animated.View>
-                )}
+                )} */}
                 <Modal
                 visible={showNoticeModal}
                 onRequestClose={this.props.closeNoticeModal}
