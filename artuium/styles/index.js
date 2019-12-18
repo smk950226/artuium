@@ -741,6 +741,13 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         elevation: 1,
     },
+    loginShadow: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        elevation: 1,
+    },
     exMenuShadow: {
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -987,6 +994,15 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderWidth: 1
     },
+    smBlueBtn: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 5,
+        paddingVertical: 2,
+        borderColor: '#044ae6',
+        borderRadius: 5,
+        borderWidth: 1
+    },
     divGray: {
         borderWidth: 1,
         borderColor: '#e0e0e0',
@@ -1001,6 +1017,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#969696',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    loginModal: {
+        borderRadius: 20,
+        backgroundColor: '#fff'
     }
 })
 

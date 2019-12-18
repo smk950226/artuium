@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Animated, View, PanResponder, Text, ScrollView, Image, Modal, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { Animated, View, PanResponder, Text, ScrollView, Image, Modal, Dimensions, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import styles from '../../styles';
 import ArtuiumCard from '../../components/ArtuiumCard';
@@ -16,7 +16,6 @@ class HomeScreen extends Component {
             newReviews: PropTypes.array,
             recommendedReviews: PropTypes.array,
             followingReviews: PropTypes.array,
-            initial: PropTypes.bool.isRequired,
             getInitial: PropTypes.func.isRequired,
             openNoticeModal: PropTypes.func.isRequired,
             closeNoticeModal: PropTypes.func.isRequired,
@@ -408,6 +407,9 @@ class HomeScreen extends Component {
                                         <Text style={[styles.font12, styles.mt5]}>추천 감상</Text>
                                     </View>
                                 </TouchableWithoutFeedback>
+                                <TouchableOpacity style={[styles.profileBtn]} onPress={()=>this.props.logout()}>
+                                    <Text style={[styles.fontMedium, styles.font15, {color: '#a8a8a8'}]}>로그아웃</Text>
+                                </TouchableOpacity>
                                 <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
                                     <View style={[styles.center]}>
                                         <Image style={{width: 24, height: 24}} source={require('../../assets/images/total.png')} />

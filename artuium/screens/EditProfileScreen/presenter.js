@@ -46,9 +46,9 @@ class EditProfileScreen extends React.Component {
                     </TouchableWithoutFeedback>
                 </View>
                 <View style={[styles.divGray]} />
-                <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.borderBtmGrayD1, styles.px30, {height: 80}]}>
+                <View style={[styles.row, styles.alignItemsStart, styles.justifyContentBetween, styles.borderBtmGrayD1, styles.px30, styles.pt30,{height: 100}]}>
                     <Text style={[styles.fontMedium, styles.font16]}>이름</Text>
-                    <View style={{width: width/2}}>
+                    <View style={{width: width/3}}>
                         <TextInput
                             style={[styles.fontMedium, styles.font16]}
                             underlineColorAndroid={'transparent'} 
@@ -57,9 +57,24 @@ class EditProfileScreen extends React.Component {
                             value={this.props.nickname} 
                             onChangeText={this.props.handleNicknameChange} 
                         />
+                        {
+                            !this.props.isCheckingNickname && this.props.checkedNickname ?
+                                this.props.nicknameForm ?
+                                    this.props.availableNickname ?
+                                        <Text style={[styles.fontMedium, styles.font12, {color: '#000', opacity: 0.5}]}>사용 가능한 닉네임</Text>
+                                    :
+                                        <Text style={[styles.fontMedium, styles.font12, {color: '#ff4545'}]}>이미 사용중인 닉네임</Text>
+                                :
+                                    <Text style={[styles.fontMedium, styles.font12, {color: '#ff4545'}]}>형식이 맞지 않는 닉네임</Text>
+                            :
+                            null
+                        }
                     </View>
                     <TouchableOpacity style={[styles.GrayXBtn]} onPress={()=>this.props.handleNicknameClear()}>
                         <Text style={[styles.font14, {color: '#bababa'}]}>X</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.blueBtn]} onPress={()=>this.props.handleCheckNickname(this.props.nickname)}>
+                        <Text style={[styles.fontMedium, styles.font12, {color: '#044ae6'}]}>중복확인</Text>
                     </TouchableOpacity>
                 </View>
             </View>

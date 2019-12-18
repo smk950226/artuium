@@ -13,6 +13,10 @@ class Container extends Component{
         super(props);
         this.state = {
             nickname: this.props.profile.nickname,
+            nicknameForm: true,
+            availableNickname: false,
+            isCheckingNickname: false,
+            checkedNickname: false,
         }
     }
 
@@ -22,8 +26,47 @@ class Container extends Component{
 
     _handleNicknameChange = (nickname) => {
         this.setState({
-            nickname
+            nickname,
+            checkedNickname: false
         })
+    }
+    
+    _handleCheckNickname = async(nickname) => {
+        let reg = /^[가-힣a-zA-Z0-9]{2,10}$/ ;
+        if(reg.test(nickname) === true){
+            await this.setState({
+                nicknameForm: true,
+                checkedNickname: true,
+            })
+        }
+        else{
+            await this.setState({
+                nicknameForm: false,
+                checkedNickname: true,
+            })
+        }
+        const { nicknameForm, isCheckingNickname } = this.state;
+        if(!isCheckingNickname && this.state.nickname && nicknameForm){
+            this.setState({
+                isCheckingNickname: true
+            })
+            const { checkNickname } = this.props;
+            const { nickname } = this.state;
+            const result = await checkNickname(nickname);
+            if(result.status === 'ok'){
+                this.setState({
+                    isCheckingNickname: false,
+                    availableNickname: true,
+                })
+            }
+            else{
+                this.setState({
+                    isCheckingNickname: false,
+                    availableNickname: false,
+                    checkedNickname: true,
+                })
+            }
+        }
     }
 
     _handleNicknameClear = () => {
@@ -33,8 +76,17 @@ class Container extends Component{
     }
 
     _handleChangeNickname = async(nickname) => {
-        await this.props.changeNickname(nickname)
-        this.props.navigation.goBack(null)
+        const { nicknameForm, checkedNickname } = this.state;
+        if(nicknameForm && checkedNickname){
+            await this.props.changeNickname(nickname)
+            this.props.navigation.goBack(null)
+        }
+        else{
+            await this.setState({
+                nickname: this.props.profile.nickname
+            })
+            this.props.navigation.goBack(null)
+        }
     }
 
 
@@ -82,6 +134,7 @@ class Container extends Component{
             handleNicknameChange={this._handleNicknameChange}
             handleNicknameClear={this._handleNicknameClear}
             handleChangeNickname={this._handleChangeNickname}
+            handleCheckNickname={this._handleCheckNickname}
             />
         )
     }

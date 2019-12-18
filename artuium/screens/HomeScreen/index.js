@@ -4,13 +4,14 @@ import { actionCreators as reviewActions } from '../../redux/modules/review';
 import { actionCreators as userActions } from '../../redux/modules/user';
 
 const mapStateToProps = (state, ownProps) => {
-    const { review : { initialStatus, newReviews, recommendedReviews, followingReviews }, user : { initial } } = state;
+    const { review : { initialStatus, newReviews, recommendedReviews, followingReviews }, user : { profile, initial } } = state;
     return {
         initialStatus,
         newReviews,
         recommendedReviews,
         followingReviews,
-        initial
+        initial,
+        profile,
     }
 }
 
@@ -24,6 +25,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         checkNoticeAll: () => {
             return dispatch(userActions.checkNoticeAll())
+        },
+        logout: () => {
+            dispatch(userActions.getLogout());
         }
     }
 }

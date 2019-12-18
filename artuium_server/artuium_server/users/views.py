@@ -112,6 +112,16 @@ class Profile(APIView):
         serializer = serializers.ProfileSerializer(user, context = {'request': request})
         return Response(status = status.HTTP_200_OK, data = serializer.data)
 
+class CheckNickname(APIView):
+    def get(self, request, format = None):
+        nickname = request.query_params.get('nickname')
+        if nickname:
+            if len(User.objects.filter(nickname = nickname)) > 0:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 사용중인 닉네임'})
+            else:
+                return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '닉네임을 입력하세요.'})
 
 class ReviewList(APIView):
     permission_classes = [IsAuthenticated]

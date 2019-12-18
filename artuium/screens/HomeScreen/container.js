@@ -12,7 +12,6 @@ class Container extends Component{
         followingReviews: PropTypes.array,
         initialReview: PropTypes.func.isRequired,
         getInitial: PropTypes.func.isRequired,
-        initial: PropTypes.bool.isRequired,
         checkNoticeAll: PropTypes.func.isRequired
     }
 
@@ -35,6 +34,7 @@ class Container extends Component{
             })
         }
         await initialReview()
+        console.log('프로필', this.props.profile)
     }
 
     static getDerivedStateFromProps(nextProps, prevState){

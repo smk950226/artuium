@@ -11,6 +11,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return{
+        signUp: (username, password, nickname, profile_image) => {
+            return dispatch(userActions.signUp(username, password, nickname, profile_image))
+        },
         login: (username, password) => {
             return dispatch(userActions.login(username, password))
         },
@@ -19,7 +22,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         getProfileByToken: (token) => {
             dispatch(userActions.getProfileByToken(token))
-        }
+        },
+        checkNickname: (nickname) => {
+            return dispatch(userActions.checkNickname(nickname))
+        },
     }
 }
 

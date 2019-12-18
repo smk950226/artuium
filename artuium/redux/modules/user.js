@@ -51,47 +51,42 @@ function getInitial(initial){
     }
 }
 
-function signUp(username, password, name, agreeTerms, code, birth, gender, phoneNumber){
+function signUp(username, password, nickname, profile_image){
     return (dispatch) => {
-        return fetch(`${FETCH_URL}/api/center/check/?code=${code}`)
-        .then(response => {
-            if(response.status === 200){
-                return fetch(`${FETCH_URL}/rest-auth/registration/`, {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        username,
-                        email: username,
-                        password1: password,
-                        password2: password,
-                        name,
-                        agreeTerms, 
-                        code, 
-                        birth, 
-                        gender, 
-                        phoneNumber
-                    })
-                 })
-                 .then(response => response.json())
-                 .then(json => {
-                     if(json.token){
-                         return {
-                             token: json.token
-                         }
-                     }
-                     else{
-                         return false
-                     }
-                 })
-                 .catch(err => console.log(err));
+        let formData = new FormData();
+        if(profile_image){
+            const temp = profile_image.type.split('/')
+            const ext = temp[temp.length - 1]
+            formData.append('profile_image',{
+                uri: profile_image.uri,
+                type: profile_image.type,
+                name: `${uuidv1()}.` + ext
+            })
+            formData.append('username', username)
+            formData.append('email', username)
+            formData.append('password1', password)
+            formData.append('password2', password)
+            formData.append('nickname', nickname)
+        }
+        return fetch(`${FETCH_URL}/rest-auth/registration/`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(json => {
+            console.log(json)
+            if(json.token){
+                dispatch(saveToken(json.token))
+                return true
             }
             else{
-                return response.json()
+                return false
             }
         })
-        .then(json => json)
+        .catch(err => console.log(err));
     }
 }
 
@@ -103,8 +98,8 @@ function login(username, password){
                "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                username: 'fov@artuium.com',
-                password: 'fov959697',
+                username,
+                password
             })
         })
         .then(response => {
@@ -121,6 +116,18 @@ function login(username, password){
             }
         })
         .catch(err => console.log(err));
+    }
+}
+
+function checkNickname(nickname){
+    return (dispatch) => {
+        return fetch(`${FETCH_URL}/api/users/check/nickname/?nickname=${nickname}`,{
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(json => json)
     }
 }
 
@@ -659,6 +666,7 @@ const actionCreators = {
     getProfileByToken,
     signUp,
     login,
+    checkNickname,
     followUser,
     unfollowUser,
     getInitial,

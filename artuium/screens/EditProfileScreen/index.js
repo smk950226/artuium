@@ -14,6 +14,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         getProfile: () => {
             dispatch(userActions.getProfile())
         },
+        checkNickname: (nickname) => {
+            return dispatch(userActions.checkNickname(nickname))
+        },
         changeNickname: (nickname) => {
             dispatch(userActions.changeNickname(nickname))
         },
