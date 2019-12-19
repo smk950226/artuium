@@ -15,6 +15,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         getExhibitionReviewListMore: (exhibitionId, page) => {
             return dispatch(exhibitionActions.getExhibitionReviewListMore(exhibitionId, page))
+        },
+        createExhibitionReview: (exhibitionId, rating, expression, content) => {
+            return dispatch(exhibitionActions.createExhibitionReview(exhibitionId, rating, expression, content))
         }
     }
 }

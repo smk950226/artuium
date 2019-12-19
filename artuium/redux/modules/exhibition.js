@@ -194,6 +194,36 @@ function getExhibitionReviewListMore(exhibitionId, page){
     }
 }
 
+
+function createExhibitionReview(exhibitionId, rating, expression, content){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/review/exhibition/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            },
+            body: JSON.stringify({
+                exhibitionId,
+                rating,
+                expression,
+                content
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     
 };
@@ -227,7 +257,8 @@ const actionCreators = {
     getExhibitionListMore,
     getExhibitionDetailByArtwork,
     getExhibitionReviewList,
-    getExhibitionReviewListMore
+    getExhibitionReviewListMore,
+    createExhibitionReview
 }
 
 export { actionCreators }

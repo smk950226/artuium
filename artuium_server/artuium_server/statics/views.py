@@ -331,11 +331,39 @@ class ExhibitionReview(APIView):
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
+    
+    def post(self, request, format = None):
+        exhibition_id = request.data.get('exhibitionId', None)
+        rate = request.data.get('rating', None)
+        expression = request.data.get('expression')
+        content = request.data.get('content')
+        user = request.user
+        if exhibition_id and rate and expression and content:
+            try:
+                exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
+                review = models.Review.objects.create(author = user, exhibition = exhibition, rate = rate, content = content, expression = expression)
+                review.save()
+                serializer = serializers.ReviewSerializer(review, context = {'request': request})
+                exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
+                total_rate = exhibition.total_rate
+                reviews = exhibition.reviews
+                thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                good = reviews.filter(expression = 'good').count()/reviews.count()
+                soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
 
-            expression = models.CharField(max_length = 100, choices = (
-        ('good', 'Good'),
-        ('soso', 'Soso'),
-        ('sad', 'Sad'),
-        ('surprise', 'Surprise'),
-        ('thumb', 'Thumb'),
-    ))
+                return Response(status = status.HTTP_200_OK, data = {
+                    'status': 'ok', 
+                    'review': serializer.data,
+                    'thumb': thumb,
+                    'good': good,
+                    'soso': soso,
+                    'sad': sad,
+                    'surprise': surprise,
+                    'total_rate': total_rate
+                })
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
