@@ -112,12 +112,24 @@ class Profile(APIView):
         serializer = serializers.ProfileSerializer(user, context = {'request': request})
         return Response(status = status.HTTP_200_OK, data = serializer.data)
 
+
+class CheckEmail(APIView):
+    def get(self, request, format = None):
+        email = request.query_params.get('email', None)
+        if email:
+            if User.objects.filter(Q(email = email) | Q(username = email)).count() > 0:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 사용중인 이메일입니다.'})
+            else:
+                return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이메일을 입력하세요.'})
+
 class CheckNickname(APIView):
     def get(self, request, format = None):
         nickname = request.query_params.get('nickname')
         if nickname:
             if len(User.objects.filter(nickname = nickname)) > 0:
-                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 사용중인 닉네임'})
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 사용중인 닉네임입니다.'})
             else:
                 return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
         else:

@@ -1021,6 +1021,9 @@ const styles = StyleSheet.create({
     loginModal: {
         borderRadius: 20,
         backgroundColor: '#fff'
+    },
+    opacity07: {
+        opacity: .7
     }
 })
 

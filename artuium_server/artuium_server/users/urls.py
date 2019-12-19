@@ -7,6 +7,7 @@ urlpatterns = [
     path('search/', views.Search.as_view()),
     path('recommended/', views.Recommended.as_view()),
     path('profile/', views.Profile.as_view()),
+    path('check/email/', views.CheckEmail.as_view()),
     path('check/nickname/', views.CheckNickname.as_view()),
     path('list/review/', views.ReviewList.as_view()),
     path('change/nickname/', views.ChangeNickname.as_view()),

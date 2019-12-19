@@ -3,9 +3,10 @@ import Container from './container';
 import { actionCreators as userActions } from '../../redux/modules/user';
 
 const mapStateToProps = (state, ownProps) => {
-    const { user : { profile } } = state;
+    const { user : { profile, token } } = state;
     return {
-        profile
+        profile,
+        token
     }
 }
 
@@ -26,6 +27,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         checkNickname: (nickname) => {
             return dispatch(userActions.checkNickname(nickname))
         },
+        checkEmail: (email) => {
+            return dispatch(userActions.checkEmail(email))
+        }
     }
 }
 

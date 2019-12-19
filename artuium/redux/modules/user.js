@@ -62,12 +62,12 @@ function signUp(username, password, nickname, profile_image){
                 type: profile_image.type,
                 name: `${uuidv1()}.` + ext
             })
-            formData.append('username', username)
-            formData.append('email', username)
-            formData.append('password1', password)
-            formData.append('password2', password)
-            formData.append('nickname', nickname)
         }
+        formData.append('username', username)
+        formData.append('email', username)
+        formData.append('password1', password)
+        formData.append('password2', password)
+        formData.append('nickname', nickname)
         return fetch(`${FETCH_URL}/rest-auth/registration/`, {
             method: 'POST',
             headers: {
@@ -77,10 +77,10 @@ function signUp(username, password, nickname, profile_image){
         })
         .then(response => response.json())
         .then(json => {
-            console.log(json)
             if(json.token){
-                dispatch(saveToken(json.token))
-                return true
+                return {
+                    token: json.token
+                }
             }
             else{
                 return false
@@ -116,6 +116,18 @@ function login(username, password){
             }
         })
         .catch(err => console.log(err));
+    }
+}
+
+function checkEmail(email){
+    return (dispatch) => {
+        return fetch(`${FETCH_URL}/api/users/check/email/?email=${email}`,{
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(json => json)
     }
 }
 
@@ -666,6 +678,7 @@ const actionCreators = {
     getProfileByToken,
     signUp,
     login,
+    checkEmail,
     checkNickname,
     followUser,
     unfollowUser,

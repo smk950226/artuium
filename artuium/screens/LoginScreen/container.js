@@ -10,11 +10,12 @@ class Container extends Component{
         login: PropTypes.func.isRequired,
         getSaveToken: PropTypes.func.isRequired,
         getProfileByToken: PropTypes.func.isRequired,
-        profile: PropTypes.object
+        profile: PropTypes.object,
+        token: PropTypes.string,
+        checkEmail: PropTypes.func.isRequired
     }
 
     state = {
-        isSubmitting: false,
         loginId: '',
         loginPw: '',
         username: '',
@@ -33,6 +34,7 @@ class Container extends Component{
         visibleSignup: false,
         isSubmitting: false,
         fetchedProfile: false,
+        fetchedToken: false,
         fetchClear: false
     }
 
@@ -54,12 +56,41 @@ class Container extends Component{
         })
     }
 
-    _handleCheckUsername = async(username) => {
+    _handleCheckUsername = async() => {
+        const { username, isCheckingUsername } = this.state;
+        const { checkEmail } = this.props;
         let reg = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
-        if(reg.test(username) === true){
+        if(reg.test(username)){
             await this.setState({
                 usernameForm: true,
             })
+            if(!isCheckingUsername){
+                this.setState({
+                    isCheckingUsername: true
+                })
+                const result = await checkEmail(username);
+                if(result.status === 'ok'){
+                    this.setState({
+                        isCheckingUsername: false,
+                        checkedUsername: true,
+                    })
+                    Alert.alert(null,'사용가능한 이메일입니다.')
+                }
+                else if(result.error){
+                    this.setState({
+                        isCheckingUsername: false,
+                        checkedUsername: false,
+                    })
+                    Alert.alert(null,result.error)
+                }
+                else{
+                    this.setState({
+                        isCheckingUsername: false,
+                        checkedUsername: false,
+                    })
+                    Alert.alert(null,'오류가 발생했습니다.')            
+                }
+            }
         }
         else{
             await this.setState({
@@ -67,44 +98,28 @@ class Container extends Component{
             })
             Alert.alert(null,'이메일 형식을 확인해 주세요.')    
         }
-        // const { usernameForm, isCheckingUsername } = this.state;
-        // if(!isCheckingUsername && this.state.username && usernameForm){
-        //     this.setState({
-        //         isCheckingUsername: true
-        //     })
-        //     const { checkUsername } = this.props;
-        //     const { username } = this.state;
-        //     const result = await checkUsername(username);
-        //     if(result.status === 'ok'){
-        //         this.setState({
-        //             isCheckingUsername: false,
-        //             checkedUsername: true,
-        //         })
-        //         Alert.alert(null,'사용가능한 이메일입니다.')
-        //     }
-        //     else{
-        //         this.setState({
-        //             isCheckingUsername: false,
-        //             checkedUsername: false,
-        //         })
-        //         Alert.alert(null,'오류가 발생했습니다.')            
-        //     }
-        // }
     }
 
     _handlePassword1Change = async(password1) => {
         this.setState({
             password1,
         })
-        let reg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/
+        let reg = /^(?=.*?[A-Za-z])(?=.*?[0-9]).{2,}$/;
         if(reg.test(password1) === true){
             this.setState({
                 passwordForm: true
             })
-            if(password1 === this.state.password2){
-                this.setState({
-                    passwordMatch: true
-                })
+            if(this.state.password2){
+                if(password1 === this.state.password2){
+                    this.setState({
+                        passwordMatch: true
+                    })
+                }
+                else{
+                    this.setState({
+                        passwordMatch: false
+                    })
+                }
             }
             else{
                 this.setState({
@@ -116,10 +131,17 @@ class Container extends Component{
             this.setState({
                 passwordForm: false    
             })
-            if(password1 === this.state.password2){
-                this.setState({
-                    passwordMatch: true
-                })
+            if(this.state.password2){
+                if(password1 === this.state.password2){
+                    this.setState({
+                        passwordMatch: true
+                    })
+                }
+                else{
+                    this.setState({
+                        passwordMatch: false
+                    })
+                }
             }
             else{
                 this.setState({
@@ -133,11 +155,18 @@ class Container extends Component{
         this.setState({
             password2,
         })
-        if(password2 !== ""){
-            if(this.state.password1 === password2){
-                await this.setState({
-                    passwordMatch: true
-                })
+        if(password2){
+            if(this.state.password1){
+                if(this.state.password1 === password2){
+                    await this.setState({
+                        passwordMatch: true
+                    })
+                }
+                else{
+                    await this.setState({
+                        passwordMatch: false
+                    })
+                }
             }
             else{
                 await this.setState({
@@ -159,41 +188,48 @@ class Container extends Component{
         })
     }
 
-    _handleCheckNickname = async(nickname) => {
+    _handleCheckNickname = async() => {
+        const { nickname, isCheckingNickname } = this.state;
         let reg = /^[가-힣a-zA-Z0-9]{2,10}$/ ;
         if(reg.test(nickname) === true){
             await this.setState({
                 nicknameForm: true,
             })
+            if(!isCheckingNickname){
+                this.setState({
+                    isCheckingNickname: true
+                })
+                const { checkNickname } = this.props;
+                const { nickname } = this.state;
+                const result = await checkNickname(nickname);
+                if(result.status === 'ok'){
+                    this.setState({
+                        isCheckingNickname: false,
+                        checkedNickname: true,
+                    })
+                    Alert.alert(null,'사용가능한 닉네임입니다.')
+                }
+                else if(result.error){
+                    this.setState({
+                        isCheckingNickname: false,
+                        checkedNickname: false,
+                    })
+                    Alert.alert(null,result.error)
+                }
+                else{
+                    this.setState({
+                        isCheckingNickname: false,
+                        checkedNickname: false,
+                    })
+                    Alert.alert(null,'오류가 발생했습니다.')
+                }
+            }
         }
         else{
             await this.setState({
                 nicknameForm: false,
             })
             Alert.alert(null,'닉네임 형식을 확인해 주세요.')    
-        }
-        const { nicknameForm, isCheckingNickname } = this.state;
-        if(!isCheckingNickname && this.state.nickname && nicknameForm){
-            this.setState({
-                isCheckingNickname: true
-            })
-            const { checkNickname } = this.props;
-            const { nickname } = this.state;
-            const result = await checkNickname(nickname);
-            if(result.status === 'ok'){
-                this.setState({
-                    isCheckingNickname: false,
-                    checkedNickname: true,
-                })
-                Alert.alert(null,'사용가능한 닉네임입니다.')
-            }
-            else{
-                this.setState({
-                    isCheckingNickname: false,
-                    checkedNickname: false,
-                })
-                Alert.alert(null,'오류가 발생했습니다.')
-            }
         }
     }
 
@@ -222,10 +258,10 @@ class Container extends Component{
 
     _handleSignup = async() => {
         const { username, password1, password2, nickname, profileImg, usernameForm, passwordForm, passwordMatch, checkedUsername, checkedNickname, isSubmitting } = this.state;
+        const { getSaveToken, getProfileByToken } = this.props;
         if(!isSubmitting){
             if(username && password1 && password2 && nickname){
-                await console.log("공통정보 : ", username, password1, nickname)
-                if(username){
+                if(usernameForm){
                     if(passwordForm){
                         if(passwordMatch){ 
                             if(usernameForm){
@@ -235,17 +271,15 @@ class Container extends Component{
                                     })
                                     const result = await this.props.signUp(username, password1, nickname, profileImg);
                                     if(result){
-                                        if(result.error){
-                                            this.setState({
-                                                isSubmitting: false,
-                                                codeError: result.error
-                                            })
+                                        if(result.token){
+                                            await getSaveToken(result.token)
+                                            await getProfileByToken(result.token)
                                         }
                                         else{
                                             this.setState({
                                                 isSubmitting: false
                                             })
-                                            this.props.navigation.navigate('홈');
+                                            Alert.alert(null,'오류가 발생하였습니다.')
                                         }
                                     }
                                     else{
@@ -268,11 +302,11 @@ class Container extends Component{
                         }
                     }
                     else{
-                        Alert.alert(null, '비밀번호 형식이 맞지 않습니다.')
+                        Alert.alert(null, '비밀번호는 최소 8자, 1개이상의 숫자와 영문자를 포함해야합니다.')
                     }
                 }
                 else{
-                    Alert.alert(null, '이메일 형식이 맞지 않습니다.')
+                    Alert.alert(null, '이메일 형식을 확인해 주세요.')
                 }
             }
             else{
@@ -282,11 +316,14 @@ class Container extends Component{
     }
 
     static getDerivedStateFromProps(nextProps, prevState){
-        const { fetchedProfile } = prevState;
-        if((!fetchedProfile)){
+        const { fetchedProfile, fetchedToken } = prevState;
+        if((!fetchedProfile) || (!fetchedToken)){
             let update = {}
             if((nextProps.profile)){
                 update.fetchedProfile = true
+            }
+            if((nextProps.token)){
+                update.fetchedToken = true
             }
 
             return update
@@ -297,12 +334,12 @@ class Container extends Component{
     }
 
     componentDidUpdate = () => {
-        if(this.state.fetchedProfile && !this.state.fetchClear){
-            this.props.getSaveToken(this.state.token)
+        if(this.state.fetchedProfile && this.state.fetchedToken && !this.state.fetchClear){
             this.setState({
                 isSubmitting: false,
                 fetchClear: true
             })
+            this.props.navigation.navigate('홈');
         }
     }
 
@@ -330,25 +367,36 @@ class Container extends Component{
         })
     }
 
-    _login = async(username, password) => {
-        const { isSubmitting } = this.state;
+    _login = async() => {
+        const { isSubmitting, loginId, loginPw } = this.state;
         const { login, getSaveToken, getProfileByToken } = this.props;
         if(!isSubmitting){
-            this.setState({
-                isSubmitting: true
-            })
-            const result = await login(username, password)
-            if(result.token){
-                await this.setState({
-                    token: result.token
+            if(loginId && loginPw){
+                this.setState({
+                    isSubmitting: true
                 })
-                await getProfileByToken(result.token)
+                const result = await login(loginId, loginPw)
+                if(result){
+                    if(result.token){
+                        await getSaveToken(result.token)
+                        await getProfileByToken(result.token)
+                    }
+                    else{
+                        this.setState({
+                            isSubmitting: false,
+                        })
+                        Alert.alert(null,'아이디 / 비밀번호를 확인해주세요.')
+                    }
+                }
+                else{
+                    this.setState({
+                        isSubmitting: false,
+                    })
+                    Alert.alert(null,'아이디 / 비밀번호를 확인해주세요.')
+                }
             }
             else{
-                this.setState({
-                    isSubmitting: false,
-                })
-                Alert.alert(null,'아이디 / 비밀번호를 확인해주세요.')
+                Alert.alert(null, "아이디 / 비밀번호를 입력해주세요.")
             }
         }
     }
