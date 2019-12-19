@@ -5,6 +5,7 @@ import thunk from 'redux-thunk';
 import user from './modules/user';
 import review from './modules/review';
 import exhibition from './modules/exhibition';
+import artwork from './modules/artwork';
 
 const middlewares = [thunk];
 
@@ -16,7 +17,8 @@ const persistConfig = {
 const reducer = persistCombineReducers(persistConfig, {
     user,
     review,
-    exhibition
+    exhibition,
+    artwork
 });
 
 const configureStore = () => {

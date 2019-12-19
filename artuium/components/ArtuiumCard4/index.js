@@ -1,24 +1,15 @@
 import { connect } from 'react-redux';
 import Container from './container';
-import { actionCreators as userActions } from '../../redux/modules/user';
 import { actionCreators as reviewActions } from '../../redux/modules/review';
+import { actionCreators as artworkActions } from '../../redux/modules/artwork';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return{
-        followUser: (userId) => {
-            return dispatch(userActions.followUser(userId))
+        likeArtwork: (artworkId) => {
+            return dispatch(artworkActions.likeArtwork(artworkId))
         },
-        unfollowUser: (userId) => {
-            return dispatch(userActions.unfollowUser(userId))
-        },
-        initialReview: () => {
-            dispatch(reviewActions.initialReview())
-        },
-        likeReview: (reviewId) => {
-            return dispatch(reviewActions.likeReview(reviewId))
-        },
-        unlikeReview: (reviewId) => {
-            return dispatch(reviewActions.unlikeReview(reviewId))
+        unlikeArtwork: (artworkId) => {
+            return dispatch(artworkActions.unlikeArtwork(artworkId))
         }
     }
 }

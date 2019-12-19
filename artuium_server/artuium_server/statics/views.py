@@ -9,6 +9,7 @@ from . import models, serializers
 from artuium_server.common.pagination import MainPageNumberPagination
 from artuium_server.users import serializers as users_serializers
 from artuium_server.exhibition import models as exhibition_models
+from artuium_server.artwork import models as artwork_models
 
 User = get_user_model()
 
@@ -246,6 +247,44 @@ class LikeExhibition(APIView):
                 pre = models.Like.objects.filter(user = user, exhibition = exhibition)
                 if pre.count() == 0:
                     return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '좋아하는 전시가 아닙니다.'})
+                else:
+                    pre.delete()
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
+
+
+class LikeArtwork(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self ,request, format = None):
+        artwork_id = request.data.get('artworkId', None)
+        user = request.user
+        if artwork_id:
+            try:
+                artwork = artwork_models.Artwork.objects.get(id = artwork_id)
+                pre = models.Like.objects.filter(user = user, artwork = artwork)
+                if pre.count() > 0:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 좋아하는 아트워크입니다.'})
+                else:
+                    like = models.Like.objects.create(user = user, artwork = artwork)
+                    like.save()
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
+    
+    def delete(self ,request, format = None):
+        artwork_id = request.data.get('artworkId', None)
+        user = request.user
+        if artwork_id:
+            try:
+                artwork = artwork_models.Artwork.objects.get(id = artwork_id)
+                pre = models.Like.objects.filter(user = user, artwork = artwork)
+                if pre.count() == 0:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '좋아하는 아트워크가 아닙니다.'})
                 else:
                     pre.delete()
                     return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})

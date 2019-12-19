@@ -11,4 +11,5 @@ urlpatterns = [
     path('review/', views.Review.as_view()),
     path('like/review/', views.LikeReview.as_view()),
     path('like/exhibition/', views.LikeExhibition.as_view()),
+    path('like/artwork/', views.LikeArtwork.as_view()),
 ]

@@ -29,15 +29,7 @@ function abbreviateNumber(value) {
 class ArtuiumCard4 extends Component{
     static propTypes = {
         artwork: PropTypes.object.isRequired,
-        openProfileModal: PropTypes.func.isRequired,
-        closeProfileModal: PropTypes.func.isRequired,
-        showProfileModal: PropTypes.bool.isRequired,
-        openFollowModal: PropTypes.func.isRequired,
-        closeFollowModal: PropTypes.func.isRequired,
-        showFollowModal: PropTypes.bool.isRequired,
         isSubmitting: PropTypes.bool.isRequired,
-        follow: PropTypes.func.isRequired,
-        unfollow: PropTypes.func.isRequired,
         like: PropTypes.func.isRequired,
         unlike: PropTypes.func.isRequired,
         is_liked: PropTypes.bool.isRequired,
@@ -83,19 +75,28 @@ class ArtuiumCard4 extends Component{
     }
 
     render(){
-        const { artwork, showProfileModal, showFollowModal, is_liked, like_count, review_count } = this.props;
+        const { artwork, is_liked, like_count, review_count } = this.props;
         return(
             <View style={[styles.center, styles.heightFull, styles.screenWidth]}>
                 <View>
                     <View style={[styles.center]}>
-                        <Image source={{uri: artwork.images}} style={{width: 360, height: 240}} resizeMode={'cover'} />
+                        <Image source={{uri: artwork.image}} style={{width: 360, height: 240}} resizeMode={'cover'} />
                     </View>
                     <View style={[styles.alignItemsCenter, {marginTop: 60}]}>
                         <View style={[styles.row, styles.mt10, styles.alignItemsCenter]}>
                             <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment.png')} />
                             <Text style={[styles.fontRegular, styles.font8, {color: '#909090', marginLeft: 4}]}>{abbreviateNumber(review_count)}</Text>
-                            <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
-                            <Text style={[styles.fontRegular, styles.font8, {color: '#909090', marginLeft: 4}]}>{abbreviateNumber(like_count)}</Text>
+                            <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
+                                <View style={[styles.row, styles.alignItemsCenter]}>
+                                    {is_liked ? (
+                                        <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+                                    ) : (
+                                        <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+
+                                    )}
+                                    <Text style={[styles.fontRegular, styles.font8, {color: '#909090', marginLeft: 4}]}>{abbreviateNumber(like_count)}</Text>
+                                </View>
+                            </TouchableWithoutFeedback>
                         </View>
                         <View style={[styles.flexWrap, {width: 200}]}>
                             <Text style={[styles.fontBold, styles.font30, styles.textCenter]}>{artwork.name}</Text>

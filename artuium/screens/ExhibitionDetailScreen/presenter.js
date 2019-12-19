@@ -31,33 +31,24 @@ class ExhibitionDetailScreen extends Component{
         like_count: PropTypes.number.isRequired,
         review_count: PropTypes.number.isRequired,
         is_liked: PropTypes.bool.isRequired,
-        goExhibition: PropTypes.func.isRequired,
-        exitExhibition: PropTypes.func.isRequired,
-        showExhibition: PropTypes.bool.isRequired
-    }
-
-    _goExhibition = () => {
-        const { goExhibition, exhibition } = this.props;
-        if(exhibition.artworks && exhibition.artworks.length > 0){
-            goExhibition()
-            this.refs.scrollView.scrollTo({x: width, y: 0, animated: true})
-        }
+        like: PropTypes.func.isRequired,
+        unlike: PropTypes.func.isRequired
     }
 
     render(){
-        const { exhibition, showExhibition, like_count, review_count, is_liked } = this.props;
+        const { exhibition, like_count, review_count, is_liked } = this.props;
         return(
             <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
             <SafeAreaView style={[styles.container]}>
                 {exhibition ? (
                     <Fragment>
-                        <View style={[styles.alignItemsCenter, styles.px15, Platform.OS === 'android' ? {top: iosStatusBarHeight + 15, right: 0} : {top: 15, right: 0}, {height: 40, flexDirection: 'row-reverse', position: 'absolute'}]}>
-                            <TouchableWithoutFeedback onPress={()=> this.props.navigation.goBack(null)}>
-                                <View style={[styles.exitBtn, { zIndex: 999 }]}>
+                        <TouchableWithoutFeedback onPress={()=> this.props.navigation.goBack(null)}>
+                            <View style={[styles.alignItemsCenter, styles.px15, {height: 40, flexDirection: 'row-reverse', position: 'absolute', top: iosStatusBarHeight + 15, right: 0, zIndex: 99}]}>
+                                <View style={[styles.exitBtn]}>
                                     <Text style={[styles.fontBold, styles.font16, styles.white]}>나가기</Text>
                                 </View>
-                            </TouchableWithoutFeedback>
-                        </View>
+                            </View>
+                        </TouchableWithoutFeedback>
                         <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]}>
                             <View>
                                 <View style={[styles.center]}>
@@ -67,8 +58,16 @@ class ExhibitionDetailScreen extends Component{
                                     <View style={[styles.row, styles.mt10, styles.alignItemsCenter]}>
                                         <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment.png')} />
                                         <Text style={[styles.fontRegular, styles.font8, {color: '#909090', marginLeft: 4}]}>{abbreviateNumber(review_count)}</Text>
-                                        <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
-                                        <Text style={[styles.fontRegular, styles.font8, {color: '#909090', marginLeft: 4}]}>{abbreviateNumber(like_count)}</Text>
+                                        <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
+                                            <View style={[styles.row, styles.alignItemsCenter]}>
+                                                {is_liked ? (
+                                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+                                                ) : (
+                                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+                                                )}
+                                                <Text style={[styles.fontRegular, styles.font8, {color: '#909090', marginLeft: 4}]}>{abbreviateNumber(like_count)}</Text>
+                                            </View>
+                                        </TouchableWithoutFeedback>
                                     </View>
                                     <View style={[styles.flexWrap, {width: 200}]}>
                                         <Text style={[styles.fontBold, styles.font30, styles.textCenter]}>{exhibition.name}</Text>

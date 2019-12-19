@@ -45,7 +45,13 @@ class ExhibitionArtworkScreen extends Component{
             <SafeAreaView style={[styles.container]}>
                 {exhibition ? (
                     <Fragment>
-                        <View style={[styles.alignItemsCenter, styles.px15, Platform.OS === 'android' ? {top: iosStatusBarHeight + 15, right: 0} : {top: 15, right: 0}, {height: 40, flexDirection: 'row-reverse', position: 'absolute'}]}>
+                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.widthFull, styles.px15, {height: 40, position: 'absolute', top: iosStatusBarHeight + 15}]}>
+                            <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ExhibitionDetail', { exhibition })}>
+                                <View style={[styles.row, styles.alignItemsCenter]}>
+                                    <Text style={[styles.fontBlack, styles.font17, styles.gray8B]}>{`<`}</Text>
+                                    <Text style={[styles.fontBlack, styles.font17, styles.gray8B, styles.ml5]}>{exhibition.name}</Text>
+                                </View>
+                            </TouchableWithoutFeedback>
                             <TouchableWithoutFeedback onPress={()=> this.props.navigation.goBack(null)}>
                                 <View style={[styles.exitBtn, { zIndex: 999 }]}>
                                     <Text style={[styles.fontBold, styles.font16, styles.white]}>나가기</Text>
