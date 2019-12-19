@@ -101,14 +101,31 @@ class ProfileScreen extends React.Component {
                     bounces={false}
                     scrollEventThrottle={16}
                 >
-                    <ImageBackground
-                        source={{uri: profile.background_image}}
-                        style={[styles.paddingIOS, styles.px15, styles.justifyContentEnd, styles.pb15, {height: 210}]}
-                        resizeMode={'cover'}
-                    >
-                        <Image source={{uri: profile.profile_image}} style={[styles.profileImage70]} />
-                    </ImageBackground>
-                    <LinearGradient colors={['#fff', '#ff0000', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#fff']} start={[0, 0.5]} end={[1, 0.5]} style={[styles.px15, {paddingBottom: 35}]}>
+                    {profile.background_image ? (
+                        <ImageBackground
+                            source={{uri: profile.background_image}}
+                            style={[styles.paddingIOS, styles.px15, styles.justifyContentEnd, styles.pb15, {height: 210}]}
+                            resizeMode={'cover'}
+                        >
+                            {profile.profile_image ? (
+                                <Image source={{uri: profile.profile_image}} style={[styles.profileImage70]} />
+                            ) : (
+                                <View style={[styles.profileImage70, styles.bgGrayC9]} />
+                            )}
+                        </ImageBackground>
+                    ) : (
+                        <View
+                            style={[styles.paddingIOS, styles.px15, styles.justifyContentEnd, styles.bgGrayF8, styles.pb15, {height: 210}]}
+                        >
+                            {profile.profile_image ? (
+                                <Image source={{uri: profile.profile_image}} style={[styles.profileImage70]} />
+                            ) : (
+                                <View style={[styles.profileImage70, styles.bgGrayC9]} />
+                            )}
+                        </View>
+                    )}
+                    
+                    <View style={[styles.px15, {paddingBottom: 35}]}>
                         <View style={[styles.row, styles.pt20, styles.px5, styles.justifyContentBetween]}>
                             <Text style={[styles.fontBold, styles.font25]}>{profile.nickname}</Text>
                             <TouchableOpacity style={[styles.profileBtn]} onPress={()=>this.props.logout()}>
@@ -140,7 +157,7 @@ class ProfileScreen extends React.Component {
                                 </View>
                             </View>
                         </TouchableWithoutFeedback>
-                    </LinearGradient>
+                    </View>
                     {loadingReviewList ? (
                         <View style={[styles.mt20, styles.alignItemsCenter, styles.justifyContentCenter]}>
                             <ActivityIndicator size={'small'} color={'#000'} />

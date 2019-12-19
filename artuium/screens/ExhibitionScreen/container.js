@@ -23,7 +23,8 @@ class Container extends Component{
         fetchedPast: false,
         fetchClear: false,
         showNoticeModal: false,
-        noticeNew: false
+        noticeNew: false,
+        refreshing: false
     }
 
     componentDidMount = async() => {
@@ -39,26 +40,21 @@ class Container extends Component{
 
     static getDerivedStateFromProps(nextProps, prevState){
         const { fetchedNew, fetchedRecommended, fetchedHot, fetchedPast } = prevState;
-        if((!fetchedNew) || (!fetchedRecommended) || (!fetchedHot) || (!fetchedPast)){
-            let update = {}
-            if((nextProps.newExhibitions)){
-                update.fetchedNew = true
-            }
-            if((nextProps.recommendedExhibitions)){
-                update.fetchedRecommended = true
-            }
-            if((nextProps.hotExhibitions)){
-                update.fetchedHot = true
-            }
-            if((nextProps.pastExhibitions)){
-                update.fetchedPast = true
-            }
+        let update = {}
+        if((nextProps.newExhibitions)){
+            update.fetchedNew = true
+        }
+        if((nextProps.recommendedExhibitions)){
+            update.fetchedRecommended = true
+        }
+        if((nextProps.hotExhibitions)){
+            update.fetchedHot = true
+        }
+        if((nextProps.pastExhibitions)){
+            update.fetchedPast = true
+        }
 
-            return update
-        }
-        else{
-            return null
-        }
+        return update
     }
 
     componentDidUpdate = () => {
@@ -68,6 +64,23 @@ class Container extends Component{
                 fetchClear: true
             })
         }
+    }
+
+    _refresh = async() => {
+        const { initialExhibition, checkNoticeAll } = this.props;
+        this.setState({
+            refreshing: false
+        })
+        const noticeNew = await checkNoticeAll()
+        if(noticeNew.is_new){
+            this.setState({
+                noticeNew: true
+            })
+        }
+        await initialExhibition()
+        this.setState({
+            refreshing: false
+        })
     }
 
     _openNoticeModal = () => {
@@ -104,6 +117,7 @@ class Container extends Component{
                     openNoticeModal={this._openNoticeModal}
                     closeNoticeModal={this._closeNoticeModal}
                     handleNoticeNewChange={this._handleNoticeNewChange}
+                    refresh={this._refresh}
                 />
             )
         }

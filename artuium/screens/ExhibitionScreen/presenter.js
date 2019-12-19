@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, Image, Animated, Dimensions, TouchableWithoutFeedback, ImageBackground, Modal } from 'react-native';
+import { View, Text, ScrollView, RefreshControl, Image, Animated, Dimensions, TouchableWithoutFeedback, ImageBackground, Modal } from 'react-native';
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import ExhibitionCard from '../../components/ExhibitionCard'
 import ExhibitionCard2 from '../../components/ExhibitionCard2'
@@ -42,7 +42,9 @@ class ExhibitionScreen extends React.Component {
         showNoticeModal: PropTypes.bool.isRequired,
         openNoticeModal: PropTypes.func.isRequired,
         closeNoticeModal: PropTypes.func.isRequired,
-        handleNoticeNewChange: PropTypes.func.isRequired
+        handleNoticeNewChange: PropTypes.func.isRequired,
+        refresh: PropTypes.func.isRequired,
+        refreshing: PropTypes.bool.isRequired
     }
 
     _renderNoticeRouter = () => {
@@ -54,7 +56,7 @@ class ExhibitionScreen extends React.Component {
     render() {
         let position = Animated.divide(this.state.scrollX, width);
         let position2 = Animated.divide(this.state.scrollX2, width);
-        const { noticeNew, newExhibitions, recommendedExhibitions, hotExhibitions, pastExhibitions, showNoticeModal } = this.props;
+        const { noticeNew, newExhibitions, recommendedExhibitions, hotExhibitions, pastExhibitions, showNoticeModal, refreshing } = this.props;
         return(
             <View style={[styles.container]}>
                 <View
@@ -75,7 +77,9 @@ class ExhibitionScreen extends React.Component {
                         </View>
                     </TouchableWithoutFeedback>
                 </View>
-                <ScrollView>
+                <ScrollView
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={this.props.refresh} tintColor={'#000000'} />}
+                >
                 <View style={[styles.widthFull]}>
                     <View>
                         <View

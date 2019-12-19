@@ -38,7 +38,8 @@ class Container extends Component{
     }
 
     componentDidMount = async() => {
-        const { checkNoticeAll, getReviewList } = this.props;
+        const { checkNoticeAll, getReviewList, getProfile } = this.props;
+        await getProfile()
         const noticeNew = await checkNoticeAll()
         if(noticeNew.is_new){
             this.setState({
@@ -50,6 +51,25 @@ class Container extends Component{
             reviewList,
             loadingReviewList: false
         })
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState){
+        if((nextProps.profile)){
+            const { profile : { following_count, follower_count, is_following, is_me, following_friends_count, like_exhibition_count, like_artwork_count, like_review_count } } = nextProps;
+            return {
+                following_count,
+                follower_count,
+                is_following,
+                is_me,
+                following_friends_count,
+                like_exhibition_count,
+                like_artwork_count,
+                like_review_count
+            }
+        }
+        else{
+            return null
+        }
     }
 
     _reviewListMore = async() => {
