@@ -24,7 +24,7 @@ const ArtuiumCard2 = (props) => (
                                 rating={props.artwork.rating}
                                 emptyStar={require('../../assets/images/icon_star_disabled.png')}
                                 fullStar={require('../../assets/images/icon_star.png')}
-                                halfStar={'ios-star-half'}
+                                halfStar={require('../../assets/images/icon_star_half.png')}
                                 iconSet={'Ionicons'}
                                 fullStarColor={'#FFBD07'}
                                 starSize={14}

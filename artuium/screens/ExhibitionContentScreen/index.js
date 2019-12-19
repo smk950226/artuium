@@ -10,6 +10,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         unlikeExhibition: (exhibitionId) => {
             return dispatch(exhibitionActions.unlikeExhibition(exhibitionId))
         },
+        getExhibitionReviewList: (exhibitionId) => {
+            return dispatch(exhibitionActions.getExhibitionReviewList(exhibitionId))
+        },
+        getExhibitionReviewListMore: (exhibitionId, page) => {
+            return dispatch(exhibitionActions.getExhibitionReviewListMore(exhibitionId, page))
+        }
     }
 }
 

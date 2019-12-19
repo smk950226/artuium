@@ -1,11 +1,12 @@
-import React from 'react';
-import { View, Text, ScrollView, SafeAreaView, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform } from 'react-native';
+import React, { Fragment } from 'react';
+import { View, Text, ScrollView, FlatList, RefreshControl, ActivityIndicator, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import ArtuiumCard3 from '../../components/ArtuiumCard3'
 import HTML from 'react-native-render-html';
+import StarRating from 'react-native-star-rating';
 
 const iosStatusBarHeight = getStatusBarHeight()
 
@@ -34,93 +35,6 @@ function numberWithCommas(x) {
     return parts.join(".");
 }
 
-const appric = [
-    {
-        id: 1,
-        image: 'http://chedulife.com.au/wp-content/uploads/%EA%B3%A0%ED%9D%90-%EB%B0%A4%EC%9D%98-%EC%B9%B4%ED%8E%98-%ED%85%8C%EB%9D%BC%EC%8A%A4-456x300.jpg',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 4.5,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름 ...'
-    },
-    {
-        id: 2,
-        image: 'http://mblogthumb3.phinf.naver.net/MjAxOTAxMDNfOTEg/MDAxNTQ2NDgxOTgwNTcz.I3sUkC74k5K1fExm6woYSK8DhlgA6MZsqmB91SLCsIcg.vb2MUoFo6xYjZnWOBvnI_jDklXM3jKR8xrbj5tlDjFwg.JPEG.allthat_art/01_5347.JPG?type=w800',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 1,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름 ...'
-    },
-    {
-        id: 3,
-        image: 'https://t1.daumcdn.net/cfile/tistory/2218C34D55096EE51F',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 5,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름 ...'
-    },
-    {
-        id: 4,
-        image: 'http://chedulife.com.au/wp-content/uploads/%EA%B3%A0%ED%9D%90-%EB%B0%A4%EC%9D%98-%EC%B9%B4%ED%8E%98-%ED%85%8C%EB%9D%BC%EC%8A%A4-456x300.jpg',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 4,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름 ...'
-    },
-    {
-        id: 5,
-        image: 'http://chedulife.com.au/wp-content/uploads/%EA%B3%A0%ED%9D%90-%EB%B0%A4%EC%9D%98-%EC%B9%B4%ED%8E%98-%ED%85%8C%EB%9D%BC%EC%8A%A4-456x300.jpg',
-        title: '그랑드 자트 섬의 일요일...',
-        author: '조르주 쇠라',
-        profile_image: 'http://yekyong.cafe24.com/data/editor/1711/f475e62a10fc4f5ed5390e8cb63222a8_1510794623_8464.jpg',
-        emoji: require('../../assets/images/icon_sad.png'),
-        rating: 3.5,
-        name: '라쿤',
-        date: '5일 전',
-        comments: 32,
-        likes: 32,
-        content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름 ...'
-    }
-]
-
-const data = {
-    id: 1,
-    image: 'http://cfile217.uf.daum.net/image/2462D34B53C5F36D20F13F',
-    title: '그랑드 자트 섬의 일요일 오후',
-    author: '조르주피에르 쇠라',
-    year: '1886',
-    painting: '캔버스에 유화',
-    comments: 32,
-    likes: 32,
-    content: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름 하루를 보내고 있는 시민들의 모습을 담고 있다.다양한 색채와 빛, 그리고 형태들을 점묘 화법을 통해 꼼꼼하게 표현하고 있다. 쇠라는 빛의 분석이 인상주의의 수법을 따르면서도 인상주의의 본능적이며 직감적인 제작 태도가 빛에만 지나치게 얽매인 나머지 형태를 확산시키고 있는 점에 불만을 느끼고, 여기에 엄밀한 이론과 과학성을 부여하고자 도모하였다.',
-    summaryTitle: '점묘화를 바라보는 법',
-    summary: '신인상주의의 창시자인 조르주 쇠라의 대표적인 작품 가운데 하나로 1886년 제8회 인상파 전람회에 출품되어 이목을 끌었다. 파리 근교의 그랑드 자트 섬에서 맑게 개인 여름 하루를 보내고 있는 시민들의 모습을 담고 있다.다양한 색채와 빛, 그리고 형태들을 점묘 화법을 통해 꼼꼼하게 표현하고 있다. 쇠라는 빛의 분석이 인상주의의 수법을 따르면서도 인상주의의 본능적이며 직감적인 제작 태도가 빛에만 지나치게 얽매인 나머지 형태를 확산시키고 있는 점에 불만을 느끼고, 여기에 엄밀한 이론과 과학성을 부여하고자 도모하였다.',
-}
-
 class ExhibitionContentScreen extends React.Component {
     static propTypes = {
         exhibition: PropTypes.object.isRequired,
@@ -128,7 +42,21 @@ class ExhibitionContentScreen extends React.Component {
         unlike: PropTypes.func.isRequired,
         is_liked: PropTypes.bool.isRequired,
         like_count: PropTypes.number.isRequired,
-        review_count: PropTypes.number.isRequired
+        review_count: PropTypes.number.isRequired,
+        reviews: PropTypes.array,
+        isLoadingMore: PropTypes.bool.isRequired,
+        hasNextPage: PropTypes.bool.isRequired,
+        reviewListMore: PropTypes.func.isRequired,
+        refresh: PropTypes.func.isRequired,
+        refreshing: PropTypes.bool.isRequired,
+        loading: PropTypes.bool.isRequired,
+        is_reviewed: PropTypes.bool.isRequired,
+        myReviews: PropTypes.array,
+        thumb: PropTypes.number,
+        good: PropTypes.number,
+        soso: PropTypes.number,
+        sad: PropTypes.number,
+        surprise: PropTypes.number,
     }
     constructor(props){
         super(props);
@@ -138,7 +66,7 @@ class ExhibitionContentScreen extends React.Component {
     }
 
     render(){
-        const { exhibition, is_liked, like_count, review_count } = this.props;
+        const { exhibition, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise } = this.props;
         return(
             exhibition ? (
                 <View style={[styles.container]}>
@@ -176,7 +104,7 @@ class ExhibitionContentScreen extends React.Component {
                                 <Text style={[styles.fontMedium, styles.font14, styles.white]}>{exhibition.gallery.name}, {`${exhibition.open_date.slice(8,10)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} ~ ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
                             </LinearGradient>
                         </ImageBackground>
-                        <View style={[styles.bgBlack, styles.px10, styles.pb10]}>
+                        <View style={[styles.bgBlack, styles.px10, styles.pb10, styles.heightFull]}>
                             <View style={[styles.bgWhite, styles.widthFull, {paddingBottom: 40, borderRadius: 5}]}>
                                 <View style={[styles.row, styles.justifyContentAround, styles.mt15]}>
                                     <TouchableWithoutFeedback
@@ -237,22 +165,144 @@ class ExhibitionContentScreen extends React.Component {
                                         </View>
                                     :
                                         <View style={{width: width-20}}>
-                                            <View style={[styles.bgWhite, styles.center, {width: '100%', height: 170}]}>
-                                                <View style={[styles.center]}>
-                                                    <View style={[styles.bgBlack, styles.mb10, {width: 60, height: 60, borderRadius: 30}]} />
-                                                    <Text style={[styles.textCenter, styles.fontMedium, styles.font12, {color: '#382a2a'}]}>리뷰를 작성하면{'\n'}통계를 볼 수 있습니다.</Text>
-                                                </View>
+                                            <View style={[styles.bgWhite, styles.center, is_reviewed ? {width: '100%', minHeight: 185} : {width: '100%', height: 170}]}>
+                                                {is_reviewed ? (
+                                                    loading ? (
+                                                        <View style={[styles.container, styles.alignItemsCenter, styles.justifyContentCenter]}>
+                                                            <ActivityIndicator size={'small'} color={'#000'} />
+                                                        </View>
+                                                    ) : (
+                                                        myReviews && myReviews.length > 0 ? (
+                                                            <Fragment>
+                                                            <ScrollView
+                                                            scrollEnabled={true}
+                                                            pagingEnabled={true}
+                                                            horizontal={true}
+                                                            showsHorizontalScrollIndicator={false}
+                                                            style={[{height: 160}, styles.mt15]}
+                                                            >
+                                                                {myReviews.map((review, index) => (
+                                                                    <ArtuiumCard3 key={index} review={review} navigation={this.props.navigation} my={true} />
+                                                                ))}
+                                                            </ScrollView>
+                                                            <View style={[styles.widthFull, styles.px15]}>
+                                                                <Text style={[styles.fontBlack, styles.font13, styles.mt20, { opacity: 0.16 }]}>통계</Text>
+                                                                <View style={[styles.row, styles.justifyContentCenter, styles.mb20, styles.alignItemsEnd]}>
+                                                                    <View style={[styles.alignItemsCenter, styles.mr20]}>
+                                                                        <Text style={[styles.fontBlack, {fontSize: 45}]}>{exhibition.total_rate.toFixed(1)}</Text>
+                                                                        <StarRating
+                                                                            disabled={true}
+                                                                            maxStars={5}
+                                                                            rating={exhibition.total_rate}
+                                                                            emptyStar={require('../../assets/images/icon_star_disabled.png')}
+                                                                            fullStar={require('../../assets/images/icon_star.png')}
+                                                                            halfStar={require('../../assets/images/icon_star_half.png')}
+                                                                            iconSet={'Ionicons'}
+                                                                            fullStarColor={'#FFBD07'}
+                                                                            starSize={18}
+                                                                        />
+                                                                    </View>
+                                                                    <View style={[styles.row, styles.justifyContentCenter, styles.alignItemsCenter, styles.ml20, styles.mb10]}>
+                                                                        <View style={[styles.justifyContentBetween, styles.alignItemsCenter, styles.mr20]}>
+                                                                            <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
+                                                                                <LinearGradient
+                                                                                    colors={['#000000', '#9b9b9b']}
+                                                                                    style={[{height: `${thumb*100}%`, width: 5}]}
+                                                                                />
+                                                                            </View>
+                                                                            <Image source={require('../../assets/images/icon_thumb.png')} style={[styles.emoji]} resizeMode={'cover'} />
+                                                                        </View>
+                                                                        <View style={[styles.justifyContentBetween, styles.alignItemsCenter, styles.mr20]}>
+                                                                            <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
+                                                                                <LinearGradient
+                                                                                    colors={['#000000', '#9b9b9b']}
+                                                                                    style={[{height: `${sad*100}%`, width: 5}]}
+                                                                                />
+                                                                            </View>
+                                                                            <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emoji]} resizeMode={'cover'} />
+                                                                        </View>
+                                                                        <View style={[styles.justifyContentBetween, styles.alignItemsCenter, styles.mr20]}>
+                                                                            <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
+                                                                                <LinearGradient
+                                                                                    colors={['#000000', '#9b9b9b']}
+                                                                                    style={[{height: `${soso*100}%`, width: 5}]}
+                                                                                />
+                                                                            </View>
+                                                                            <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emoji]} resizeMode={'cover'} />
+                                                                        </View>
+                                                                        <View style={[styles.justifyContentBetween, styles.alignItemsCenter, styles.mr20]}>
+                                                                            <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
+                                                                                <LinearGradient
+                                                                                    colors={['#000000', '#9b9b9b']}
+                                                                                    style={[{height: `${surprise*100}%`, width: 5}]}
+                                                                                />
+                                                                            </View>
+                                                                            <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emoji]} resizeMode={'cover'} />
+                                                                        </View>
+                                                                        <View style={[styles.justifyContentBetween, styles.alignItemsCenter]}>
+                                                                            <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
+                                                                                <LinearGradient
+                                                                                    colors={['#000000', '#9b9b9b']}
+                                                                                    style={[{height: `${good*100}%`, width: 5}]}
+                                                                                />
+                                                                            </View>
+                                                                            <Image source={require('../../assets/images/icon_good.png')} style={[styles.emoji]} resizeMode={'cover'} />
+                                                                        </View>
+                                                                    </View>
+                                                                </View>
+                                                            </View>
+                                                            </Fragment>
+                                                        ) : (
+                                                            <View style={[styles.center]}>
+                                                                <View style={[styles.bgBlack, styles.mb10, {width: 60, height: 60, borderRadius: 30}]} />
+                                                                <Text style={[styles.textCenter, styles.fontMedium, styles.font12, {color: '#382a2a'}]}>리뷰를 작성하면{'\n'}통계를 볼 수 있습니다.</Text>
+                                                            </View>
+                                                        )
+                                                    )
+                                                ) : (
+                                                    <View style={[styles.center]}>
+                                                        <View style={[styles.bgBlack, styles.mb10, {width: 60, height: 60, borderRadius: 30}]} />
+                                                        <Text style={[styles.textCenter, styles.fontMedium, styles.font12, {color: '#382a2a'}]}>리뷰를 작성하면{'\n'}통계를 볼 수 있습니다.</Text>
+                                                    </View>
+                                                )}
+                                                
                                             </View>
                                             <View style={[styles.divView]} />
                                             <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px30, styles.pt20]}>
                                                 <Text style={[styles.font20, styles.fontBold, {color: '#382a2a'}]}>유저 감상</Text>
                                                 <Image source={require('../../assets/images/icon_sort.png')} style={[styles.icon20]} />
                                             </View>
-                                            {appric.map((da, index) => {
-                                                return(
-                                                    <ArtuiumCard3 key={index} artwork={da}/>
+                                            {loading ? (
+                                                <View style={[styles.container, styles.alignItemsCenter, styles.justifyContentCenter]}>
+                                                    <ActivityIndicator size={'small'} color={'#000'} />
+                                                </View>
+                                            ) : (
+                                                reviews && reviews.length > 0 ? (
+                                                    <FlatList 
+                                                    data={reviews} 
+                                                    renderItem={({item}) => (
+                                                        <ArtuiumCard3 review={item} navigation={this.props.navigation} />
+                                                    )} 
+                                                    numColumns={1} 
+                                                    keyExtractor={item => String(item.id)} 
+                                                    refreshing={refreshing} 
+                                                    onRefresh={this.props.refresh} 
+                                                    onEndReached={hasNextPage ? this.props.reviewListMore : null} 
+                                                    onEndReachedThreshold={0.5} 
+                                                    bounces={true} 
+                                                    ListFooterComponent={isLoadingMore ? (
+                                                        <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.mt5, styles.py5]}>
+                                                            <ActivityIndicator size={'small'} color={'#000000'} />
+                                                        </View>
+                                                    ): null} />
+                                                ) : (
+                                                    <ScrollView 
+                                                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={this.props.refresh} tintColor={'#000000'} />}
+                                                    >
+                                                        <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
+                                                    </ScrollView>
                                                 )
-                                            })}
+                                            )}
                                         </View>
                                     }
                                 </View>

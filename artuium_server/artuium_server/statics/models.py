@@ -27,7 +27,8 @@ class Review(models.Model):
         ('good', 'Good'),
         ('soso', 'Soso'),
         ('sad', 'Sad'),
-        ('surprise', 'Surprise')
+        ('surprise', 'Surprise'),
+        ('thumb', 'Thumb'),
     ))
     recommended = models.BooleanField('추천 여부', default = False)
 

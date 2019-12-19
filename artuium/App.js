@@ -32,6 +32,7 @@ class App extends React.Component {
         require('./assets/images/icon_soso.png'),
         require('./assets/images/icon_sad.png'),
         require('./assets/images/icon_surprise.png'),
+        require('./assets/images/icon_thumb.png'),
         require('./assets/images/search.png'),
         require('./assets/images/icon_star.png'),
         require('./assets/images/icon_star_disabled.png'),
