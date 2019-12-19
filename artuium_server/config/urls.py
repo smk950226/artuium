@@ -7,6 +7,7 @@ from django.views import defaults as default_views
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    path("terms/privacy/", TemplateView.as_view(template_name="terms/privacy.html"), name="privacy"),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     # Django Admin, use {% url 'admin:index' %}
