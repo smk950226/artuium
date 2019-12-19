@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 
 class Gallery(models.Model):
     name = models.CharField('이름', max_length = 300)
@@ -15,12 +16,12 @@ class Gallery(models.Model):
 
 class Exhibition(models.Model):
     name = models.CharField('이름', max_length = 500)
-    content = models.TextField('내용')
+    content = RichTextField('내용')
     open_date = models.DateField()
     close_date = models.DateField()
     open_time = models.TimeField()
     close_time = models.TimeField()
-    notopendate = models.DateField(blank = True, null = True)
+    notopendate = models.CharField(blank = True, null = True, max_length = 500)
     region = models.CharField('지역', max_length = 255)
     address = models.CharField('주소', max_length = 500)
     scale = models.CharField('규모', choices = (('중대형', '중대형'), ('소형', '소형')), max_length = 500)

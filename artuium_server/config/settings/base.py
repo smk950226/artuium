@@ -78,6 +78,7 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'rest_auth.registration',
+    'ckeditor',
 ]
 
 LOCAL_APPS = [
@@ -278,3 +279,9 @@ ACCOUNT_LOGOUT_ON_GET = True
 JWT_AUTH = {
     'JWT_VERIFY_EXPIRATION': False
 } 
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+    },
+}

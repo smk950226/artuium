@@ -1,5 +1,5 @@
 from django.db import models
-
+from ckeditor.fields import RichTextField
 
 class Artist(models.Model):
     name = models.CharField('이름', max_length = 255)
@@ -19,7 +19,7 @@ class Artwork(models.Model):
     author = models.ForeignKey(Artist, on_delete = models.CASCADE, blank = True, null = True, related_name = 'artworks')
     created = models.DateField('작품 날짜')
     material = models.CharField(max_length = 500)
-    content = models.TextField()
+    content = RichTextField()
 
     def __str__(self):
         return self.name

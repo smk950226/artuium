@@ -79,7 +79,7 @@ class ExhibitionDetailScreen extends Component{
                                             <Text style={[styles.fontMedium, styles.font18, styles.white]}>전시 입장</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
-                                    <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ExhibitionContent')}>
+                                    <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ExhibitionContent', { exhibition })}>
                                         <View style={[styles.upBtn, {marginTop: 40}]}>
                                             <Text style={[styles.white, styles.font40]}>^</Text>
                                         </View>
@@ -95,7 +95,6 @@ class ExhibitionDetailScreen extends Component{
                         </Text>
                     </View>
                 )}
-                
             </SafeAreaView>
             </ImageBackground>
         )
