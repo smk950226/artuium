@@ -5,6 +5,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import TabContainer from './TabNavigation';
 import ExhibitionDetailScreen from '../screens/ExhibitionDetailScreen';
 import ExhibitionContentScreen from '../screens/ExhibitionContentScreen';
+import ExhibitionArtworkScreen from '../screens/ExhibitionArtworkScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import SearchScreen from '../screens/SearchScreen';
 
@@ -23,6 +24,12 @@ const GeneralNavigation = createStackNavigator({
     },
     ExhibitionContent: {
         screen: ExhibitionContentScreen,
+        navigationOptions: ({screenProps, navigation}) => ({
+            header: null
+        })
+    },
+    ExhibitionArtwork: {
+        screen: ExhibitionArtworkScreen,
         navigationOptions: ({screenProps, navigation}) => ({
             header: null
         })

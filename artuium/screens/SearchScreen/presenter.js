@@ -107,7 +107,7 @@ const SearchScreen = (props) => (
                     style={[styles.mt15]}
                     >
                         {props.exhibitions.map((exhibition, index) => (
-                            <ExhibitionCard2 key={index} exhibition={exhibition} />
+                            <ExhibitionCard2 key={index} exhibition={exhibition} navigation={props.navigation} />
                         ))}
                     </ScrollView>
                 ) : (

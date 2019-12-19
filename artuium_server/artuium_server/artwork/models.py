@@ -28,3 +28,11 @@ class Artwork(models.Model):
         ordering = ['-id']
         verbose_name = '아트워크'
         verbose_name_plural = '아트워크'
+
+    @property
+    def review_count(self):
+        return self.reviews.all().count()
+    
+    @property
+    def like_count(self):
+        return self.likes.all().count()

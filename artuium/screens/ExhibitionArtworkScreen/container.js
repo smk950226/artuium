@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ExhibitionDetailScreen from './presenter';
+import ExhibitionArtworkScreen from './presenter';
 
 class Container extends Component{
     constructor(props){
@@ -14,28 +14,12 @@ class Container extends Component{
             review_count,
             showExhibition: false
         }
-        console.log(exhibition)
     }
-
-    _goExhibition = () => {
-        this.setState({
-            showExhibition: true
-        })
-    }
-
-    _exitExhibition = () => {
-        this.setState({
-            showExhibition: false
-        })
-    }
-
     render(){
         return(
-            <ExhibitionDetailScreen 
+            <ExhibitionArtworkScreen 
             {...this.props}
             {...this.state}
-            goExhibition={this._goExhibition}
-            exitExhibition={this._exitExhibition}
             />
         )
     }

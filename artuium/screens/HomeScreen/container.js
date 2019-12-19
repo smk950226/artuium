@@ -34,7 +34,6 @@ class Container extends Component{
             })
         }
         await initialReview()
-        console.log('프로필', this.props.profile)
     }
 
     static getDerivedStateFromProps(nextProps, prevState){

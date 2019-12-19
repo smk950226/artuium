@@ -7,7 +7,10 @@ import sharedRoutes, { sharedOptions } from './sharedRoutes';
 const ArtworkRoute = createStackNavigator(
     {
         Artwork: {
-            screen: ArtworkScreen
+            screen: ArtworkScreen,
+            navigationOptions: {
+                header: null
+            }
         },
         ...sharedRoutes
     },

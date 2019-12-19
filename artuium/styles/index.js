@@ -271,6 +271,9 @@ const styles = StyleSheet.create({
     bgBlack07: {
         backgroundColor: 'rgba(0,0,0,0.7)'
     },
+    bgBlack18: {
+        backgroundColor: 'rgb(18,18,18)'
+    },
     bgWhite: {
         backgroundColor: '#FFFFFF'
     },
@@ -939,7 +942,7 @@ const styles = StyleSheet.create({
         borderColor: '#c3c3c3',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#fff'
+        backgroundColor: 'rgb(18,18,18)'
     },
     upBtn: {
         width: 50, 
@@ -1039,6 +1042,10 @@ const styles = StyleSheet.create({
     },
     opacity07: {
         opacity: .7
+    },
+    sliderLine: {
+        width: 25,
+        height: 3
     }
 })
 

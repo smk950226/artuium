@@ -3,6 +3,7 @@ import { View, Text, ScrollView, RefreshControl, Image, Animated, Dimensions, To
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import ExhibitionCard from '../../components/ExhibitionCard'
 import ExhibitionCard2 from '../../components/ExhibitionCard2'
+import ExhibitionCard3 from '../../components/ExhibitionCard3'
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import NoticeScreen from '../../screens/NoticeScreen';
@@ -102,17 +103,7 @@ class ExhibitionScreen extends React.Component {
                                 >
                                 {recommendedExhibitions.map((exhibition, index) => {
                                     return(
-                                        <ImageBackground
-                                            key={index} resizeMode={'cover'} source={{uri : exhibition ? (exhibition.images && (exhibition.images.length > 0)) ? exhibition.images[0].image : null : null}}
-                                            style={[{width: width, height: 400}, styles.justifyContentEnd]}
-                                            blurRadius={20}
-                                        >
-                                            <Image source={{uri: exhibition ? (exhibition.images && (exhibition.images.length > 0)) ? exhibition.images[0].image : null : null}} resizeMode={'contain'} style={[styles.heightFull]} />
-                                            <View style={[{position: 'absolute', bottom: 50, left: 30}]}>
-                                                <Text style={[styles.fontMedium, styles.font14, styles.yellow]}>{exhibition.name}</Text>
-                                                <Text style={[styles.fontBold, styles.font30, styles.white]}>{exhibition.name}</Text>
-                                            </View>
-                                        </ImageBackground>
+                                        <ExhibitionCard3 key={index} exhibition={exhibition} navigation={this.props.navigation} />
                                     )
                                 })}
                                 </ScrollView>
@@ -198,7 +189,7 @@ class ExhibitionScreen extends React.Component {
                             >
                                 {recommendedExhibitions.map((exhibition, index) => {
                                     return(
-                                        <ExhibitionCard key={index} exhibition={exhibition} />
+                                        <ExhibitionCard key={index} exhibition={exhibition} navigation={this.props.navigation} />
                                     )
                                 })}
                             </ScrollView>
@@ -256,7 +247,7 @@ class ExhibitionScreen extends React.Component {
                                 <ScrollView contentContainerStyle={[styles.pl15]} horizontal={true} showsHorizontalScrollIndicator={false}>
                                 {newExhibitions.map((exhibition, index) => {
                                     return(
-                                        <ExhibitionCard2 key={index} exhibition={exhibition} />
+                                        <ExhibitionCard2 key={index} exhibition={exhibition} navigation={this.props.navigation} />
                                     )
                                 })}
                                 </ScrollView>
@@ -278,7 +269,7 @@ class ExhibitionScreen extends React.Component {
                                     <ScrollView contentContainerStyle={[styles.pl15]} horizontal={true} showsHorizontalScrollIndicator={false}>
                                     {hotExhibitions.map((exhibition, index) => {
                                         return(
-                                            <ExhibitionCard2 key={index} exhibition={exhibition} />
+                                            <ExhibitionCard2 key={index} exhibition={exhibition} navigation={this.props.navigation} />
                                         )
                                     })}
                                     </ScrollView>
@@ -298,7 +289,7 @@ class ExhibitionScreen extends React.Component {
                                     <ScrollView contentContainerStyle={[styles.pl15]} horizontal={true} showsHorizontalScrollIndicator={false}>
                                     {pastExhibitions.map((exhibition, index) => {
                                         return(
-                                            <ExhibitionCard2 key={index} exhibition={exhibition} />
+                                            <ExhibitionCard2 key={index} exhibition={exhibition} navigation={this.props.navigation} />
                                         )
                                     })}
                                     </ScrollView>
