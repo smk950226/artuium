@@ -20,7 +20,7 @@ class Exhibition(models.Model):
     close_date = models.DateField()
     open_time = models.TimeField()
     close_time = models.TimeField()
-    notopendate = models.DateField()
+    notopendate = models.DateField(blank = True, null = True)
     region = models.CharField('지역', max_length = 255)
     address = models.CharField('주소', max_length = 500)
     scale = models.CharField('규모', choices = (('중대형', '중대형'), ('소형', '소형')), max_length = 500)
