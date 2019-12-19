@@ -35,7 +35,9 @@ class Container extends Component{
         isSubmitting: false,
         fetchedProfile: false,
         fetchedToken: false,
-        fetchClear: false
+        fetchClear: false,
+        agreeTerm: false,
+        showTerm: false
     }
 
     _handleLoginIdChange = async(loginId) => {
@@ -257,23 +259,31 @@ class Container extends Component{
     }
 
     _handleSignup = async() => {
-        const { username, password1, password2, nickname, profileImg, usernameForm, passwordForm, passwordMatch, checkedUsername, checkedNickname, isSubmitting } = this.state;
+        const { username, password1, password2, nickname, profileImg, usernameForm, passwordForm, passwordMatch, checkedUsername, checkedNickname, isSubmitting, agreeTerm } = this.state;
         const { getSaveToken, getProfileByToken } = this.props;
         if(!isSubmitting){
             if(username && password1 && password2 && nickname){
                 if(usernameForm){
-                    if(passwordForm){
-                        if(passwordMatch){ 
-                            if(usernameForm){
-                                if(checkedNickname){
-                                    this.setState({
-                                        isSubmitting: true
-                                    })
-                                    const result = await this.props.signUp(username, password1, nickname, profileImg);
-                                    if(result){
-                                        if(result.token){
-                                            await getSaveToken(result.token)
-                                            await getProfileByToken(result.token)
+                    if(checkedUsername){
+                        if(passwordForm){
+                            if(passwordMatch){ 
+                                if(agreeTerm){
+                                    if(checkedNickname){
+                                        this.setState({
+                                            isSubmitting: true
+                                        })
+                                        const result = await this.props.signUp(username, password1, nickname, profileImg);
+                                        if(result){
+                                            if(result.token){
+                                                await getSaveToken(result.token)
+                                                await getProfileByToken(result.token)
+                                            }
+                                            else{
+                                                this.setState({
+                                                    isSubmitting: false
+                                                })
+                                                Alert.alert(null,'오류가 발생하였습니다.')
+                                            }
                                         }
                                         else{
                                             this.setState({
@@ -283,27 +293,24 @@ class Container extends Component{
                                         }
                                     }
                                     else{
-                                        this.setState({
-                                            isSubmitting: false
-                                        })
-                                        Alert.alert(null,'오류가 발생하였습니다.')
+                                        Alert.alert(null, '닉네임 중복확인을 해주세요.')
                                     }
                                 }
                                 else{
-                                    Alert.alert(null, '닉네임 중복확인을 해주세요.')
+                                    Alert.alert(null, '약관에 동의해주세요.')
                                 }
                             }
                             else{
-                                Alert.alert(null, '이메일 중복확인을 해주세요.')
+                                Alert.alert(null, '비밀번호가 일치하지 않습니다.')
                             }
                         }
                         else{
-                            Alert.alert(null, '비밀번호가 일치하지 않습니다.')
+                            Alert.alert(null, '비밀번호는 최소 8자, 1개이상의 숫자와 영문자를 포함해야합니다.')
                         }
                     }
                     else{
-                        Alert.alert(null, '비밀번호는 최소 8자, 1개이상의 숫자와 영문자를 포함해야합니다.')
-                    }
+                        Alert.alert(null, '이메일 중복검사를 해주세요.')
+                    }   
                 }
                 else{
                     Alert.alert(null, '이메일 형식을 확인해 주세요.')
@@ -367,6 +374,18 @@ class Container extends Component{
         })
     }
 
+    _handleChangeAgreeTerm = () => {
+        this.setState({
+            agreeTerm: !this.state.agreeTerm
+        })
+    }
+
+    _handleChangeShowTerm = () => {
+        this.setState({
+            showTerm: !this.state.showTerm
+        })
+    }
+
     _login = async() => {
         const { isSubmitting, loginId, loginPw } = this.state;
         const { login, getSaveToken, getProfileByToken } = this.props;
@@ -421,6 +440,8 @@ class Container extends Component{
             handleSignup={this._handleSignup}
             handleCheckUsername={this._handleCheckUsername}
             handleCheckNickname={this._handleCheckNickname}
+            handleChangeAgreeTerm={this._handleChangeAgreeTerm}
+            handleChangeShowTerm={this._handleChangeShowTerm}
             />
         )
     }

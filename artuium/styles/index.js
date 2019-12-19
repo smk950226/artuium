@@ -616,6 +616,12 @@ const styles = StyleSheet.create({
     pr30: {
         paddingRight: 30
     },
+    px2: {
+        paddingHorizontal: 2
+    },
+    px3: {
+        paddingHorizontal: 3
+    },
     px5: {
         paddingHorizontal: 5
     },
@@ -633,6 +639,12 @@ const styles = StyleSheet.create({
     },
     px30: {
         paddingHorizontal: 30
+    },
+    py2: {
+        paddingVertical: 2
+    },
+    py3: {
+        paddingVertical: 3
     },
     py5: {
         paddingVertical: 5
@@ -670,6 +682,9 @@ const styles = StyleSheet.create({
     center: {
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    borderRadius3: {
+        borderRadius: 3
     },
     borderRadius5: {
         borderRadius: 5

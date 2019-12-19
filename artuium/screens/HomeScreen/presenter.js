@@ -407,9 +407,6 @@ class HomeScreen extends Component {
                                         <Text style={[styles.font12, styles.mt5]}>추천 감상</Text>
                                     </View>
                                 </TouchableWithoutFeedback>
-                                <TouchableOpacity style={[styles.profileBtn]} onPress={()=>this.props.logout()}>
-                                    <Text style={[styles.fontMedium, styles.font15, {color: '#a8a8a8'}]}>로그아웃</Text>
-                                </TouchableOpacity>
                                 <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
                                     <View style={[styles.center]}>
                                         <Image style={{width: 24, height: 24}} source={require('../../assets/images/total.png')} />
