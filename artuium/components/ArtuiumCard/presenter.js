@@ -90,8 +90,8 @@ class ArtuiumCard extends Component{
     render(){
         const { review, size, showProfileModal, showFollowModal, is_me, is_following, follower_count, following_count, is_liked, like_count, reply_count } = this.props;
         return(
-            <TouchableWithoutFeedback onPress={()=>props.navigation.navigate('ExhibitionDetail')}>
-                <Fragment>
+            <Fragment>
+                <TouchableWithoutFeedback onPress={review.artwork ? ()=> this.props.navigation.navigate('ArtworkDetail', { artwork: review.artwork }) : () => this.props.navigation.navigate('ExhibitionDetail', { exhibition: review.exhibition })}>
                 <View style={[(size === 'xsmall') ? {width: (width/2)-30} : null, (size === 'small') ? {width: (width/2)-20} : null, (size === 'large') ? { width: width-30 } : null, (size === 'xlarge') ? { width: width } : null, styles.mb10, (size === 'xlarge') ? null : styles.artworkBorder, styles.overflowHidden]}>
                     <ImageBackground source={{uri: review.artwork ? review.artwork.image : review.exhibition ? (review.exhibition.images && (review.exhibition.images.length > 0)) ? review.exhibition.images[0].image : null : null}} style={[((size === 'small') || (size === 'xsmall')) ? styles.artworkImage : styles.artworkImageLg, ((size === 'small') || (size === 'xsmall')) ? styles.py5 : styles.py20, ((size === 'small') || (size === 'xsmall')) ? styles.px10 : styles.px15, styles.justifyContentEnd]} resizeMode={'cover'} >
                         {review.artwork ? (
@@ -117,53 +117,53 @@ class ArtuiumCard extends Component{
                     <View style={[(size === 'xlarge') ? styles.py20 : styles.py10, (size === 'xlarge') ? styles.px30 : styles.px10]}>
                         {((size === 'small') || (size === 'xsmall')) ? (
                             <Fragment>
-                                <View style={[styles.row, styles.justifyContentBetween]}>
-                                    <View style={[styles.row]}>
-                                        <TouchableWithoutFeedback onPress={this.props.openProfileModal}>
-                                            <View>
-                                                {review.author.profile_image ? (
-                                                    <Image source={{uri: review.author.profile_image}} style={[styles.profileImage30]} resizeMode={'cover'} />
-                                                ) : (
-                                                    <View style={[styles.circle30, styles.bgGrayD1]} />
-                                                )}
-                                                {review.expression === 'good' && (
-                                                    <Image source={require('../../assets/images/icon_good.png')} style={[styles.emoji, { position: 'absolute', top: 16, left: 16 }]} resizeMode={'cover'} />
-                                                )}
-                                                {review.expression === 'soso' && (
-                                                    <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emoji, { position: 'absolute', top: 16, left: 16 }]} resizeMode={'cover'} />
-                                                )}
-                                                {review.expression === 'sad' && (
-                                                    <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emoji, { position: 'absolute', top: 16, left: 16 }]} resizeMode={'cover'} />
-                                                )}
-                                                {review.expression === 'surprise' && (
-                                                    <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emoji, { position: 'absolute', top: 16, left: 16 }]} resizeMode={'cover'} />
-                                                )}
-                                            </View>
-                                        </TouchableWithoutFeedback>
-                                        <View style={[styles.ml5]}>
-                                            <View style={[styles.row, styles.justifyContentStart]}>
-                                                <StarRating
-                                                    disabled={true}
-                                                    maxStars={5}
-                                                    rating={review.rate}
-                                                    emptyStar={require('../../assets/images/icon_star_disabled.png')}
-                                                    fullStar={require('../../assets/images/icon_star.png')}
-                                                    halfStar={'ios-star-half'}
-                                                    iconSet={'Ionicons'}
-                                                    fullStarColor={'#FFBD07'}
-                                                    starSize={10}
-                                                />
-                                            </View>
-                                            <View style={[styles.row]}>
-                                                <Text style={[styles.fontBold, styles.font10]}>{review.author.nickname}</Text>
-                                                <Text style={[styles.fontMedium, styles.font10, styles.grayD1, styles.ml5]}>{`${review.time.slice(0,4)}.${review.time.slice(5,7)}.${review.time.slice(8,10)}`}</Text>
+                                <TouchableWithoutFeedback onPress={this.props.openProfileModal}>
+                                    <View style={[styles.row, styles.justifyContentBetween]}>
+                                        <View style={[styles.row]}>
+                                                <View>
+                                                    {review.author.profile_image ? (
+                                                        <Image source={{uri: review.author.profile_image}} style={[styles.profileImage30]} resizeMode={'cover'} />
+                                                    ) : (
+                                                        <View style={[styles.circle30, styles.bgGrayD1]} />
+                                                    )}
+                                                    {review.expression === 'good' && (
+                                                        <Image source={require('../../assets/images/icon_good.png')} style={[styles.emoji, { position: 'absolute', top: 16, left: 16 }]} resizeMode={'cover'} />
+                                                    )}
+                                                    {review.expression === 'soso' && (
+                                                        <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emoji, { position: 'absolute', top: 16, left: 16 }]} resizeMode={'cover'} />
+                                                    )}
+                                                    {review.expression === 'sad' && (
+                                                        <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emoji, { position: 'absolute', top: 16, left: 16 }]} resizeMode={'cover'} />
+                                                    )}
+                                                    {review.expression === 'surprise' && (
+                                                        <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emoji, { position: 'absolute', top: 16, left: 16 }]} resizeMode={'cover'} />
+                                                    )}
+                                                </View>
+                                            <View style={[styles.ml5]}>
+                                                <View style={[styles.row, styles.justifyContentStart]}>
+                                                    <StarRating
+                                                        disabled={true}
+                                                        maxStars={5}
+                                                        rating={review.rate}
+                                                        emptyStar={require('../../assets/images/icon_star_disabled.png')}
+                                                        fullStar={require('../../assets/images/icon_star.png')}
+                                                        halfStar={'ios-star-half'}
+                                                        iconSet={'Ionicons'}
+                                                        fullStarColor={'#FFBD07'}
+                                                        starSize={10}
+                                                    />
+                                                </View>
+                                                <View style={[styles.row]}>
+                                                    <Text style={[styles.fontBold, styles.font10]}>{review.author.nickname}</Text>
+                                                    <Text style={[styles.fontMedium, styles.font10, styles.grayD1, styles.ml5]}>{`${review.time.slice(0,4)}.${review.time.slice(5,7)}.${review.time.slice(8,10)}`}</Text>
+                                                </View>
                                             </View>
                                         </View>
+                                        <View>
+                                            <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                        </View>
                                     </View>
-                                    <View>
-                                        <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
-                                    </View>
-                                </View>
+                                </TouchableWithoutFeedback>
                                 <View style={[styles.row, styles.justifyContentBetween, styles.mt5]}>
                                     <View>
                                         <TouchableWithoutFeedback>
@@ -186,53 +186,53 @@ class ArtuiumCard extends Component{
                             </Fragment>
                         ) : (
                             <Fragment>
-                                <View style={[styles.row, styles.justifyContentBetween]}>
-                                    <View style={[styles.row]}>
-                                        <TouchableWithoutFeedback onPress={this.props.openProfileModal}>
-                                            <View>
-                                                {review.author.profile_image ? (
-                                                    <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
-                                                ) : (
-                                                    <View style={[styles.circle40, styles.bgGrayD1]} />
-                                                )}
-                                                {review.expression === 'good' && (
-                                                    <Image source={require('../../assets/images/icon_good.png')} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
-                                                )}
-                                                {review.expression === 'soso' && (
-                                                    <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
-                                                )}
-                                                {review.expression === 'sad' && (
-                                                    <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
-                                                )}
-                                                {review.expression === 'surprise' && (
-                                                    <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
-                                                )}
-                                            </View>
-                                        </TouchableWithoutFeedback>
-                                        <View style={[styles.ml10]}>
-                                            <View style={[styles.row, styles.justifyContentStart]}>
-                                                <StarRating
-                                                    disabled={true}
-                                                    maxStars={5}
-                                                    rating={review.rate}
-                                                    emptyStar={require('../../assets/images/icon_star_disabled.png')}
-                                                    fullStar={require('../../assets/images/icon_star.png')}
-                                                    halfStar={'ios-star-half'}
-                                                    iconSet={'Ionicons'}
-                                                    fullStarColor={'#FFBD07'}
-                                                    starSize={14}
-                                                />
-                                            </View>
-                                            <View style={[styles.row]}>
-                                                <Text style={[styles.fontBold, styles.font14]}>{review.author.nickname}</Text>
-                                                <Text style={[styles.fontMedium, styles.font14, styles.grayD1, styles.ml5]}>{`${review.time.slice(0,4)}.${review.time.slice(5,7)}.${review.time.slice(8,10)}`}</Text>
+                                <TouchableWithoutFeedback onPress={this.props.openProfileModal}>
+                                    <View style={[styles.row, styles.justifyContentBetween]}>
+                                        <View style={[styles.row]}>
+                                                <View>
+                                                    {review.author.profile_image ? (
+                                                        <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
+                                                    ) : (
+                                                        <View style={[styles.circle40, styles.bgGrayD1]} />
+                                                    )}
+                                                    {review.expression === 'good' && (
+                                                        <Image source={require('../../assets/images/icon_good.png')} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
+                                                    )}
+                                                    {review.expression === 'soso' && (
+                                                        <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
+                                                    )}
+                                                    {review.expression === 'sad' && (
+                                                        <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
+                                                    )}
+                                                    {review.expression === 'surprise' && (
+                                                        <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
+                                                    )}
+                                                </View>
+                                            <View style={[styles.ml10]}>
+                                                <View style={[styles.row, styles.justifyContentStart]}>
+                                                    <StarRating
+                                                        disabled={true}
+                                                        maxStars={5}
+                                                        rating={review.rate}
+                                                        emptyStar={require('../../assets/images/icon_star_disabled.png')}
+                                                        fullStar={require('../../assets/images/icon_star.png')}
+                                                        halfStar={'ios-star-half'}
+                                                        iconSet={'Ionicons'}
+                                                        fullStarColor={'#FFBD07'}
+                                                        starSize={14}
+                                                    />
+                                                </View>
+                                                <View style={[styles.row]}>
+                                                    <Text style={[styles.fontBold, styles.font14]}>{review.author.nickname}</Text>
+                                                    <Text style={[styles.fontMedium, styles.font14, styles.grayD1, styles.ml5]}>{`${review.time.slice(0,4)}.${review.time.slice(5,7)}.${review.time.slice(8,10)}`}</Text>
+                                                </View>
                                             </View>
                                         </View>
+                                        <View>
+                                            <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon30]} />
+                                        </View>
                                     </View>
-                                    <View>
-                                        <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon30]} />
-                                    </View>
-                                </View>
+                                </TouchableWithoutFeedback>
                                 <View style={[styles.mt10]}>
                                     <Text style={[styles.fontRegular, styles.font13, styles.lineHeight20]} numberOfLines={4}>
                                         {review.content}
@@ -252,6 +252,7 @@ class ArtuiumCard extends Component{
                         )}
                     </View>
                 </View>
+                </TouchableWithoutFeedback>
                 <Modal
                 visible={showProfileModal}
                 onRequestClose={this.props.closeProfileModal}
@@ -348,8 +349,7 @@ class ArtuiumCard extends Component{
                         </View>
                     </TouchableWithoutFeedback>
                 </Modal>
-                </Fragment>
-            </TouchableWithoutFeedback>
+            </Fragment>
         )
     }
 }

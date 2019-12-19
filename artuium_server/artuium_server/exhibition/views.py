@@ -11,6 +11,7 @@ import datetime
 from . import models, serializers
 from artuium_server.common.pagination import MainPageNumberPagination
 from artuium_server.users import serializers as users_serializers
+from artuium_server.artwork import models as artwork_models
 
 User = get_user_model()
 
@@ -104,3 +105,25 @@ class Exhibition(APIView):
         serializer = serializers.ExhibitionSerializer(result_page, many = True, context = {'request': request})
 
         return Response(status = status.HTTP_200_OK, data = serializer.data)
+
+
+class ExhibitionDetailByArtwork(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        artwork_id = request.query_params.get('artworkId', None)
+        if artwork_id:
+            try:
+                artwork = artwork_models.Artwork.objects.get(id = artwork_id)
+                try:
+                    exhibition = artwork.exhibitions.order_by('-open_date').first()
+                    if exhibition:
+                        serializer = serializers.ExhibitionSerializer(exhibition, context = {'request': request})
+                        return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'exhibition': serializer.data})
+                    else:
+                        return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+                except:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})

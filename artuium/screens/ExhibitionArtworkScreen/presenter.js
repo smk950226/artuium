@@ -78,31 +78,31 @@ class ExhibitionArtworkScreen extends Component{
                                 exhibition.artworks.map((artwork, index) => (
                                     <View key={index} style={[styles.center, styles.heightFull, styles.screenWidth]}>
                                         <ArtuiumCard4 artwork={artwork} navigation={this.props.navigation} />
-                                        <View style={[styles.alignItemsCenter, styles.mb25, {width: width, posizion: 'absolute', bottom: height*0.2}]}>
-                                            <View
-                                                style={[styles.row]}
-                                            >
-                                                {exhibition.artworks.map((_, ind) => {
-                                                    let opacity2 = position.interpolate({
-                                                        inputRange: [ind - 1, ind, ind + 1],
-                                                        outputRange: [0, 1, 0],
-                                                        extrapolate: 'clamp'
-                                                    });
-                                                    return (
-                                                        <View key={ind} style={[styles.sliderLine, styles.bgWhite, styles.center]}>
-                                                            <Animated.View
-                                                                style={[styles.sliderLine, styles.bgBlack, {opacity: opacity2}]}
-                                                            />
-                                                        </View>
-                                                    );
-                                                })}
-                                            </View>
-                                        </View>
+                                        
                                     </View>
                                 ))
                             )}
-                            
                         </ScrollView>
+                        <View style={[styles.alignItemsCenter, styles.mb25, {width: width, posizion: 'absolute', bottom: height*0.2}]}>
+                            <View
+                                style={[styles.row]}
+                            >
+                                {exhibition.artworks.map((_, ind) => {
+                                    let opacity2 = position.interpolate({
+                                        inputRange: [ind - 1, ind, ind + 1],
+                                        outputRange: [0, 1, 0],
+                                        extrapolate: 'clamp'
+                                    });
+                                    return (
+                                        <View key={ind} style={[styles.sliderLine, styles.bgWhite, styles.center]}>
+                                            <Animated.View
+                                                style={[styles.sliderLine, styles.bgBlack, {opacity: opacity2}]}
+                                            />
+                                        </View>
+                                    );
+                                })}
+                            </View>
+                        </View>
                     </Fragment>
                 ) : (
                     <View style={[styles.container, styles.center]}>

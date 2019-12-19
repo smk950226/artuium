@@ -122,6 +122,31 @@ function getExhibitionListMore(type, filter, period, scale, region, page){
     }
 }
 
+function getExhibitionDetailByArtwork(artworkId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/exhibition/exhibition/detail/artwork/?artworkId=${artworkId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else if(response.status === 404){
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     
 };
@@ -152,7 +177,8 @@ const actionCreators = {
     likeExhibition,
     unlikeExhibition,
     getExhibitionList,
-    getExhibitionListMore
+    getExhibitionListMore,
+    getExhibitionDetailByArtwork
 }
 
 export { actionCreators }

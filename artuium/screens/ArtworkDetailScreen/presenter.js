@@ -25,10 +25,10 @@ function abbreviateNumber(value) {
     return newValue;
 }
 
-class ExhibitionDetailScreen extends Component{
+class ArtworkDetailScreen extends Component{
     static propTypes = {
-        exhibition: PropTypes.object,
         artwork: PropTypes.object,
+        exhibition: PropTypes.object,
         like_count: PropTypes.number.isRequired,
         review_count: PropTypes.number.isRequired,
         is_liked: PropTypes.bool.isRequired,
@@ -37,11 +37,11 @@ class ExhibitionDetailScreen extends Component{
     }
 
     render(){
-        const { exhibition, like_count, review_count, is_liked } = this.props;
+        const { artwork, exhibition, like_count, review_count, is_liked } = this.props;
         return(
             <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
             <SafeAreaView style={[styles.container]}>
-                {exhibition ? (
+                {artwork ? (
                     <Fragment>
                         <TouchableWithoutFeedback onPress={()=> this.props.navigation.goBack(null)}>
                             <View style={[styles.alignItemsCenter, styles.px15, {height: 40, flexDirection: 'row-reverse', position: 'absolute', top: iosStatusBarHeight + 15, right: 0, zIndex: 99}]}>
@@ -53,7 +53,7 @@ class ExhibitionDetailScreen extends Component{
                         <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]}>
                             <View>
                                 <View style={[styles.center]}>
-                                    <Image source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : null : null}} style={{width: 360, height: 240}} resizeMode={'cover'} />
+                                    <Image source={{uri: artwork.image}} style={{width: 360, height: 240}} resizeMode={'cover'} />
                                 </View>
                                 <View style={[styles.alignItemsCenter, {marginTop: 60}]}>
                                     <View style={[styles.row, styles.mt10, styles.alignItemsCenter]}>
@@ -71,12 +71,12 @@ class ExhibitionDetailScreen extends Component{
                                         </TouchableWithoutFeedback>
                                     </View>
                                     <View style={[styles.flexWrap, {width: 200}]}>
-                                        <Text style={[styles.fontBold, styles.font30, styles.textCenter]}>{exhibition.name}</Text>
+                                        <Text style={[styles.fontBold, styles.font30, styles.textCenter]}>{artwork.name}</Text>
                                     </View>
-                                    <Text style={[styles.fontMedium, styles.font14]}>{exhibition.gallery.name}, {`${exhibition.open_date.slice(0,4)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} ~ ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
-                                    <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('ExhibitionArtwork', { exhibition })}>
-                                        <View style={[styles.relatedBtn, styles.mt30]}>
-                                            <Text style={[styles.fontMedium, styles.font18, styles.white]}>전시 입장</Text>
+                                    <Text style={[styles.fontMedium, styles.font14]}>{artwork.author.name}, {`${artwork.created.slice(0,4)}.${artwork.created.slice(5,7)}.${artwork.created.slice(8,10)}`}, {artwork.material}</Text>
+                                    <TouchableWithoutFeedback onPress={exhibition ? () => this.props.navigation.navigate('ExhibitionDetail', { exhibition }) : null}>
+                                        <View style={[styles.relatedBtn2, styles.mt30, exhibition ? null : styles.hidden]}>
+                                            <Text style={[styles.fontMedium, styles.font18, styles.gray8B]}>관련 전시</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
                                     <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ExhibitionContent')}>
@@ -102,4 +102,4 @@ class ExhibitionDetailScreen extends Component{
     }
 }
 
-export default ExhibitionDetailScreen;
+export default ArtworkDetailScreen;

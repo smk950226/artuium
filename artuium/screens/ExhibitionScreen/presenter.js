@@ -103,7 +103,11 @@ class ExhibitionScreen extends React.Component {
                                 >
                                 {recommendedExhibitions.map((exhibition, index) => {
                                     return(
-                                        <ExhibitionCard3 key={index} exhibition={exhibition} navigation={this.props.navigation} />
+                                        <TouchableWithoutFeedback key={index} onPress={() => this.props.navigation.navigate('ExhibitionDetail', { exhibition })}>
+                                            <View style={[{zIndex: 999}]}>
+                                                <ExhibitionCard3 exhibition={exhibition} navigation={this.props.navigation} />
+                                            </View>
+                                        </TouchableWithoutFeedback>
                                     )
                                 })}
                                 </ScrollView>

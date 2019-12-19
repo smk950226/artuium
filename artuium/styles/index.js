@@ -943,6 +943,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgb(18,18,18)'
+    }, 
+    relatedBtn2: {
+        width: 150,
+        height: 35,
+        borderRadius: 35/2,
+        borderWidth: 1,
+        borderColor: '#c6c6c6',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#ffffff'
     },
     upBtn: {
         width: 50, 

@@ -19,7 +19,6 @@ class Container extends Component{
             review_count,
             isSubmitting: false
         }
-        console.log(exhibition)
     }
 
     _like = async() => {

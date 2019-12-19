@@ -8,6 +8,7 @@ import ExhibitionContentScreen from '../screens/ExhibitionContentScreen';
 import ExhibitionArtworkScreen from '../screens/ExhibitionArtworkScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import SearchScreen from '../screens/SearchScreen';
+import ArtworkDetailScreen from '../screens/ArtworkDetailScreen';
 
 const GeneralNavigation = createStackNavigator({
     Root: {
@@ -45,10 +46,16 @@ const GeneralNavigation = createStackNavigator({
         navigationOptions: {
             header: null
         }
+    },
+    ArtworkDetail: {
+        screen: ArtworkDetailScreen,
+        navigationOptions: ({screenProps, navigation}) => ({
+            header: null
+        })
     }
 },
 {
-    mode: 'modal',
+    mode: 'slide',
     defaultNavigationOptions: {
       gesturesEnabled: false,
     },
