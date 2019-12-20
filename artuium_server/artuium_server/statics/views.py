@@ -9,7 +9,9 @@ from . import models, serializers
 from artuium_server.common.pagination import MainPageNumberPagination
 from artuium_server.users import serializers as users_serializers
 from artuium_server.exhibition import models as exhibition_models
+from artuium_server.exhibition import serializers as exhibition_serializers
 from artuium_server.artwork import models as artwork_models
+from artuium_server.artwork import serializers as artwork_serializers
 
 User = get_user_model()
 
@@ -182,6 +184,14 @@ class Following(APIView):
 
 class LikeReview(APIView):
     permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user = request.user
+        likes = models.Like.objects.filter(user = user, review__isnull = False)
+        paginator = MainPageNumberPagination()
+        result_page = paginator.paginate_queryset(likes, request)
+        serializer = serializers.LikeSerializer(result_page, many = True, context = {'request': request})
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+
     def post(self ,request, format = None):
         review_id = request.data.get('reviewId', None)
         user = request.user
@@ -220,6 +230,14 @@ class LikeReview(APIView):
 
 class LikeExhibition(APIView):
     permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user = request.user
+        likes = models.Like.objects.filter(user = user, exhibition__isnull = False)
+        paginator = MainPageNumberPagination()
+        result_page = paginator.paginate_queryset(likes, request)
+        serializer = serializers.LikeSerializer(result_page, many = True, context = {'request': request})
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+
     def post(self ,request, format = None):
         exhibition_id = request.data.get('exhibitionId', None)
         user = request.user
@@ -258,6 +276,14 @@ class LikeExhibition(APIView):
 
 class LikeArtwork(APIView):
     permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user = request.user
+        likes = models.Like.objects.filter(user = user, artwork__isnull = False)
+        paginator = MainPageNumberPagination()
+        result_page = paginator.paginate_queryset(likes, request)
+        serializer = serializers.LikeSerializer(result_page, many = True, context = {'request': request})
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+
     def post(self ,request, format = None):
         artwork_id = request.data.get('artworkId', None)
         user = request.user

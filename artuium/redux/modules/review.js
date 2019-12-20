@@ -122,6 +122,53 @@ function unlikeReview(reviewId){
     }
 }
 
+function getReviewLikeList(){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/like/review/?page=1`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function getReviewLikeListMore(page){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/like/review/?page=${page}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else if(response.status === 404){
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     
 };
@@ -151,7 +198,9 @@ const actionCreators = {
     getReviewList,
     getReviewListMore,
     likeReview,
-    unlikeReview
+    unlikeReview,
+    getReviewLikeList,
+    getReviewLikeListMore
 }
 
 export { actionCreators }

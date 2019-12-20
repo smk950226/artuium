@@ -99,7 +99,6 @@ function getArtworkReviewListMore(artworkId, page){
     }
 }
 
-
 function createArtworkReview(artworkId, rating, expression, content){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
@@ -129,6 +128,53 @@ function createArtworkReview(artworkId, rating, expression, content){
     }
 }
 
+function getArtworkLikeList(){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/like/artwork/?page=1`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function getArtworkLikeListMore(page){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/like/artwork/?page=${page}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else if(response.status === 404){
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     
 };
@@ -145,7 +191,9 @@ const actionCreators = {
     unlikeArtwork,
     getArtworkReviewList,
     getArtworkReviewListMore,
-    createArtworkReview
+    createArtworkReview,
+    getArtworkLikeList,
+    getArtworkLikeListMore
 }
 
 export { actionCreators }
