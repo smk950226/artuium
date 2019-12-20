@@ -138,6 +138,9 @@ class ArtuiumCard extends Component{
                                                     {review.expression === 'surprise' && (
                                                         <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emoji, { position: 'absolute', top: 16, left: 16 }]} resizeMode={'cover'} />
                                                     )}
+                                                    {review.expression === 'thumb' && (
+                                                        <Image source={require('../../assets/images/icon_thumb.png')} style={[styles.emoji, { position: 'absolute', top: 16, left: 16 }]} resizeMode={'cover'} />
+                                                    )}
                                                 </View>
                                             <View style={[styles.ml5]}>
                                                 <View style={[styles.row, styles.justifyContentStart]}>
@@ -147,7 +150,7 @@ class ArtuiumCard extends Component{
                                                         rating={review.rate}
                                                         emptyStar={require('../../assets/images/icon_star_disabled.png')}
                                                         fullStar={require('../../assets/images/icon_star.png')}
-                                                        halfStar={'ios-star-half'}
+                                                        halfStar={require('../../assets/images/icon_star_half.png')}
                                                         iconSet={'Ionicons'}
                                                         fullStarColor={'#FFBD07'}
                                                         starSize={10}
@@ -207,6 +210,9 @@ class ArtuiumCard extends Component{
                                                     {review.expression === 'surprise' && (
                                                         <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
                                                     )}
+                                                    {review.expression === 'thumb' && (
+                                                        <Image source={require('../../assets/images/icon_thumb.png')} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
+                                                    )}
                                                 </View>
                                             <View style={[styles.ml10]}>
                                                 <View style={[styles.row, styles.justifyContentStart]}>
@@ -216,7 +222,7 @@ class ArtuiumCard extends Component{
                                                         rating={review.rate}
                                                         emptyStar={require('../../assets/images/icon_star_disabled.png')}
                                                         fullStar={require('../../assets/images/icon_star.png')}
-                                                        halfStar={'ios-star-half'}
+                                                        halfStar={require('../../assets/images/icon_star_half.png')}
                                                         iconSet={'Ionicons'}
                                                         fullStarColor={'#FFBD07'}
                                                         starSize={14}

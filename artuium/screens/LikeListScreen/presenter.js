@@ -1,38 +1,27 @@
 import React from 'react';
-import { View, Text, ImageBackground, Image, ScrollView, Animated, Dimensions} from 'react-native';
+import { View, Text, TouchableWithoutFeedback, Image, ScrollView, Animated, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import styles from '../../styles';
+import ExhibitionLikeScreen from '../ExhibitionLikeScreen';
+import ArtworkLikeScreen from '../ArtworkLikeScreen';
+import ReviewLikeScreen from '../ReviewLikeScreen';
 
 const iosStatusBarHeight = getStatusBarHeight()
+
 const { width, height } = Dimensions.get('window')
 
-const FirstRoute = () => (
-    <ScrollView contentContainerStyle={[styles.alignItemsCenter]} bounces={false} style={[styles.container, { backgroundColor: '#ff4081' }]}>
-        <Image source={{uri: 'https://thumb.named.com/normal/resize/origin/file/photo/editor/1804/176ef5cda5edd31a2d453c0446649a57_nE72y9HJLoBrgI7LFPq.jpg'}} style={{width: 400, height: 700}} />
-        <Image source={{uri: 'https://thumb.named.com/normal/resize/origin/file/photo/editor/1804/176ef5cda5edd31a2d453c0446649a57_nE72y9HJLoBrgI7LFPq.jpg'}} style={{width: 400, height: 700}} />
-        <Image source={{uri: 'https://thumb.named.com/normal/resize/origin/file/photo/editor/1804/176ef5cda5edd31a2d453c0446649a57_nE72y9HJLoBrgI7LFPq.jpg'}} style={{width: 400, height: 700}} />
-    </ScrollView>
-);
-
-const SecondRoute = () => (
-    <ScrollView contentContainerStyle={[styles.alignItemsCenter]} bounces={false} style={[styles.container, { backgroundColor: '#673ab7' }]}>
-        <Image source={{uri: 'https://i.pinimg.com/564x/48/62/37/486237812ede6eb5b0735fac6d62c1fa.jpg'}} style={{width: 400, height: 700}} />
-        <Image source={{uri: 'https://i.pinimg.com/564x/48/62/37/486237812ede6eb5b0735fac6d62c1fa.jpg'}} style={{width: 400, height: 700}} />
-        <Image source={{uri: 'https://i.pinimg.com/564x/48/62/37/486237812ede6eb5b0735fac6d62c1fa.jpg'}} style={{width: 400, height: 700}} />
-    </ScrollView>
-);
-
-const ThirdRoute = () => (
-    <ScrollView contentContainerStyle={[styles.alignItemsCenter]} bounces={false} style={[styles.container, { backgroundColor: '#ff4081' }]}>
-        <Image source={{uri: 'http://nimage.globaleconomic.co.kr/phpwas/restmb_allidxmake.php?idx=5&simg=2019111315302604184c4c55f9b3d591019584.jpg'}} style={{width: 400, height: 700}} />
-        <Image source={{uri: 'http://nimage.globaleconomic.co.kr/phpwas/restmb_allidxmake.php?idx=5&simg=2019111315302604184c4c55f9b3d591019584.jpg'}} style={{width: 400, height: 700}} />
-        <Image source={{uri: 'http://nimage.globaleconomic.co.kr/phpwas/restmb_allidxmake.php?idx=5&simg=2019111315302604184c4c55f9b3d591019584.jpg'}} style={{width: 400, height: 700}} />
-    </ScrollView>
-);
-
 class LikeListScreen extends React.Component {
+    static propTypes = {
+        profile: PropTypes.object.isRequired,
+        getReviewLikeList: PropTypes.func.isRequired,
+        getReviewLikeListMore: PropTypes.func.isRequired,
+        getArtworkLikeList: PropTypes.func.isRequired,
+        getArtworkLikeListMore: PropTypes.func.isRequired,
+        getExhibitionLikeList: PropTypes.func.isRequired,
+        getExhibitionLikeListMore: PropTypes.func.isRequired
+    }
     constructor(props){
         super(props);
         this.state = {
@@ -41,20 +30,46 @@ class LikeListScreen extends React.Component {
                 { key: 'first', title: '전시' },
                 { key: 'second', title: '작품' },
                 { key: 'third', title: '감상' },
-            ],
+            ]
         }
     }
 
+    _renderExhibitionRoute = () => {
+        return(
+            <ExhibitionLikeScreen navigation={this.props.navigation} />
+        )
+    }
+
+    _renderArtworkRoute = () => {
+        return(
+            <ArtworkLikeScreen navigation={this.props.navigation} />
+        )
+    }
+
+    _renderReviewRoute = () => {
+        return(
+            <ReviewLikeScreen navigation={this.props.navigation} />
+        )
+    }
+
     render(){
+        const { profile } = this.props;
         return(
             <View style={[styles.container]}>
+                <View style={[{height: iosStatusBarHeight+50, paddingTop: iosStatusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
+                    <TouchableWithoutFeedback onPress={() => this.props.navigation.goBack(null)}>
+                        <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9, height: 17}]} />
+                    </TouchableWithoutFeedback>
+                    <Text style={[styles.fontBold, styles.font20]}>{`${profile.nickname}님이 좋아한`}</Text>
+                    <View style={[{width: 9, height: 17}]} />
+                </View>
                 <TabView
                     navigationState={this.state}
                     onIndexChange={index => this.setState({ index })}
                     renderScene={SceneMap({
-                        first: FirstRoute,
-                        second: SecondRoute,
-                        third: ThirdRoute,
+                        first: this._renderExhibitionRoute,
+                        second: this._renderArtworkRoute,
+                        third: this._renderReviewRoute,
                     })}
                     renderTabBar={props =>
                         <TabBar
@@ -71,10 +86,6 @@ class LikeListScreen extends React.Component {
             </View>
         )
     }
-}
-
-LikeListScreen.propTypes = {
-
 }
 
 export default LikeListScreen;

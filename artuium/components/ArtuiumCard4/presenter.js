@@ -104,7 +104,7 @@ class ArtuiumCard4 extends Component{
                         <Text style={[styles.fontMedium, styles.font14, { marginBottom: 150 }]}>{artwork.author.name}, {`${artwork.created.slice(0,4)}.${artwork.created.slice(5,7)}.${artwork.created.slice(8,10)}`}, {artwork.material}</Text>
                     </View>
                 </View>
-                <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ExhibitionContent')}>
+                <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ArtworkContent', { artwork })}>
                     <View style={[styles.upBtn, {position: 'absolute', bottom: height*0.1}]}>
                         <Text style={[styles.white, styles.font40]}>^</Text>
                     </View>

@@ -265,6 +265,10 @@ const styles = StyleSheet.create({
         color: '#F4F4F4',
         includeFontPadding: false
     },
+    grayA8: {
+        color: '#A8A8A8',
+        includeFontPadding: false
+    },
     bgBlack: {
         backgroundColor: '#000000'
     },
@@ -733,6 +737,10 @@ const styles = StyleSheet.create({
         borderBottomColor: '#707070',
         borderBottomWidth: StyleSheet.hairlineWidth
     },
+    borderBtmGrayE8: {
+        borderBottomColor: '#E8E8E8',
+        borderBottomWidth: 1
+    },
     overflowHidden: {
         overflow: 'hidden'
     },
@@ -816,6 +824,10 @@ const styles = StyleSheet.create({
     emojiLg: {
         width: 18,
         height: 18
+    },
+    emojiXl: {
+        width: 26,
+        height: 26
     },
     icon12: {
         width: 12,

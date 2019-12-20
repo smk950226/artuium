@@ -46,7 +46,7 @@ class EditProfileScreen extends React.Component {
                     </TouchableWithoutFeedback>
                 </View>
                 <View style={[styles.divGray]} />
-                <View style={[styles.row, styles.alignItemsStart, styles.justifyContentBetween, styles.borderBtmGrayD1, styles.px30, styles.pt30,{height: 100}]}>
+                <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.borderBtmGrayD1, styles.px30, styles.pt30,{height: 100}]}>
                     <Text style={[styles.fontMedium, styles.font16]}>이름</Text>
                     <View style={{width: width/3}}>
                         <TextInput

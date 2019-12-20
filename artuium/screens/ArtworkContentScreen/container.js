@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import { Alert } from 'react-native';
 import PropTypes from 'prop-types';
-import ExhibitionContentScreen from './presenter';
+import ArtworkContentScreen from './presenter';
 
 class Container extends Component{
     static propTypes = {
-        likeExhibition: PropTypes.func.isRequired,
-        unlikeExhibition: PropTypes.func.isRequired,
-        getExhibitionReviewList: PropTypes.func.isRequired,
-        getExhibitionReviewListMore: PropTypes.func.isRequired,
-        createExhibitionReview: PropTypes.func.isRequired
+        likeArtwork: PropTypes.func.isRequired,
+        unlikeArtwork: PropTypes.func.isRequired,
+        getArtworkReviewList: PropTypes.func.isRequired,
+        getArtworkReviewListMore: PropTypes.func.isRequired,
+        createArtworkReview: PropTypes.func.isRequired
     }
 
     constructor(props){
         super(props)
-        const exhibition = props.navigation.getParam('exhibition', null)
-        const { is_liked, like_count, review_count, is_reviewed, total_rate } = exhibition;
+        const artwork = props.navigation.getParam('artwork', null)
+        const { is_liked, like_count, review_count, is_reviewed, total_rate } = artwork;
         this.state = {
-            exhibition,
+            artwork,
             is_liked,
             is_reviewed,
             like_count,
@@ -41,9 +41,9 @@ class Container extends Component{
     }
 
     componentDidMount = async() => {
-        const { exhibition : { id } } = this.state;
-        const { getExhibitionReviewList } = this.props;
-        const result = await getExhibitionReviewList(id)
+        const { artwork : { id } } = this.state;
+        const { getArtworkReviewList } = this.props;
+        const result = await getArtworkReviewList(id)
         if(result.status === 'ok'){
             this.setState({
                 loading: false,
@@ -64,14 +64,14 @@ class Container extends Component{
     }
 
     _reviewListMore = async() => {
-        const { getExhibitionReviewListMore } = this.props;
-        const { page, hasNextPage, isLoadingMore, exhibition : { id } } = this.state;
+        const { getArtworkReviewListMore } = this.props;
+        const { page, hasNextPage, isLoadingMore, artwork : { id } } = this.state;
         if(hasNextPage){
             if(!isLoadingMore){
                 await this.setState({
                     isLoadingMore: true
                 });
-                const result = await getExhibitionReviewListMore(id, page+1);
+                const result = await getArtworkReviewListMore(id, page+1);
                 if(result.status === 'ok'){
                     await this.setState({
                         page: this.state.page+1,
@@ -90,8 +90,8 @@ class Container extends Component{
     }
 
     _refresh = async() => {
-        const { getExhibitionReviewList } = this.props;
-        const { exhibition : { id } } = this.state;
+        const { getArtworkReviewList } = this.props;
+        const { artwork : { id } } = this.state;
         this.setState({
             refreshing: true,
             isLoadingMore: false,
@@ -99,7 +99,7 @@ class Container extends Component{
             hasNextPage: true,
         })
 
-        const result = await getExhibitionReviewList(id)
+        const result = await getArtworkReviewList(id)
         if(result.status === 'ok'){
             this.setState({
                 loading: false,
@@ -123,14 +123,14 @@ class Container extends Component{
     }  
 
     _like = async() => {
-        const { is_liked, isSubmitting, exhibition : { id } } = this.state;
-        const { likeExhibition } = this.props;
+        const { is_liked, isSubmitting, artwork : { id } } = this.state;
+        const { likeArtwork } = this.props;
         if(!isSubmitting){
             if(!is_liked){
                 this.setState({
                     isSubmitting: true
                 })
-                const result = await likeExhibition(id)
+                const result = await likeArtwork(id)
                 if(result.status === 'ok'){
                     this.setState({
                         is_liked: true,
@@ -148,14 +148,14 @@ class Container extends Component{
     }
 
     _unlike = async() => {
-        const { is_liked, isSubmitting, exhibition : { id } } = this.state;
-        const { unlikeExhibition } = this.props;
+        const { is_liked, isSubmitting, artwork : { id } } = this.state;
+        const { unlikeArtwork } = this.props;
         if(!isSubmitting){
             if(is_liked){
                 this.setState({
                     isSubmitting: true
                 })
-                const result = await unlikeExhibition(id)
+                const result = await unlikeArtwork(id)
                 if(result.status === 'ok'){
                     this.setState({
                         is_liked: false,
@@ -211,14 +211,14 @@ class Container extends Component{
     }
 
     _submit = async() => {
-        const { rating, expression, content, isSubmittingReview, exhibition : { id } } = this.state;
-        const { createExhibitionReview } = this.props;
+        const { rating, expression, content, isSubmittingReview, artwork : { id } } = this.state;
+        const { createArtworkReview } = this.props;
         if(!isSubmittingReview){
             if(rating && expression && content){
                 this.setState({
                     isSubmittingReview: true
                 })
-                const result = await createExhibitionReview(id, rating, expression, content)
+                const result = await createArtworkReview(id, rating, expression, content)
                 if(result.status === 'ok'){
                     this.setState({
                         reviews: [...this.state.reviews, result.review],
@@ -255,7 +255,7 @@ class Container extends Component{
 
     render(){
         return(
-            <ExhibitionContentScreen 
+            <ArtworkContentScreen 
             {...this.props}
             {...this.state}
             like={this._like}

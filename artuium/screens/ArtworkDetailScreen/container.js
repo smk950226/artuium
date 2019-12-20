@@ -34,7 +34,6 @@ class Container extends Component{
                 exhibition: result.exhibition,
                 loading: false
             })
-            console.log(result.exhibition)
         }
         else{
             this.setState({

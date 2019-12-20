@@ -9,7 +9,9 @@ from . import models, serializers
 from artuium_server.common.pagination import MainPageNumberPagination
 from artuium_server.users import serializers as users_serializers
 from artuium_server.exhibition import models as exhibition_models
+from artuium_server.exhibition import serializers as exhibition_serializers
 from artuium_server.artwork import models as artwork_models
+from artuium_server.artwork import serializers as artwork_serializers
 
 User = get_user_model()
 
@@ -182,6 +184,14 @@ class Following(APIView):
 
 class LikeReview(APIView):
     permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user = request.user
+        likes = models.Like.objects.filter(user = user, review__isnull = False)
+        paginator = MainPageNumberPagination()
+        result_page = paginator.paginate_queryset(likes, request)
+        serializer = serializers.LikeSerializer(result_page, many = True, context = {'request': request})
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+
     def post(self ,request, format = None):
         review_id = request.data.get('reviewId', None)
         user = request.user
@@ -220,6 +230,14 @@ class LikeReview(APIView):
 
 class LikeExhibition(APIView):
     permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user = request.user
+        likes = models.Like.objects.filter(user = user, exhibition__isnull = False)
+        paginator = MainPageNumberPagination()
+        result_page = paginator.paginate_queryset(likes, request)
+        serializer = serializers.LikeSerializer(result_page, many = True, context = {'request': request})
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+
     def post(self ,request, format = None):
         exhibition_id = request.data.get('exhibitionId', None)
         user = request.user
@@ -258,6 +276,14 @@ class LikeExhibition(APIView):
 
 class LikeArtwork(APIView):
     permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user = request.user
+        likes = models.Like.objects.filter(user = user, artwork__isnull = False)
+        paginator = MainPageNumberPagination()
+        result_page = paginator.paginate_queryset(likes, request)
+        serializer = serializers.LikeSerializer(result_page, many = True, context = {'request': request})
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+
     def post(self ,request, format = None):
         artwork_id = request.data.get('artworkId', None)
         user = request.user
@@ -288,6 +314,156 @@ class LikeArtwork(APIView):
                 else:
                     pre.delete()
                     return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
+
+
+class ExhibitionReview(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        exhibition_id = request.query_params.get('exhibitionId', None)
+        page = request.query_params.get('page', None)
+        if exhibition_id:
+            try:
+                exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
+                reviews = exhibition.reviews.all()
+                paginator = MainPageNumberPagination()
+                result_page = paginator.paginate_queryset(reviews, request)
+                serializer = serializers.ReviewSerializer(result_page, many = True, context = {'request': request})
+
+                if page == '1':
+                    my_review = reviews.filter(author = request.user)
+                    thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                    good = reviews.filter(expression = 'good').count()/reviews.count()
+                    soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                    sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                    surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'reviews': serializer.data, 
+                        'my_review': serializers.ReviewSerializer(my_review, many = True, context = {'request': request}).data,
+                        'thumb': thumb,
+                        'good': good,
+                        'soso': soso,
+                        'sad': sad,
+                        'surprise': surprise
+                    })
+                else:
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'reviews': serializer.data})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
+    
+    def post(self, request, format = None):
+        exhibition_id = request.data.get('exhibitionId', None)
+        rate = request.data.get('rating', None)
+        expression = request.data.get('expression')
+        content = request.data.get('content')
+        user = request.user
+        if exhibition_id and rate and expression and content:
+            try:
+                exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
+                review = models.Review.objects.create(author = user, exhibition = exhibition, rate = rate, content = content, expression = expression)
+                review.save()
+                serializer = serializers.ReviewSerializer(review, context = {'request': request})
+                exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
+                total_rate = exhibition.total_rate
+                reviews = exhibition.reviews
+                thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                good = reviews.filter(expression = 'good').count()/reviews.count()
+                soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+
+                return Response(status = status.HTTP_200_OK, data = {
+                    'status': 'ok', 
+                    'review': serializer.data,
+                    'thumb': thumb,
+                    'good': good,
+                    'soso': soso,
+                    'sad': sad,
+                    'surprise': surprise,
+                    'total_rate': total_rate
+                })
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
+
+
+class ArtworkReview(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        artwork_id = request.query_params.get('artworkId', None)
+        page = request.query_params.get('page', None)
+        if artwork_id:
+            try:
+                artwork = artwork_models.Artwork.objects.get(id = artwork_id)
+                reviews = artwork.reviews.all()
+                paginator = MainPageNumberPagination()
+                result_page = paginator.paginate_queryset(reviews, request)
+                serializer = serializers.ReviewSerializer(result_page, many = True, context = {'request': request})
+
+                if page == '1':
+                    my_review = reviews.filter(author = request.user)
+                    thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                    good = reviews.filter(expression = 'good').count()/reviews.count()
+                    soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                    sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                    surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'reviews': serializer.data, 
+                        'my_review': serializers.ReviewSerializer(my_review, many = True, context = {'request': request}).data,
+                        'thumb': thumb,
+                        'good': good,
+                        'soso': soso,
+                        'sad': sad,
+                        'surprise': surprise
+                    })
+                else:
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'reviews': serializer.data})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
+    
+    def post(self, request, format = None):
+        artwork_id = request.data.get('artworkId', None)
+        rate = request.data.get('rating', None)
+        expression = request.data.get('expression')
+        content = request.data.get('content')
+        user = request.user
+        if artwork_id and rate and expression and content:
+            try:
+                artwork = artwork_models.Artwork.objects.get(id = artwork_id)
+                review = models.Review.objects.create(author = user, artwork = artwork, rate = rate, content = content, expression = expression)
+                review.save()
+                serializer = serializers.ReviewSerializer(review, context = {'request': request})
+                artwork = artwork_models.Artwork.objects.get(id = artwork_id)
+                total_rate = artwork.total_rate
+                reviews = artwork.reviews
+                thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                good = reviews.filter(expression = 'good').count()/reviews.count()
+                soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+
+                return Response(status = status.HTTP_200_OK, data = {
+                    'status': 'ok', 
+                    'review': serializer.data,
+                    'thumb': thumb,
+                    'good': good,
+                    'soso': soso,
+                    'sad': sad,
+                    'surprise': surprise,
+                    'total_rate': total_rate
+                })
             except:
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
         else:

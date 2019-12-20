@@ -9,6 +9,7 @@ import ExhibitionArtworkScreen from '../screens/ExhibitionArtworkScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ArtworkDetailScreen from '../screens/ArtworkDetailScreen';
+import ArtworkContentScreen from '../screens/ArtworkContentScreen';
 
 const GeneralNavigation = createStackNavigator({
     Root: {
@@ -49,6 +50,12 @@ const GeneralNavigation = createStackNavigator({
     },
     ArtworkDetail: {
         screen: ArtworkDetailScreen,
+        navigationOptions: ({screenProps, navigation}) => ({
+            header: null
+        })
+    },
+    ArtworkContent: {
+        screen: ArtworkContentScreen,
         navigationOptions: ({screenProps, navigation}) => ({
             header: null
         })

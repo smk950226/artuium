@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ArtuiumCard3 from './presenter';
+import ArtuiumCard5 from './presenter';
 
 class Container extends Component{
     static propTypes = {
@@ -10,7 +10,7 @@ class Container extends Component{
         likeReview: PropTypes.func.isRequired,
         unlikeReview: PropTypes.func.isRequired,
         my: PropTypes.bool,
-        handleChangeMode:  PropTypes.func
+        handleChangeMode:  PropTypes.func,
     }
 
     constructor(props){
@@ -180,7 +180,7 @@ class Container extends Component{
     
     render(){
         return(
-            <ArtuiumCard3 
+            <ArtuiumCard5 
             {...this.props}
             {...this.state}
             openProfileModal={this._openProfileModal}

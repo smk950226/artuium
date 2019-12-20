@@ -26,7 +26,7 @@ function abbreviateNumber(value) {
     return newValue;
 }
 
-class ArtuiumCard3 extends Component{
+class ArtuiumCard5 extends Component{
     static propTypes = {
         review: PropTypes.object.isRequired,
         is_liked: PropTypes.bool.isRequired,
@@ -91,81 +91,75 @@ class ArtuiumCard3 extends Component{
         const { review, is_liked, like_count, reply_count, showProfileModal, showFollowModal, is_me, is_following, follower_count, following_count, my } = this.props;
         return(
             <Fragment>
-                <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('review', review)}>
-                    <View style={my ? [{width: width - 20, height: 160}, styles.px15, styles.center] : null}>
-                        <View style={[styles.py20, styles.px20, styles.mx10, styles.justifyContentBetween, my ? [{borderRadius: 5, backgroundColor: '#f2f2f2', height: '100%'}, styles.exMenuShadow, styles.widthFull] : {borderBottomColor: '#e6e6e6', borderBottomWidth: 1}]}>
-                            <View>
-                                <View style={[styles.row, styles.justifyContentBetween]}>
-                                    <TouchableWithoutFeedback onPress={this.props.openProfileModal}>
-                                        <View style={[styles.row]}>
-                                            <View>
-                                                {review.author.profile_image ? (
-                                                    <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
-                                                ) : (
-                                                    <View style={[styles.circle40, styles.bgGrayD1]} />
-                                                )}
-                                                {review.expression === 'good' && (
-                                                    <Image source={require('../../assets/images/icon_good.png')} style={[styles.emoji, { position: 'absolute', top: 26, left: 24 }]} resizeMode={'cover'} />
-                                                )}
-                                                {review.expression === 'soso' && (
-                                                    <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emoji, { position: 'absolute', top: 26, left: 24 }]} resizeMode={'cover'} />
-                                                )}
-                                                {review.expression === 'sad' && (
-                                                    <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emoji, { position: 'absolute', top: 26, left: 24 }]} resizeMode={'cover'} />
-                                                )}
-                                                {review.expression === 'surprise' && (
-                                                    <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emoji, { position: 'absolute', top: 26, left: 24 }]} resizeMode={'cover'} />
-                                                )}
-                                                {review.expression === 'thumb' && (
-                                                    <Image source={require('../../assets/images/icon_thumb.png')} style={[styles.emoji, { position: 'absolute', top: 26, left: 24 }]} resizeMode={'cover'} />
-                                                )}
-                                            </View>
-                                            <View style={[styles.ml10]}>
-                                                <View style={[styles.row]}>
-                                                    <StarRating
-                                                        disabled={true}
-                                                        maxStars={5}
-                                                        rating={review.rate}
-                                                        emptyStar={require('../../assets/images/icon_star_disabled.png')}
-                                                        fullStar={require('../../assets/images/icon_star.png')}
-                                                        halfStar={require('../../assets/images/icon_star_half.png')}
-                                                        iconSet={'Ionicons'}
-                                                        fullStarColor={'#FFBD07'}
-                                                        starSize={14}
-                                                    />
-                                                </View>
-                                                <View style={[styles.row]}>
-                                                    <Text style={[styles.fontBold, styles.font14]}>{review.author.nickname}</Text>
-                                                    <Text style={[styles.fontMedium, styles.font14, styles.grayD1, styles.ml5]}>{`${review.time.slice(0,4)}.${review.time.slice(5,7)}.${review.time.slice(8,10)}`}</Text>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </TouchableWithoutFeedback>
-                                </View>
-                                <View style={[styles.mt10]}>
-                                    <Text style={[styles.fontRegular, styles.font13, styles.lineHeight20]}>
-                                        {review.content}
-                                    </Text>
-                                </View>
+                <Fragment>
+                    <View style={[styles.row, styles.justifyContentBetween]}>
+                        <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('list')}>
+                            <View style={[styles.ml25]}>
+                                <Text style={[styles.fontBlack, styles.font26, styles.grayA8]}>{'<'}</Text>
                             </View>
-                            <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentEnd]}>
-                                <Image source={require('../../assets/images/icon_comment.png')} style={[styles.icon15]} />
-                                <Text style={[styles.fontMedium, styles.font9, styles.grayD1, styles.ml5]}>{abbreviateNumber(reply_count)}</Text>
-                                <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
-                                    <View style={[styles.row, styles.alignItemsCenter]}>
-                                        {is_liked ? (
-                                            <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon15, styles.ml10]} />
-                                        ) : (
-                                            <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon15, styles.ml10]} />
-                                        )}
-                                        <Text style={[styles.fontMedium, styles.font9, styles.grayD1, styles.ml5]}>{abbreviateNumber(like_count)}</Text>
-                                    </View>
-                                </TouchableWithoutFeedback>
-                                <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon15, styles.ml10]} />
-                            </View>
+                        </TouchableWithoutFeedback>
+                        <View style={[styles.alignItemsCenter, styles.mt15]}>
+                            {review.author.profile_image ? (
+                                <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
+                            ) : (
+                                <View style={[styles.circle40, styles.bgGrayD1]} />
+                            )}
+                            {review.expression === 'good' && (
+                                <Image source={require('../../assets/images/icon_good.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
+                            )}
+                            {review.expression === 'soso' && (
+                                <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
+                            )}
+                            {review.expression === 'sad' && (
+                                <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
+                            )}
+                            {review.expression === 'surprise' && (
+                                <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
+                            )}
+                            {review.expression === 'thumb' && (
+                                <Image source={require('../../assets/images/icon_thumb.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
+                            )}
                         </View>
+                        <TouchableWithoutFeedback>
+                            <View style={[styles.mr25, styles.hidden]}>
+                                <Text style={[styles.fontBlack, styles.font26, styles.grayA8]}>{'<'}</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
                     </View>
-                </TouchableWithoutFeedback>
+                    <Text style={[styles.fontBold, styles.font20, styles.mt5, styles.textCenter]}>{review.author.nickname}님의 감상</Text>
+                    <View style={[styles.row, styles.justifyContentCenter, styles.widthFull, styles.mt5]}>
+                        <StarRating
+                            disabled={true}
+                            maxStars={5}
+                            rating={review.rate}
+                            emptyStar={require('../../assets/images/icon_star_disabled.png')}
+                            fullStar={require('../../assets/images/icon_star.png')}
+                            halfStar={require('../../assets/images/icon_star_half.png')}
+                            iconSet={'Ionicons'}
+                            fullStarColor={'#FFBD07'}
+                            starSize={25}
+                        />
+                    </View>
+                    <Text style={[styles.fontRegular, styles.font13, styles.mt20, styles.px25]}>
+                        {review.content}
+                    </Text>
+                    <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentEnd, styles.mt15, styles.px25]}>
+                        <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment.png')} />
+                        <Text style={[styles.fontRegular, styles.font8, {color: '#d1d1d1', marginLeft: 4}]}>{abbreviateNumber(reply_count)}</Text>
+                        <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
+                            <View style={[styles.row, styles.alignItemsCenter]}>
+                                {is_liked ? (
+                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+                                ) : (
+                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+
+                                )}
+                                <Text style={[styles.fontRegular, styles.font8, {color: '#d1d1d1', marginLeft: 4}]}>{abbreviateNumber(like_count)}</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
+                        <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon15, styles.ml10]} />
+                    </View>
+                </Fragment>
                 <Modal
                 visible={showProfileModal}
                 onRequestClose={this.props.closeProfileModal}
@@ -267,4 +261,4 @@ class ArtuiumCard3 extends Component{
     }
 }
 
-export default ArtuiumCard3;
+export default ArtuiumCard5;
