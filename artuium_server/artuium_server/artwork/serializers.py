@@ -15,7 +15,7 @@ class ArtworkSerializer(serializers.ModelSerializer):
     is_reviewed = serializers.SerializerMethodField()
     class Meta:
         model = models.Artwork
-        fields = ['id', 'name', 'image', 'author', 'created', 'material', 'content', 'review_count', 'like_count', 'is_liked', 'is_reviewed']
+        fields = ['id', 'name', 'image', 'author', 'created', 'material', 'content', 'review_count', 'like_count', 'is_liked', 'is_reviewed', 'total_rate']
     
     def get_is_liked(self, obj):
         if 'request' in self.context:

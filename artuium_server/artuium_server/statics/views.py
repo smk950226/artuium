@@ -367,3 +367,78 @@ class ExhibitionReview(APIView):
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
+
+
+class ArtworkReview(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        artwork_id = request.query_params.get('artworkId', None)
+        page = request.query_params.get('page', None)
+        if artwork_id:
+            try:
+                artwork = artwork_models.Artwork.objects.get(id = artwork_id)
+                reviews = artwork.reviews.all()
+                paginator = MainPageNumberPagination()
+                result_page = paginator.paginate_queryset(reviews, request)
+                serializer = serializers.ReviewSerializer(result_page, many = True, context = {'request': request})
+
+                if page == '1':
+                    my_review = reviews.filter(author = request.user)
+                    thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                    good = reviews.filter(expression = 'good').count()/reviews.count()
+                    soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                    sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                    surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'reviews': serializer.data, 
+                        'my_review': serializers.ReviewSerializer(my_review, many = True, context = {'request': request}).data,
+                        'thumb': thumb,
+                        'good': good,
+                        'soso': soso,
+                        'sad': sad,
+                        'surprise': surprise
+                    })
+                else:
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'reviews': serializer.data})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
+    
+    def post(self, request, format = None):
+        artwork_id = request.data.get('artworkId', None)
+        rate = request.data.get('rating', None)
+        expression = request.data.get('expression')
+        content = request.data.get('content')
+        user = request.user
+        if artwork_id and rate and expression and content:
+            try:
+                artwork = artwork_models.Artwork.objects.get(id = artwork_id)
+                review = models.Review.objects.create(author = user, artwork = artwork, rate = rate, content = content, expression = expression)
+                review.save()
+                serializer = serializers.ReviewSerializer(review, context = {'request': request})
+                artwork = artwork_models.Artwork.objects.get(id = artwork_id)
+                total_rate = artwork.total_rate
+                reviews = artwork.reviews
+                thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                good = reviews.filter(expression = 'good').count()/reviews.count()
+                soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+
+                return Response(status = status.HTTP_200_OK, data = {
+                    'status': 'ok', 
+                    'review': serializer.data,
+                    'thumb': thumb,
+                    'good': good,
+                    'soso': soso,
+                    'sad': sad,
+                    'surprise': surprise,
+                    'total_rate': total_rate
+                })
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})

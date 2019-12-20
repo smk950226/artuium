@@ -36,3 +36,14 @@ class Artwork(models.Model):
     @property
     def like_count(self):
         return self.likes.all().count()
+    
+    @property
+    def total_rate(self):
+        reviews = self.reviews.all()
+        if reviews.count() == 0:
+            return 0
+        else:
+            total = 0
+            for review in reviews:
+                total += review.rate
+            return total/reviews.count()

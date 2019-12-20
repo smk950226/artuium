@@ -37,9 +37,9 @@ function numberWithCommas(x) {
     return parts.join(".");
 }
 
-class ExhibitionContentScreen extends React.Component {
+class ArtworkContentScreen extends React.Component {
     static propTypes = {
-        exhibition: PropTypes.object.isRequired,
+        artwork: PropTypes.object.isRequired,
         like: PropTypes.func.isRequired,
         unlike: PropTypes.func.isRequired,
         is_liked: PropTypes.bool.isRequired,
@@ -80,9 +80,9 @@ class ExhibitionContentScreen extends React.Component {
     }
 
     render(){
-        const { exhibition, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview } = this.props;
+        const { artwork, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview } = this.props;
         return(
-            exhibition ? (
+            artwork ? (
                 <View style={[styles.container]}>
                     <View style={[styles.alignItemsCenter, styles.px15, {height: 40, flexDirection: 'row-reverse', position: 'absolute', top: iosStatusBarHeight + 15, right: 0, zIndex: 99}]}>
                         <TouchableWithoutFeedback onPress={()=>this.props.navigation.goBack()}>
@@ -92,7 +92,7 @@ class ExhibitionContentScreen extends React.Component {
                         </TouchableWithoutFeedback>
                     </View>
                     <ScrollView style={[styles.flex1]} bounces={false} showsVerticalScrollIndicator={false} ref={'scrollView'}>
-                        <ImageBackground resizeMode={'cover'} source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : null : null}} style={[Platform.OS === 'ios' ? styles.paddingIOS : null, styles.justifyContentEnd, {height: height*0.5}]}>
+                        <ImageBackground resizeMode={'cover'} source={{uri: artwork.image}} style={[Platform.OS === 'ios' ? styles.paddingIOS : null, styles.justifyContentEnd, {height: height*0.5}]}>
                             <LinearGradient
                                 colors={['#00000000', '#000000']}
                                 style={[styles.pl30, styles.pb30, styles.justifyContentEnd, {height: height*0.3}]}
@@ -113,9 +113,9 @@ class ExhibitionContentScreen extends React.Component {
                                     </TouchableWithoutFeedback>
                                 </View>
                                 <View style={[styles.flexWrap, {width: 200}]}>
-                                    <Text style={[styles.fontBold, styles.font30, styles.white]}><Text style={[styles.fontBold, styles.font30, styles.yellow]}>{'전시 '}</Text>{exhibition.name}</Text>
+                                    <Text style={[styles.fontBold, styles.font30, styles.white]}>{artwork.name}</Text>
                                 </View>
-                                <Text style={[styles.fontMedium, styles.font14, styles.white]}>{exhibition.gallery.name}, {`${exhibition.open_date.slice(8,10)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} ~ ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
+                                <Text style={[styles.fontMedium, styles.font14, styles.white]}>{artwork.author.name}, {`${artwork.created.slice(8,10)}.${artwork.created.slice(5,7)}.${artwork.created.slice(8,10)}`}, {artwork.material}</Text>
                             </LinearGradient>
                         </ImageBackground>
                         <View style={[styles.bgBlack, styles.px10, styles.pb10, styles.heightFull]}>
@@ -130,7 +130,7 @@ class ExhibitionContentScreen extends React.Component {
                                             <Text style={[styles.font14]}>정보</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
-                                    <TouchableWithoutFeedback style={[styles.flex1]} onPress={()=>this.props.navigation.navigate('ExhibitionDetail', { exhibition })}>   
+                                    <TouchableWithoutFeedback style={[styles.flex1]} onPress={()=>this.props.navigation.navigate('ArtworkDetail', { artwork })}>   
                                         <View style={[styles.upBtn]}>
                                             <Text style={[styles.white, styles.font40]}>V</Text>
                                         </View>
@@ -148,33 +148,8 @@ class ExhibitionContentScreen extends React.Component {
                                 <View style={[styles.alignItemsCenter]}>
                                     {this.state.index === 0 ?
                                         <View style={{width: width-80}}>
-                                            <View style={[styles.bgGrayf0, styles.py20, styles.px30, styles.mt15]}>
-                                                <View style={[styles.row]}>
-                                                    <Text style={[{width: 60}, styles.fontBold, styles.font14]}>전시 기간</Text>
-                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{`${exhibition.open_date.slice(8,10)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} - ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
-                                                </View>
-                                                <View style={[styles.row, styles.mt5]}>
-                                                    <Text style={[{width: 60}, styles.fontBold, styles.font14]}>전시 장소</Text>
-                                                    <View style={[styles.ml10]}>
-                                                        <Text style={[styles.fontRegular, styles.font14]}>{exhibition.gallery.name}</Text>
-                                                        <Text style={[styles.fontRegular, styles.font14, styles.mt5]}>{exhibition.address}</Text>
-                                                    </View>
-                                                </View>
-                                                <View style={[styles.row, styles.mt5]}>
-                                                    <Text style={[{width: 60}, styles.fontBold, styles.font14]}>관람 시간</Text>
-                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{`${exhibition.open_time.slice(0,5)} - ${exhibition.close_time.slice(0,5)}`}</Text>
-                                                </View>
-                                                <View style={[styles.row, styles.mt5]}>
-                                                    <Text style={[{width: 60}, styles.fontBold, styles.font14]}>입장료</Text>
-                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{`${numberWithCommas(exhibition.fee)}원`}</Text>
-                                                </View>
-                                                <View style={[styles.row, styles.mt5]}>
-                                                    <Text style={[{width: 60}, styles.fontBold, styles.font14]}>휴관일</Text>
-                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{exhibition.notopendate ? exhibition.notopendate : '없음'}</Text>
-                                                </View>
-                                            </View>
                                             <View style={[{marginTop: 25}]}>
-                                                <HTML html={exhibition.content} imagesMaxWidth={width} />
+                                                <HTML html={artwork.content} imagesMaxWidth={width} />
                                             </View>
                                         </View>
                                     :
@@ -407,4 +382,4 @@ class ExhibitionContentScreen extends React.Component {
     }
 }
 
-export default ExhibitionContentScreen;
+export default ArtworkContentScreen;

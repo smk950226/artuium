@@ -143,7 +143,7 @@ class ArtuiumCard5 extends Component{
                     <Text style={[styles.fontRegular, styles.font13, styles.mt20, styles.px25]}>
                         {review.content}
                     </Text>
-                    <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentEnd, styles.mt15]}>
+                    <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentEnd, styles.mt15, styles.px25]}>
                         <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment.png')} />
                         <Text style={[styles.fontRegular, styles.font8, {color: '#d1d1d1', marginLeft: 4}]}>{abbreviateNumber(reply_count)}</Text>
                         <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>

@@ -79,7 +79,7 @@ class ArtworkDetailScreen extends Component{
                                             <Text style={[styles.fontMedium, styles.font18, styles.gray8B]}>관련 전시</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
-                                    <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ExhibitionContent')}>
+                                    <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ArtworkContent', { artwork })}>
                                         <View style={[styles.upBtn, {marginTop: 40}]}>
                                             <Text style={[styles.white, styles.font40]}>^</Text>
                                         </View>
