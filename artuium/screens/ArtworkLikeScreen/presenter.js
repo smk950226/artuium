@@ -46,7 +46,7 @@ class ArtworkLikeScreen extends React.Component {
                     <ScrollView 
                     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={this.props.refresh} tintColor={'#000000'} />}
                     >
-                        <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>전시가 없습니다.</Text>
+                        <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>작품이 없습니다.</Text>
                     </ScrollView>
                 )}
             </View>
