@@ -28,10 +28,10 @@ class EditProfileScreen extends React.Component {
                     />
                     :
                     <View
-                        style={[{width, height: 210, backgroundColor: '#e0e0e0'}]} resizeMode={'cover'}
+                        style={[{width, height: 210, backgroundColor: '#e0e0e0'}]}
                     />
                     }
-                    <TouchableWithoutFeedback onPress={this.props.handleChangeBackgroundImg}>
+                    <TouchableWithoutFeedback onPress={()=>this.props.handleChangeBackgroundImg()}>
                         <View style={[styles.blueBtn, styles.my15]}>
                             <Text style={[styles.fontMedium, styles.font12, {color: '#044ae6'}]}>커버 사진 바꾸기</Text>
                         </View> 
@@ -39,8 +39,12 @@ class EditProfileScreen extends React.Component {
                 </View>
                 <View style={[styles.divGray]} />
                 <View style={[styles.center, {height: 150}]}>
+                    {this.props.profile.profile_image ?
                     <Image source={{uri: this.props.profile.profile_image}} style={[styles.profileImage70]} />
-                    <TouchableWithoutFeedback onPress={this.props.handleChangeProfileImg}>
+                    :
+                    <View style={[styles.profileImage70, {backgroundColor: '#e0e0e0'}]} />
+                    }
+                    <TouchableWithoutFeedback onPress={()=>this.props.handleChangeProfileImg()}>
                         <View style={[styles.blueBtn, styles.mt15]}>
                             <Text style={[styles.fontMedium, styles.font12, {color: '#044ae6'}]}>프로필 사진 바꾸기</Text>
                         </View> 
