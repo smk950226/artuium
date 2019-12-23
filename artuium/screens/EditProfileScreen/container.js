@@ -12,7 +12,7 @@ class Container extends Component{
     constructor(props){
         super(props);
         this.state = {
-            nickname: this.props.profile.nickname,
+            nickname: props.profile.nickname,
             nicknameForm: true,
             availableNickname: false,
             isCheckingNickname: false,
@@ -21,7 +21,7 @@ class Container extends Component{
     }
 
     componentDidMount(){
-        this.props.getProfile
+        this.props.getProfile()
     }
 
     _handleNicknameChange = (nickname) => {
@@ -33,7 +33,7 @@ class Container extends Component{
     
     _handleCheckNickname = async(nickname) => {
         let reg = /^[가-힣a-zA-Z0-9]{2,10}$/ ;
-        if(reg.test(nickname) === true){
+        if(reg.test(nickname)){
             await this.setState({
                 nicknameForm: true,
                 checkedNickname: true,

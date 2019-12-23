@@ -1,37 +1,17 @@
 {
+  "name": "artuium",
+  "displayName": "아틔움",
   "expo": {
-    "name": "아틔움",
-    "slug": "artuium",
-    "privacy": "public",
-    "sdkVersion": "35.0.0",
+    "name": "artuium",
+    "slug": "expo-template-bare",
+    "privacy": "unlisted",
+    "sdkVersion": "36.0.0",
+    "version": "1.0.0",
+    "entryPoint": "node_modules/expo/AppEntry.js",
     "platforms": [
       "ios",
       "android",
       "web"
-    ],
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "ios.build.artuium",
-      "buildNumber": "1.0.0"
-    },
-    "android": {
-      "package": "com.artuium.fov",
-      "versionCode": 1,
-      "icon": "./assets/images/icon.png"
-    }
+    ]
   }
 }

@@ -54,7 +54,7 @@ class Reply(models.Model):
     author = models.ForeignKey('users.User', on_delete = models.CASCADE, related_name = 'replies')
     time = models.DateTimeField('작성일', auto_now_add = True)
     content = models.TextField('내용')    
-    replies = models.ManyToManyField('self', blank = True, null = True)
+    replies = models.ManyToManyField('self', blank = True)
 
     def __str__(self):
         return  'reply-' + self.author.nickname

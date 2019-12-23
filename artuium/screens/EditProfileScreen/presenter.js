@@ -8,11 +8,6 @@ const iosStatusBarHeight = getStatusBarHeight()
 const { width, height } = Dimensions.get('window')
 
 class EditProfileScreen extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-        }
-    }
     render(){
         return(
             <View style={[styles.container, styles.bgGrayf0]}>
@@ -26,10 +21,16 @@ class EditProfileScreen extends React.Component {
                     </TouchableOpacity>
                 </View>
                 <View style={[styles.alignItemsCenter]}>
+                    {this.props.profile.background_image ? 
                     <Image
                         source={{uri: this.props.profile.background_image}}
                         style={[{width, height: 210}]} resizeMode={'cover'}
                     />
+                    :
+                    <View
+                        style={[{width, height: 210, backgroundColor: '#e0e0e0'}]} resizeMode={'cover'}
+                    />
+                    }
                     <TouchableWithoutFeedback onPress={this.props.handleChangeBackgroundImg}>
                         <View style={[styles.blueBtn, styles.my15]}>
                             <Text style={[styles.fontMedium, styles.font12, {color: '#044ae6'}]}>커버 사진 바꾸기</Text>
