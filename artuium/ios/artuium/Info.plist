@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>아틔움</string>
+	<string>artuium</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -37,28 +37,8 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Allow 아틔움 to access your calendar</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Allow 아틔움 to use the camera</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Allow 아틔움 experiences to access your contacts</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allow 아틔움 to use your location</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Allow 아틔움 to use your location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow 아틔움 to use your location</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow 아틔움 to access your microphone</string>
-	<key>NSMotionUsageDescription</key>
-	<string>Allow 아틔움 to access your device's accelerometer</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Give 아틔움 periences permission to save photos</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Give 아틔움 periences permission to access your photos</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>Allow 아틔움 to access your reminders</string>
+	<string></string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Fonts/NotoSansKR-Black.otf</string>
@@ -67,7 +47,6 @@
 		<string>Fonts/NotoSansKR-Medium.otf</string>
 		<string>Fonts/NotoSansKR-Regular.otf</string>
 		<string>Fonts/NotoSansKR-Thin.otf</string>
-		<string>Fonts/Ionicons.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

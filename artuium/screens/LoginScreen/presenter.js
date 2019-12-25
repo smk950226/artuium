@@ -359,11 +359,11 @@ class LoginScreen extends React.Component {
                             <Text style={[styles.font16, styles.fontMedium, styles.white]}>회원가입</Text>
                         </View>
                     </TouchableWithoutFeedback>
-                    {/* <TouchableWithoutFeedback onPress={()=>this.props.login('fov@artuium.com', 'fov959697')}>
+                    <TouchableWithoutFeedback onPress={()=>this.props.handleKakaoLogin()}>
                         <View>
                             <Image source={require('../../assets/images/login_kakao.png')} style={[styles.loginBtn]} resizeMode={'contain'} />
                         </View>
-                    </TouchableWithoutFeedback> */}
+                    </TouchableWithoutFeedback>
                 </View>
             </ImageBackground>
         )

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { View, Text, ScrollView, FlatList, RefreshControl, ActivityIndicator, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform, TextInput } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import { getStatusBarHeight } from 'react-native-status-bar-height';

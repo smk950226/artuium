@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { Alert } from 'react-native';
 import PropTypes from 'prop-types';
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
+import ImagePicker from 'react-native-image-picker';
+import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import EditProfileScreen from './presenter';
 
 function sleep(ms) {
@@ -90,25 +91,44 @@ class Container extends Component{
     }
 
 
-    _askPermissionsAsync = async () => {
-        const cameraRoll = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-
-        this.setState({
-            hasCameraRollPermission: cameraRoll.status === 'granted'
-        });
-    };
+    // _askPermissionsAsync = async () => {
+    //     check(PERMISSIONS.IOS.LOCATION_ALWAYS)
+    //     .then(result => {
+    //         switch (result) {
+    //         case RESULTS.UNAVAILABLE:
+    //             Alert.alert(null, '오류가 발생하였습니다.')
+    //             break;
+    //         case RESULTS.DENIED:
+    //             Alert.alert(null, '권한요청이 거절되었습니다.')
+    //             break;
+    //         case RESULTS.GRANTED:
+    //             this.setState({
+    //                 hasCameraRollPermission: 'granted'
+    //             });
+    //             break;
+    //         case RESULTS.BLOCKED:
+    //             Alert.alert(null, '권한요청이 차단되었습니다.')
+    //             break;
+    //         }
+    //     })
+    // };
 
     _handleChangeProfileImg = async() => {
         const options = {
             mediaTypes: 'Images'
         };
 
-        await this._askPermissionsAsync();
-        const result = await ImagePicker.launchImageLibraryAsync(options)
-        if(result.cancelled === false){
-            const source = { uri: result.uri, type: result.type };
+        // await this._askPermissionsAsync();
+        ImagePicker.launchImageLibrary(options, (response) => {
+            if (response.didCancel) {
+            console.log('User cancelled image picker');
+            } else if (response.error) {
+            console.log('ImagePicker Error: ', response.error);
+            } else {
+            const source = { uri: response.uri, type: response.type };
             this.props.changeProfileImg(source)
-        }
+            }
+        })
     }
 
     _handleChangeBackgroundImg = async() => {
@@ -116,12 +136,17 @@ class Container extends Component{
             mediaTypes: 'Images'
         };
 
-        await this._askPermissionsAsync();
-        const result = await ImagePicker.launchImageLibraryAsync(options)
-        if(result.cancelled === false){
-            const source = { uri: result.uri, type: result.type };
+        // await this._askPermissionsAsync();
+        ImagePicker.launchImageLibrary(options, (response) => {
+            if (response.didCancel) {
+            console.log('User cancelled image picker');
+            } else if (response.error) {
+            console.log('ImagePicker Error: ', response.error);
+            } else {
+            const source = { uri: response.uri, type: response.type };
             this.props.changeBackgroundImg(source)
-        }
+            }
+        })
     }
 
     render(){

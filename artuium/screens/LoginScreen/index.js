@@ -29,6 +29,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         checkEmail: (email) => {
             return dispatch(userActions.checkEmail(email))
+        },
+        kakaoLogin: (accessToken) => {
+            return dispatch(userActions.kakaoLogin(accessToken))
+        },
+        logout: () => {
+            dispatch(userActions.getLogout());
         }
     }
 }

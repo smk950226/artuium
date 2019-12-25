@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">아틔움</string>
+    <string name="app_name">artuium</string>
+    <string name="kakao_app_key">2481b981f3b743556ed1554643725acf</string>
 </resources>

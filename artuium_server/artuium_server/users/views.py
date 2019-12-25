@@ -5,6 +5,8 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
+from rest_auth.registration.views import SocialLoginView
 
 from . import models, serializers
 from artuium_server.statics import models as statics_models
@@ -184,3 +186,6 @@ class ChangeNickname(APIView):
         serializer = serializers.ProfileSerializer(user, context = {'request': request})
 
         return Response(status = status.HTTP_200_OK, data = serializer.data)
+
+class KakaoLogin(SocialLoginView):
+    adapter_class = KakaoOAuth2Adapter

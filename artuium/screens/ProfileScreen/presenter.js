@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, ImageBackground, Image, ScrollView, Animated, Dimensions, TouchableOpacity, TouchableWithoutFeedback, Modal, ActivityIndicator, FlatList, RefreshControl } from 'react-native';
 import PropTypes from 'prop-types';
-import { LinearGradient } from 'expo-linear-gradient';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import styles from '../../styles';
 import NoticeScreen from '../../screens/NoticeScreen';

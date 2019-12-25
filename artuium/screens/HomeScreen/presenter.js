@@ -286,6 +286,9 @@ class HomeScreen extends Component {
                 {changedScrollView ? (
                     <ScrollView>
                         <Animated.ScrollView scrollEventThrottle={16} horizontal={true} pagingEnabled={true} style={[styles.bgWhite, {width, height: height - 500, zIndex: 99, position: 'absolute', top: 0}, {transform: [{ translateY: this.state.containerPosition.y },{ scale: 1.0 }]}]} >
+                            <TouchableOpacity style={[styles.profileBtn, {height: '100%', width}]} onPress={()=>this.props.logout()}>
+                                <Text style={[styles.fontMedium, styles.font15, {color: '#a8a8a8'}]}>로그아웃</Text>
+                            </TouchableOpacity>
                             <Image resizeMode={'cover'} source={require('../../assets/images/mona.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
                             <Image resizeMode={'cover'} source={require('../../assets/images/monc.jpg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
                             <Image resizeMode={'cover'} source={require('../../assets/images/goh.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />

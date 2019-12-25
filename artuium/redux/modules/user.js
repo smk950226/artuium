@@ -619,6 +619,36 @@ function changeBackgroundImg(backgroundImg){
     }
 }
 
+function kakaoLogin(accessToken, nickname, profileImgUri){
+    return async (dispatch) => {
+        if(accessToken){
+            fetch(`${FETCH_URL}/api/users/login/kakao/`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    access_token: accessToken,
+                    nickname,
+                    profile_image: profileImgUri
+                })
+            })
+            .then(response => {
+                return response.json()
+            })
+            .then(json => {
+                if(json.token && json.user){
+                    dispatch(saveToken(json.token));
+                    return true
+                }
+                else{
+                    return false
+                }
+            })
+        }
+   };
+}
+
 const initialState = {
     isLoggedIn: false,
     token: null,
@@ -698,6 +728,7 @@ const actionCreators = {
     changeNickname,
     changeProfileImg,
     changeBackgroundImg,
+    kakaoLogin,
 }
 
 export { actionCreators }

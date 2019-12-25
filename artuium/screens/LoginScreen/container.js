@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Alert } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
+import ImagePicker from 'react-native-image-picker';
+import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import PropTypes from 'prop-types';
 import LoginScreen from './presenter';
+import RNKakao from 'rn-kakao-login';
 
 class Container extends Component{
     static propTypes = {
@@ -38,6 +39,12 @@ class Container extends Component{
         fetchClear: false,
         agreeTerm: false,
         showTerm: false
+    }
+
+    _handleKakaoLogin = async() => {
+        const { accessToken, nickName, profileImage } = await RNKakao.login()
+        console.log('토큰 확인', accessToken, nickName, profileImage)
+        this.props.kakaoLogin(accessToken, nickName, profileImage)
     }
 
     _handleLoginIdChange = async(loginId) => {
@@ -235,27 +242,32 @@ class Container extends Component{
         }
     }
 
-    _askPermissionsAsync = async() => {
-        const cameraRoll = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    // _askPermissionsAsync = async() => {
+    //     const cameraRoll = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
-        this.setState({
-            hasCameraRollPermission: cameraRoll.status === 'granted'
-        });
-    };
+    //     this.setState({
+    //         hasCameraRollPermission: cameraRoll.status === 'granted'
+    //     });
+    // };
 
     _handleChangeProfileImg = async() => {
         const options = {
             mediaTypes: 'Images'
         };
 
-        await this._askPermissionsAsync();
-        const result = await ImagePicker.launchImageLibraryAsync(options)
-        if(result.cancelled === false){
-            const source = { uri: result.uri, type: result.type };
+        // await this._askPermissionsAsync();
+        ImagePicker.launchImageLibrary(options, (response) => {
+            if (response.didCancel) {
+            console.log('User cancelled image picker');
+            } else if (response.error) {
+            console.log('ImagePicker Error: ', response.error);
+            } else {
+            const source = { uri: response.uri, type: response.type };
             this.setState({
                 profileImg: source
             })
-        }
+            }
+        })
     }
 
     _handleSignup = async() => {
@@ -442,6 +454,7 @@ class Container extends Component{
             handleCheckNickname={this._handleCheckNickname}
             handleChangeAgreeTerm={this._handleChangeAgreeTerm}
             handleChangeShowTerm={this._handleChangeShowTerm}
+            handleKakaoLogin={this._handleKakaoLogin}
             />
         )
     }
