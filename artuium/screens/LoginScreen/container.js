@@ -87,7 +87,7 @@ class Container extends Component{
         const { nickname, profileImg, savedToken } = this.state;
         await this.props.addInfo(savedToken, nickname, profileImg)
         await this.props.getProfileByToken(savedToken)
-        await getSaveToken(savedToken)
+        await this.props.getSaveToken(savedToken)
     }
 
     _openAddInfo = () => {

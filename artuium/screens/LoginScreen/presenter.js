@@ -135,7 +135,7 @@ class LoginScreen extends React.Component {
                                 <View style={[styles.row, styles.justifyContentBetween, styles.px5, styles.alignItemsCenter, {height: 40}]}>
                                     <View style={[styles.row, styles.pl5, styles.alignItemsCenter, {width: '100%', height: 40, borderBottomWidth: 1, borderBottomColor: '#b2b2b2'}]}>
                                         <TextInput
-                                            style={[styles.font14, styles.fontMedium, {height: 20, width: '80%'}]}
+                                            style={[styles.font14, {height: 43, width: '80%'}]}
                                             placeholder={'닉네임을 입력해주세요'}
                                             autoCapitalize={'none'} 
                                             autoCorrect={false} 

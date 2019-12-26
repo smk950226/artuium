@@ -19,7 +19,11 @@ const ExhibitionCard = (props) => (
                         <Text style={[styles.fontRegular, styles.font8, {color: '#909090', marginLeft: 4}]}>{props.review_count}</Text>
                         <TouchableWithoutFeedback onPress={props.is_liked ? props.unlike : props.like}>
                             <View style={[styles.row, styles.alignItemsCenter]}>
-                                <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+                                {props.is_liked ? (
+                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like_active.png')} />
+                                ) : (
+                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+                                )}
                                 <Text style={[styles.fontRegular, styles.font8, {color: '#909090', marginLeft: 4}]}>{props.like_count}</Text>
                             </View>
                         </TouchableWithoutFeedback>

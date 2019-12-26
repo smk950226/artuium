@@ -50,21 +50,21 @@ class ExhibitionDetailScreen extends Component{
                                 </View>
                             </View>
                         </TouchableWithoutFeedback>
-                        <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]}>
+                        <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_exhibition.png')}>
                             <View>
                                 <View style={[styles.center]}>
                                     <Image source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : null : null}} style={{width: 360, height: 240}} resizeMode={'cover'} />
                                 </View>
                                 <View style={[styles.alignItemsCenter, {marginTop: 60}]}>
                                     <View style={[styles.row, styles.mt10, styles.alignItemsCenter]}>
-                                        <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment.png')} />
+                                        <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment_white.png')} />
                                         <Text style={[styles.fontRegular, styles.font8, {color: '#909090', marginLeft: 4}]}>{abbreviateNumber(review_count)}</Text>
                                         <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
                                             <View style={[styles.row, styles.alignItemsCenter]}>
                                                 {is_liked ? (
-                                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+                                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like_active.png')} />
                                                 ) : (
-                                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+                                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like_white.png')} />
                                                 )}
                                                 <Text style={[styles.fontRegular, styles.font8, {color: '#909090', marginLeft: 4}]}>{abbreviateNumber(like_count)}</Text>
                                             </View>
@@ -80,8 +80,8 @@ class ExhibitionDetailScreen extends Component{
                                         </View>
                                     </TouchableWithoutFeedback>
                                     <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ExhibitionContent', { exhibition })}>
-                                        <View style={[styles.upBtn, {marginTop: 40}]}>
-                                            <Text style={[styles.white, styles.font40]}>^</Text>
+                                        <View style={[{marginTop: 40}]}>
+                                            <Image source={require('../../assets/images/arrow_up_exhibition.png')} style={[styles.upBtn]}/>
                                         </View>
                                     </TouchableWithoutFeedback>
                                 </View>

@@ -180,7 +180,12 @@ class ArtuiumCard extends Component{
                                         <Text style={[styles.fontMedium, styles.font10, styles.grayD1]}>{abbreviateNumber(reply_count)}</Text>
                                         <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
                                             <View style={[styles.row, styles.alignItemsCenter]}>
-                                                <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon12, styles.ml10]} />
+                                                {is_liked ? (
+                                                    <Image source={require('../../assets/images/icon_like_active.png')} style={[styles.icon12, styles.ml10]} />
+
+                                                ) : (
+                                                    <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon12, styles.ml10]} />
+                                                )}
                                                 <Text style={[styles.fontMedium, styles.font10, styles.grayD1]}>{abbreviateNumber(like_count)}</Text>
                                             </View>
                                         </TouchableWithoutFeedback>
@@ -249,7 +254,11 @@ class ArtuiumCard extends Component{
                                     <Text style={[styles.fontMedium, styles.font15, styles.grayD1, styles.ml5]}>{abbreviateNumber(reply_count)}</Text>
                                     <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
                                         <View style={[styles.row, styles.alignItemsCenter]}>
-                                            <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon30, styles.ml20]} />
+                                            {is_liked ? (
+                                                <Image source={require('../../assets/images/icon_like_active.png')} style={[styles.icon30, styles.ml20]} />
+                                            ) : (
+                                                <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon30, styles.ml20]} />
+                                            )}
                                             <Text style={[styles.fontMedium, styles.font15, styles.grayD1, styles.ml5]}>{abbreviateNumber(like_count)}</Text>
                                         </View>
                                     </TouchableWithoutFeedback>

@@ -89,7 +89,7 @@ class ArtuiumCard4 extends Component{
                             <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
                                 <View style={[styles.row, styles.alignItemsCenter]}>
                                     {is_liked ? (
-                                        <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+                                        <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like_active.png')} />
                                     ) : (
                                         <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
 
@@ -105,8 +105,8 @@ class ArtuiumCard4 extends Component{
                     </View>
                 </View>
                 <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ArtworkContent', { artwork })}>
-                    <View style={[styles.upBtn, {position: 'absolute', bottom: height*0.1}]}>
-                        <Text style={[styles.white, styles.font40]}>^</Text>
+                    <View style={[{position: 'absolute', bottom: height*0.1}]}>
+                        <Image source={require('../../assets/images/arrow_up_exhibition.png')} style={[styles.upBtn]}/>
                     </View>
                 </TouchableWithoutFeedback>
             </View>

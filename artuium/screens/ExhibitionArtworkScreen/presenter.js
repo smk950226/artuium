@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, ScrollView, Platform, SafeAreaView, ImageBackground, Dimensions, TouchableWithoutFeedback, Animated } from 'react-native';
+import { View, Text, ScrollView, Image, SafeAreaView, ImageBackground, Dimensions, TouchableWithoutFeedback, Animated } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import { getStatusBarHeight } from "react-native-status-bar-height";
@@ -47,8 +47,8 @@ class ExhibitionArtworkScreen extends Component{
                     <Fragment>
                         <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.widthFull, styles.px15, {height: 40, position: 'absolute', top: iosStatusBarHeight + 15}]}>
                             <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ExhibitionDetail', { exhibition })}>
-                                <View style={[styles.row, styles.alignItemsCenter]}>
-                                    <Text style={[styles.fontBlack, styles.font17, styles.gray8B]}>{`<`}</Text>
+                                <View style={[styles.row, styles.alignItemsCenter, {zIndex: 10}]}>
+                                    <Image source={require('../../assets/images/icon_back_gray.png')} style={[{width: 26, height: 26}]} />
                                     <Text style={[styles.fontBlack, styles.font17, styles.gray8B, styles.ml5]}>{exhibition.name}</Text>
                                 </View>
                             </TouchableWithoutFeedback>

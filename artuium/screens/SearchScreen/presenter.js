@@ -21,12 +21,12 @@ const SearchScreen = (props) => (
     <View style={[styles.container]}>
         <View style={[{height:50, marginTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
             <TouchableWithoutFeedback onPress={() => props.navigation.goBack(null)}>
-                <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9, height: 17}]} />
+                <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
             </TouchableWithoutFeedback>
             <Text style={[styles.fontBold, styles.font18]}>통합 검색</Text>
             <TouchableWithoutFeedback>
                 <View style={[styles.hidden]}>
-                    <Image source={require('../../assets/images/search.png')} style={[{width: 17, height: 17}]} />
+                    <Image source={require('../../assets/images/search.png')} style={[{width: 17*1.6, height: 17*1.6}]} />
                 </View>
             </TouchableWithoutFeedback>
         </View>
@@ -47,12 +47,12 @@ const SearchScreen = (props) => (
             <View style={[{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1}, styles.bgBlack07]}>
                 <View style={[{height:50, marginTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb, styles.hidden]}>
                     <TouchableWithoutFeedback>
-                        <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9, height: 17}]} />
+                        <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
                     </TouchableWithoutFeedback>
                     <Text style={[styles.fontBold, styles.font18]}>통합 검색</Text>
                     <TouchableWithoutFeedback>
                         <View style={[styles.hidden]}>
-                            <Image source={require('../../assets/images/search.png')} style={[{width: 17, height: 17}]} />
+                            <Image source={require('../../assets/images/search.png')} style={[{width: 17*1.6, height: 17*1.6}]} />
                         </View>
                     </TouchableWithoutFeedback>
                 </View>
