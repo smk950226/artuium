@@ -993,7 +993,7 @@ const styles = StyleSheet.create({
     },
     profileBox: {
         width: '100%',
-        height: 120,
+        height: 110,
         borderRadius: 10,
         backgroundColor: '#fff',
         paddingVertical: 20

@@ -122,18 +122,20 @@ class ProfileScreen extends React.Component {
                             )}
                         </ImageBackground>
                     ) : (
-                        <View
-                            style={[styles.paddingIOS, styles.px15, styles.justifyContentEnd, styles.bgGrayF8, styles.pb15, {height: 210}]}
+                        <ImageBackground
+                            source={require('../../assets/images/empty_bg.png')}
+                            style={[styles.paddingIOS, styles.px15, styles.justifyContentEnd, styles.pb15, {height: 210}]}
+                            resizeMode={'cover'}
                         >
                             {profile.profile_image ? (
                                 <Image source={{uri: profile.profile_image}} style={[styles.profileImage70]} />
                             ) : (
                                 <View style={[styles.profileImage70, styles.bgGrayC9]} />
                             )}
-                        </View>
+                        </ImageBackground>
                     )}
                     
-                    <View style={[styles.px15, {paddingBottom: 35}]}>
+                    <ImageBackground source={require('../../assets/images/gradient.png')} style={[styles.px15, {paddingBottom: 70}]}>
                         <View style={[styles.row, styles.pt20, styles.px5, styles.justifyContentBetween]}>
                             <Text style={[styles.fontBold, styles.font25]}>{profile.nickname}</Text>
                             <View style={[styles.row]}>
@@ -167,7 +169,7 @@ class ProfileScreen extends React.Component {
                                 </View>
                             </View>
                         </TouchableWithoutFeedback>
-                    </View>
+                    </ImageBackground>
                     {loadingReviewList ? (
                         <View style={[styles.mt20, styles.alignItemsCenter, styles.justifyContentCenter]}>
                             <ActivityIndicator size={'small'} color={'#000'} />
