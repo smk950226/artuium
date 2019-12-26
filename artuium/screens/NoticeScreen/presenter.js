@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, FlatList, RefreshControl, ScrollView, ActivityIndicator, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
-import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import Notice from '../../components/Notice';
 
 const { width, height } = Dimensions.get('window')
@@ -47,4 +46,4 @@ NoticeScreen.propTypes = {
     handleNoticeNewChange: PropTypes.func.isRequired
 }
 
-export default gestureHandlerRootHOC(NoticeScreen);
+export default NoticeScreen

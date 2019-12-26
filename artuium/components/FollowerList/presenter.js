@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, FlatList, RefreshControl, ScrollView, ActivityIndicator, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
-import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import UserComp from '..//UserComp';
 
 const { width, height } = Dimensions.get('window')
@@ -46,4 +45,4 @@ FollowerList.propTypes = {
     refresh: PropTypes.func.isRequired
 }
 
-export default gestureHandlerRootHOC(FollowerList);
+export default FollowerList

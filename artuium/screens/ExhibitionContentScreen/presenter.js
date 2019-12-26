@@ -407,4 +407,4 @@ class ExhibitionContentScreen extends React.Component {
     }
 }
 
-export default ExhibitionContentScreen;
+export default ExhibitionContentScreen

@@ -382,4 +382,4 @@ class ArtworkContentScreen extends React.Component {
     }
 }
 
-export default ArtworkContentScreen;
+export default ArtworkContentScreen
