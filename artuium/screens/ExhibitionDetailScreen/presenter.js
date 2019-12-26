@@ -70,7 +70,7 @@ class ExhibitionDetailScreen extends Component{
                                             </View>
                                         </TouchableWithoutFeedback>
                                     </View>
-                                    <View style={[styles.flexWrap, {width: 200}]}>
+                                    <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.flexWrap, {width: 200}]}>
                                         <Text style={[styles.fontBold, styles.font30, styles.textCenter]}>{exhibition.name}</Text>
                                     </View>
                                     <Text style={[styles.fontMedium, styles.font14]}>{exhibition.gallery.name}, {`${exhibition.open_date.slice(0,4)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} ~ ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>

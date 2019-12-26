@@ -98,7 +98,7 @@ class ArtuiumCard4 extends Component{
                                 </View>
                             </TouchableWithoutFeedback>
                         </View>
-                        <View style={[styles.flexWrap, {width: 200}]}>
+                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.flexWrap, {width: 200}]}>
                             <Text style={[styles.fontBold, styles.font30, styles.textCenter]}>{artwork.name}</Text>
                         </View>
                         <Text style={[styles.fontMedium, styles.font14, { marginBottom: 150 }]}>{artwork.author.name}, {`${artwork.created.slice(0,4)}.${artwork.created.slice(5,7)}.${artwork.created.slice(8,10)}`}, {artwork.material}</Text>

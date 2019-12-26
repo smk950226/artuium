@@ -81,8 +81,8 @@ class ArtworkContentScreen extends React.Component {
 
     render(){
         const { artwork, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview } = this.props;
-        return(
-            artwork ? (
+        if(artwork){
+            return(
                 <View style={[styles.container]}>
                     <View style={[styles.alignItemsCenter, styles.px15, {height: 40, flexDirection: 'row-reverse', position: 'absolute', top: iosStatusBarHeight + 15, right: 0, zIndex: 99}]}>
                         <TouchableWithoutFeedback onPress={()=>this.props.navigation.goBack()}>
@@ -93,30 +93,30 @@ class ArtworkContentScreen extends React.Component {
                     </View>
                     <ScrollView style={[styles.flex1]} bounces={false} showsVerticalScrollIndicator={false} ref={'scrollView'}>
                         <ImageBackground resizeMode={'cover'} source={{uri: artwork.image}} style={[Platform.OS === 'ios' ? styles.paddingIOS : null, styles.justifyContentEnd, {height: height*0.5}]}>
-                            <LinearGradient
+                            <View
                                 colors={['#00000000', '#000000']}
                                 style={[styles.pl30, styles.pb30, styles.justifyContentEnd, {height: height*0.3}]}
                             >
-                                <View style={[styles.row, styles.mt10, styles.alignItemsCenter]}>
-                                    <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment.png')} />
-                                    <Text style={[styles.fontRegular, styles.font8, {color: '#fff', marginLeft: 4}]}>{abbreviateNumber(review_count)}</Text>
-                                    <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
-                                        <View style={[styles.row, styles.alignItemsCenter]}>
-                                            {is_liked ? (
-                                                <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
-                                            ) : (
-                                                <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+                                    <View style={[styles.row, styles.mt10, styles.alignItemsCenter]}>
+                                        <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment.png')} />
+                                        <Text style={[styles.fontRegular, styles.font8, {color: '#fff', marginLeft: 4}]}>{abbreviateNumber(review_count)}</Text>
+                                        <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
+                                            <View style={[styles.row, styles.alignItemsCenter]}>
+                                                {is_liked ? (
+                                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+                                                ) : (
+                                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
 
-                                            )}
-                                            <Text style={[styles.fontRegular, styles.font8, {color: '#fff', marginLeft: 4}]}>{abbreviateNumber(like_count)}</Text>
-                                        </View>
-                                    </TouchableWithoutFeedback>
-                                </View>
-                                <View style={[styles.flexWrap, {width: 200}]}>
-                                    <Text style={[styles.fontBold, styles.font30, styles.white]}>{artwork.name}</Text>
-                                </View>
-                                <Text style={[styles.fontMedium, styles.font14, styles.white]}>{artwork.author.name}, {`${artwork.created.slice(8,10)}.${artwork.created.slice(5,7)}.${artwork.created.slice(8,10)}`}, {artwork.material}</Text>
-                            </LinearGradient>
+                                                )}
+                                                <Text style={[styles.fontRegular, styles.font8, {color: '#fff', marginLeft: 4}]}>{abbreviateNumber(like_count)}</Text>
+                                            </View>
+                                        </TouchableWithoutFeedback>
+                                    </View>
+                                    <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.flexWrap, {width: 200}]}>
+                                        <Text style={[styles.fontBold, styles.font30, styles.white]}>{artwork.name}</Text>
+                                    </View>
+                                    <Text style={[styles.fontMedium, styles.font14, styles.white]}>{artwork.author.name}, {`${artwork.created.slice(8,10)}.${artwork.created.slice(5,7)}.${artwork.created.slice(8,10)}`}, {artwork.material}</Text>
+                            </View>
                         </ImageBackground>
                         <View style={[styles.bgBlack, styles.px10, styles.pb10, styles.heightFull]}>
                             <View style={[styles.bgWhite, styles.widthFull, {paddingBottom: 40, borderRadius: 5}]}>
@@ -339,7 +339,7 @@ class ArtworkContentScreen extends React.Component {
                                                     </View>
                                                     <View style={[styles.widthFull, {height: 300, borderWidth: 1, borderColor: '#e8e8e8'}]}>
                                                         <TextInput
-                                                            style={[styles.font15, styles.fontRegular, styles.widthFull, styles.px25, styles.py10, styles.widthFull, {height: 300}]}
+                                                            style={[styles.font15, styles.widthFull, styles.px25, styles.py10, styles.widthFull, {height: 300}]}
                                                             placeholder={'내용을 입력하세요.'}
                                                             autoCapitalize={'none'} 
                                                             autoCorrect={false} 
@@ -349,6 +349,7 @@ class ArtworkContentScreen extends React.Component {
                                                             placeholderTextColor={'#000000'}
                                                             multiline={true}
                                                             maxLength={500}
+                                                            textAlignVertical={'top'}
                                                         />
                                                         <Text style={[styles.fontMedium, styles.font14, { position: 'absolute', bottom: 15, right: 25 }]}>{content.length}<Text style={[styles.grayD1]}>/500자</Text></Text>
                                                     </View>
@@ -371,14 +372,17 @@ class ArtworkContentScreen extends React.Component {
                         </View>
                     </ScrollView>
                 </View>
-            ) : (
+            )
+        }
+        else{
+            return(
                 <View style={[styles.container, styles.center]}>
                     <Text style={[styles.fontMedium, styles.font16]}>
                         잘못된 요청입니다.
                     </Text>
                 </View>
             )
-        )
+        }
     }
 }
 

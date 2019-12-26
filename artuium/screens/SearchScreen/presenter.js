@@ -32,7 +32,7 @@ const SearchScreen = (props) => (
         </View>
         <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px15, styles.py10, styles.bgGrayF4]}>
             <TouchableWithoutFeedback onPress={props.onFocus}>
-                    <View style={[styles.bgWhite, styles.borderRadius5, styles.pl20, styles.width90, styles.justifyContentCenter, {zIndex: 9, height: 40}]} >
+                    <View style={[styles.bgWhite, styles.borderRadius5, styles.pl20, styles.width90, styles.justifyContentCenter, {zIndex: 9, height: 43}]} >
                         <Text style={[styles.fontMedium, styles.font17]}>{props.q}</Text>
                     </View>
             </TouchableWithoutFeedback>
@@ -56,9 +56,9 @@ const SearchScreen = (props) => (
                         </View>
                     </TouchableWithoutFeedback>
                 </View>
-                <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px15, styles.py10, styles.bgTransparent]}>
+                <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px15, styles.py10, styles.bgTransparent, {zIndex: 9}]}>
                     <TextInput 
-                    style={[styles.bgWhite, styles.borderRadius5, styles.fontMedium, styles.font17, styles.pl20, styles.width90, styles.justifyContentCenter, {zIndex: 9, height: 40, allowFontScaling}]} 
+                    style={[styles.bgWhite, styles.borderRadius5, styles.font14, styles.pl20, styles.width90, styles.justifyContentCenter, {zIndex: 9, height: 43}]} 
                     underlineColorAndroid={'transparent'} 
                     autoCapitalize={'none'} 
                     autoCorrect={false} 
@@ -67,7 +67,7 @@ const SearchScreen = (props) => (
                     returnKeyType={'send'} 
                     onFocus={props.onFocus}
                     onBlur={props.onBlur}
-                    allowFontScaling={false}
+                    autoFocus={true}
                     />
                     <TouchableWithoutFeedback onPress={props.onBlur}>
                         <View style={[{zIndex: 9}]}>
