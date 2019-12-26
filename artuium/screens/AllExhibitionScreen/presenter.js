@@ -97,12 +97,12 @@ const AllExhibitionScreen = (props) => (
         <View style={[styles.container]}>
             <View style={[{height:50, marginTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
                 <TouchableWithoutFeedback onPress={() => props.navigation.goBack(null)}>
-                    <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9, height: 17}]} />
+                    <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
                 </TouchableWithoutFeedback>
                 <Text style={[styles.fontBold, styles.font18]}>전체 전시</Text>
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => props.navigation.navigate('Search')}>
                     <View>
-                        <Image source={require('../../assets/images/search.png')} style={[{width: 17, height: 17}]} />
+                        <Image source={require('../../assets/images/search.png')} style={[{width: 17*1.6, height: 17*1.6}]} />
                     </View>
                 </TouchableWithoutFeedback>
             </View>
@@ -110,17 +110,20 @@ const AllExhibitionScreen = (props) => (
                 <View style={[styles.row, styles.alignItemsCenter]}>
                     <TouchableWithoutFeedback onPress={props.openPeriodModal}>
                         <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.borderRadius5, styles.px5, styles.py5, styles.mr10, props.period.value ? styles.bgGrayF8 : styles.bgLightBlue]}>
-                            <Text style={[styles.fontBold, styles.font16]}>기간 V</Text>
+                            <Text style={[styles.fontBold, styles.font14]}>기간</Text>
+                            <Image source={require('../../assets/images/arrow_down.png')} style={{width: 24, height: 24}} />
                         </View>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={props.openScaleModal}>
                         <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.borderRadius5, styles.px5, styles.py5, styles.mr10, props.scale.value ? styles.bgGrayF8 : styles.bgLightBlue]}>
-                            <Text style={[styles.fontBold, styles.font16]}>규모 V</Text>
+                            <Text style={[styles.fontBold, styles.font14]}>규모</Text>
+                            <Image source={require('../../assets/images/arrow_down.png')} style={{width: 24, height: 24}} />
                         </View>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={props.openRegionModal}>
                         <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.borderRadius5, styles.px5, styles.py5, props.region.value ? styles.bgGrayF8 : styles.bgLightBlue]}>
-                            <Text style={[styles.fontBold, styles.font16]}>지역 V</Text>
+                            <Text style={[styles.fontBold, styles.font14]}>지역</Text>
+                            <Image source={require('../../assets/images/arrow_down.png')} style={{width: 24, height: 24}} />
                         </View>
                     </TouchableWithoutFeedback>
                 </View>
@@ -135,21 +138,21 @@ const AllExhibitionScreen = (props) => (
                     {(props.period.value) && (
                         <TouchableWithoutFeedback onPress={() => props.handlePeriodChange({})}>
                             <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.borderRadiusRound, styles.bgBlue, styles.px10, styles.py5, styles.mr5]}>
-                                <Text style={[styles.fontBold, styles.font16, styles.white]}>{`${props.period.label} X`}</Text>
+                                <Text style={[styles.fontBold, styles.font14, styles.white]}>{`${props.period.label} X`}</Text>
                             </View>
                         </TouchableWithoutFeedback>
                     )}
                     {(props.scale.value) && (
                         <TouchableWithoutFeedback onPress={() => props.handleScaleChange({})}>
                             <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.borderRadiusRound, styles.bgBlue, styles.px10, styles.py5, styles.mr5]}>
-                                <Text style={[styles.fontBold, styles.font16, styles.white]}>{`${props.scale.label} X`}</Text>
+                                <Text style={[styles.fontBold, styles.font14, styles.white]}>{`${props.scale.label} X`}</Text>
                             </View>
                         </TouchableWithoutFeedback>
                     )}
                     {(props.region.value) && (
                         <TouchableWithoutFeedback onPress={() => props.handleRegionChange({})}>
                             <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.borderRadiusRound, styles.bgBlue, styles.px10, styles.py5, styles.mr5]}>
-                                <Text style={[styles.fontBold, styles.font16, styles.white]}>{`${props.region.label} X`}</Text>
+                                <Text style={[styles.fontBold, styles.font14, styles.white]}>{`${props.region.label} X`}</Text>
                             </View>
                         </TouchableWithoutFeedback>
                     )}

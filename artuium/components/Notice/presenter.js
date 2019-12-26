@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TouchableWithoutFeedback, Image } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 
@@ -21,7 +21,11 @@ const Notice = (props) => (
                 <TouchableWithoutFeedback onPress={props.expand ? props.closeExpand : props.openExpand}>
                     <View style={[styles.flex1]}>
                         <Text style={[styles.fontBlack, styles.font16]}>
-                            {props.expand ? 'A' : 'V'}
+                            {props.expand ? (
+                                <Image source={require('../../assets/images/arrow_up.png')} style={[{width: 40, height: 40}]} />
+                            ) : (
+                                <Image source={require('../../assets/images/arrow_down.png')} style={[{width: 40, height: 40}]} />
+                            )}
                         </Text>
                     </View>
                 </TouchableWithoutFeedback>

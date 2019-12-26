@@ -66,7 +66,7 @@ class ExhibitionScreen extends React.Component {
                 ]}>
                     <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
                         <View>
-                            <Image style={{width: 24, height: 24, zIndex: 999}} source={require('../../assets/images/notification.png')} />
+                            <Image style={{width: 38.4, height: 38.4, zIndex: 999}} source={require('../../assets/images/notification.png')} />
                             {noticeNew && (
                                 <View style={[styles.bgRed, styles.circle6, {position: 'absolute', top: 0, right: 0}]} />
                             )}
@@ -74,7 +74,7 @@ class ExhibitionScreen extends React.Component {
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Search')}>
                         <View>
-                            <Image style={{width: 24, height: 24, zIndex: 999}} source={require('../../assets/images/search.png')} />
+                            <Image style={{width: 38.4, height: 38.4, zIndex: 999}} source={require('../../assets/images/search.png')} />
                         </View>
                     </TouchableWithoutFeedback>
                 </View>

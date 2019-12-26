@@ -34,12 +34,12 @@ const AllExhibitionReviewScreen = (props) => (
     <View style={[styles.container]}>
         <View style={[{height:50, marginTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
             <TouchableWithoutFeedback onPress={() => props.navigation.goBack(null)}>
-                <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9, height: 17}]} />
+                <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
             </TouchableWithoutFeedback>
             <Text style={[styles.fontBold, styles.font18]}>전시 감상 전체</Text>
             <TouchableWithoutFeedback onPress={props.openFilterModal}>
                 <View>
-                    <Image source={require('../../assets/images/icon_sort.png')} style={[{width: 20, height: 17}]} />
+                    <Image source={require('../../assets/images/icon_sort.png')} style={[{width: 20*1.6, height: 17*1.6}]} />
                 </View>
             </TouchableWithoutFeedback>
         </View>

@@ -98,14 +98,14 @@ class ExhibitionContentScreen extends React.Component {
                                 style={[styles.pl30, styles.pb30, styles.justifyContentEnd, {height: height*0.3}]}
                             >
                                 <View style={[styles.row, styles.mt10, styles.alignItemsCenter]}>
-                                    <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment.png')} />
+                                    <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment_white.png')} />
                                     <Text style={[styles.fontRegular, styles.font8, {color: '#fff', marginLeft: 4}]}>{abbreviateNumber(review_count)}</Text>
                                     <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
                                         <View style={[styles.row, styles.alignItemsCenter]}>
                                             {is_liked ? (
-                                                <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+                                                <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like_active.png')} />
                                             ) : (
-                                                <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+                                                <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like_white.png')} />
 
                                             )}
                                             <Text style={[styles.fontRegular, styles.font8, {color: '#fff', marginLeft: 4}]}>{abbreviateNumber(like_count)}</Text>
@@ -131,8 +131,8 @@ class ExhibitionContentScreen extends React.Component {
                                         </View>
                                     </TouchableWithoutFeedback>
                                     <TouchableWithoutFeedback style={[styles.flex1]} onPress={()=>this.props.navigation.navigate('ExhibitionDetail', { exhibition })}>   
-                                        <View style={[styles.upBtn]}>
-                                            <Text style={[styles.white, styles.font40]}>V</Text>
+                                        <View >
+                                            <Image source={require('../../assets/images/arrow_down_exhibition.png')} style={[styles.upBtn]}/>
                                         </View>
                                     </TouchableWithoutFeedback>
                                     <TouchableWithoutFeedback
@@ -271,7 +271,7 @@ class ExhibitionContentScreen extends React.Component {
                                                                 ) : (
                                                                     <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('create')}>
                                                                     <View style={[styles.center]}>
-                                                                        <View style={[styles.bgBlack, styles.mb10, {width: 60, height: 60, borderRadius: 30}]} />
+                                                                    <Image source={require('../../assets/images/review_hide.png')} style={[{width: 60, height: 60, borderRadius: 30}, styles.mb10]} />
                                                                         <Text style={[styles.textCenter, styles.fontMedium, styles.font12, {color: '#382a2a'}]}>리뷰를 작성하면{'\n'}통계를 볼 수 있습니다.</Text>
                                                                     </View>
                                                                     </TouchableWithoutFeedback>
@@ -280,7 +280,7 @@ class ExhibitionContentScreen extends React.Component {
                                                         ) : (
                                                             <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('create')}>
                                                             <View style={[styles.center]}>
-                                                                <View style={[styles.bgBlack, styles.mb10, {width: 60, height: 60, borderRadius: 30}]} />
+                                                            <Image source={require('../../assets/images/review_hide.png')} style={[{width: 60, height: 60, borderRadius: 30}, styles.mb10]} />
                                                                 <Text style={[styles.textCenter, styles.fontMedium, styles.font12, {color: '#382a2a'}]}>리뷰를 작성하면{'\n'}통계를 볼 수 있습니다.</Text>
                                                             </View>
                                                             </TouchableWithoutFeedback>

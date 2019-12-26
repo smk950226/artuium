@@ -59,6 +59,7 @@ const TabNavigation = createBottomTabNavigator({
             fontSize: 10,
             fontFamily: 'NotoSansKR-Medium',
             includeFontPadding: false,
+            marginTop: -15
         }
     },
     tabBarComponent: props => (

@@ -74,7 +74,7 @@ class ProfileScreen extends React.Component {
                 ]}>
                     <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
                         <View>
-                            <Image style={{width: 24, height: 24, zIndex: 999}} source={require('../../assets/images/notification.png')} />
+                            <Image style={{width: 38.4, height: 38.4, zIndex: 999}} source={require('../../assets/images/notification.png')} />
                             {noticeNew && (
                                 <View style={[styles.bgRed, styles.circle6, {position: 'absolute', top: 0, right: 0}]} />
                             )}
@@ -83,7 +83,7 @@ class ProfileScreen extends React.Component {
                     <Animated.Text style={[styles.fontBold, styles.font20, {opacity: headerOpacity}]}>{`${profile.nickname}님의 프로필`}</Animated.Text>
                     <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Search')}>
                         <View>
-                            <Image style={{width: 24, height: 24, zIndex: 999}} source={require('../../assets/images/search.png')} />
+                            <Image style={{width: 38.4, height: 38.4, zIndex: 999}} source={require('../../assets/images/search.png')} />
                         </View>
                     </TouchableWithoutFeedback>
                 </View>

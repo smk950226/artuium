@@ -149,7 +149,7 @@ class ArtuiumCard5 extends Component{
                         <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
                             <View style={[styles.row, styles.alignItemsCenter]}>
                                 {is_liked ? (
-                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
+                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like_active.png')} />
                                 ) : (
                                     <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like.png')} />
 
