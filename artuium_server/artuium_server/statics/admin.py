@@ -35,3 +35,15 @@ class FollowAdmin(admin.ModelAdmin):
 class NoticeCheckAdmin(admin.ModelAdmin):
     list_display = ["id", "user", 'notice']
     list_display_links = ["id"]
+
+
+@admin.register(models.Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ["id", "from_user", 'to_user', 'type']
+    list_display_links = ["id"]
+
+
+@admin.register(models.NotificationCheck)
+class NotificationCheckAdmin(admin.ModelAdmin):
+    list_display = ["id", "user", 'notification']
+    list_display_links = ["id"]

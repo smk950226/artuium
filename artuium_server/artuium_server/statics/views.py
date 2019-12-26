@@ -204,6 +204,12 @@ class LikeReview(APIView):
                 else:
                     like = models.Like.objects.create(user = user, review = review)
                     like.save()
+                    notification = models.Notification.objects.create(
+                        from_user = user,
+                        to_user = review.author,
+                        type = 'like_review'
+                    )
+                    notification.save()
                     return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
             except:
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
@@ -468,3 +474,62 @@ class ArtworkReview(APIView):
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
+
+
+class Notification(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user = request.user
+        notification = models.Notification.objects.filter(to_user = user).order_by('-date')
+        if notification.count() > 0:
+            notification_check = models.NotificationCheck.objects.filter(user = user)
+            if notification_check.count() == notification.count():
+                paginator = MainPageNumberPagination()
+                result_page = paginator.paginate_queryset(notification, request)
+                serializer = serializers.NotificationSerializer(result_page, many = True, context = {'request': request})
+
+                return Response(status = status.HTTP_200_OK, data = {'is_new': False, 'notification': serializer.data})
+            else:
+                paginator = MainPageNumberPagination()
+                result_page = paginator.paginate_queryset(notification, request)
+                serializer = serializers.NotificationSerializer(result_page, many = True, context = {'request': request})
+
+                return Response(status = status.HTTP_200_OK, data = {'is_new': True, 'notification': serializer.data})
+        else:
+            paginator = MainPageNumberPagination()
+            result_page = paginator.paginate_queryset(notification, request)
+            serializer = serializers.NotificationSerializer(result_page, many = True, context = {'request': request})
+
+            return Response(status = status.HTTP_200_OK, data = {'is_new': False, 'notification': serializer.data})
+
+
+class NotificationCheck(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user = request.user
+        notification_check = models.NotificationCheck.objects.filter(user = user).count()
+        notification = models.Notification.objects.filter(to_user = user).count()
+
+        if notification_check == notification:
+            return Response(status = status.HTTP_200_OK, data = {'is_new': False})
+        else:
+            return Response(status = status.HTTP_200_OK, data = {'is_new': True})
+
+    def post(self, request, format = None):
+        user = request.user
+        notification_id = request.data.get('notificationId', None)
+        
+        try:
+            notification = models.Notification.objects.get(id = notification_id)
+            pre = models.NotificationCheck.objects.filter(user = user, notification = notification)
+            if pre.count() > 0:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            else:
+                notification_check = models.NotificationCheck.objects.create(user = user, notification = notification)
+                notification_check.save()
+                if models.Notification.objects.all().count() == models.NotificationCheck.objects.filter(user = user).count():
+                    return Response(status = status.HTTP_201_CREATED)
+                else:
+                    return Response(status = status.HTTP_200_OK)
+        except:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)

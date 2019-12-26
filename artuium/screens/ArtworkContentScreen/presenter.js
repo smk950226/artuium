@@ -196,7 +196,7 @@ class ArtworkContentScreen extends React.Component {
                                                                             <View style={[styles.row, styles.justifyContentCenter, styles.alignItemsCenter, styles.ml20, styles.mb10]}>
                                                                                 <View style={[styles.justifyContentBetween, styles.alignItemsCenter, styles.mr20]}>
                                                                                     <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
-                                                                                        <LinearGradient
+                                                                                        <View
                                                                                             colors={['#000000', '#9b9b9b']}
                                                                                             style={[{height: `${thumb*100}%`, width: 5}]}
                                                                                         />
@@ -205,7 +205,7 @@ class ArtworkContentScreen extends React.Component {
                                                                                 </View>
                                                                                 <View style={[styles.justifyContentBetween, styles.alignItemsCenter, styles.mr20]}>
                                                                                     <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
-                                                                                        <LinearGradient
+                                                                                        <View
                                                                                             colors={['#000000', '#9b9b9b']}
                                                                                             style={[{height: `${sad*100}%`, width: 5}]}
                                                                                         />
@@ -214,7 +214,7 @@ class ArtworkContentScreen extends React.Component {
                                                                                 </View>
                                                                                 <View style={[styles.justifyContentBetween, styles.alignItemsCenter, styles.mr20]}>
                                                                                     <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
-                                                                                        <LinearGradient
+                                                                                        <View
                                                                                             colors={['#000000', '#9b9b9b']}
                                                                                             style={[{height: `${soso*100}%`, width: 5}]}
                                                                                         />
@@ -223,7 +223,7 @@ class ArtworkContentScreen extends React.Component {
                                                                                 </View>
                                                                                 <View style={[styles.justifyContentBetween, styles.alignItemsCenter, styles.mr20]}>
                                                                                     <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
-                                                                                        <LinearGradient
+                                                                                        <View
                                                                                             colors={['#000000', '#9b9b9b']}
                                                                                             style={[{height: `${surprise*100}%`, width: 5}]}
                                                                                         />
@@ -232,7 +232,7 @@ class ArtworkContentScreen extends React.Component {
                                                                                 </View>
                                                                                 <View style={[styles.justifyContentBetween, styles.alignItemsCenter]}>
                                                                                     <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
-                                                                                        <LinearGradient
+                                                                                        <View
                                                                                             colors={['#000000', '#9b9b9b']}
                                                                                             style={[{height: `${good*100}%`, width: 5}]}
                                                                                         />

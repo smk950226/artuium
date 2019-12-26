@@ -9,6 +9,7 @@ class Container extends Component{
         getProfile: PropTypes.func.isRequired,
         profile: PropTypes.object,
         checkNoticeAll: PropTypes.func.isRequired,
+        checkNotificationAll: PropTypes.func.isRequired,
         getReviewList: PropTypes.func.isRequired,
         getReviewListMore: PropTypes.func.isRequired
     }
@@ -21,6 +22,7 @@ class Container extends Component{
             loadingReviewList: true,
             showNoticeModal: false,
             noticeNew: false,
+            notificationNew: false,
             following_count, 
             follower_count, 
             is_following, 
@@ -38,12 +40,18 @@ class Container extends Component{
     }
 
     componentDidMount = async() => {
-        const { checkNoticeAll, getReviewList, getProfile } = this.props;
+        const { checkNoticeAll, getReviewList, getProfile, checkNotificationAll } = this.props;
         await getProfile()
         const noticeNew = await checkNoticeAll()
+        const notificationNew = await checkNotificationAll()
         if(noticeNew.is_new){
             this.setState({
                 noticeNew: true
+            })
+        }
+        if(notificationNew.is_new){
+            this.setState({
+                notificationNew: true
             })
         }
         const reviewList = await getReviewList()
@@ -125,9 +133,16 @@ class Container extends Component{
             showNoticeModal: false
         })
     }
+
     _handleNoticeNewChange = (noticeNew) => {
         this.setState({
             noticeNew
+        })
+    }
+
+    _handleNotificationNewChange = (notificationNew) => {
+        this.setState({
+            notificationNew
         })
     }
 
@@ -150,6 +165,7 @@ class Container extends Component{
                 handleNoticeNewChange={this._handleNoticeNewChange}
                 reviewListMore={this._reviewListMore}
                 refresh={this._refresh}
+                handleNotificationNewChange={this._handleNotificationNewChange}
                 />
             )
         }

@@ -5,6 +5,7 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 import styles from '../../styles';
 import ArtuiumCard from '../../components/ArtuiumCard';
 import NoticeScreen from '../../screens/NoticeScreen';
+import NotificationScreen from '../../screens/NotificationScreen';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
 const iosStatusBarHeight = getStatusBarHeight()
@@ -20,7 +21,8 @@ class HomeScreen extends Component {
             openNoticeModal: PropTypes.func.isRequired,
             closeNoticeModal: PropTypes.func.isRequired,
             showNoticeModal :PropTypes.bool.isRequired,
-            noticeNew: PropTypes.bool.isRequired
+            noticeNew: PropTypes.bool.isRequired,
+            notificationNew: PropTypes.bool.isRequired
         }
 
     constructor(props){
@@ -258,9 +260,15 @@ class HomeScreen extends Component {
         )
     }
 
+    _renderNotificationRouter = () => {
+        return (
+            <NotificationScreen handleNotificationNewChange={this.props.handleNotificationNewChange} />
+        )
+    }
+
     render() {
         const { topHeight, menuWidth, menuRadius, headerOpacity, menuPosition, headerHeight, changedScrollView, startScroll } = this.state;
-        const { newReviews, recommendedReviews, followingReviews, initial, showNoticeModal, noticeNew } = this.props;
+        const { newReviews, recommendedReviews, followingReviews, initial, showNoticeModal, noticeNew, notificationNew } = this.props;
         return (
             <View style={[styles.container]}>
                 <Animated.View style={[styles.bgWhite, {width: width, height: headerHeight, position: 'absolute', top: 0, opacity: headerOpacity, zIndex: 995}]} />
@@ -271,7 +279,7 @@ class HomeScreen extends Component {
                     <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
                         <View>
                             <Image style={{width: 38.4, height: 38.4}} source={require('../../assets/images/notification.png')} />
-                            {noticeNew && (
+                            {((noticeNew) || (notificationNew)) && (
                                 <View style={[styles.bgRed, styles.circle6, {position: 'absolute', top: 0, right: 0}]} />
                             )}
                         </View>
@@ -489,7 +497,7 @@ class HomeScreen extends Component {
                             onIndexChange={index => this.setState({ index })}
                             swipeEnabled={false}
                             renderScene={SceneMap({
-                                first: this._renderNoticeRouter,
+                                first: this._renderNotificationRouter,
                                 second: this._renderNoticeRouter
                             })}
                             renderTabBar={props =>
@@ -504,6 +512,9 @@ class HomeScreen extends Component {
                                                  {route.title}
                                              </Text>
                                              {(route.title === '공지사항') && noticeNew && (
+                                                 <View style={[styles.bgRed, styles.circle6, focused ? null : {opacity: 0.4}, {position: 'absolute', top: 0, right: -5}]} />
+                                             )}
+                                             {(route.title === '알림') && notificationNew && (
                                                  <View style={[styles.bgRed, styles.circle6, focused ? null : {opacity: 0.4}, {position: 'absolute', top: 0, right: -5}]} />
                                              )}
                                         </View>

@@ -63,3 +63,28 @@ class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Like
         fields = ['id', 'user', 'review', 'artwork', 'exhibition', 'time']
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    from_user = users_serializers.ProfileSerializer()
+    to_user = users_serializers.ProfileSerializer()
+    is_new = serializers.SerializerMethodField()
+    review = ReviewSerializer()
+    reply = ReplySerializer()
+    class Meta:
+        model = models.Notification
+        fields = ['id', 'from_user', 'to_user', 'type', 'review', 'reply', 'date', 'is_new']
+    
+    def get_is_new(self, obj):
+        if 'request' in self.context:
+            request = self.context['request']
+            user = request.user
+            if obj.date >= user.date_joined:
+                notification_check = models.NotificationCheck.objects.filter(user = user, notification = obj)
+                if notification_check.count() > 0:
+                    return False
+                else:
+                    return True
+            else:
+                return False
+        return False

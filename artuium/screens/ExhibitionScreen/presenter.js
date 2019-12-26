@@ -7,6 +7,7 @@ import ExhibitionCard3 from '../../components/ExhibitionCard3'
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import NoticeScreen from '../../screens/NoticeScreen';
+import NotificationScreen from '../../screens/NotificationScreen';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
 const iosStatusBarHeight = getStatusBarHeight()
@@ -36,6 +37,7 @@ class ExhibitionScreen extends React.Component {
 
     static propTypes = {
         noticeNew: PropTypes.bool.isRequired,
+        notificationNew: PropTypes.bool.isRequired,
         newExhibitions: PropTypes.array,
         recommendedExhibitions: PropTypes.array,
         hotExhibitions: PropTypes.array,
@@ -44,6 +46,7 @@ class ExhibitionScreen extends React.Component {
         openNoticeModal: PropTypes.func.isRequired,
         closeNoticeModal: PropTypes.func.isRequired,
         handleNoticeNewChange: PropTypes.func.isRequired,
+        handleNotificationNewChange: PropTypes.func.isRequired,
         refresh: PropTypes.func.isRequired,
         refreshing: PropTypes.bool.isRequired
     }
@@ -54,10 +57,16 @@ class ExhibitionScreen extends React.Component {
         )
     }
 
+    _renderNotificationRouter = () => {
+        return (
+            <NotificationScreen handleNotificationNewChange={this.props.handleNoticeNewChange} />
+        )
+    }
+
     render() {
         let position = Animated.divide(this.state.scrollX, width);
         let position2 = Animated.divide(this.state.scrollX2, width);
-        const { noticeNew, newExhibitions, recommendedExhibitions, hotExhibitions, pastExhibitions, showNoticeModal, refreshing } = this.props;
+        const { noticeNew, notificationNew, newExhibitions, recommendedExhibitions, hotExhibitions, pastExhibitions, showNoticeModal, refreshing } = this.props;
         return(
             <View style={[styles.container]}>
                 <View
@@ -67,7 +76,7 @@ class ExhibitionScreen extends React.Component {
                     <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
                         <View>
                             <Image style={{width: 38.4, height: 38.4, zIndex: 999}} source={require('../../assets/images/notification.png')} />
-                            {noticeNew && (
+                            {((noticeNew) || (notificationNew)) && (
                                 <View style={[styles.bgRed, styles.circle6, {position: 'absolute', top: 0, right: 0}]} />
                             )}
                         </View>
@@ -327,7 +336,7 @@ class ExhibitionScreen extends React.Component {
                             onIndexChange={index => this.setState({ index })}
                             swipeEnabled={false}
                             renderScene={SceneMap({
-                                first: this._renderNoticeRouter,
+                                first: this._renderNotificationRouter,
                                 second: this._renderNoticeRouter
                             })}
                             renderTabBar={props =>
@@ -342,6 +351,9 @@ class ExhibitionScreen extends React.Component {
                                                  {route.title}
                                              </Text>
                                              {(route.title === '공지사항') && noticeNew && (
+                                                 <View style={[styles.bgRed, styles.circle6, focused ? null : {opacity: 0.4}, {position: 'absolute', top: 0, right: -5}]} />
+                                             )}
+                                             {(route.title === '알림') && notificationNew && (
                                                  <View style={[styles.bgRed, styles.circle6, focused ? null : {opacity: 0.4}, {position: 'absolute', top: 0, right: -5}]} />
                                              )}
                                         </View>

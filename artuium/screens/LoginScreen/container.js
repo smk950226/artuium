@@ -64,8 +64,8 @@ class Container extends Component{
     // };
 
     _handleKakaoLogin = async() => {
-        const { accessToken } = await RNKakao.login()
-        const result = await this.props.kakaoLogin(accessToken)
+        const kakaoResult = await RNKakao.login()
+        const result = await this.props.kakaoLogin(kakaoResult.accessToken)
         if(result.token){
             const profile = await this.props.getProfileByTokenReturn(result.token);
             if(profile){

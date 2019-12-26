@@ -24,6 +24,8 @@ ALLOWED_HOSTS = [
     'artuium.ap-northeast-2.elasticbeanstalk.com',
     'artuium.com',
     '.artuium.com',
+    '.artuium.shop',
+    'artuium.shop',
 ]
 
 # DATABASES

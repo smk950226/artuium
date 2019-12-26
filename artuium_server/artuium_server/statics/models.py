@@ -106,3 +106,39 @@ class NoticeCheck(models.Model):
         ordering = ['-id']
         verbose_name = '공지 확인 여부'
         verbose_name_plural = '공지 확인 여부'
+
+
+class Notification(models.Model):
+    from_user = models.ForeignKey('users.User', on_delete = models.CASCADE, related_name = 'from_notifications')
+    to_user = models.ForeignKey('users.User', on_delete = models.CASCADE, related_name = 'to_notifications')
+    type = models.CharField('알림 유형', max_length = 255, choices = (
+        ('comment_review', 'Comment Review'),
+        ('comment_reply', 'Comment Reply'),
+        ('like_review', 'Like Review'),
+        ('following', 'Following')
+    ))
+    review = models.ForeignKey(Review, on_delete = models.CASCADE, related_name = 'notifications', blank = True, null = True)
+    reply = models.ForeignKey(Reply, on_delete = models.CASCADE, related_name = 'notifications', blank = True, null = True)
+    date = models.DateTimeField(auto_now_add = True)
+
+    def __str__(self):
+        return  self.from_user.nickname + ' -> ' + self.to_user.nickname
+    
+    class Meta:
+        ordering = ['-id']
+        verbose_name = '알림'
+        verbose_name_plural = '알림'
+
+
+class NotificationCheck(models.Model):
+    user = models.ForeignKey('users.User', on_delete = models.CASCADE, related_name = 'checked_notifications')
+    notification = models.ForeignKey(Notification, on_delete = models.CASCADE, related_name = 'checked_notifications')
+    date = models.DateTimeField('Checked Time', auto_now_add = True)
+
+    def __str__(self):
+        return  self.user.nickname + ' - ' + str(self.Notification.id)
+    
+    class Meta:
+        ordering = ['-id']
+        verbose_name = '알림 확인 여부'
+        verbose_name_plural = '알림 확인 여부'
