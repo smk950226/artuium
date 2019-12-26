@@ -27,9 +27,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         checkNoticeAll: () => {
             return dispatch(userActions.checkNoticeAll())
         },
-        logout: () => {
-            dispatch(userActions.getLogout());
-        }
     }
 }
 

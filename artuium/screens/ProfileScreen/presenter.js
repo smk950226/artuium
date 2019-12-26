@@ -127,12 +127,14 @@ class ProfileScreen extends React.Component {
                     <View style={[styles.px15, {paddingBottom: 35}]}>
                         <View style={[styles.row, styles.pt20, styles.px5, styles.justifyContentBetween]}>
                             <Text style={[styles.fontBold, styles.font25]}>{profile.nickname}</Text>
-                            <TouchableOpacity style={[styles.profileBtn]} onPress={()=>this.props.logout()}>
-                                <Text style={[styles.fontMedium, styles.font15, {color: '#a8a8a8'}]}>로그아웃</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.profileBtn]} onPress={()=>this.props.navigation.navigate('EditProfile')}>
-                                <Text style={[styles.fontMedium, styles.font15, {color: '#a8a8a8'}]}>프로필 변경</Text>
-                            </TouchableOpacity>
+                            <View style={[styles.row]}>
+                                <TouchableOpacity style={[styles.profileBtn]} onPress={()=>this.props.navigation.navigate('EditProfile')}>
+                                    <Text style={[styles.fontMedium, styles.font15, {color: '#a8a8a8'}]}>프로필 변경</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={[styles.profileBtn, styles.ml20]} onPress={()=>this.props.logout()}>
+                                    <Text style={[styles.fontMedium, styles.font15, {color: '#a8a8a8'}]}>로그아웃</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                         <View style={[styles.row, styles.px5]}>
                             <Text style={[styles.fontMedium, styles.font13, {color: '#a7a7a7'}]}>팔로워</Text>
