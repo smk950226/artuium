@@ -147,7 +147,7 @@ class ArtworkContentScreen extends React.Component {
                                 </View>
                                 <View style={[styles.alignItemsCenter]}>
                                     {this.state.index === 0 ?
-                                        <View style={{width: width-80}}>
+                                        <View style={{width: width-80, minHeight: 300}}>
                                             <View style={[{marginTop: 25}]}>
                                                 <HTML html={artwork.content} imagesMaxWidth={width} />
                                             </View>
