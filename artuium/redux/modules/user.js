@@ -186,6 +186,29 @@ function getProfileByToken(token){
     }
 }
 
+function getProfileByTokenReturn(token){
+    return (dispatch) => {
+        return fetch(`${FETCH_URL}/api/users/profile/`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => {
+            return json
+        })
+    }
+}
+
 function followUser(userId){
     return (dispatch, getState) => {
         const { user : { token } } = getState();
@@ -619,18 +642,49 @@ function changeBackgroundImg(backgroundImg){
     }
 }
 
-function kakaoLogin(accessToken, nickname, profileImgUri){
-    return async (dispatch) => {
+function addInfo(token, nickname, profileImg){
+    return (dispatch, getState) => {
+        let formData = new FormData();
+        if(profileImg){
+            const temp = profileImg.type.split('/')
+            const ext = temp[temp.length - 1]
+            formData.append('profileImg',{
+                uri: profileImg.uri,
+                type: profileImg.type,
+                name: `${uuidv1()}.` + ext
+            })
+        }
+        formData.append('nickname', nickname)
+        fetch(`${FETCH_URL}/api/users/addinfo/`, {
+            method: 'PUT',
+            headers: {
+                "Authorization": `JWT ${token}`
+            },
+            body: formData
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(logout());
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => dispatch(setProfile(json)))
+    }
+}
+
+function kakaoLogin(accessToken){
+    return (dispatch) => {
         if(accessToken){
-            fetch(`${FETCH_URL}/api/users/login/kakao/`, {
+            return fetch(`${FETCH_URL}/api/users/login/kakao/`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     access_token: accessToken,
-                    nickname,
-                    profile_image: profileImgUri
                 })
             })
             .then(response => {
@@ -638,8 +692,9 @@ function kakaoLogin(accessToken, nickname, profileImgUri){
             })
             .then(json => {
                 if(json.token && json.user){
-                    dispatch(saveToken(json.token));
-                    return true
+                    return {
+                        token: json.token
+                    }
                 }
                 else{
                     return false
@@ -706,6 +761,7 @@ const actionCreators = {
     getSaveToken,
     getProfile,
     getProfileByToken,
+    getProfileByTokenReturn,
     signUp,
     login,
     checkEmail,
@@ -728,6 +784,7 @@ const actionCreators = {
     changeNickname,
     changeProfileImg,
     changeBackgroundImg,
+    addInfo,
     kakaoLogin,
 }
 

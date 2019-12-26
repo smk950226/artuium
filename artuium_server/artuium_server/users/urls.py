@@ -14,5 +14,6 @@ urlpatterns = [
     path('change/profileimg/', views.ChangeProfileImg.as_view()),
     path('change/backgroundimg/', views.ChangeBackgroundImg.as_view()),
     path('accounts/', include('allauth.urls')),
+    path('addinfo/', views.AddInfo.as_view()),
     path('login/kakao/', views.KakaoLogin.as_view()),
 ]

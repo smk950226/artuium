@@ -24,6 +24,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         getProfileByToken: (token) => {
             dispatch(userActions.getProfileByToken(token))
         },
+        getProfileByTokenReturn: (token) => {
+            return dispatch(userActions.getProfileByTokenReturn(token))
+        },
         checkNickname: (nickname) => {
             return dispatch(userActions.checkNickname(nickname))
         },
@@ -35,7 +38,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         logout: () => {
             dispatch(userActions.getLogout());
-        }
+        },
+        addInfo: (token, nickname, profileImg) => {
+            dispatch(userActions.addInfo(token, nickname, profileImg))
+        },
     }
 }
 

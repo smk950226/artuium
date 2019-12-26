@@ -187,5 +187,20 @@ class ChangeNickname(APIView):
 
         return Response(status = status.HTTP_200_OK, data = serializer.data)
 
+class AddInfo(APIView):
+    def put(self, request, format = None):
+        profile_image = request.data.get('profileImg', None)
+        nickname = request.data.get('nickname', None)
+
+        user = request.user
+        user.profile_image = profile_image
+        user.nickname = nickname
+
+        user.save()
+
+        serializer = serializers.ProfileSerializer(user, context = {'request': request})
+
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+
 class KakaoLogin(SocialLoginView):
     adapter_class = KakaoOAuth2Adapter
