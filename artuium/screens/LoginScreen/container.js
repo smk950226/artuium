@@ -30,6 +30,39 @@ class Container extends Component{
         addInfoModal: false,
     }
 
+    // _handleGoogleLogin = async() => {
+    //     try {
+    //         await GoogleSignin.hasPlayServices();
+    //         const userInfo = await GoogleSignin.signIn();
+    //         if(userInfo.idToken){
+    //             const profile = await this.props.getProfileByTokenReturn(userInfo.idToken);
+    //             console.log("구글 프로필", profile)
+    //             if(profile){
+    //                 if(profile.nickname){
+    //                     await this.props.getProfileByToken(userInfo.idToken)
+    //                     await this.props.getSaveToken(userInfo.idToken)
+    //                 }
+    //                 else{
+    //                     await this._openAddInfo()
+    //                     this.setState({
+    //                         savedToken: userInfo.idToken
+    //                     })
+    //                 }
+    //             }
+    //         }
+    //     } catch (error) {
+    //         if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+    //             // user cancelled the login flow
+    //         } else if (error.code === statusCodes.IN_PROGRESS) {
+    //             // operation (e.g. sign in) is in progress already
+    //         } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+    //             // play services not available or outdated
+    //         } else {
+    //             // some other error happened
+    //         }
+    //     }
+    // };
+
     _handleKakaoLogin = async() => {
         const { accessToken } = await RNKakao.login()
         const result = await this.props.kakaoLogin(accessToken)
@@ -182,6 +215,7 @@ class Container extends Component{
             handleChangeAgreeTerm={this._handleChangeAgreeTerm}
             handleChangeShowTerm={this._handleChangeShowTerm}
             handleKakaoLogin={this._handleKakaoLogin}
+            handleGoogleLogin={this._handleGoogleLogin}
             openAddInfo={this._openAddInfo}
             closeAddInfo={this._closeAddInfo}
             addInfoEnd={this._addInfoEnd}
