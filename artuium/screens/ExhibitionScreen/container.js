@@ -12,7 +12,8 @@ class Container extends Component{
         hotExhibitions: PropTypes.array,
         pastExhibitions: PropTypes.array,
         initialExhibition: PropTypes.func.isRequired,
-        checkNoticeAll: PropTypes.func.isRequired
+        checkNoticeAll: PropTypes.func.isRequired,
+        checkNotificationAll: PropTypes.func.isRequired
     }
 
     state = {
@@ -24,15 +25,22 @@ class Container extends Component{
         fetchClear: false,
         showNoticeModal: false,
         noticeNew: false,
+        notificationNew: false,
         refreshing: false
     }
 
     componentDidMount = async() => {
-        const { initialExhibition, checkNoticeAll } = this.props;
+        const { initialExhibition, checkNoticeAll, checkNotificationAll } = this.props;
         const noticeNew = await checkNoticeAll()
+        const notificationNew = await checkNotificationAll()
         if(noticeNew.is_new){
             this.setState({
                 noticeNew: true
+            })
+        }
+        if(notificationNew.is_new){
+            this.setState({
+                notificationNew: true
             })
         }
         await initialExhibition()
@@ -67,14 +75,20 @@ class Container extends Component{
     }
 
     _refresh = async() => {
-        const { initialExhibition, checkNoticeAll } = this.props;
+        const { initialExhibition, checkNoticeAll, checkNotificationAll } = this.props;
         this.setState({
             refreshing: false
         })
         const noticeNew = await checkNoticeAll()
+        const notificationNew = await checkNotificationAll()
         if(noticeNew.is_new){
             this.setState({
                 noticeNew: true
+            })
+        }
+        if(notificationNew.is_new){
+            this.setState({
+                notificationNew: true
             })
         }
         await initialExhibition()
@@ -100,6 +114,12 @@ class Container extends Component{
         })
     }
 
+    _handleNotificationNewChange = (notificationNew) => {
+        this.setState({
+            notificationNew
+        })
+    }
+
     render(){
         const { loading } = this.state;
         if(loading){
@@ -117,6 +137,7 @@ class Container extends Component{
                     openNoticeModal={this._openNoticeModal}
                     closeNoticeModal={this._closeNoticeModal}
                     handleNoticeNewChange={this._handleNoticeNewChange}
+                    handleNotificationNewChange={this._handleNotificationNewChange}
                     refresh={this._refresh}
                 />
             )

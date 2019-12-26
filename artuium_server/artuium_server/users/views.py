@@ -34,6 +34,13 @@ class Follow(APIView):
                 else:
                     follow = statics_models.Follow.objects.create(following = user, follower = follow_user)
                     follow.save()
+
+                    notification = statics_models.Notification.objects.create(
+                        from_user = user,
+                        to_user = follow_user,
+                        type = 'following'
+                    )
+                    notification.save()
                     return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
             except:
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '회원이 존재하지 않습니다.'})

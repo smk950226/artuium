@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import styles from '../../styles';
 import NoticeScreen from '../../screens/NoticeScreen';
+import NotificationScreen from '../../screens/NotificationScreen';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import ArtuiumCard from '../../components/ArtuiumCard';
 
@@ -18,9 +19,11 @@ class ProfileScreen extends React.Component {
             profile: PropTypes.object.isRequired,
             showNoticeModal: PropTypes.bool.isRequired,
             noticeNew: PropTypes.bool.isRequired,
+            notificationNew: PropTypes.bool.isRequired,
             openNoticeModal: PropTypes.func.isRequired,
             closeNoticeModal: PropTypes.func.isRequired,
             handleNoticeNewChange: PropTypes.func.isRequired,
+            handleNotificationNewChange: PropTypes.func.isRequired,
             index: 0,
             routes: [
                 { key: 'first', title: '알림' },
@@ -50,6 +53,12 @@ class ProfileScreen extends React.Component {
         )
     }
 
+    _renderNotificationRouter = () => {
+        return (
+            <NotificationScreen handleNotificationNewChange={this.props.handleNotificationNewChange} />
+        )
+    }
+
     render(){
         const headerHeight = this.state.scrollY.interpolate({
             inputRange: [0, 50],
@@ -66,7 +75,7 @@ class ProfileScreen extends React.Component {
             outputRange: [0, 1],
             extrapolate: 'clamp'
         });
-        const { profile, noticeNew, showNoticeModal, following_count, follower_count, is_following, is_me, following_friends_count, like_exhibition_count, like_artwork_count, like_review_count, loadingReviewList, isLoadingMore, hasNextPage, reviewList, refreshing } = this.props;
+        const { profile, noticeNew, notificationNew, showNoticeModal, following_count, follower_count, is_following, is_me, following_friends_count, like_exhibition_count, like_artwork_count, like_review_count, loadingReviewList, isLoadingMore, hasNextPage, reviewList, refreshing } = this.props;
         return(
             <View style={[styles.container]}>
                 <View style={[styles.row, styles.justifyContentBetween, styles.alignItemsCenter, styles.px15,
@@ -75,7 +84,7 @@ class ProfileScreen extends React.Component {
                     <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
                         <View>
                             <Image style={{width: 38.4, height: 38.4, zIndex: 999}} source={require('../../assets/images/notification.png')} />
-                            {noticeNew && (
+                            {((noticeNew) || (notificationNew)) && (
                                 <View style={[styles.bgRed, styles.circle6, {position: 'absolute', top: 0, right: 0}]} />
                             )}
                         </View>
@@ -212,7 +221,7 @@ class ProfileScreen extends React.Component {
                             onIndexChange={index => this.setState({ index })}
                             swipeEnabled={false}
                             renderScene={SceneMap({
-                                first: this._renderNoticeRouter,
+                                first: this._renderNotificationRouter,
                                 second: this._renderNoticeRouter
                             })}
                             renderTabBar={props =>
@@ -227,6 +236,9 @@ class ProfileScreen extends React.Component {
                                                  {route.title}
                                              </Text>
                                              {(route.title === '공지사항') && noticeNew && (
+                                                 <View style={[styles.bgRed, styles.circle6, focused ? null : {opacity: 0.4}, {position: 'absolute', top: 0, right: -5}]} />
+                                             )}
+                                             {(route.title === '알림') && notificationNew && (
                                                  <View style={[styles.bgRed, styles.circle6, focused ? null : {opacity: 0.4}, {position: 'absolute', top: 0, right: -5}]} />
                                              )}
                                         </View>

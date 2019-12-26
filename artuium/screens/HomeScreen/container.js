@@ -12,7 +12,8 @@ class Container extends Component{
         followingReviews: PropTypes.array,
         initApp: PropTypes.func.isRequired,
         getInitial: PropTypes.func.isRequired,
-        checkNoticeAll: PropTypes.func.isRequired
+        checkNoticeAll: PropTypes.func.isRequired,
+        checkNotificationAll: PropTypes.func.isRequired
     }
 
     state = {
@@ -23,15 +24,22 @@ class Container extends Component{
         fetchedFollowing: false,
         fetchClear: false,
         showNoticeModal: false,
-        noticeNew: false
+        noticeNew: false,
+        notificationNew: false,
     }
 
     componentDidMount = async() => {
-        const { initApp, checkNoticeAll } = this.props;
-        const noticeNew = await checkNoticeAll()
+        const { initApp, checkNoticeAll, checkNotificationAll } = this.props;
+        const noticeNew = await checkNotificationAll()
+        const notificationNew = await checkNoticeAll()
         if(noticeNew.is_new){
             this.setState({
                 noticeNew: true
+            })
+        }
+        if(notificationNew.is_new){
+            this.setState({
+                notificationNew: true
             })
         }
         await initApp()
@@ -87,6 +95,12 @@ class Container extends Component{
         })
     }
 
+    _handleNotificationNewChange = (notificationNew) => {
+        this.setState({
+            notificationNew
+        })
+    }
+
     render(){
         const { loading } = this.state;
         if(loading){
@@ -104,6 +118,7 @@ class Container extends Component{
                     openNoticeModal={this._openNoticeModal}
                     closeNoticeModal={this._closeNoticeModal}
                     handleNoticeNewChange={this._handleNoticeNewChange}
+                    handleNotificationNewChange={this._handleNotificationNewChange}
                 />
             )
         }

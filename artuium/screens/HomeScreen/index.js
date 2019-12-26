@@ -27,6 +27,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         checkNoticeAll: () => {
             return dispatch(userActions.checkNoticeAll())
         },
+        checkNotificationAll: () => {
+            return dispatch(userActions.checkNotificationAll())
+        },
     }
 }
 

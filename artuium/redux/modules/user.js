@@ -330,6 +330,53 @@ function checkNoticeAll(){
     }
 }
 
+function getNotification(){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/notification/?page=1`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function getNotificationMore(page){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/notification/?page=${page}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else if(response.status === 404){
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 function checkNotice(noticeId){
     return (dispatch, getState) => {
         const { user : { token } } = getState();
@@ -356,6 +403,60 @@ function checkNotice(noticeId){
             }
             else{
                 return false
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function checkNotification(notificationId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/notification/check/`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            },
+            body: JSON.stringify({
+                notificationId
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else if(response.status === 200){
+                return true
+            }
+            else if(response.status === 201){
+                return 'clear'
+            }
+            else{
+                return false
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function checkNotificationAll(){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/notification/check/`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
             }
         })
         .then(json => json)
@@ -786,6 +887,10 @@ const actionCreators = {
     changeBackgroundImg,
     addInfo,
     kakaoLogin,
+    getNotification,
+    getNotificationMore,
+    checkNotification,
+    checkNotificationAll
 }
 
 export { actionCreators }
