@@ -1,5 +1,5 @@
 import { FETCH_URL } from '../../config/urls';
-import uuidv1 from 'uuid'
+import uuidv1 from 'uuid';
 
 const LOGOUT = 'LOGOUT';
 const SAVE_TOKEN = 'SAVE_TOKEN';
@@ -778,30 +778,28 @@ function addInfo(token, nickname, profileImg){
 
 function kakaoLogin(accessToken){
     return (dispatch) => {
-        if(accessToken){
-            return fetch(`${FETCH_URL}/api/users/login/kakao/`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    access_token: accessToken,
-                })
+        return fetch(`${FETCH_URL}/api/users/login/kakao/`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                access_token: accessToken,
             })
-            .then(response => {
-                return response.json()
-            })
-            .then(json => {
-                if(json.token && json.user){
-                    return {
-                        token: json.token
-                    }
+        })
+        .then(response => {
+            return response.json()
+        })
+        .then(json => {
+            if(json.token){
+                return {
+                    token: json.token
                 }
-                else{
-                    return false
-                }
-            })
-        }
+            }
+            else{
+                return false
+            }
+        })
    };
 }
 
