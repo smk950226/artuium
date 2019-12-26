@@ -53,17 +53,28 @@ class EditProfileScreen extends React.Component {
                             </TouchableWithoutFeedback>
                         </View>
                         <View style={[styles.divGray]} />
-                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.borderBtmGrayD1, styles.px30, styles.pt30, {height: 100, backgroundColor: 'pink'}]}>
-                            <Text style={[styles.fontMedium, styles.font16]}>이름</Text>
-                            <View style={{width: width/3}}>
-                                <TextInput
-                                    style={[styles.fontMedium, styles.font16, {includeFontPadding: false, textAlignVertical: 'center'}]}
-                                    underlineColorAndroid={'transparent'} 
-                                    autoCapitalize={'none'} 
-                                    autoCorrect={false} 
-                                    value={this.props.nickname} 
-                                    onChangeText={this.props.handleNicknameChange} 
-                                />
+                        <View style={[styles.borderBtmGrayD1]}>
+                            <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px30, styles.pt30]}>
+                                <Text style={[styles.fontMedium, styles.font16]}>이름</Text>
+                                <View>
+                                    <TextInput
+                                        style={[styles.font16, {includeFontPadding: false, textAlignVertical: 'center', height: 40, paddingBottom: 0}]}
+                                        underlineColorAndroid={'transparent'} 
+                                        autoCapitalize={'none'} 
+                                        autoCorrect={false} 
+                                        value={this.props.nickname} 
+                                        onChangeText={this.props.handleNicknameChange} 
+                                    />
+                                </View>
+                                <TouchableOpacity style={[styles.GrayXBtn]} onPress={()=>this.props.handleNicknameClear()}>
+                                    <Text style={[styles.font14, {color: '#bababa'}]}>X</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={[styles.blueBtn]} onPress={()=>this.props.handleCheckNickname(this.props.nickname)}>
+                                    <Text style={[styles.fontMedium, styles.font12, {color: '#044ae6'}]}>중복확인</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px30]}>
+                                <Text style={[styles.fontMedium, styles.font16, styles.hidden]}>이름</Text>
                                 {
                                     !this.props.isCheckingNickname && this.props.checkedNickname ?
                                         this.props.nicknameForm ?
@@ -76,16 +87,13 @@ class EditProfileScreen extends React.Component {
                                     :
                                     null
                                 }
+                                <TouchableOpacity style={[styles.GrayXBtn, styles.hidden]}>
+                                    <Text style={[styles.font14, {color: '#bababa'}]}>X</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={[styles.blueBtn, styles.hidden]}>
+                                    <Text style={[styles.fontMedium, styles.font12, {color: '#044ae6'}]}>중복확인</Text>
+                                </TouchableOpacity>
                             </View>
-                            <TouchableOpacity style={[styles.GrayXBtn]} onPress={()=>this.props.handleNicknameClear()}>
-                                <Text style={[styles.font14, {color: '#bababa'}]}>X</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.blueBtn]} onPress={()=>this.props.handleCheckNickname(this.props.nickname)}>
-                                <Text style={[styles.fontMedium, styles.font12, {color: '#044ae6'}]}>중복확인</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{backgroundColor: 'pink', height: 80, width}}>
-                            <Text style={[styles.fontMedium, {includeFontPadding: false, textAlignVertical: 'center', backgroundColor: 'blue'}]}>sdkjfbnaskj!!!!!!!</Text>
                         </View>
                     </KeyboardAvoidingView>
                 </ScrollView>

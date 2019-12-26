@@ -328,7 +328,7 @@ class ExhibitionReview(APIView):
         if exhibition_id:
             try:
                 exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
-                reviews = exhibition.reviews.all()
+                reviews = exhibition.reviews.all().order_by('time')
                 paginator = MainPageNumberPagination()
                 result_page = paginator.paginate_queryset(reviews, request)
                 serializer = serializers.ReviewSerializer(result_page, many = True, context = {'request': request})
@@ -403,7 +403,7 @@ class ArtworkReview(APIView):
         if artwork_id:
             try:
                 artwork = artwork_models.Artwork.objects.get(id = artwork_id)
-                reviews = artwork.reviews.all()
+                reviews = artwork.reviews.all().order_by('time')
                 paginator = MainPageNumberPagination()
                 result_page = paginator.paginate_queryset(reviews, request)
                 serializer = serializers.ReviewSerializer(result_page, many = True, context = {'request': request})

@@ -93,7 +93,7 @@ class ExhibitionContentScreen extends React.Component {
                     </View>
                     <ScrollView style={[styles.flex1]} bounces={false} showsVerticalScrollIndicator={false} ref={'scrollView'}>
                         <ImageBackground resizeMode={'cover'} source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : null : null}} style={[Platform.OS === 'ios' ? styles.paddingIOS : null, styles.justifyContentEnd, {height: height*0.5}]}>
-                            <LinearGradient
+                            <View
                                 colors={['#00000000', '#000000']}
                                 style={[styles.pl30, styles.pb30, styles.justifyContentEnd, {height: height*0.3}]}
                             >
@@ -116,7 +116,7 @@ class ExhibitionContentScreen extends React.Component {
                                     <Text style={[styles.fontBold, styles.font30, styles.white]}><Text style={[styles.fontBold, styles.font30, styles.yellow]}>{'전시 '}</Text>{exhibition.name}</Text>
                                 </View>
                                 <Text style={[styles.fontMedium, styles.font14, styles.white]}>{exhibition.gallery.name}, {`${exhibition.open_date.slice(8,10)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} ~ ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
-                            </LinearGradient>
+                            </View>
                         </ImageBackground>
                         <View style={[styles.bgBlack, styles.px10, styles.pb10, styles.heightFull]}>
                             <View style={[styles.bgWhite, styles.widthFull, {paddingBottom: 40, borderRadius: 5}]}>
@@ -221,7 +221,7 @@ class ExhibitionContentScreen extends React.Component {
                                                                             <View style={[styles.row, styles.justifyContentCenter, styles.alignItemsCenter, styles.ml20, styles.mb10]}>
                                                                                 <View style={[styles.justifyContentBetween, styles.alignItemsCenter, styles.mr20]}>
                                                                                     <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
-                                                                                        <LinearGradient
+                                                                                        <View
                                                                                             colors={['#000000', '#9b9b9b']}
                                                                                             style={[{height: `${thumb*100}%`, width: 5}]}
                                                                                         />
@@ -230,7 +230,7 @@ class ExhibitionContentScreen extends React.Component {
                                                                                 </View>
                                                                                 <View style={[styles.justifyContentBetween, styles.alignItemsCenter, styles.mr20]}>
                                                                                     <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
-                                                                                        <LinearGradient
+                                                                                        <View
                                                                                             colors={['#000000', '#9b9b9b']}
                                                                                             style={[{height: `${sad*100}%`, width: 5}]}
                                                                                         />
@@ -239,7 +239,7 @@ class ExhibitionContentScreen extends React.Component {
                                                                                 </View>
                                                                                 <View style={[styles.justifyContentBetween, styles.alignItemsCenter, styles.mr20]}>
                                                                                     <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
-                                                                                        <LinearGradient
+                                                                                        <View
                                                                                             colors={['#000000', '#9b9b9b']}
                                                                                             style={[{height: `${soso*100}%`, width: 5}]}
                                                                                         />
@@ -248,7 +248,7 @@ class ExhibitionContentScreen extends React.Component {
                                                                                 </View>
                                                                                 <View style={[styles.justifyContentBetween, styles.alignItemsCenter, styles.mr20]}>
                                                                                     <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
-                                                                                        <LinearGradient
+                                                                                        <View
                                                                                             colors={['#000000', '#9b9b9b']}
                                                                                             style={[{height: `${surprise*100}%`, width: 5}]}
                                                                                         />
@@ -257,7 +257,7 @@ class ExhibitionContentScreen extends React.Component {
                                                                                 </View>
                                                                                 <View style={[styles.justifyContentBetween, styles.alignItemsCenter]}>
                                                                                     <View style={[{height: 45, width: 5}, styles.justifyContentEnd]}>
-                                                                                        <LinearGradient
+                                                                                        <View
                                                                                             colors={['#000000', '#9b9b9b']}
                                                                                             style={[{height: `${good*100}%`, width: 5}]}
                                                                                         />
@@ -364,7 +364,7 @@ class ExhibitionContentScreen extends React.Component {
                                                     </View>
                                                     <View style={[styles.widthFull, {height: 300, borderWidth: 1, borderColor: '#e8e8e8'}]}>
                                                         <TextInput
-                                                            style={[styles.font15, styles.fontRegular, styles.widthFull, styles.px25, styles.py10, styles.widthFull, {height: 300}]}
+                                                            style={[styles.font15, styles.widthFull, styles.px25, styles.py10, styles.widthFull, {height: 300, minHeight: 300, flex: 1}]}
                                                             placeholder={'내용을 입력하세요.'}
                                                             autoCapitalize={'none'} 
                                                             autoCorrect={false} 
@@ -374,6 +374,7 @@ class ExhibitionContentScreen extends React.Component {
                                                             placeholderTextColor={'#000000'}
                                                             multiline={true}
                                                             maxLength={500}
+                                                            textAlignVertical={'top'}
                                                         />
                                                         <Text style={[styles.fontMedium, styles.font14, { position: 'absolute', bottom: 15, right: 25 }]}>{content.length}<Text style={[styles.grayD1]}>/500자</Text></Text>
                                                     </View>
