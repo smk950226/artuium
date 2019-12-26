@@ -84,9 +84,6 @@ class EditProfileScreen extends React.Component {
                                 <Text style={[styles.fontMedium, styles.font12, {color: '#044ae6'}]}>중복확인</Text>
                             </TouchableOpacity>
                         </View>
-                        <View style={{backgroundColor: 'pink', height: 80, width}}>
-                            <Text style={[styles.fontMedium, {includeFontPadding: false, textAlignVertical: 'center', backgroundColor: 'blue'}]}>sdkjfbnaskj!!!!!!!</Text>
-                        </View>
                     </KeyboardAvoidingView>
                 </ScrollView>
             </View>
