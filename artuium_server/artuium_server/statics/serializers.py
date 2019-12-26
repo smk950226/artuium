@@ -36,11 +36,14 @@ class NoticeSerializer(serializers.ModelSerializer):
         if 'request' in self.context:
             request = self.context['request']
             user = request.user
-            notice_check = models.NoticeCheck.objects.filter(user = user, notice = obj)
-            if notice_check.count() > 0:
-                return False
+            if obj.date >= user.date_joined:
+                notice_check = models.NoticeCheck.objects.filter(user = user, notice = obj)
+                if notice_check.count() > 0:
+                    return False
+                else:
+                    return True
             else:
-                return True
+                return False
         return False
 
 

@@ -8,18 +8,50 @@ import LoggedOutContainer from '../../navigation/LoggedOutNavigation';
 class AppContainer extends Component {
     static propTypes = {
         isLoggedIn: PropTypes.bool.isRequired,
-        logout: PropTypes.func.isRequired
+        logout: PropTypes.func.isRequired,
+        initApp: PropTypes.func.isRequired
     };
 
     state = {
         loading: true,
         scrollY: new Animated.Value(0),
+        fetchedProfile: false,
+        fetchClear: false
     }
 
     componentDidMount = async() => {
-        this.setState({
-            loading: false
-        })
+        const { isLoggedIn, initApp } = this.props;
+        if(isLoggedIn){
+            await initApp()
+        }
+        else{
+            this.setState({
+                loading: false
+            })
+        }
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState){
+        const { fetchedProfile } = prevState;
+        if((!fetchedProfile)){
+            let update = {}
+            if((nextProps.profile)){
+                update.fetchedProfile = true
+            }
+            return update
+        }
+        else{
+            return null
+        }
+    }
+
+    componentDidUpdate = () => {
+        if(this.state.fetchedProfile && !this.state.fetchClear){
+            this.setState({
+                loading: false,
+                fetchClear: true
+            })
+        }
     }
 
     render(){

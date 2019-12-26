@@ -10,13 +10,14 @@ class Container extends Component{
         newReviews: PropTypes.array,
         recommendedReviews: PropTypes.array,
         followingReviews: PropTypes.array,
-        initialReview: PropTypes.func.isRequired,
+        initApp: PropTypes.func.isRequired,
         getInitial: PropTypes.func.isRequired,
         checkNoticeAll: PropTypes.func.isRequired
     }
 
     state = {
         loading: true,
+        fetchedProfile: false,
         fetchedNew: false,
         fetchedRecommended: false,
         fetchedFollowing: false,
@@ -26,19 +27,19 @@ class Container extends Component{
     }
 
     componentDidMount = async() => {
-        const { initialReview, checkNoticeAll } = this.props;
+        const { initApp, checkNoticeAll } = this.props;
         const noticeNew = await checkNoticeAll()
         if(noticeNew.is_new){
             this.setState({
                 noticeNew: true
             })
         }
-        await initialReview()
+        await initApp()
     }
 
     static getDerivedStateFromProps(nextProps, prevState){
-        const { fetchedNew, fetchedRecommended, fetchedFollowing } = prevState;
-        if((!fetchedNew) || (!fetchedRecommended) || (!fetchedFollowing)){
+        const { fetchedNew, fetchedRecommended, fetchedFollowing, fetchedProfile } = prevState;
+        if((!fetchedNew) || (!fetchedRecommended) || (!fetchedFollowing) || (!fetchedProfile)){
             let update = {}
             if((nextProps.newReviews)){
                 update.fetchedNew = true
@@ -49,6 +50,9 @@ class Container extends Component{
             if((nextProps.followingReviews)){
                 update.fetchedFollowing = true
             }
+            if(nextProps.profile){
+                update.fetchedProfile = true
+            }
 
             return update
         }
@@ -58,7 +62,7 @@ class Container extends Component{
     }
 
     componentDidUpdate = () => {
-        if(this.state.fetchedNew && this.state.fetchedRecommended && this.state.fetchedFollowing && !this.state.fetchClear){
+        if(this.state.fetchedNew && this.state.fetchedRecommended && this.state.fetchedFollowing && this.state.fetchedProfile && !this.state.fetchClear){
             this.setState({
                 loading: false,
                 fetchClear: true

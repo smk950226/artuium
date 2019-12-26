@@ -11,7 +11,7 @@ class Container extends Component{
         login: PropTypes.func.isRequired,
         getSaveToken: PropTypes.func.isRequired,
         getProfileByToken: PropTypes.func.isRequired,
-        profile: PropTypes.object,
+        profile: PropTypes.any,
         token: PropTypes.string,
         checkEmail: PropTypes.func.isRequired
     }
@@ -28,6 +28,7 @@ class Container extends Component{
         password2: '',
         passwordMatch: false,
         nickname: '',
+        
         nicknameForm: false,
         isCheckingNickname: false,
         checkedNickname: false,

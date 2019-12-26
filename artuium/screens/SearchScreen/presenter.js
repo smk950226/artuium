@@ -58,7 +58,7 @@ const SearchScreen = (props) => (
                 </View>
                 <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px15, styles.py10, styles.bgTransparent]}>
                     <TextInput 
-                    style={[styles.bgWhite, styles.borderRadius5, styles.fontMedium, styles.font17, styles.pl20, styles.width90, styles.justifyContentCenter, {zIndex: 9, height: 40}]} 
+                    style={[styles.bgWhite, styles.borderRadius5, styles.fontMedium, styles.font17, styles.pl20, styles.width90, styles.justifyContentCenter, {zIndex: 9, height: 40, allowFontScaling}]} 
                     underlineColorAndroid={'transparent'} 
                     autoCapitalize={'none'} 
                     autoCorrect={false} 
@@ -67,6 +67,7 @@ const SearchScreen = (props) => (
                     returnKeyType={'send'} 
                     onFocus={props.onFocus}
                     onBlur={props.onBlur}
+                    allowFontScaling={false}
                     />
                     <TouchableWithoutFeedback onPress={props.onBlur}>
                         <View style={[{zIndex: 9}]}>
