@@ -168,7 +168,7 @@ class LoginScreen extends React.Component {
                                 </View>
                             </TouchableWithoutFeedback>
                             <View style={[styles.row]}>
-                                {this.props.nicknameForm && this.props.profileImg && this.props.agreeTerm ? 
+                                {this.props.checkedNickname && this.props.nicknameForm && this.props.profileImg && this.props.agreeTerm ? 
                                 <TouchableOpacity
                                     style={[styles.center, styles.mx5, styles.loginShadow, styles.my30, isSubmitting ? styles.opacity07 : null, {backgroundColor: '#1162d0', height: 35, borderRadius: 5, width: 120}]}
                                     onPress={this.props.addInfoEnd}
