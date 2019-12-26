@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Alert, ImageBackground, Image, TouchableWithoutFeedback, TextInput, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 import Modal from "react-native-modal";
+// import { GoogleSignin, GoogleSigninButton } from '@react-native-community/google-signin';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 
@@ -191,11 +192,19 @@ class LoginScreen extends React.Component {
                         예술을 이야기하다
                     </Text>
                     <Image source={require('../../assets/images/logo_with_text.png')} style={[{width: 1324*0.05, height: 1536*0.05}, styles.mt15, styles.alignSelfCenter, {marginBottom: 100}]} />
-                    <TouchableWithoutFeedback onPress={()=>this.props.handleKakaoLogin()}>
-                        <View>
-                            <Image source={require('../../assets/images/login_kakao.png')} style={[styles.loginBtn]} resizeMode={'contain'} />
-                        </View>
-                    </TouchableWithoutFeedback>
+                    <View style={[styles.alignItemsCenter]}>
+                        <TouchableWithoutFeedback onPress={()=>this.props.handleKakaoLogin()}>
+                            <View>
+                                <Image source={require('../../assets/images/login_kakao.png')} style={[styles.loginBtn]} resizeMode={'contain'} />
+                            </View>
+                        </TouchableWithoutFeedback>
+                        {/* <GoogleSigninButton
+                            style={{ width: 312, height: 56 }}
+                            size={GoogleSigninButton.Size.Wide}
+                            color={GoogleSigninButton.Color.Light}
+                            onPress={()=>this.props.handleGoogleLogin()}
+                        /> */}
+                    </View>
                 </View>
             </ImageBackground>
         )
