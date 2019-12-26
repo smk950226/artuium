@@ -17,7 +17,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return{
-        initialReview: () => {
+        initApp: () => {
+            dispatch(userActions.getProfile())
             dispatch(reviewActions.initialReview())
         },
         getInitial: (initial) => {

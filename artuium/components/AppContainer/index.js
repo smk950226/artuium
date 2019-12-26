@@ -3,9 +3,10 @@ import AppContainer from './presenter';
 import { actionCreators as userActions } from '../../redux/modules/user';
 
 const mapStateToProps = (state, ownProps) => {
-    const { user : { isLoggedIn } } = state;
+    const { user : { isLoggedIn, profile } } = state;
     return {
-        isLoggedIn
+        isLoggedIn,
+        profile
     }
 }
 
@@ -13,6 +14,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return{
         logout: () => {
             dispatch(userActions.getLogout());
+        },
+        initApp: () => {
+            dispatch(userActions.getProfile())
         }
     }
 }
