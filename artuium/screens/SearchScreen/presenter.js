@@ -36,9 +36,9 @@ const SearchScreen = (props) => (
                         <Text style={[styles.fontMedium, styles.font17]}>{props.q}</Text>
                     </View>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={props.makeBlank}>
                 <View style={[{zIndex: 9}]}>
-                    <Text style={[styles.fontBlack, styles.font17]}>X</Text>
+                    <Image source={require('../../assets/images/icon_close.png')} style={[styles.icon15]} />
                 </View>
             </TouchableWithoutFeedback>
         </View>
@@ -70,8 +70,8 @@ const SearchScreen = (props) => (
                     autoFocus={true}
                     />
                     <TouchableWithoutFeedback onPress={props.onBlur}>
-                        <View style={[{zIndex: 9}]}>
-                            <Text style={[styles.fontBlack, styles.font17]}>X</Text>
+                        <View style={[{zIndex: 99}]}>
+                            <Image source={require('../../assets/images/icon_close.png')} style={[styles.icon15]} />
                         </View>
                     </TouchableWithoutFeedback>
                 </View>
@@ -88,7 +88,7 @@ const SearchScreen = (props) => (
                     style={[styles.mt15]}
                     >
                         {props.artworks.map((artwork, index) => (
-                            <ArtworkCard key={index} artwork={artwork} />
+                            <ArtworkCard key={index} artwork={artwork} navigation={props.navigation} />
                         ))}
                     </ScrollView>
                 ) : (
@@ -128,7 +128,8 @@ SearchScreen.propTypes = {
     onBlur: PropTypes.func.isRequired,
     focused: PropTypes.bool.isRequired,
     artworks: PropTypes.array,
-    exhibitions: PropTypes.array
+    exhibitions: PropTypes.array,
+    makeBlank: PropTypes.func.isRequired
 }
 
 export default SearchScreen;

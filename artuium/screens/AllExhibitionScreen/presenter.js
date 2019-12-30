@@ -137,22 +137,25 @@ const AllExhibitionScreen = (props) => (
                 <View style={[styles.row, styles.alignItemsCenter, styles.px10, styles.pb10, styles.borderBtmGrayDb]}>
                     {(props.period.value) && (
                         <TouchableWithoutFeedback onPress={() => props.handlePeriodChange({})}>
-                            <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.borderRadiusRound, styles.bgBlue, styles.px10, styles.py5, styles.mr5]}>
-                                <Text style={[styles.fontBold, styles.font14, styles.white]}>{`${props.period.label} X`}</Text>
+                            <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.borderRadiusRound, styles.bgBlue, styles.px10, styles.py5, styles.mr5]}>
+                                <Text style={[styles.fontBold, styles.font14, styles.white]}>{`${props.period.label}`}</Text>
+                                <Image source={require('../../assets/images/icon_close_white.png')} style={[styles.icon25]} />
                             </View>
                         </TouchableWithoutFeedback>
                     )}
                     {(props.scale.value) && (
                         <TouchableWithoutFeedback onPress={() => props.handleScaleChange({})}>
-                            <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.borderRadiusRound, styles.bgBlue, styles.px10, styles.py5, styles.mr5]}>
-                                <Text style={[styles.fontBold, styles.font14, styles.white]}>{`${props.scale.label} X`}</Text>
+                            <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.borderRadiusRound, styles.bgBlue, styles.px10, styles.py5, styles.mr5]}>
+                                <Text style={[styles.fontBold, styles.font14, styles.white]}>{`${props.scale.label}`}</Text>
+                                <Image source={require('../../assets/images/icon_close_white.png')} style={[styles.icon25]} />
                             </View>
                         </TouchableWithoutFeedback>
                     )}
                     {(props.region.value) && (
                         <TouchableWithoutFeedback onPress={() => props.handleRegionChange({})}>
-                            <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.borderRadiusRound, styles.bgBlue, styles.px10, styles.py5, styles.mr5]}>
-                                <Text style={[styles.fontBold, styles.font14, styles.white]}>{`${props.region.label} X`}</Text>
+                            <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.borderRadiusRound, styles.bgBlue, styles.px10, styles.py5, styles.mr5]}>
+                                <Text style={[styles.fontBold, styles.font14, styles.white]}>{`${props.region.label}`}</Text>
+                                <Image source={require('../../assets/images/icon_close_white.png')} style={[styles.icon25]} />
                             </View>
                         </TouchableWithoutFeedback>
                     )}

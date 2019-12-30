@@ -6,6 +6,7 @@ import StarRating from 'react-native-star-rating';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import FollowerList from '../FollowerList';
 import FollowingList from '../FollowingList';
+import stripHtml from "string-strip-html";
 
 const { width, height } = Dimensions.get('window')
 
@@ -246,7 +247,7 @@ class ArtuiumCard extends Component{
                                 </TouchableWithoutFeedback>
                                 <View style={[styles.mt10]}>
                                     <Text style={[styles.fontRegular, styles.font13, styles.lineHeight20]} numberOfLines={4}>
-                                        {review.content}
+                                        {stripHtml(review.content)}
                                     </Text>
                                 </View>
                                 <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt10]}>

@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { View, Text, Image, Dimensions, TouchableWithoutFeedback, ImageBackground } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
+import stripHtml from "string-strip-html";
 
 const { width, height } = Dimensions.get('window')
 
@@ -28,7 +29,7 @@ const ExhibitionCard = (props) => (
                             </View>
                         </TouchableWithoutFeedback>
                     </View>
-                    <Text style={[styles.fontMedium, styles.font11, styles.mt25, {color: '#909090'}]} numberOfLines={4} ellipsizeMode={'clip'}>{props.exhibition.content}</Text>
+                    <Text style={[styles.fontMedium, styles.font11, styles.mt25, {color: '#909090'}]} numberOfLines={4} ellipsizeMode={'clip'}>{stripHtml(props.exhibition.content)}</Text>
                 </View>
                 {props.full ? null :
                 <View style={[styles.alignItemsCenter]}>

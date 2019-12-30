@@ -23,7 +23,6 @@ class Container extends Component{
     componentDidMount = async() => {
         const { getNotification } = this.props;
         const notification = await getNotification()
-        console.log('hihi')
         this.setState({
             notification: notification.notification,
             is_new: notification.is_new,
