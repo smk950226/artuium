@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Alert, ImageBackground, Image, TouchableWithoutFeedback, TextInput, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 import Modal from "react-native-modal";
 import { GoogleSigninButton } from '@react-native-community/google-signin';
+import { LoginButton, AccessToken } from 'react-native-fbsdk';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 
@@ -199,10 +200,29 @@ class LoginScreen extends React.Component {
                             </View>
                         </TouchableWithoutFeedback>
                         <GoogleSigninButton
-                            style={{ width: 312, height: 56 }}
+                            style={{ width: 308, height: 58 }}
                             size={GoogleSigninButton.Size.Wide}
                             color={GoogleSigninButton.Color.Light}
                             onPress={()=>this.props.handleGoogleLogin()}
+                        />
+                        <LoginButton
+                            style={[styles.mt25, { width: 300, height: 50 }]}
+                            readPermissions={["public_profile"]}
+                            onLoginFinished={
+                                (error, result) => {
+                                    if (error) {
+                                        console.log("login has error: " + result.error);
+                                    } else if (result.isCancelled) {
+                                        console.log("login is cancelled.");
+                                    } else {
+                                        AccessToken.getCurrentAccessToken().then(
+                                            (data) => {
+                                                this.props.handleFacebookLogin(data.accessToken.toString())
+                                            }
+                                        )
+                                    }
+                                }
+                            }
                         />
                     </View>
                 </View>
