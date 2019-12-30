@@ -304,7 +304,7 @@ class ArtworkContentScreen extends React.Component {
                                                 <Fragment>
                                                     <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('list')}>
                                                         <View style={[styles.ml25]}>
-                                                            <Text style={[styles.fontBlack, styles.font26, styles.grayA8]}>{'<'}</Text>
+                                                            <Image style={[{width: 14, height: 26}]} source={require('../../assets/images/icon_back.png')} />
                                                         </View>
                                                     </TouchableWithoutFeedback>
                                                     <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.alignSelfCenter, styles.mt15, styles.borderBtmGrayE8, styles.pb15, styles.widthFull]}>
