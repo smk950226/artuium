@@ -39,6 +39,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         googleLogin: (accessToken) => {
             return dispatch(userActions.googleLogin(accessToken))
         },
+        facebookLogin: (accessToken) => {
+            return dispatch(userActions.facebookLogin(accessToken))
+        },
         logout: () => {
             dispatch(userActions.getLogout());
         },

@@ -38,6 +38,25 @@ class Container extends Component{
         });
     }
 
+    _handleFacebookLogin = async(accessToken) => {
+        const result = await this.props.facebookLogin(accessToken)
+        if(result.token){
+            const profile = await this.props.getProfileByTokenReturn(result.token);
+            if(profile){
+                if(profile.nickname){
+                    await this.props.getProfileByToken(result.token)
+                    await this.props.getSaveToken(result.token)
+                }
+                else{
+                    await this._openAddInfo()
+                    this.setState({
+                        savedToken: result.token
+                    })
+                }
+            }
+        }
+    }
+
     _handleGoogleLogin = async() => {
         try {
             await GoogleSignin.hasPlayServices();
@@ -218,6 +237,7 @@ class Container extends Component{
             handleChangeShowTerm={this._handleChangeShowTerm}
             handleKakaoLogin={this._handleKakaoLogin}
             handleGoogleLogin={this._handleGoogleLogin}
+            handleFacebookLogin={this._handleFacebookLogin}
             openAddInfo={this._openAddInfo}
             closeAddInfo={this._closeAddInfo}
             addInfoEnd={this._addInfoEnd}

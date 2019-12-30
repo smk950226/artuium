@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">아틔움</string>
     <string name="kakao_app_key">2481b981f3b743556ed1554643725acf</string>
+    <string name="facebook_app_id">2719016738178477</string>
+    <string name="fb_login_protocol_scheme">fb2719016738178477</string>
 </resources>

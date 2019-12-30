@@ -832,6 +832,35 @@ function googleLogin(accessToken){
    };
 }
 
+function facebookLogin(accessToken){
+    return (dispatch) => {
+        if(accessToken){
+            return fetch(`${FETCH_URL}/api/users/login/facebook/`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    access_token: accessToken,
+                })
+            })
+            .then(response => {
+                return response.json()
+            })
+            .then(json => {
+                if(json.token && json.user){
+                    return {
+                        token: json.token
+                    }
+                }
+                else{
+                    return false
+                }
+            })
+        }
+   };
+}
+
 const initialState = {
     isLoggedIn: false,
     token: null,
@@ -919,6 +948,7 @@ const actionCreators = {
     checkNotification,
     checkNotificationAll,
     googleLogin,
+    facebookLogin,
 }
 
 export { actionCreators }
