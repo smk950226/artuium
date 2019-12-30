@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Alert } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
+import { GoogleSignin } from '@react-native-community/google-signin';
 import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import PropTypes from 'prop-types';
 import LoginScreen from './presenter';
@@ -30,38 +31,41 @@ class Container extends Component{
         addInfoModal: false,
     }
 
-    // _handleGoogleLogin = async() => {
-    //     try {
-    //         await GoogleSignin.hasPlayServices();
-    //         const userInfo = await GoogleSignin.signIn();
-    //         if(userInfo.idToken){
-    //             const profile = await this.props.getProfileByTokenReturn(userInfo.idToken);
-    //             console.log("구글 프로필", profile)
-    //             if(profile){
-    //                 if(profile.nickname){
-    //                     await this.props.getProfileByToken(userInfo.idToken)
-    //                     await this.props.getSaveToken(userInfo.idToken)
-    //                 }
-    //                 else{
-    //                     await this._openAddInfo()
-    //                     this.setState({
-    //                         savedToken: userInfo.idToken
-    //                     })
-    //                 }
-    //             }
-    //         }
-    //     } catch (error) {
-    //         if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-    //             // user cancelled the login flow
-    //         } else if (error.code === statusCodes.IN_PROGRESS) {
-    //             // operation (e.g. sign in) is in progress already
-    //         } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-    //             // play services not available or outdated
-    //         } else {
-    //             // some other error happened
-    //         }
-    //     }
-    // };
+    componentDidMount = () => {
+        GoogleSignin.configure({
+            offlineAccess: true,
+            webClientId: '650157758522-7dd0i0oa5i4f472s33aqk6j3eh5ucqf4.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+        });
+    }
+
+    _handleGoogleLogin = async() => {
+        try {
+            console.log(" :::::::::::: 스타트 구글 로그인 :::::::::::: ")
+            await GoogleSignin.hasPlayServices();
+            console.log(" :::::::::::: 해스플레이서비스성공 :::::::::::: ")
+            const userInfo = await GoogleSignin.signIn();
+            console.log("유저인포 :::::::::::: ", userInfo)
+            if(userInfo.idToken){
+                const profile = await this.props.getProfileByTokenReturn(userInfo.idToken);
+                console.log("구글 프로필 :::::::::::: ", profile)
+                if(profile){
+                    if(profile.nickname){
+                        await this.props.getProfileByToken(userInfo.idToken)
+                        await this.props.getSaveToken(userInfo.idToken)
+                    }
+                    else{
+                        await this._openAddInfo()
+                        this.setState({
+                            savedToken: userInfo.idToken
+                        })
+                    }
+                }
+            }
+        }
+        catch (error) {
+            console.log("에러 :::::::::::::: ", error)
+        }
+    };
 
     _handleKakaoLogin = async() => {
         const kakaoResult = await RNKakao.login()
