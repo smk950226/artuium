@@ -128,7 +128,7 @@ class LoginScreen extends React.Component {
                                 {this.props.profileImg ?
                                     <Image source={{uri: this.props.profileImg.uri}} style={[styles.mt30, {width: 100, height: 100, borderRadius: 50}]} />
                                 :
-                                    <View style={[styles.mt30, {width: 100, height: 100, borderRadius: 50, backgroundColor: '#d8d8d8'}]} />
+                                    <Image source={require('../../assets/images/empty_profile.png')} style={[styles.mt30, {width: 100, height: 100, borderRadius: 50}]} />
                                 }
                             </TouchableWithoutFeedback>
                             <View style={[styles.my15, styles.px15, {width: '100%'}]}>

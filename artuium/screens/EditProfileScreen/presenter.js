@@ -29,8 +29,9 @@ class EditProfileScreen extends React.Component {
                                 style={[{width, height: 210}]} resizeMode={'cover'}
                             />
                             :
-                            <View
-                                style={[{width, height: 210, backgroundColor: '#e0e0e0'}]}
+                            <Image
+                                source={require('../../assets/images/empty_bg.png')}
+                                style={[{width, height: 210}]}
                             />
                             }
                             <TouchableWithoutFeedback onPress={()=>this.props.handleChangeBackgroundImg()}>
