@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from rest_auth.registration.views import SocialLoginView
 
@@ -215,3 +216,6 @@ class KakaoLogin(SocialLoginView):
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
+
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter
