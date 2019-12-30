@@ -73,7 +73,7 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.instagram',
+    'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.kakao',
     "rest_framework",
     'rest_framework.authtoken',
