@@ -34,29 +34,27 @@ class Container extends Component{
     componentDidMount = () => {
         GoogleSignin.configure({
             offlineAccess: true,
-            webClientId: '650157758522-7dd0i0oa5i4f472s33aqk6j3eh5ucqf4.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+            webClientId: '834300059497-k2p01j18n5fnh11ek598nm138vh06s2m.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
         });
     }
 
     _handleGoogleLogin = async() => {
         try {
-            console.log(" :::::::::::: 스타트 구글 로그인 :::::::::::: ")
             await GoogleSignin.hasPlayServices();
-            console.log(" :::::::::::: 해스플레이서비스성공 :::::::::::: ")
-            const userInfo = await GoogleSignin.signIn();
-            console.log("유저인포 :::::::::::: ", userInfo)
-            if(userInfo.idToken){
-                const profile = await this.props.getProfileByTokenReturn(userInfo.idToken);
-                console.log("구글 프로필 :::::::::::: ", profile)
+            await GoogleSignin.signIn();
+            const { accessToken } = await GoogleSignin.getTokens();
+            const result = await this.props.googleLogin(accessToken)
+            if(result.token){
+                const profile = await this.props.getProfileByTokenReturn(result.token);
                 if(profile){
                     if(profile.nickname){
-                        await this.props.getProfileByToken(userInfo.idToken)
-                        await this.props.getSaveToken(userInfo.idToken)
+                        await this.props.getProfileByToken(result.token)
+                        await this.props.getSaveToken(result.token)
                     }
                     else{
                         await this._openAddInfo()
                         this.setState({
-                            savedToken: userInfo.idToken
+                            savedToken: result.token
                         })
                     }
                 }

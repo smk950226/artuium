@@ -1,58 +1,58 @@
 {
   "project_info": {
-    "project_number": "650157758522",
-    "firebase_url": "https://artuium-bce51.firebaseio.com",
-    "project_id": "artuium-bce51",
-    "storage_bucket": "artuium-bce51.appspot.com"
+    "project_number": "834300059497",
+    "firebase_url": "https://new-artuium.firebaseio.com",
+    "project_id": "new-artuium",
+    "storage_bucket": "new-artuium.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:650157758522:android:4b2d2313c5296264afbd03",
+        "mobilesdk_app_id": "1:834300059497:android:883bf0d641ace427a5a7f8",
         "android_client_info": {
-          "package_name": "com.artuium"
+          "package_name": "com.artuium.fov"
         }
       },
       "oauth_client": [
         {
-          "client_id": "650157758522-dsfk6g4aqdcf5sdkf92lvglh4to1g34e.apps.googleusercontent.com",
+          "client_id": "834300059497-v7l7c39pnk4g58c4din108ml7jvae693.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.artuium",
+            "package_name": "com.artuium.fov",
             "certificate_hash": "02dad580216f2ffb70cdbe46408cb0b943e2efe1"
           }
         },
         {
-          "client_id": "650157758522-6r79kkf5lklhke775q3mpro3g29jqdaq.apps.googleusercontent.com",
+          "client_id": "834300059497-dgdaftlcu9qpqfgqajru5u3dt34lo8rc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.artuium",
+            "package_name": "com.artuium.fov",
             "certificate_hash": "d3f20e269b4675d735f2883bbb08e9e45c210ac7"
           }
         },
         {
-          "client_id": "650157758522-4si4g06bf6ct2idhr6mockbgii46qdus.apps.googleusercontent.com",
+          "client_id": "834300059497-dfd02n85uebfru8qdfel4rrsqn2mfe2c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.artuium",
+            "package_name": "com.artuium.fov",
             "certificate_hash": "ac8d423b1ee0d43d96ea20f3cb3e0221a7177d6d"
           }
         },
         {
-          "client_id": "650157758522-7dd0i0oa5i4f472s33aqk6j3eh5ucqf4.apps.googleusercontent.com",
+          "client_id": "834300059497-k2p01j18n5fnh11ek598nm138vh06s2m.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDWhgbl4jGf6EHu-JXcica-h-1-a0uwmMw"
+          "current_key": "AIzaSyBBa26d5DcplEG3B8oeZQRAvpElEcPxTn0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "650157758522-7dd0i0oa5i4f472s33aqk6j3eh5ucqf4.apps.googleusercontent.com",
+              "client_id": "834300059497-k2p01j18n5fnh11ek598nm138vh06s2m.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

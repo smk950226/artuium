@@ -36,6 +36,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         kakaoLogin: (accessToken) => {
             return dispatch(userActions.kakaoLogin(accessToken))
         },
+        googleLogin: (accessToken) => {
+            return dispatch(userActions.googleLogin(accessToken))
+        },
         logout: () => {
             dispatch(userActions.getLogout());
         },
