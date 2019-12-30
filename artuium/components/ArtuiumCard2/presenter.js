@@ -3,6 +3,7 @@ import { View, Text, Image, Dimensions, TouchableWithoutFeedback, ImageBackgroun
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import StarRating from 'react-native-star-rating';
+import stripHtml from "string-strip-html";
 
 const { width, height } = Dimensions.get('window')
 
@@ -41,7 +42,7 @@ const ArtuiumCard2 = (props) => (
                 </View>
                 <View style={[styles.mt20]}>
                     <Text style={[styles.fontRegular, styles.font13, styles.lineHeight20]}>
-                        {props.artwork.content}
+                        {stripHtml(props.artwork.content)}
                     </Text>
                 </View>
                 <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt20]}>

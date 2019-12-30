@@ -40,6 +40,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "rn-kakao-login": "^2.0.1",
+    "string-strip-html": "^4.3.12",
     "styled-components": "^4.4.1",
     "uuid": "^3.3.3"
   },

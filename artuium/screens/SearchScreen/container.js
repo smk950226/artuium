@@ -39,6 +39,14 @@ class Container extends Component{
         })
     }
 
+    _makeBlank = () => {
+        this.setState({
+            q: "",
+            artworks: [],
+            exhibitions: []
+        })
+    }
+
     render(){
         return(
             <SearchScreen 
@@ -47,6 +55,7 @@ class Container extends Component{
             handleQChange={this._handleQChange}
             onFocus={this._onFocus}
             onBlur={this._onBlur}
+            makeBlank={this._makeBlank}
             />
         )
     }
