@@ -1,4 +1,4 @@
-package com.artuium;
+package com.artuium.fov;
 
 import android.content.Intent;
 import android.os.Bundle;
