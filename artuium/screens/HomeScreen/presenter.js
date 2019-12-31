@@ -128,14 +128,26 @@ class HomeScreen extends Component {
                         if(!this.state.changedScrollView){
                             this.setState({
                                 changedScrollView: true,
+                            },() => {
+                                Animated.timing( this.props.screenProps.scrollY, {
+                                    toValue: 100,
+                                    duration: 200,
+                                } ).start(() => {
+                                    
+                                });
                             })
                         }
                     }
                     else{
                         if(this.state.changedScrollView){
-                            this.setState({
-                                changedScrollView: false,
-                            })
+                            Animated.timing( this.props.screenProps.scrollY, {
+                                toValue: 0,
+                                duration: 200,
+                            } ).start(() => {
+                                this.setState({
+                                    changedScrollView: false,
+                                })
+                            });
                         }
                     }
                 }
