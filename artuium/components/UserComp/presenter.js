@@ -33,7 +33,7 @@ class UserComp extends Component{
                         <View style={[styles.borderRadius5, styles.bgGrayD1, styles.alignItemsCenter, styles.justifyContentCenter, styles.px25, styles.py5]}>
                             <TouchableWithoutFeedback onPress={is_me ? null : this.props.unfollow}>
                                 <View>
-                                    <Text style={[styles.fontMedium, styles.font13, styles.white]}>언팔로우</Text>
+                                    <Text style={[styles.fontMedium, styles.font13, styles.white]}>언팔로우</Text>
                                 </View>
                             </TouchableWithoutFeedback>
                         </View>
@@ -41,7 +41,7 @@ class UserComp extends Component{
                         <View style={[styles.borderRadius5, styles.bgBlue, styles.alignItemsCenter, styles.justifyContentCenter, styles.px25, styles.py5]}>
                             <TouchableWithoutFeedback onPress={is_me ? null : this.props.follow}>
                                 <View>
-                                    <Text style={[styles.fontMedium, styles.font13, styles.white]}>팔로우</Text>
+                                    <Text style={[styles.fontMedium, styles.font13, styles.white]}>팔로우</Text>
                                 </View>
                             </TouchableWithoutFeedback>
                         </View>
