@@ -199,31 +199,35 @@ class LoginScreen extends React.Component {
                                 <Image source={require('../../assets/images/login_kakao.png')} style={[styles.loginBtn]} resizeMode={'contain'} />
                             </View>
                         </TouchableWithoutFeedback>
-                        <GoogleSigninButton
-                            style={{ width: 308, height: 58 }}
-                            size={GoogleSigninButton.Size.Wide}
-                            color={GoogleSigninButton.Color.Light}
-                            onPress={()=>this.props.handleGoogleLogin()}
-                        />
-                        <LoginButton
-                            style={[styles.mt25, { width: 300, height: 50 }]}
-                            readPermissions={["public_profile"]}
-                            onLoginFinished={
-                                (error, result) => {
-                                    if (error) {
-                                        console.log("login has error: " + result.error);
-                                    } else if (result.isCancelled) {
-                                        console.log("login is cancelled.");
-                                    } else {
-                                        AccessToken.getCurrentAccessToken().then(
-                                            (data) => {
-                                                this.props.handleFacebookLogin(data.accessToken.toString())
-                                            }
-                                        )
+                        <View style={[styles.mt25, styles.loginBtn]}>
+                            <GoogleSigninButton
+                                style={{ width: 308, height: 58 }}
+                                size={GoogleSigninButton.Size.Wide}
+                                color={GoogleSigninButton.Color.Light}
+                                onPress={()=>this.props.handleGoogleLogin()}
+                            />
+                        </View>
+                        <View style={[styles.mt25, styles.loginBtn]}>
+                            <LoginButton
+                                style={[styles.loginBtn]}
+                                readPermissions={["public_profile"]}
+                                onLoginFinished={
+                                    (error, result) => {
+                                        if (error) {
+                                            console.log("login has error: " + result.error);
+                                        } else if (result.isCancelled) {
+                                            console.log("login is cancelled.");
+                                        } else {
+                                            AccessToken.getCurrentAccessToken().then(
+                                                (data) => {
+                                                    this.props.handleFacebookLogin(data.accessToken.toString())
+                                                }
+                                            )
+                                        }
                                     }
                                 }
-                            }
-                        />
+                            />
+                        </View>
                     </View>
                 </View>
             </ImageBackground>
