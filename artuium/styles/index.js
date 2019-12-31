@@ -1017,9 +1017,8 @@ const styles = StyleSheet.create({
         paddingVertical: 20
     },
     loginBtn: {
-        width: '80%',
-        minWidth: 300,
-        maxWidth: 500,
+        width: 300,
+        height: 50
     },
     circle6: {
         width: 6,

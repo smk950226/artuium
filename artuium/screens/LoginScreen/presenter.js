@@ -200,13 +200,13 @@ class LoginScreen extends React.Component {
                             </View>
                         </TouchableWithoutFeedback>
                         <GoogleSigninButton
-                            style={{ width: 308, height: 58 }}
+                            style={[styles.mt25, { width: 308, height: 58 }]}
                             size={GoogleSigninButton.Size.Wide}
                             color={GoogleSigninButton.Color.Light}
                             onPress={()=>this.props.handleGoogleLogin()}
                         />
                         <LoginButton
-                            style={[styles.mt25, { width: 300, height: 50 }]}
+                            style={[styles.loginBtn, styles.mt25]}
                             readPermissions={["public_profile"]}
                             onLoginFinished={
                                 (error, result) => {
