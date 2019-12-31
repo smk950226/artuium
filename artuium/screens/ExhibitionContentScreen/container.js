@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Keyboard } from 'react-native';
 import PropTypes from 'prop-types';
 import ExhibitionContentScreen from './presenter';
 
@@ -9,7 +9,11 @@ class Container extends Component{
         unlikeExhibition: PropTypes.func.isRequired,
         getExhibitionReviewList: PropTypes.func.isRequired,
         getExhibitionReviewListMore: PropTypes.func.isRequired,
-        createExhibitionReview: PropTypes.func.isRequired
+        createExhibitionReview: PropTypes.func.isRequired,
+        getReplyList: PropTypes.func.isRequired,
+        getReplyListMore: PropTypes.func.isRequired,
+        createReviewReply: PropTypes.func.isRequired,
+        createReplyReply: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -36,7 +40,16 @@ class Container extends Component{
             content: '',
             isSubmittingReview: false,
             total_rate,
-            showingReview: {}
+            showingReview: {},
+            loadingReply: false,
+            isLoadingMoreReply: false,
+            pageReply: 1,
+            hasNextPageReply: true,
+            replies: [],
+            refreshingReply: false,
+            contentReply: '',
+            isSubmittingReply: false,
+            selectedReply: {}
         }
     }
 
@@ -172,22 +185,54 @@ class Container extends Component{
         }
     }
     
-    _handleChangeMode = (mode, showingReview) => {
+    _handleChangeMode = async(mode, showingReview) => {
         if(mode === 'review'){
             this.setState({
                 mode,
                 rating: 0,
                 expression: '',
                 content: '',
-                showingReview
+                showingReview,
+                loadingReply: true,
+                selectedReply: {}
             })
+            const { getReplyList } = this.props;
+            const result = await getReplyList(showingReview.id)
+            if(result.status === 'ok'){
+                this.setState({
+                    replies: result.replies,
+                    isLoadingMoreReply: false,
+                    hasNextPageReply: true,
+                    pageReply: 1,
+                    loadingReply: false
+                })
+            }
+            else if(result.error){
+                this.setState({
+                    isLoadingMoreReply: false,
+                    hasNextPageReply: true,
+                    pageReply: 1,
+                    loadingReply: false
+                })
+                Alert.alert(null, result.error)
+            }
+            else{
+                this.setState({
+                    isLoadingMoreReply: false,
+                    hasNextPageReply: true,
+                    pageReply: 1,
+                    loadingReply: false
+                })
+                Alert.alert(null, '오류가 발생하였습니다.')
+            }
         }
         else{
             this.setState({
                 mode,
                 rating: 0,
                 expression: '',
-                content: ''
+                content: '',
+                selectedReply: {}
             })
         }
     }
@@ -207,6 +252,12 @@ class Container extends Component{
     _handleChangeContent = (content) => {
         this.setState({
             content
+        })
+    }
+
+    _handleChangeContentReply = (contentReply) => {
+        this.setState({
+            contentReply
         })
     }
 
@@ -231,7 +282,8 @@ class Container extends Component{
                         surprise: result.surprise,
                         isSubmittingReview: false,
                         mode: 'list',
-                        is_reviewed: true
+                        is_reviewed: true,
+                        selectedReply: {}
                     })
                 }
                 else if(result.error){
@@ -253,6 +305,158 @@ class Container extends Component{
         }
     }
 
+    _replyListMore = async() => {
+        const { getReplyListMore } = this.props;
+        const { pageReply, hasNextPageReply, isLoadingMoreReply, showingReview : { id } } = this.state;
+        if(hasNextPageReply){
+            if(!isLoadingMoreReply){
+                await this.setState({
+                    isLoadingMoreReply: true
+                });
+                const result = await getReplyListMore(id, pageReply+1);
+                if(result.status === 'ok'){
+                    await this.setState({
+                        pageReply: this.state.pageReply+1,
+                        isLoadingMoreReply: false,
+                        replies: [...this.state.replies, ...result.replies],
+                        selectedReply: {}
+                    })
+                }
+                else{
+                    this.setState({
+                        isLoadingMoreReply: false,
+                        hasNextPageReply: false,
+                        selectedReply: {}
+                    })
+                }
+            }
+        }
+    }
+
+    _refreshReply = async() => {
+        const { getReplyList } = this.props;
+        const { showingReview : { id } } = this.state;
+        if(id){
+            this.setState({
+                refreshingReply: true,
+                isLoadingMoreReply: false,
+                pageReply: 1,
+                hasNextPageReply: true,
+                selectedReply: {}
+            })
+    
+            const result = await getReplyList(id)
+            if(result.status === 'ok'){
+                this.setState({
+                    loadingReply: false,
+                    replies: result.replies,
+                    refreshingReply: false,
+                })
+            }
+            else{
+                this.setState({
+                    loadingReply: false,
+                    replies: [],
+                    refreshingReply: false
+                })
+            }
+        }
+    }
+
+    _createReview = async() => {
+        const { contentReply, isSubmittingReply, showingReview : { id }, selectedReply } = this.state;
+        const { createReviewReply, createReplyReply } = this.props;
+        if(!isSubmittingReply){
+            if(selectedReply.id){
+                if(contentReply){
+                    this.setState({
+                        isSubmittingReply: true
+                    })
+                    const result = await createReplyReply(selectedReply.id, contentReply)
+                    if(result.status === 'ok'){
+                        let newReplist = []
+                        this.state.replies.map(rep => {
+                            if(rep.id === selectedReply.id){
+                                newReplist.push({
+                                    ...rep,
+                                    reply_count: rep.reply_count + 1,
+                                    initial_replies: [
+                                        ...rep.initial_replies,
+                                        result.reply
+                                    ]
+                                })
+                            }
+                            else{
+                                newReplist.push(rep)
+                            }
+                        })
+                        this.setState({
+                            replies: newReplist,
+                            isSubmittingReply: false,
+                            contentReply: '',
+                            selectedReply: {}
+                        })
+                        Keyboard.dismiss()
+    
+    
+                    }
+                    else if(result.error){
+                        this.setState({
+                            isSubmittingReply: false
+                        })
+                        Alert.alert(null, result.error)
+                    }
+                    else{
+                        this.setState({
+                            isSubmittingReply: false
+                        })
+                        Alert.alert(null, '오류가 발생하였습니다.')
+                    }
+                }
+            }
+            else{
+                if(id && contentReply){
+                    this.setState({
+                        isSubmittingReply: true
+                    })
+                    const result = await createReviewReply(id, contentReply)
+                    if(result.status === 'ok'){
+                        this.setState({
+                            replies: [
+                                ...this.state.replies,
+                                result.reply
+                            ],
+                            isSubmittingReply: false,
+                            contentReply: '',
+                            selectedReply: {}
+                        })
+                        Keyboard.dismiss()
+    
+    
+                    }
+                    else if(result.error){
+                        this.setState({
+                            isSubmittingReply: false
+                        })
+                        Alert.alert(null, result.error)
+                    }
+                    else{
+                        this.setState({
+                            isSubmittingReply: false
+                        })
+                        Alert.alert(null, '오류가 발생하였습니다.')
+                    }
+                }
+            }
+        }
+    }
+
+    _selectReply = (selectedReply) => {
+        this.setState({
+            selectedReply
+        })
+    }
+
     render(){
         return(
             <ExhibitionContentScreen 
@@ -267,6 +471,11 @@ class Container extends Component{
             handleChangeRating={this._handleChangeRating}
             handleChangeContent={this._handleChangeContent}
             submit={this._submit}
+            replyListMore={this._replyListMore}
+            refreshReply={this._refreshReply}
+            handleChangeContentReply={this._handleChangeContentReply}
+            createReview={this._createReview}
+            selectReply={this._selectReply}
             />
         )
     }

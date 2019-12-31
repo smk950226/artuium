@@ -861,6 +861,132 @@ function facebookLogin(accessToken){
    };
 }
 
+function getReplyList(reviewId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/reply/?reviewId=${reviewId}&page=1`, {
+            headers: {
+                "Authorization": `JWT ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(logout());
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function getReplyListMore(reviewId, page){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/reply/?reviewId=${reviewId}&page=${page}`, {
+            headers: {
+                "Authorization": `JWT ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(logout());
+                return false
+            }
+            else if(response.status === 404){
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function getRepliesList(replyId, page){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/replies/?replyId=${replyId}&page=${page}`, {
+            headers: {
+                "Authorization": `JWT ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(logout());
+                return false
+            }
+            else if (response.status === 200){
+                return response.json()
+            }
+            else{
+                return false
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function createReviewReply(reviewId, content){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/reply/`, {
+            method: 'POST',
+            headers: {
+                "Authorization": `JWT ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                reviewId,
+                content
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(logout());
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function createReplyReply(replyId, content){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/replies/`, {
+            method: 'POST',
+            headers: {
+                "Authorization": `JWT ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                replyId,
+                content
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(logout());
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     isLoggedIn: false,
     token: null,
@@ -949,6 +1075,11 @@ const actionCreators = {
     checkNotificationAll,
     googleLogin,
     facebookLogin,
+    getReplyList,
+    getReplyListMore,
+    getRepliesList,
+    createReviewReply,
+    createReplyReply
 }
 
 export { actionCreators }

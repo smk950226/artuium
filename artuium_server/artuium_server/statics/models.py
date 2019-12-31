@@ -50,11 +50,11 @@ class Review(models.Model):
 
 
 class Reply(models.Model):
-    review = models.ForeignKey(Review, on_delete = models.CASCADE, related_name = 'replies')
+    review = models.ForeignKey(Review, on_delete = models.CASCADE, related_name = 'replies', blank = True, null = True)
     author = models.ForeignKey('users.User', on_delete = models.CASCADE, related_name = 'replies')
     time = models.DateTimeField('작성일', auto_now_add = True)
     content = models.TextField('내용')    
-    replies = models.ManyToManyField('self', blank = True)
+    replies = models.ManyToManyField('self', blank = True, null = True)
 
     def __str__(self):
         return  'reply-' + self.author.nickname
@@ -136,7 +136,7 @@ class NotificationCheck(models.Model):
     date = models.DateTimeField('Checked Time', auto_now_add = True)
 
     def __str__(self):
-        return  self.user.nickname + ' - ' + str(self.Notification.id)
+        return  self.user.nickname + ' - ' + str(self.notification.id)
     
     class Meta:
         ordering = ['-id']

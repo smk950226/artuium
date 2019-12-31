@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, ScrollView, TouchableWithoutFeedback, Image, Dimensions, ActivityIndicator, Animated } from 'react-native';
+import { View, Text, ScrollView, TouchableWithoutFeedback, ImageBackground, Dimensions, ActivityIndicator, Animated } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import ArtuiumCard from '../../components/ArtuiumCard';
@@ -53,8 +53,9 @@ class RecommendArtworkScreen extends Component{
                         </View>
                     ) : (
                         <ScrollView>
+                            <ImageBackground source={require('../../assets/images/gradient.png')} style={[styles.widthFull, {paddingBottom: 50}]}>
                             <Text style={[styles.fontBold, styles.font25, styles.mt20, styles.px20]}>추천하는 멤버</Text>
-                            <View style={[{width, height: 105}]}>
+                            <View style={[{width, height: 105},]}>
                                 {users && users.length > 0 ? (
                                     <ScrollView
                                         horizontal={true}
@@ -116,7 +117,8 @@ class RecommendArtworkScreen extends Component{
                                     })
                                 )}
                             </View>
-                            <Text style={[styles.fontBold, styles.font25, styles.mt25, styles.px20]}>추천하는 작품 감상</Text>
+                            </ImageBackground>
+                            <Text style={[styles.fontBold, styles.font25, styles.mt5, styles.px20]}>추천하는 작품 감상</Text>
                             <View style={[styles.mt15, styles.px20, styles.row, styles.flexWrap, styles.justifyContentBetween]}>
                                 {artworks && artworks.length > 0 ? (
                                     artworks.map((review, index) => {

@@ -26,10 +26,12 @@ const Notification = (props) => (
                                             {props.notification.review.artwork && ` '${props.notification.review.artwork.name}'`}
                                         </Text>
                                     )}
-                                    <Text style={[styles.fontMedium, styles.font13]}>
-                                    {props.notification.review.exhibition && ` 전시 감상에 `}
-                                    {props.notification.review.artwork && ` 감상에 `}
-                                    </Text>
+                                    {props.notification.review && (
+                                        <Text style={[styles.fontMedium, styles.font13]}>
+                                            {props.notification.review.exhibition && ` 전시 감상에 `}
+                                            {props.notification.review.artwork && ` 감상에 `}
+                                        </Text>
+                                    )}
                                     <Text style={[styles.fontMedium, styles.font13]}>
                                     댓글을 달았습니다.
                                     </Text>
@@ -68,10 +70,12 @@ const Notification = (props) => (
                                             {props.notification.review.artwork && ` '${props.notification.review.artwork.name}'`}
                                         </Text>
                                     )}
-                                    <Text style={[styles.fontMedium, styles.font13]}>
-                                    {props.notification.review.exhibition && ` 전시 감상에 `}
-                                    {props.notification.review.artwork && ` 감상에 `}
-                                    </Text>
+                                    {props.notification.review && (
+                                        <Text style={[styles.fontMedium, styles.font13]}>
+                                        {props.notification.review.exhibition && ` 전시 감상에 `}
+                                        {props.notification.review.artwork && ` 감상에 `}
+                                        </Text>
+                                    )}
                                     <Text style={[styles.fontMedium, styles.font13]}>
                                     좋아요를 눌렀습니다.
                                     </Text>

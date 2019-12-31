@@ -48,11 +48,28 @@ class NoticeSerializer(serializers.ModelSerializer):
 
 
 class ReplySerializer(serializers.ModelSerializer):
-    review = ReviewSerializer()
     author = users_serializers.ProfileSerializer()
+    reply_count = serializers.SerializerMethodField()
+    initial_replies = serializers.SerializerMethodField()
+    
     class Meta:
         model = models.Reply
-        fields = ['id', 'review', 'author', 'time', 'content']
+        fields = ['id', 'review', 'author', 'time', 'content', 'reply_count', 'initial_replies']
+    
+    def get_reply_count(self, obj):
+        return obj.replies.count()
+    
+    def get_initial_replies(self, obj):
+        replies =  obj.replies.order_by('time')[:3]
+        replies_list = []
+        for reply in replies:
+            replies_list.append({
+                'id': reply.id,
+                'time': reply.time,
+                'content': reply.content,
+                'author': reply.author.nickname
+            })
+        return replies_list
 
 
 class LikeSerializer(serializers.ModelSerializer):

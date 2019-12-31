@@ -2,11 +2,9 @@ import React, { Component, Fragment } from 'react';
 import { View, Text, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Modal } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
-import StarRating from 'react-native-star-rating';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import FollowerList from '../FollowerList';
 import FollowingList from '../FollowingList';
-import stripHtml from "string-strip-html";
 
 const { width, height } = Dimensions.get('window')
 
@@ -27,50 +25,46 @@ function abbreviateNumber(value) {
     return newValue;
 }
 
-class ArtuiumCard3 extends Component{
+class ReplyCard extends Component{
     static propTypes = {
-        review: PropTypes.object.isRequired,
-        is_liked: PropTypes.bool.isRequired,
-        like_count: PropTypes.number.isRequired,
-        reply_count: PropTypes.number.isRequired,
+        reply: PropTypes.object.isRequired,
+        replyListMore: PropTypes.func.isRequired,
+        isLoadingMore: PropTypes.bool.isRequired,
+        hasNextPage: PropTypes.bool.isRequired,
+        selectReply: PropTypes.func.isRequired,
+        selectedReply: PropTypes.object,
+        showFollowModal: PropTypes.bool.isRequired,
+        showProfileModal: PropTypes.bool.isRequired,
         openProfileModal: PropTypes.func.isRequired,
         closeProfileModal: PropTypes.func.isRequired,
-        showProfileModal: PropTypes.bool.isRequired,
         openFollowModal: PropTypes.func.isRequired,
         closeFollowModal: PropTypes.func.isRequired,
-        showFollowModal: PropTypes.bool.isRequired,
         follow: PropTypes.func.isRequired,
         unfollow: PropTypes.func.isRequired,
-        like: PropTypes.func.isRequired,
-        unlike: PropTypes.func.isRequired,
         is_me: PropTypes.bool.isRequired,
         is_following: PropTypes.bool.isRequired,
-        follower_count: PropTypes.number.isRequired,
         following_count: PropTypes.number.isRequired,
-        my: PropTypes.bool,
-        handleChangeMode: PropTypes.func
+        follower_count: PropTypes.number.isRequired,
+        mode: PropTypes.string.isRequired
     }
 
-    constructor(props){
-        super(props)
-        this.state = {
-            index: 0,
-            routes: [
-                { key: 'first', title: '팔로워' },
-                { key: 'second', title: '팔로잉' },
-            ],
-        }
+    state = {
+        index: 0,
+        routes: [
+            { key: 'first', title: '팔로워' },
+            { key: 'second', title: '팔로잉' },
+        ],
     }
 
     _renderFollowerList = () => {
         return(
-            <FollowerList user={this.props.review.author} />
+            <FollowerList user={this.props.reply.author} />
         )
     }
 
     _renderFollowingList = () => {
         return(
-            <FollowingList user={this.props.review.author} />
+            <FollowingList user={this.props.reply.author} />
         )
     }
 
@@ -89,83 +83,69 @@ class ArtuiumCard3 extends Component{
     }
 
     render(){
-        const { review, is_liked, like_count, reply_count, showProfileModal, showFollowModal, is_me, is_following, follower_count, following_count, my } = this.props;
+        const { reply, isLoadingMore, hasNextPage, selectedReply, showFollowModal, showProfileModal, is_me, is_following, following_count, follower_count, mode } = this.props;
         return(
             <Fragment>
-                <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('review', review)}>
-                    <View style={my ? [{width: width - 20, height: 160}, styles.px15, styles.center] : null}>
-                        <View style={[styles.py20, styles.px20, styles.mx10, styles.justifyContentBetween, my ? [{borderRadius: 5, backgroundColor: '#f2f2f2', height: '100%'}, styles.exMenuShadow, styles.widthFull] : {borderBottomColor: '#e6e6e6', borderBottomWidth: 1}]}>
-                            <View>
-                                <View style={[styles.row, styles.justifyContentBetween]}>
-                                    <TouchableWithoutFeedback onPress={this.props.openProfileModal}>
-                                        <View style={[styles.row]}>
-                                            <View>
-                                                {review.author.profile_image ? (
-                                                    <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
-                                                ) : (
-                                                    <View style={[styles.circle40, styles.bgGrayD1]} />
-                                                )}
-                                                {review.expression === 'good' && (
-                                                    <Image source={require('../../assets/images/icon_good.png')} style={[styles.emoji, { position: 'absolute', top: 26, left: 24 }]} resizeMode={'cover'} />
-                                                )}
-                                                {review.expression === 'soso' && (
-                                                    <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emoji, { position: 'absolute', top: 26, left: 24 }]} resizeMode={'cover'} />
-                                                )}
-                                                {review.expression === 'sad' && (
-                                                    <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emoji, { position: 'absolute', top: 26, left: 24 }]} resizeMode={'cover'} />
-                                                )}
-                                                {review.expression === 'surprise' && (
-                                                    <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emoji, { position: 'absolute', top: 26, left: 24 }]} resizeMode={'cover'} />
-                                                )}
-                                                {review.expression === 'thumb' && (
-                                                    <Image source={require('../../assets/images/icon_thumb.png')} style={[styles.emoji, { position: 'absolute', top: 26, left: 24 }]} resizeMode={'cover'} />
-                                                )}
-                                            </View>
-                                            <View style={[styles.ml10]}>
-                                                <View style={[styles.row]}>
-                                                    <StarRating
-                                                        disabled={true}
-                                                        maxStars={5}
-                                                        rating={review.rate}
-                                                        emptyStar={require('../../assets/images/icon_star_disabled.png')}
-                                                        fullStar={require('../../assets/images/icon_star.png')}
-                                                        halfStar={require('../../assets/images/icon_star_half.png')}
-                                                        iconSet={'Ionicons'}
-                                                        fullStarColor={'#FFBD07'}
-                                                        starSize={14}
-                                                    />
-                                                </View>
-                                                <View style={[styles.row]}>
-                                                    <Text style={[styles.fontBold, styles.font14]}>{review.author.nickname}</Text>
-                                                    <Text style={[styles.fontMedium, styles.font14, styles.grayD1, styles.ml5]}>{`${review.time.slice(0,4)}.${review.time.slice(5,7)}.${review.time.slice(8,10)}`}</Text>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback>
+                    <Fragment>
+                    <View style={[styles.row, styles.justifyContentCenter, styles.borderRadius5, styles.borderGrayF0, styles.mx25, styles.mb20, styles.py15, styles.px20, styles.bgWhite, selectedReply.id === reply.id ? { zIndex: 9999 } : null]}>
+                        <TouchableWithoutFeedback onPress={this.props.openProfileModal}>
+                            <View style={[{width: 40}, styles.alignItemsCenter, styles.mr15]}>
+                                {reply.author.profile_image ? (
+                                    <Image source={{uri: reply.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
+                                ) : (
+                                    <View style={[styles.circle40, styles.bgGrayD1]} />
+                                )}
+                            </View>
+                        </TouchableWithoutFeedback>
+                        <View style={[styles.flex1]}>
+                            <TouchableWithoutFeedback onPress={this.props.openProfileModal}>
+                                <View style={[styles.row, styles.alignItemsCenter]}>
+                                    <Text style={[styles.fontBold, styles.font14]}>{reply.author.nickname}</Text>
+                                    <Text style={[styles.fontMedium, styles.font14, styles.grayBa, styles.ml5]}>{`${reply.time.slice(0,4)}.${reply.time.slice(5,7)}.${reply.time.slice(8,10)}`}</Text>
                                 </View>
-                                <View style={[styles.mt10]}>
-                                    <Text style={[styles.fontRegular, styles.font13, styles.lineHeight20]} numberOfLines={4} ellipsizeMode={'tail'}>
-                                        {stripHtml(review.content)}
+                            </TouchableWithoutFeedback>
+                            <Text style={[styles.fontRegular, styles.font13, styles.mt5]}>
+                                {reply.content}
+                            </Text>
+                            <TouchableWithoutFeedback onPress={() => this.props.selectReply(reply)}>
+                                <View>
+                                    <Text style={[styles.fontMedium, styles.font13, styles.grayD1, styles.mt1, styles.textUnderline, styles.textRight]}>
+                                        {`대댓글 달기(${abbreviateNumber(reply.reply_count)})`}
                                     </Text>
                                 </View>
-                            </View>
-                            <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentEnd]}>
-                                <Image source={require('../../assets/images/icon_comment.png')} style={[styles.icon15]} />
-                                <Text style={[styles.fontMedium, styles.font9, styles.grayD1, styles.ml5]}>{abbreviateNumber(reply_count)}</Text>
-                                <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
-                                    <View style={[styles.row, styles.alignItemsCenter]}>
-                                        {is_liked ? (
-                                            <Image source={require('../../assets/images/icon_like_active.png')} style={[styles.icon15, styles.ml10]} />
-                                        ) : (
-                                            <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon15, styles.ml10]} />
-                                        )}
-                                        <Text style={[styles.fontMedium, styles.font9, styles.grayD1, styles.ml5]}>{abbreviateNumber(like_count)}</Text>
-                                    </View>
-                                </TouchableWithoutFeedback>
-                                <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon15, styles.ml10]} />
-                            </View>
+                            </TouchableWithoutFeedback>
                         </View>
                     </View>
+                    {reply.reply_count > 0 && reply.initial_replies && reply.initial_replies.length > 0 && (
+                        <View style={[styles.alignItemsEnd, styles.mx25, {marginTop: -10}]}>
+                            {reply.initial_replies.map((reply,index) => (
+                                <View key={index} style={[styles.borderGrayF0, styles.bgGrayFc, styles.borderRadius5, styles.width80, styles.px10, styles.py10, styles.mb10]}>
+                                    <View style={[styles.row, styles.alignItemsCenter]}>
+                                        <Text style={[styles.fontBold, styles.font14]}>
+                                            {typeof(reply.author) === typeof('str') ? reply.author : reply.author.nickname}
+                                        </Text>
+                                        <Text style={[styles.fontMedium, styles.font14, styles.grayBa, styles.ml5]}>{`${reply.time.slice(0,4)}.${reply.time.slice(5,7)}.${reply.time.slice(8,10)}`}</Text>
+                                    </View>
+                                    <Text style={[styles.fontRegular, styles.font13, styles.mt5]}>
+                                        {reply.content}
+                                    </Text>
+                                </View>
+                            ))}
+                        </View>
+                    )}
+                    {reply.reply_count > 3 && hasNextPage && (
+                            <TouchableWithoutFeedback onPress={this.props.replyListMore}>
+                                <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentEnd, styles.mx25, styles.mb10]}>
+                                    <Image source={require('../../assets/images/icon_triangle_reverse.png')} style={[styles.icon12]} />
+                                    <Text style={[styles.fontMedium, styles.font13, styles.grayD1, styles.mt1, styles.textRight, styles.ml5, isLoadingMore ? {opacity: .4} : null]}>
+                                        {`대댓글 더보기`}
+                                    </Text>
+                                </View>
+                        </TouchableWithoutFeedback>
+
+                    )}
+                    </Fragment>
                 </TouchableWithoutFeedback>
                 <Modal
                 visible={showProfileModal}
@@ -176,20 +156,20 @@ class ArtuiumCard3 extends Component{
                     <TouchableWithoutFeedback onPress={this.props.closeProfileModal}>
                         <View style={[styles.widthFull, styles.heightFull, styles.alignItemsCenter, styles.justifyContentCenter]}>
                             <View style={[styles.borderRadius10, styles.exMenuShadow, styles.overflowHidden]}>
-                                {review.author.background_image ? (
-                                    <Image source={{uri: review.author.background_image}} resizeMode={'cover'} style={[{height: 140, width: width - 40}, styles.borderTopRadius10, styles.overflowHidden]} />
+                                {reply.author.background_image ? (
+                                    <Image source={{uri: reply.author.background_image}} resizeMode={'cover'} style={[{height: 140, width: width - 40}, styles.borderTopRadius10, styles.overflowHidden]} />
                                 ) : (
                                     <View style={[{height: 140, width: width - 40}, styles.bgGrayD1, styles.borderTopRadius10]} />
                                 )}
                                 <View style={[styles.bgWhite, styles.px20, styles.py15, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.borderBtmRadius10]}>
                                     <View style={[styles.row, styles.alignItemsCenter]}>
-                                        {review.author.profile_image ? (
-                                            <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
+                                        {reply.author.profile_image ? (
+                                            <Image source={{uri: reply.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
                                         ) : (
                                             <View style={[styles.circle40, styles.bgGrayD1]} />
                                         )}
                                         <View style={[styles.ml10]}>
-                                            <Text style={[styles.fontMedium, styles.font16]}>{review.author.nickname}</Text>
+                                            <Text style={[styles.fontMedium, styles.font16]}>{reply.author.nickname}</Text>
                                             <View style={[styles.row, styles.alignItemsCenter]}>
                                                 <TouchableWithoutFeedback onPress={() => this._openFollowModal('follower')}>
                                                     <View style={[styles.mr5]}>
@@ -209,7 +189,7 @@ class ArtuiumCard3 extends Component{
                                             <View style={[styles.borderRadius5, styles.bgGrayD1, styles.alignItemsCenter, styles.justifyContentCenter, styles.px25, styles.py5]}>
                                                 <TouchableWithoutFeedback onPress={is_me ? null : this.props.unfollow}>
                                                     <View>
-                                                        <Text style={[styles.fontMedium, styles.font13, styles.white]}>언팔로우</Text>
+                                                        <Text style={[styles.fontMedium, styles.font13, styles.white]}>언팔로우</Text>
                                                     </View>
                                                 </TouchableWithoutFeedback>
                                             </View>
@@ -217,7 +197,7 @@ class ArtuiumCard3 extends Component{
                                             <View style={[styles.borderRadius5, styles.bgBlue, styles.alignItemsCenter, styles.justifyContentCenter, styles.px25, styles.py5]}>
                                                 <TouchableWithoutFeedback onPress={is_me ? null : this.props.follow}>
                                                     <View>
-                                                        <Text style={[styles.fontMedium, styles.font13, styles.white]}>팔로우</Text>
+                                                        <Text style={[styles.fontMedium, styles.font13, styles.white]}>팔로우</Text>
                                                     </View>
                                                 </TouchableWithoutFeedback>
                                             </View>
@@ -268,4 +248,4 @@ class ArtuiumCard3 extends Component{
     }
 }
 
-export default ArtuiumCard3;
+export default ReplyCard;

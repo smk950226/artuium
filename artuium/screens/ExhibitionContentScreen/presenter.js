@@ -6,6 +6,7 @@ import styles from '../../styles';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import ArtuiumCard3 from '../../components/ArtuiumCard3'
 import ArtuiumCard5 from '../../components/ArtuiumCard5'
+import ReplyCard from '../../components/ReplyCard'
 import HTML from 'react-native-render-html';
 import StarRating from 'react-native-star-rating';
 import Stars from 'react-native-stars';
@@ -70,7 +71,20 @@ class ExhibitionContentScreen extends React.Component {
         isSubmittingReview: PropTypes.bool.isRequired,
         total_rate: PropTypes.number.isRequired,
         submit: PropTypes.func.isRequired,
-        showingReview: PropTypes.object
+        showingReview: PropTypes.object,
+        replyListMore: PropTypes.func.isRequired,
+        replies: PropTypes.array,
+        isLoadingMoreReply: PropTypes.bool.isRequired,
+        hasNextPageReply: PropTypes.bool.isRequired,
+        loadingReply: PropTypes.bool.isRequired,
+        refreshReply: PropTypes.func.isRequired,
+        refreshingReply: PropTypes.bool.isRequired,
+        handleChangeContentReply: PropTypes.func.isRequired,
+        contentReply: PropTypes.string.isRequired,
+        isSubmittingReply: PropTypes.bool.isRequired,
+        createReview: PropTypes.func.isRequired,
+        selectReply: PropTypes.func.isRequired,
+        selectedReply: PropTypes.object.isRequired
     }
     constructor(props){
         super(props);
@@ -80,7 +94,7 @@ class ExhibitionContentScreen extends React.Component {
     }
 
     render(){
-        const { exhibition, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview } = this.props;
+        const { exhibition, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply } = this.props;
         return(
             exhibition ? (
                 <View style={[styles.container]}>
@@ -151,7 +165,7 @@ class ExhibitionContentScreen extends React.Component {
                                             <View style={[styles.bgGrayf0, styles.py20, styles.px30, styles.mt15]}>
                                                 <View style={[styles.row]}>
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>전시 기간</Text>
-                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{`${exhibition.open_date.slice(8,10)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} - ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
+                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{`${exhibition.open_date.slice(0,4)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} - ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>전시 장소</Text>
@@ -388,7 +402,47 @@ class ExhibitionContentScreen extends React.Component {
                                                 </Fragment>
                                             )}
                                             {mode === 'review' && (
-                                                <ArtuiumCard5 review={showingReview} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
+                                                <View style={[styles.pb30]}>
+                                                    <ArtuiumCard5 review={showingReview} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
+                                                    <View style={[styles.divView, styles.mt15]} />
+                                                    <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px30, styles.pt20, styles.mb15]}>
+                                                        <Text style={[styles.font20, styles.fontBold, {color: '#382a2a'}]}>댓글</Text>
+                                                        <Image source={require('../../assets/images/icon_sort.png')} style={[styles.icon20]} />
+                                                    </View>
+                                                    {loadingReply ? (
+                                                        <View style={[styles.container, styles.alignItemsCenter, styles.justifyContentCenter]}>
+                                                            <ActivityIndicator size={'small'} color={'#000'} />
+                                                        </View>
+                                                    ) : (
+                                                        replies && replies.length > 0 ? (
+                                                            <FlatList 
+                                                            data={replies} 
+                                                            renderItem={({item}) => (
+                                                                <View style={[item.id === selectedReply.id ? { zIndex: 9999 } : { zIndex: 10 }]}>
+                                                                    <ReplyCard reply={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} selectReply={this.props.selectReply} selectedReply={selectedReply} />
+                                                                </View>
+                                                            )} 
+                                                            numColumns={1} 
+                                                            keyExtractor={item => String(item.id)} 
+                                                            refreshing={refreshingReply} 
+                                                            onRefresh={this.props.refreshReply} 
+                                                            onEndReached={hasNextPageReply ? this.props.replyListMore : null} 
+                                                            onEndReachedThreshold={0.5} 
+                                                            bounces={true} 
+                                                            ListFooterComponent={isLoadingMoreReply ? (
+                                                                <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.mt5, styles.py5]}>
+                                                                    <ActivityIndicator size={'small'} color={'#000000'} />
+                                                                </View>
+                                                            ): null} />
+                                                        ) : (
+                                                            <ScrollView 
+                                                            refreshControl={<RefreshControl refreshing={refreshingReply} onRefresh={this.props.refreshReply} tintColor={'#000000'} />}
+                                                            >
+                                                                <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>댓글이 없습니다.</Text>
+                                                            </ScrollView>
+                                                        )
+                                                    )}
+                                                </View>
                                             )}
                                         </View>
                                     }
@@ -396,6 +450,36 @@ class ExhibitionContentScreen extends React.Component {
                             </View>
                         </View>
                     </ScrollView>
+                    {this.state.index === 1 && mode === 'review' && selectedReply.id ? (
+                        <TouchableWithoutFeedback onPress={() => this.props.selectReply({})}>
+                            <View style={[styles.screenWidth, styles.heightFull, { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.6)' }]}>
+
+                            </View>
+                        </TouchableWithoutFeedback>
+                    ) : (
+                        null
+                    )}
+                    {this.state.index === 1 && mode === 'review' && (
+                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.py10, styles.bgWhite, styles.widthFull, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
+                            <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
+                                <TextInput
+                                    style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
+                                    autoCapitalize={'none'} 
+                                    autoCorrect={false} 
+                                    value={contentReply} 
+                                    onChangeText={this.props.handleChangeContentReply} 
+                                    returnKeyType={'done'} 
+                                    placeholderTextColor={'#000000'}
+                                />
+                            </View>
+                            <TouchableWithoutFeedback onPress={this.props.createReview}>
+                                <View style={[styles.flex2, styles.bgGray33, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.py5, styles.borderRadius5, isSubmittingReply ? { opacity: .4 } : null]}>
+                                    <Text style={[styles.fontMedium, styles.font16, styles.white]}>등록</Text>
+                                </View>
+                            </TouchableWithoutFeedback>
+                        </View>
+                    )}
+                    
                 </View>
             ) : (
                 <View style={[styles.container, styles.center]}>

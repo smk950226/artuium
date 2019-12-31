@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import Container from './container';
 import { actionCreators as artworkActions } from '../../redux/modules/artwork';
+import { actionCreators as userActions } from '../../redux/modules/user';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return{
@@ -18,6 +19,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         createArtworkReview: (artworkId, rating, expression, content) => {
             return dispatch(artworkActions.createArtworkReview(artworkId, rating, expression, content))
+        },
+        getReplyList: (reviewId) => {
+            return dispatch(userActions.getReplyList(reviewId))
+        },
+        getReplyListMore: (reviewId, page) => {
+            return dispatch(userActions.getReplyListMore(reviewId, page))
+        },
+        createReviewReply: (reviewId, content) => {
+            return dispatch(userActions.createReviewReply(reviewId, content))
+        },
+        createReplyReply: (replyId, content) => {
+            return dispatch(userActions.createReplyReply(replyId, content))
         }
     }
 }

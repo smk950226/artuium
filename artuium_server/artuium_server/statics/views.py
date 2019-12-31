@@ -207,7 +207,8 @@ class LikeReview(APIView):
                     notification = models.Notification.objects.create(
                         from_user = user,
                         to_user = review.author,
-                        type = 'like_review'
+                        type = 'like_review',
+                        review = review
                     )
                     notification.save()
                     return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
@@ -533,3 +534,99 @@ class NotificationCheck(APIView):
                     return Response(status = status.HTTP_200_OK)
         except:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+
+class Reply(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        review_id = request.query_params.get('reviewId', None)
+
+        if review_id:
+            review = models.Review.objects.get(id = review_id)
+            replies = review.replies.all().order_by('time')
+
+            paginator = MainPageNumberPagination()
+            result_page = paginator.paginate_queryset(replies, request)
+            serializer = serializers.ReplySerializer(result_page, many = True, context = {'request': request})
+
+            return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'replies': serializer.data})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+    
+    def post(self, request, format = None):
+        review_id = request.data.get('reviewId', None)
+        user = request.user
+        content = request.data.get('content', None)
+
+        if review_id and content:
+            try:
+                review = models.Review.objects.get(id = review_id)
+
+                reply = models.Reply.objects.create(
+                    review = review,
+                    author = user,
+                    content = content
+                )
+
+                reply.save()
+
+                serializer = serializers.ReplySerializer(reply, context = {'request': request})
+
+                return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'reply': serializer.data})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+
+
+class Replies(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        reply_id = request.query_params.get('replyId', None)
+        page = int(request.query_params.get('page', None))
+
+        if reply_id and page:
+            reply = models.Reply.objects.get(id = reply_id)
+            replies = reply.replies.all().order_by('time')
+
+            total_count = replies.count()
+            start = 3 + (12*(page-1))
+            end = 3 + (12*(page))
+
+            if total_count > end:
+                replies = replies[start:end]
+                serializer = serializers.ReplySerializer(replies, many = True, context = {'request': request})
+                return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'has_next_page': True, 'replies': serializer.data})
+            else:
+                replies = replies[start:]
+                serializer = serializers.ReplySerializer(replies, many = True, context = {'request': request})
+                return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'has_next_page': False, 'replies': serializer.data})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+    
+    def post(self, request, format = None):
+        reply_id = request.data.get('replyId', None)
+        user = request.user
+        content = request.data.get('content', None)
+
+        if reply_id and content:
+            try:
+                reply = models.Reply.objects.get(id = reply_id)
+
+                new_reply = models.Reply.objects.create(
+                    author = user,
+                    content = content
+                )
+
+                new_reply.save()
+
+                new_reply.replies.add(reply)
+                new_reply.save()
+
+                serializer = serializers.ReplySerializer(new_reply, context = {'request': request})
+
+                return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'reply': serializer.data})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})

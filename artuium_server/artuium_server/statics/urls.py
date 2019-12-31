@@ -16,4 +16,6 @@ urlpatterns = [
     path('review/artwork/', views.ArtworkReview.as_view()),
     path('notification/', views.Notification.as_view()),
     path('notification/check/', views.NotificationCheck.as_view()),
+    path('reply/', views.Reply.as_view()),
+    path('replies/', views.Replies.as_view()),
 ]

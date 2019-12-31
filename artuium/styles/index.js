@@ -269,6 +269,10 @@ const styles = StyleSheet.create({
         color: '#A8A8A8',
         includeFontPadding: false
     },
+    grayBa: {
+        color: '#BaBaBa',
+        includeFontPadding: false
+    },
     bgBlack: {
         backgroundColor: '#000000'
     },
@@ -289,6 +293,9 @@ const styles = StyleSheet.create({
     },
     bgYellow: {
         backgroundColor: '#ffbd40'
+    },
+    bgGray33: {
+        backgroundColor: '#333333'
     },
     bgGrayA7: {
         backgroundColor: '#a7a7a7'
@@ -328,6 +335,9 @@ const styles = StyleSheet.create({
     },
     bgGrayF4: {
         backgroundColor: '#F4F4F4'
+    },
+    bgGrayFc: {
+        backgroundColor: '#FcFcFc'
     },
     justifyContentCenter: {
         justifyContent: 'center'
@@ -740,6 +750,10 @@ const styles = StyleSheet.create({
     borderBtmGrayE8: {
         borderBottomColor: '#E8E8E8',
         borderBottomWidth: 1
+    },
+    borderGrayF0: {
+        borderColor: '#F0F0F0',
+        borderWidth: 1
     },
     overflowHidden: {
         overflow: 'hidden'
