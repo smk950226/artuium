@@ -6,6 +6,7 @@ import { BottomTabBar } from 'react-navigation-tabs';
 const TabNavigation = props =>{
     if(props.navigation.state.index === 0){
         if(props.navigation.state.routes[props.navigation.state.index].index === 0){
+            console.log('??')
             return(
                 <Animated.View style={{height: props.screenProps.scrollY.interpolate({
                     inputRange: [0, 100],

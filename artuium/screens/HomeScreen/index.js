@@ -30,6 +30,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         checkNotificationAll: () => {
             return dispatch(userActions.checkNotificationAll())
         },
+        setPushToken: (pushToken) => {
+            return dispatch(userActions.setPushToken(pushToken))
+        }
     }
 }
 

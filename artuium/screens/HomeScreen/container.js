@@ -3,6 +3,7 @@ import { ActivityIndicator, View } from 'react-native';
 import styles from '../../styles';
 import PropTypes from 'prop-types';
 import HomeScreen from './presenter';
+import firebase from 'react-native-firebase';
 
 class Container extends Component{
     static propTypes = {
@@ -13,7 +14,8 @@ class Container extends Component{
         initApp: PropTypes.func.isRequired,
         getInitial: PropTypes.func.isRequired,
         checkNoticeAll: PropTypes.func.isRequired,
-        checkNotificationAll: PropTypes.func.isRequired
+        checkNotificationAll: PropTypes.func.isRequired,
+        setPushToken: PropTypes.func.isRequired
     }
 
     state = {
@@ -26,7 +28,45 @@ class Container extends Component{
         showNoticeModal: false,
         noticeNew: false,
         notificationNew: false,
+        pushPermission: false
     }
+
+    _getToken = async() => {
+        const { profile, setPushToken } = this.props;
+        if(profile){
+            fcmToken = await firebase.messaging().getToken();
+            if(fcmToken) {
+                if(profile.push_token !== fcmToken){
+                    const result =  await setPushToken(fcmToken);
+                }
+            }
+        }
+    };
+
+    _checkPermission = async () => {
+        const enabled = await firebase.messaging().hasPermission();
+        if (enabled) {
+            this.setState({
+                pushPermission: true
+            })
+            // this._getToken();
+        } 
+        else {
+            this._requestPermission();
+        }
+    };
+
+    _requestPermission = async () => {
+        try {
+            await firebase.messaging().requestPermission();
+            this.setState({
+                pushPermission: true
+            })
+            // this._getToken();
+        } catch (error) {
+            console.log('permission rejected');
+        }
+    };
 
     componentDidMount = async() => {
         const { initApp, checkNoticeAll, checkNotificationAll } = this.props;
@@ -70,11 +110,14 @@ class Container extends Component{
     }
 
     componentDidUpdate = () => {
-        if(this.state.fetchedNew && this.state.fetchedRecommended && this.state.fetchedFollowing && this.state.fetchedProfile && !this.state.fetchClear){
+        if(this.props.profile && this.state.fetchedNew && this.state.fetchedRecommended && this.state.fetchedFollowing && this.state.fetchedProfile && !this.state.fetchClear){
             this.setState({
                 loading: false,
                 fetchClear: true
             })
+            if(this.state.pushPermission){
+                this._getToken()
+            }
         }
     }
 

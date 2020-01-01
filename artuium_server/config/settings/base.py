@@ -2,7 +2,8 @@
 Base settings to build other settings files upon.
 """
 
-import environ
+import environ, os, json
+from django.core.exceptions import ImproperlyConfigured
 
 ROOT_DIR = (
     environ.Path(__file__) - 3
@@ -80,6 +81,7 @@ THIRD_PARTY_APPS = [
     'rest_auth',
     'rest_auth.registration',
     'ckeditor',
+    'fcm_django',
 ]
 
 LOCAL_APPS = [
@@ -285,4 +287,21 @@ CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
     },
+}
+
+secret_file = os.path.join(ROOT_DIR, 'config', 'settings', 'secrets.json')
+
+with open(secret_file) as f:
+    secrets = json.loads(f.read())
+
+def get_secret(setting, secrets=secrets):
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = "Set the {} environment variable".format(setting)
+        raise ImproperlyConfigured(error_msg)
+
+FCM_DJANGO_SETTINGS = {
+        "APP_VERBOSE_NAME": "Artuium",
+        "FCM_SERVER_KEY": get_secret("FCM_SERVER_KEY"),
 }

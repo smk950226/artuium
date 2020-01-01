@@ -9,6 +9,7 @@ from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from rest_auth.registration.views import SocialLoginView
+from fcm_django.fcm import fcm_send_message
 
 from . import models, serializers
 from artuium_server.statics import models as statics_models
@@ -37,12 +38,18 @@ class Follow(APIView):
                     follow = statics_models.Follow.objects.create(following = user, follower = follow_user)
                     follow.save()
 
-                    notification = statics_models.Notification.objects.create(
-                        from_user = user,
-                        to_user = follow_user,
-                        type = 'following'
-                    )
-                    notification.save()
+                    if user.id != follow_user.id:
+                        notification = statics_models.Notification.objects.create(
+                            from_user = user,
+                            to_user = follow_user,
+                            type = 'following'
+                        )
+                        notification.save()
+                        if follow_user.push_token:
+                            text = ''
+                            text += user.nickname
+                            text += ' 님이 회원님을 팔로우합니다.'
+                            fcm_send_message(registration_id = follow_user.push_token, title='팔로우 알림', body=text, android_channel_id = 'artuium', icon='ic_notification')
                     return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
             except:
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '회원이 존재하지 않습니다.'})
@@ -210,6 +217,17 @@ class AddInfo(APIView):
         serializer = serializers.ProfileSerializer(user, context = {'request': request})
 
         return Response(status = status.HTTP_200_OK, data = serializer.data)
+
+
+class PushToken(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, format = None):
+        user = request.user
+        push_token = request.data.get('pushToken', None)
+        user.push_token = push_token
+        user.save()
+        return Response(status = status.HTTP_200_OK)
+
 
 class KakaoLogin(SocialLoginView):
     adapter_class = KakaoOAuth2Adapter

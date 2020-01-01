@@ -987,6 +987,32 @@ function createReplyReply(replyId, content){
     }
 }
 
+function setPushToken(pushToken){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/users/push/token/`, {
+            method: 'POST',
+            headers: {
+                "Authorization": `JWT ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                pushToken
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(logout());
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     isLoggedIn: false,
     token: null,
@@ -1079,7 +1105,8 @@ const actionCreators = {
     getReplyListMore,
     getRepliesList,
     createReviewReply,
-    createReplyReply
+    createReplyReply,
+    setPushToken
 }
 
 export { actionCreators }

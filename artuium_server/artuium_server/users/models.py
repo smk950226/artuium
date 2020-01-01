@@ -13,6 +13,8 @@ class User(AbstractUser):
     profile_image = models.ImageField('Profile Image', upload_to = 'user/profile/', blank = True, null = True)
     background_image = models.ImageField('Background Image', upload_to = 'user/background/', blank = True, null = True)
     recommended = models.BooleanField('추천 여부', default = False)
+    push_token = models.CharField('푸쉬 토큰', max_length = 500, blank = True, null = True)
+    initial = models.BooleanField('첫 사용 여부', default = True)
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})

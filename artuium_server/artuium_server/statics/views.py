@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
+from fcm_django.fcm import fcm_send_message
 
 from . import models, serializers
 from artuium_server.common.pagination import MainPageNumberPagination
@@ -204,13 +205,26 @@ class LikeReview(APIView):
                 else:
                     like = models.Like.objects.create(user = user, review = review)
                     like.save()
-                    notification = models.Notification.objects.create(
-                        from_user = user,
-                        to_user = review.author,
-                        type = 'like_review',
-                        review = review
-                    )
-                    notification.save()
+                    if user.id != review.author.id:
+                        notification = models.Notification.objects.create(
+                            from_user = user,
+                            to_user = review.author,
+                            type = 'like_review',
+                            review = review
+                        )
+                        notification.save()
+                        if review.author.push_token:
+
+                            text = ''
+                            text += user.nickname
+                            text += ' 님이 회원님의 '
+                            if review.artwork:
+                                text += "'" + review.artwork.name + "'"
+                            elif review.exhibition:
+                                text += "'" + review.exhibition.name + "'" + '전시 '
+                            text += '감상을 좋아합니다.'
+                            fcm_send_message(registration_id = review.author.push_token, title='좋아요 알림', body=text, android_channel_id = 'artuium', icon='ic_notification')
+
                     return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
             except:
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
@@ -570,6 +584,26 @@ class Reply(APIView):
 
                 reply.save()
 
+                if user.id != review.author.id:
+                    notification = models.Notification.objects.create(
+                        from_user = user,
+                        to_user = review.author,
+                        type = 'comment_review',
+                        review = review,
+                        reply = reply
+                    )
+                    notification.save()
+                    if review.author.push_token:
+                        text = ''
+                        text += user.nickname
+                        text += ' 님이 회원님의 '
+                        if review.artwork:
+                            text += "'" + review.artwork.name + "'"
+                        elif review.exhibition:
+                            text += "'" + review.exhibition.name + "'" + '전시 '
+                        text += '감상에 댓글을 달았습니다.'
+                        fcm_send_message(registration_id = review.author.push_token, title='댓글 알림', body=text, android_channel_id = 'artuium', icon='ic_notification')
+
                 serializer = serializers.ReplySerializer(reply, context = {'request': request})
 
                 return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'reply': serializer.data})
@@ -622,6 +656,25 @@ class Replies(APIView):
 
                 new_reply.replies.add(reply)
                 new_reply.save()
+                if user.id != reply.author.id:
+                    notification = models.Notification.objects.create(
+                        from_user = user,
+                        to_user = reply.author,
+                        type = 'comment_reply',
+                        review = reply.review,
+                        reply = new_reply
+                    )
+                    notification.save()
+                    if reply.author.push_token:
+                        text = ''
+                        text += user.nickname
+                        text += ' 님이 회원님의 '
+                        if reply.review.artwork:
+                            text += "'" + reply.review.artwork.name + "'"
+                        elif reply.review.exhibition:
+                            text += "'" + reply.review.exhibition.name + "'" + '전시 '
+                        text += '감상의 댓글에 대댓글을 달았습니다.'
+                        fcm_send_message(registration_id = reply.author.push_token, title='댓글 알림', body=text, android_channel_id = 'artuium', icon='ic_notification')
 
                 serializer = serializers.ReplySerializer(new_reply, context = {'request': request})
 

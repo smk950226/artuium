@@ -4,23 +4,70 @@ import { View, StatusBar, ActivityIndicator, Animated } from 'react-native';
 import styles from '../../styles';
 import GeneralContainer from '../../navigation/GeneralNavigation';
 import LoggedOutContainer from '../../navigation/LoggedOutNavigation';
+import firebase from 'react-native-firebase';
 
 class AppContainer extends Component {
     static propTypes = {
         isLoggedIn: PropTypes.bool.isRequired,
         logout: PropTypes.func.isRequired,
-        initApp: PropTypes.func.isRequired
+        initApp: PropTypes.func.isRequired,
+        setPushToken: PropTypes.func.isRequired
     };
 
     state = {
         loading: true,
         scrollY: new Animated.Value(0),
         fetchedProfile: false,
-        fetchClear: false
+        fetchClear: false,
+        pushPermission: false
     }
+
+    _getToken = async() => {
+        const { profile, setPushToken } = this.props;
+        if(profile){
+            fcmToken = await firebase.messaging().getToken();
+            if(fcmToken) {
+                if(profile.push_token !== fcmToken){
+                    const result =  await setPushToken(fcmToken);
+                }
+            }
+        }
+    };
+
+    _checkPermission = async () => {
+        const enabled = await firebase.messaging().hasPermission();
+        if (enabled) {
+            this.setState({
+                pushPermission: true
+            })
+            console.log('Permission', enabled)
+            // this._getToken();
+        } 
+        else {
+            this._requestPermission();
+        }
+    };
+
+    _requestPermission = async () => {
+        try {
+            await firebase.messaging().requestPermission();
+            this.setState({
+                pushPermission: true
+            })
+            // this._getToken();
+        } catch (error) {
+            console.log('permission rejected');
+        }
+    };
 
     componentDidMount = async() => {
         const { isLoggedIn, initApp } = this.props;
+        const channel = new firebase.notifications.Android.Channel('artuium', 'Artuium', firebase.notifications.Android.Importance.Max)
+        .setDescription("Artuium's Notification");
+        firebase.notifications().android.createChannel(channel);
+        this._checkPermission();
+        this._createNotificationListeners();
+
         if(isLoggedIn){
             await initApp()
         }
@@ -30,6 +77,32 @@ class AppContainer extends Component {
             })
         }
     }
+
+    componentWillUnmount() {
+        this._removeNotificationListeners();
+    }
+
+    _createNotificationListeners = async() => {
+        this.onUnsubscribeNotificaitonListener = firebase
+        .notifications()
+        .onNotification(notification => {
+            firebase.notifications().displayNotification(notification);
+        });
+
+        this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+            console.log('onNotificationOpened', notificationOpen);
+        });
+    
+        const notificationOpen = await firebase.notifications().getInitialNotification();
+        if (notificationOpen) {
+            console.log('getInitialNotification', notificationOpen);
+        }
+      };
+    
+    _removeNotificationListeners = () => {
+        this.onUnsubscribeNotificaitonListener();
+        this.notificationOpenedListener();
+    };
 
     static getDerivedStateFromProps(nextProps, prevState){
         const { fetchedProfile } = prevState;
@@ -45,12 +118,15 @@ class AppContainer extends Component {
         }
     }
 
-    componentDidUpdate = () => {
-        if(this.state.fetchedProfile && !this.state.fetchClear){
+    componentDidUpdate = (prevProps, prevState) => {
+        if(this.props.profile && this.state.fetchedProfile && !this.state.fetchClear){
             this.setState({
                 loading: false,
                 fetchClear: true
             })
+            if(this.state.pushPermission){
+                this._getToken()
+            }
         }
     }
 
