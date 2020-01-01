@@ -89,7 +89,8 @@ class Notice(APIView):
         notice = models.Notice.objects.all().order_by('-date')
         if notice.count() > 0:
             notice_check = models.NoticeCheck.objects.filter(user = user)
-            if notice_check.count() == notice.count():
+            after_notice = models.Notice.objects.filter(date__gte = user.date_joined).order_by('-date')
+            if notice_check.count() == after_notice.count():
                 paginator = MainPageNumberPagination()
                 result_page = paginator.paginate_queryset(notice, request)
                 serializer = serializers.NoticeSerializer(result_page, many = True, context = {'request': request})
@@ -114,7 +115,7 @@ class NoticeCheck(APIView):
     def get(self, request, format = None):
         user = request.user
         notice_check = models.NoticeCheck.objects.filter(user = user).count()
-        notice = models.Notice.objects.all().count()
+        notice = models.Notice.objects.filter(date__gte = user.date_joined).count()
 
         if notice_check == notice:
             return Response(status = status.HTTP_200_OK, data = {'is_new': False})
@@ -133,7 +134,7 @@ class NoticeCheck(APIView):
             else:
                 notice_check = models.NoticeCheck.objects.create(user = user, notice = notice)
                 notice_check.save()
-                if models.Notice.objects.all().count() == models.NoticeCheck.objects.filter(user = user).count():
+                if models.Notice.objects.filter(date__gte = user.date_joined).count() == models.NoticeCheck.objects.filter(user = user).count():
                     return Response(status = status.HTTP_201_CREATED)
                 else:
                     return Response(status = status.HTTP_200_OK)
@@ -542,7 +543,7 @@ class NotificationCheck(APIView):
             else:
                 notification_check = models.NotificationCheck.objects.create(user = user, notification = notification)
                 notification_check.save()
-                if models.Notification.objects.all().count() == models.NotificationCheck.objects.filter(user = user).count():
+                if models.Notification.objects.filter(to_user = user).count() == models.NotificationCheck.objects.filter(user = user).count():
                     return Response(status = status.HTTP_201_CREATED)
                 else:
                     return Response(status = status.HTTP_200_OK)

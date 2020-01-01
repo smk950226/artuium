@@ -4,14 +4,15 @@ import { actionCreators as reviewActions } from '../../redux/modules/review';
 import { actionCreators as userActions } from '../../redux/modules/user';
 
 const mapStateToProps = (state, ownProps) => {
-    const { review : { initialStatus, newReviews, recommendedReviews, followingReviews }, user : { profile, initial } } = state;
+    const { review : { initialStatus, newReviews, recommendedReviews, followingReviews }, user : { profile, notificationNew, noticeNew } } = state;
     return {
         initialStatus,
         newReviews,
         recommendedReviews,
         followingReviews,
-        initial,
         profile,
+        notificationNew,
+        noticeNew
     }
 }
 
@@ -22,7 +23,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(reviewActions.initialReview())
         },
         getInitial: (initial) => {
-            dispatch(userActions.getInitial(initial))
+            return dispatch(userActions.getInitial(initial))
         },
         checkNoticeAll: () => {
             return dispatch(userActions.checkNoticeAll())
@@ -32,6 +33,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         setPushToken: (pushToken) => {
             return dispatch(userActions.setPushToken(pushToken))
+        },
+        getProfile: () => {
+            dispatch(userActions.getProfile())
+        },
+        getNoticeNew: (noticeNew) => {
+            dispatch(userActions.getNoticeNew(noticeNew))
+        },
+        getNotificationNew: (notificationNew) => {
+            dispatch(userActions.getNotificationNew(notificationNew))
         }
     }
 }

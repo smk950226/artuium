@@ -229,6 +229,16 @@ class PushToken(APIView):
         return Response(status = status.HTTP_200_OK)
 
 
+class Initial(APIView):
+    permission_classes = [IsAuthenticated]
+    def put(self, request, format = None):
+        user = request.user
+        initial = request.data.get('initial', None)
+        user.initial = initial
+        user.save()
+        return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+
+
 class KakaoLogin(SocialLoginView):
     adapter_class = KakaoOAuth2Adapter
 

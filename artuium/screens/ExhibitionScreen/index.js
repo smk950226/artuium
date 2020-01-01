@@ -4,13 +4,15 @@ import { actionCreators as exhibitionActions } from '../../redux/modules/exhibit
 import { actionCreators as userActions } from '../../redux/modules/user';
 
 const mapStateToProps = (state, ownProps) => {
-    const { exhibition : { initialStatus, newExhibitions, recommendedExhibitions, hotExhibitions, pastExhibitions } } = state;
+    const { exhibition : { initialStatus, newExhibitions, recommendedExhibitions, hotExhibitions, pastExhibitions }, user : { notificationNew, noticeNew } } = state;
     return {
         initialStatus,
         newExhibitions,
         recommendedExhibitions,
         hotExhibitions,
-        pastExhibitions
+        pastExhibitions,
+        notificationNew,
+        noticeNew
     }
 }
 
@@ -24,6 +26,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         checkNotificationAll: () => {
             return dispatch(userActions.checkNotificationAll())
+        },
+        getNoticeNew: (noticeNew) => {
+            dispatch(userActions.getNoticeNew(noticeNew))
+        },
+        getNotificationNew: (notificationNew) => {
+            dispatch(userActions.getNotificationNew(notificationNew))
         }
     }
 }

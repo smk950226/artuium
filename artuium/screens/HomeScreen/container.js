@@ -15,20 +15,28 @@ class Container extends Component{
         getInitial: PropTypes.func.isRequired,
         checkNoticeAll: PropTypes.func.isRequired,
         checkNotificationAll: PropTypes.func.isRequired,
-        setPushToken: PropTypes.func.isRequired
+        setPushToken: PropTypes.func.isRequired,
+        getNoticeNew: PropTypes.func.isRequired,
+        getNotificationNew: PropTypes.func.isRequired,
+        noticeNew: PropTypes.bool.isRequired,
+        notificationNew: PropTypes.bool.isRequired
     }
 
-    state = {
-        loading: true,
-        fetchedProfile: false,
-        fetchedNew: false,
-        fetchedRecommended: false,
-        fetchedFollowing: false,
-        fetchClear: false,
-        showNoticeModal: false,
-        noticeNew: false,
-        notificationNew: false,
-        pushPermission: false
+    constructor(props){
+        super(props);
+        const { noticeNew, notificationNew } = props;
+        this.state = {
+            loading: true,
+            fetchedProfile: false,
+            fetchedNew: false,
+            fetchedRecommended: false,
+            fetchedFollowing: false,
+            fetchClear: false,
+            showNoticeModal: false,
+            noticeNew,
+            notificationNew,
+            pushPermission: false
+        }
     }
 
     _getToken = async() => {
@@ -69,20 +77,48 @@ class Container extends Component{
     };
 
     componentDidMount = async() => {
-        const { initApp, checkNoticeAll, checkNotificationAll } = this.props;
-        const noticeNew = await checkNotificationAll()
-        const notificationNew = await checkNoticeAll()
+        const { initApp, checkNoticeAll, checkNotificationAll, getNoticeNew, getNotificationNew } = this.props;
+        const noticeNew = await checkNoticeAll()
+        const notificationNew = await checkNotificationAll()
         if(noticeNew.is_new){
+            getNoticeNew(true)
             this.setState({
                 noticeNew: true
             })
         }
+        else{
+            getNoticeNew(false)
+            this.setState({
+                noticeNew: false
+            })
+        }
         if(notificationNew.is_new){
+            getNotificationNew(true)
             this.setState({
                 notificationNew: true
             })
         }
+        else{
+            getNotificationNew(false)
+            this.setState({
+                notificationNew: false
+            })
+        }
         await initApp()
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        console.log('hihi')
+        if(prevProps.noticeNew !== this.props.noticeNew){
+            this.setState({
+                noticeNew: this.props.noticeNew
+            })
+        }
+        if(prevProps.notificationNew !== this.props.notificationNew){
+            this.setState({
+                notificationNew: this.props.notificationNew
+            })
+        }
     }
 
     static getDerivedStateFromProps(nextProps, prevState){
@@ -133,12 +169,14 @@ class Container extends Component{
         })
     }
     _handleNoticeNewChange = (noticeNew) => {
+        this.props.getNoticeNew(noticeNew)
         this.setState({
             noticeNew
         })
     }
 
     _handleNotificationNewChange = (notificationNew) => {
+        this.props.getNotificationNew(notificationNew)
         this.setState({
             notificationNew
         })

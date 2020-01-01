@@ -4,7 +4,8 @@ import uuidv1 from 'uuid';
 const LOGOUT = 'LOGOUT';
 const SAVE_TOKEN = 'SAVE_TOKEN';
 const SET_PROFILE = 'SET_PROFILE';
-const SET_INITIAL = 'SET_INITIAL';
+const SET_NOTICE_NEW = 'SET_NOTICE_NEW';
+const SET_NOTIFICATION_NEW = 'SET_NOTIFICATION_NEW';
 
 function logout(){
     return {
@@ -26,10 +27,17 @@ function setProfile(profile){
     }
 }
 
-function setInitial(initial){
+function setNoticeNew(noticeNew){
     return {
-        type: SET_INITIAL,
-        initial
+        type: SET_NOTICE_NEW,
+        noticeNew
+    }
+}
+
+function setNotificationNew(notificationNew){
+    return {
+        type: SET_NOTIFICATION_NEW,
+        notificationNew
     }
 }
 
@@ -45,9 +53,43 @@ function getSaveToken(token){
     }
 }
 
-function getInitial(initial){
+function getNoticeNew(noticeNew){
+    console.log('notice chance', noticeNew)
     return (dispatch) => {
-        dispatch(setInitial(initial))
+        dispatch(setNoticeNew(noticeNew))
+    }
+}
+
+function getNotificationNew(notificationNew){
+    console.log('notification change', notificationNew)
+    return (dispatch) => {
+        dispatch(setNotificationNew(notificationNew))
+    }
+}
+
+function getInitial(initial){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/users/initial/`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `JWT ${token}`
+            },
+            body: JSON.stringify({
+                initial
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
     }
 }
 
@@ -1016,7 +1058,8 @@ function setPushToken(pushToken){
 const initialState = {
     isLoggedIn: false,
     token: null,
-    initial: true
+    noticeNew: false,
+    notificationNew: false,
 };
 
 function reducer(state = initialState, action){
@@ -1027,8 +1070,10 @@ function reducer(state = initialState, action){
             return applySaveToken(state, action);
         case SET_PROFILE:
             return applySetProfile(state, action);
-        case SET_INITIAL:
-            return applySetInitial(state, action);
+        case SET_NOTICE_NEW:
+            return applySetNoticeNew(state, action);
+        case SET_NOTIFICATION_NEW:
+            return applySetNotificationNew(state, action);
         default:
            return state;
     }
@@ -1057,11 +1102,19 @@ function applySetProfile(state, action){
     }
 }
 
-function applySetInitial(state, action){
-    const { initial } = action;
+function applySetNoticeNew(state, action){
+    const { noticeNew } = action;
     return {
         ...state,
-        initial
+        noticeNew
+    }
+}
+
+function applySetNotificationNew(state, action){
+    const { notificationNew } = action;
+    return {
+        ...state,
+        notificationNew
     }
 }
 
@@ -1106,7 +1159,9 @@ const actionCreators = {
     getRepliesList,
     createReviewReply,
     createReplyReply,
-    setPushToken
+    setPushToken,
+    getNoticeNew,
+    getNotificationNew
 }
 
 export { actionCreators }
