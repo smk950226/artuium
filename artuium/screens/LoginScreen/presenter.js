@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Alert, ImageBackground, Image, TouchableWithoutFeedback, TextInput, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 import Modal from "react-native-modal";
 import { GoogleSigninButton } from '@react-native-community/google-signin';
-import { LoginButton, AccessToken } from 'react-native-fbsdk';
+import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 
@@ -17,6 +17,25 @@ class LoginScreen extends React.Component {
         handleChangeShowTerm: PropTypes.func.isRequired,
         showTerm: PropTypes.bool.isRequired
     }
+
+    _handleFacebookLogin = () => {
+        LoginManager.logInWithPermissions(['public_profile']).then(
+            function (result) {
+                if (result.isCancelled) {
+                    console.log("login is cancelled.");
+                } else {
+                    AccessToken.getCurrentAccessToken().then(
+                        (data) => {
+                            this.props.handleFacebookLogin(data.accessToken.toString())
+                        }
+                    )
+                }
+            },
+            function (error) {
+                console.log("login has error: " + error);
+            }
+        )
+      }
 
     render(){
         const { isCheckingNickname, isSubmitting, agreeTerm, showTerm } = this.props;
@@ -205,25 +224,13 @@ class LoginScreen extends React.Component {
                             color={GoogleSigninButton.Color.Light}
                             onPress={()=>this.props.handleGoogleLogin()}
                         />
-                        <LoginButton
-                            style={[styles.loginBtn, styles.mt25]}
-                            readPermissions={["public_profile"]}
-                            onLoginFinished={
-                                (error, result) => {
-                                    if (error) {
-                                        console.log("login has error: " + result.error);
-                                    } else if (result.isCancelled) {
-                                        console.log("login is cancelled.");
-                                    } else {
-                                        AccessToken.getCurrentAccessToken().then(
-                                            (data) => {
-                                                this.props.handleFacebookLogin(data.accessToken.toString())
-                                            }
-                                        )
-                                    }
-                                }
-                            }
-                        />
+                        <TouchableWithoutFeedback onPress={this._handleFacebookLogin}>
+                            <View style={[styles.loginBtn, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px20, styles.mt25, { backgroundColor: '#3B77EA', borderRadius: 3 }]}>
+                                <Image source={require('../../assets/images/logo_fb.png')} style={[{width: 30, height: 30}, styles.alignSelfCenter]} />
+                                <Text style={[styles.white, styles.fontBold, styles.font14, styles.textCenter]}>Facebook으로 계속하기</Text>
+                                <Image source={require('../../assets/images/logo_fb.png')} style={[{width: 30, height: 30}, styles.alignSelfCenter, styles.hidden]} />
+                            </View>
+                        </TouchableWithoutFeedback>
                     </View>
                 </View>
             </ImageBackground>
