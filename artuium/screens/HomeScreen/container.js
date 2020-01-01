@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import styles from '../../styles';
 import PropTypes from 'prop-types';
 import HomeScreen from './presenter';
 import firebase from 'react-native-firebase';
+import { NavigationEvents } from "react-navigation";
 
 class Container extends Component{
     static propTypes = {
@@ -72,7 +73,6 @@ class Container extends Component{
             })
             // this._getToken();
         } catch (error) {
-            console.log('permission rejected');
         }
     };
 
@@ -108,7 +108,6 @@ class Container extends Component{
     }
 
     componentDidUpdate = (prevProps, prevState) => {
-        console.log('hihi')
         if(prevProps.noticeNew !== this.props.noticeNew){
             this.setState({
                 noticeNew: this.props.noticeNew
@@ -182,6 +181,37 @@ class Container extends Component{
         })
     }
 
+    _remount = async() => {
+        const { initApp, checkNoticeAll, checkNotificationAll, getNoticeNew, getNotificationNew } = this.props;
+        const noticeNew = await checkNoticeAll()
+        const notificationNew = await checkNotificationAll()
+        if(noticeNew.is_new){
+            getNoticeNew(true)
+            this.setState({
+                noticeNew: true
+            })
+        }
+        else{
+            getNoticeNew(false)
+            this.setState({
+                noticeNew: false
+            })
+        }
+        if(notificationNew.is_new){
+            getNotificationNew(true)
+            this.setState({
+                notificationNew: true
+            })
+        }
+        else{
+            getNotificationNew(false)
+            this.setState({
+                notificationNew: false
+            })
+        }
+        await initApp()
+    }
+
     render(){
         const { loading } = this.state;
         if(loading){
@@ -193,14 +223,22 @@ class Container extends Component{
         }
         else{
             return(
-                <HomeScreen 
-                    {...this.props}
-                    {...this.state}
-                    openNoticeModal={this._openNoticeModal}
-                    closeNoticeModal={this._closeNoticeModal}
-                    handleNoticeNewChange={this._handleNoticeNewChange}
-                    handleNotificationNewChange={this._handleNotificationNewChange}
-                />
+                <Fragment>
+                    <NavigationEvents
+                    onWillFocus={payload => {
+                        this._remount()
+                    }}
+                    />
+                    <HomeScreen 
+                        {...this.props}
+                        {...this.state}
+                        openNoticeModal={this._openNoticeModal}
+                        closeNoticeModal={this._closeNoticeModal}
+                        handleNoticeNewChange={this._handleNoticeNewChange}
+                        handleNotificationNewChange={this._handleNotificationNewChange}
+                    />
+                </Fragment>
+                
             )
         }
     }

@@ -7,7 +7,6 @@ import ArtuiumCard from '../../components/ArtuiumCard';
 import NoticeScreen from '../../screens/NoticeScreen';
 import NotificationScreen from '../../screens/NotificationScreen';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
-import { BottomTabBar } from 'react-navigation-tabs';
 
 const iosStatusBarHeight = getStatusBarHeight()
 
@@ -139,7 +138,7 @@ class HomeScreen extends Component {
                                     toValue: 100,
                                     duration: 200,
                                 } ).start(() => {
-                                    
+
                                 });
                             })
                         }

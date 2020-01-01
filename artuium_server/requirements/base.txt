@@ -21,3 +21,4 @@ djangorestframework-jwt==1.11.0
 awsebcli==3.16.0
 requests==2.20.1
 django-ckeditor==5.8.0
+fcm-django==0.3.3

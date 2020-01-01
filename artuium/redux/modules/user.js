@@ -54,14 +54,12 @@ function getSaveToken(token){
 }
 
 function getNoticeNew(noticeNew){
-    console.log('notice chance', noticeNew)
     return (dispatch) => {
         dispatch(setNoticeNew(noticeNew))
     }
 }
 
 function getNotificationNew(notificationNew){
-    console.log('notification change', notificationNew)
     return (dispatch) => {
         dispatch(setNotificationNew(notificationNew))
     }

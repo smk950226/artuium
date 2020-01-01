@@ -40,7 +40,6 @@ class AppContainer extends Component {
             this.setState({
                 pushPermission: true
             })
-            console.log('Permission', enabled)
             // this._getToken();
         } 
         else {
@@ -56,7 +55,6 @@ class AppContainer extends Component {
             })
             // this._getToken();
         } catch (error) {
-            console.log('permission rejected');
         }
     };
 
@@ -127,6 +125,11 @@ class AppContainer extends Component {
             if(this.state.pushPermission){
                 this._getToken()
             }
+        }
+        if(!prevProps.isLoggedIn && this.props.isLoggedIn){
+            this.setState({
+                scrollY: new Animated.Value(0)
+            })
         }
     }
 

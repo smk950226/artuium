@@ -38,7 +38,6 @@ class Container extends Component{
                     isLoadingMore: true
                 });
                 const result = await getExhibitionLikeListMore(page+1);
-                console.log(result)
                 if(result){
                     await this.setState({
                         page: this.state.page+1,

@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import styles from '../../styles';
 import PropTypes from 'prop-types';
 import ExhibitionScreen from './presenter';
+import { NavigationEvents } from "react-navigation";
 
 class Container extends Component{
     static propTypes = {
@@ -157,6 +158,37 @@ class Container extends Component{
         })
     }
 
+    _remount = async() => {
+        const { initialExhibition, checkNoticeAll, checkNotificationAll, getNoticeNew, getNotificationNew } = this.props;
+        const noticeNew = await checkNoticeAll()
+        const notificationNew = await checkNotificationAll()
+        if(noticeNew.is_new){
+            getNoticeNew(true)
+            this.setState({
+                noticeNew: true
+            })
+        }
+        else{
+            getNoticeNew(false)
+            this.setState({
+                noticeNew: false
+            })
+        }
+        if(notificationNew.is_new){
+            getNotificationNew(true)
+            this.setState({
+                notificationNew: true
+            })
+        }
+        else{
+            getNotificationNew(false)
+            this.setState({
+                notificationNew: false
+            })
+        }
+        await initialExhibition()
+    }
+
     render(){
         const { loading } = this.state;
         if(loading){
@@ -168,15 +200,23 @@ class Container extends Component{
         }
         else{
             return(
-                <ExhibitionScreen 
-                    {...this.props}
-                    {...this.state}
-                    openNoticeModal={this._openNoticeModal}
-                    closeNoticeModal={this._closeNoticeModal}
-                    handleNoticeNewChange={this._handleNoticeNewChange}
-                    handleNotificationNewChange={this._handleNotificationNewChange}
-                    refresh={this._refresh}
-                />
+                <Fragment>
+                    <NavigationEvents
+                    onWillFocus={payload => {
+                        this._remount()
+                    }}
+                    />
+                    <ExhibitionScreen 
+                        {...this.props}
+                        {...this.state}
+                        openNoticeModal={this._openNoticeModal}
+                        closeNoticeModal={this._closeNoticeModal}
+                        handleNoticeNewChange={this._handleNoticeNewChange}
+                        handleNotificationNewChange={this._handleNotificationNewChange}
+                        refresh={this._refresh}
+                    />
+                </Fragment>
+                
             )
         }
     }

@@ -121,9 +121,7 @@ class Container extends Component{
         // await this._askPermissionsAsync();
         ImagePicker.launchImageLibrary(options, (response) => {
             if (response.didCancel) {
-            console.log('User cancelled image picker');
             } else if (response.error) {
-            console.log('ImagePicker Error: ', response.error);
             } else {
             const source = { uri: response.uri, type: response.type };
             this.props.changeProfileImg(source)
@@ -139,9 +137,7 @@ class Container extends Component{
         // await this._askPermissionsAsync();
         ImagePicker.launchImageLibrary(options, (response) => {
             if (response.didCancel) {
-            console.log('User cancelled image picker');
             } else if (response.error) {
-            console.log('ImagePicker Error: ', response.error);
             } else {
             const source = { uri: response.uri, type: response.type };
             this.props.changeBackgroundImg(source)
