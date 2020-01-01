@@ -155,9 +155,8 @@ class CheckNickname(APIView):
 
 class ReviewList(APIView):
     permission_classes = [IsAuthenticated]
-    def get(self, request, format = None):
-        user = request.user
-        reviews = statics_models.Review.objects.filter(author = user)
+    def get(self, request, user_id, format = None):
+        reviews = statics_models.Review.objects.filter(author = user_id)
         paginator = MainPageNumberPagination()
         result_page = paginator.paginate_queryset(reviews, request)
         serializer = statics_serializers.ReviewSerializer(result_page, many = True, context = {'request': request})

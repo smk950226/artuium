@@ -22,11 +22,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         checkNotificationAll: () => {
             return dispatch(userActions.checkNotificationAll())
         },
-        getReviewList: () => {
-            return dispatch(userActions.getReviewList())
+        getReviewList: (userId) => {
+            return dispatch(userActions.getReviewList(userId))
         },
-        getReviewListMore: (page) => {
-            return dispatch(userActions.getReviewListMore(page))
+        getReviewListMore: (userId, page) => {
+            return dispatch(userActions.getReviewListMore(userId, page))
         },
         logout: () => {
             dispatch(userActions.getLogout());

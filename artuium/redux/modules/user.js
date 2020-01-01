@@ -644,10 +644,10 @@ function recommended(){
     }
 }
 
-function getReviewList(){
+function getReviewList(userId){
     return (dispatch, getState) => {
         const { user : { token } } = getState();
-        return fetch(`${FETCH_URL}/api/users/list/review/?page=1`, {
+        return fetch(`${FETCH_URL}/api/users/list/review/${userId}/?page=1`, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `JWT ${token}`
@@ -666,10 +666,10 @@ function getReviewList(){
     }
 }
 
-function getReviewListMore(page){
+function getReviewListMore(userId, page){
     return (dispatch, getState) => {
         const { user : { token } } = getState();
-        return fetch(`${FETCH_URL}/api/users/list/review/?page=${page}`, {
+        return fetch(`${FETCH_URL}/api/users/list/review/${userId}/?page=${page}`, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `JWT ${token}`
