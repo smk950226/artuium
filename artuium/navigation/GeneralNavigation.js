@@ -7,6 +7,7 @@ import ExhibitionDetailScreen from '../screens/ExhibitionDetailScreen';
 import ExhibitionContentScreen from '../screens/ExhibitionContentScreen';
 import ExhibitionArtworkScreen from '../screens/ExhibitionArtworkScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
+import OthersProfileScreen from '../screens/OthersProfileScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ArtworkDetailScreen from '../screens/ArtworkDetailScreen';
 import ArtworkContentScreen from '../screens/ArtworkContentScreen';
@@ -56,6 +57,12 @@ const GeneralNavigation = createStackNavigator({
     },
     ArtworkContent: {
         screen: ArtworkContentScreen,
+        navigationOptions: ({screenProps, navigation}) => ({
+            header: null
+        })
+    },
+    OthersProfile: {
+        screen: OthersProfileScreen,
         navigationOptions: ({screenProps, navigation}) => ({
             header: null
         })
