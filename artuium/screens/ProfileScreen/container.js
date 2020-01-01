@@ -73,7 +73,7 @@ class Container extends Component{
                 notificationNew: false
             })
         }
-        const reviewList = await getReviewList(profile.id)
+        const reviewList = await getReviewList(this.props.profile.id)
         this.setState({
             reviewList,
             loadingReviewList: false
@@ -107,7 +107,7 @@ class Container extends Component{
                 await this.setState({
                     isLoadingMore: true
                 });
-                const result = await getReviewListMore(profile.id, page+1);
+                const result = await getReviewListMore(this.props.profile.id, page+1);
                 if(result){
                     await this.setState({
                         page: this.state.page+1,
@@ -134,7 +134,7 @@ class Container extends Component{
             hasNextPage: true,
         })
 
-        const reviewList = await getReviewList(profile.id)
+        const reviewList = await getReviewList(this.props.profile.id)
         this.setState({
             reviewList,
             refreshing: false
@@ -196,7 +196,7 @@ class Container extends Component{
                 notificationNew: false
             })
         }
-        const reviewList = await getReviewList(profile.id)
+        const reviewList = await getReviewList(this.props.profile.id)
         this.setState({
             reviewList,
             loadingReviewList: false
