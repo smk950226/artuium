@@ -17,23 +17,40 @@ class Container extends Component{
         page: 1,
         hasNextPage: true,
         isLoadingMore: false,
-        refreshing: false
+        refreshing: false,
+        images: []
     }
 
     componentDidMount = async() => {
         const { getArtworkLikeList, profile, others } = this.props;
         if(others){
             const likes = await getArtworkLikeList(others.id)
+            let images = []
+            likes.map(img => {
+                images.push({
+                    ...img,
+                    uri: img.artwork.image
+                })
+            })
             this.setState({
                 loading: false,
-                likes
+                likes,
+                images
             })
         }
         else{
             const likes = await getArtworkLikeList(profile.id)
+            let images = []
+            likes.map(img => {
+                images.push({
+                    ...img,
+                    uri: img.artwork.image
+                })
+            })
             this.setState({
                 loading: false,
-                likes
+                likes,
+                images
             })
         }
     }

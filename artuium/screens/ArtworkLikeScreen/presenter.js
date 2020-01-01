@@ -3,6 +3,7 @@ import { View, Text, TouchableWithoutFeedback, ImageBackground, ScrollView, Refr
 import PropTypes from 'prop-types';
 // import Masonry from 'react-native-masonry-layout';
 import styles from '../../styles';
+import MasonryList from "react-native-masonry-list";
 
 const { width, height } = Dimensions.get('window')
 
@@ -50,6 +51,7 @@ class ArtworkLikeScreen extends React.Component {
                         <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>작품이 없습니다.</Text>
                     </ScrollView>
                 )}
+                <MasonryList images={this.props.images} />
             </View>
         )
     }
