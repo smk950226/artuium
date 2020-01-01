@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import styles from '../../styles';
 import PropTypes from 'prop-types';
 import HomeScreen from './presenter';
+import firebase from 'react-native-firebase';
+import { NavigationEvents } from "react-navigation";
 
 class Container extends Component{
     static propTypes = {
@@ -13,36 +15,109 @@ class Container extends Component{
         initApp: PropTypes.func.isRequired,
         getInitial: PropTypes.func.isRequired,
         checkNoticeAll: PropTypes.func.isRequired,
-        checkNotificationAll: PropTypes.func.isRequired
+        checkNotificationAll: PropTypes.func.isRequired,
+        setPushToken: PropTypes.func.isRequired,
+        getNoticeNew: PropTypes.func.isRequired,
+        getNotificationNew: PropTypes.func.isRequired,
+        noticeNew: PropTypes.bool.isRequired,
+        notificationNew: PropTypes.bool.isRequired
     }
 
-    state = {
-        loading: true,
-        fetchedProfile: false,
-        fetchedNew: false,
-        fetchedRecommended: false,
-        fetchedFollowing: false,
-        fetchClear: false,
-        showNoticeModal: false,
-        noticeNew: false,
-        notificationNew: false,
+    constructor(props){
+        super(props);
+        const { noticeNew, notificationNew } = props;
+        this.state = {
+            loading: true,
+            fetchedProfile: false,
+            fetchedNew: false,
+            fetchedRecommended: false,
+            fetchedFollowing: false,
+            fetchClear: false,
+            showNoticeModal: false,
+            noticeNew,
+            notificationNew,
+            pushPermission: false
+        }
     }
+
+    _getToken = async() => {
+        const { profile, setPushToken } = this.props;
+        if(profile){
+            fcmToken = await firebase.messaging().getToken();
+            if(fcmToken) {
+                if(profile.push_token !== fcmToken){
+                    const result =  await setPushToken(fcmToken);
+                }
+            }
+        }
+    };
+
+    _checkPermission = async () => {
+        const enabled = await firebase.messaging().hasPermission();
+        if (enabled) {
+            this.setState({
+                pushPermission: true
+            })
+            // this._getToken();
+        } 
+        else {
+            this._requestPermission();
+        }
+    };
+
+    _requestPermission = async () => {
+        try {
+            await firebase.messaging().requestPermission();
+            this.setState({
+                pushPermission: true
+            })
+            // this._getToken();
+        } catch (error) {
+        }
+    };
 
     componentDidMount = async() => {
-        const { initApp, checkNoticeAll, checkNotificationAll } = this.props;
-        const noticeNew = await checkNotificationAll()
-        const notificationNew = await checkNoticeAll()
+        const { initApp, checkNoticeAll, checkNotificationAll, getNoticeNew, getNotificationNew } = this.props;
+        const noticeNew = await checkNoticeAll()
+        const notificationNew = await checkNotificationAll()
         if(noticeNew.is_new){
+            getNoticeNew(true)
             this.setState({
                 noticeNew: true
             })
         }
+        else{
+            getNoticeNew(false)
+            this.setState({
+                noticeNew: false
+            })
+        }
         if(notificationNew.is_new){
+            getNotificationNew(true)
             this.setState({
                 notificationNew: true
             })
         }
+        else{
+            getNotificationNew(false)
+            this.setState({
+                notificationNew: false
+            })
+        }
         await initApp()
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        if(prevProps.noticeNew !== this.props.noticeNew){
+            this.setState({
+                noticeNew: this.props.noticeNew
+            })
+        }
+        if(prevProps.notificationNew !== this.props.notificationNew){
+            this.setState({
+                notificationNew: this.props.notificationNew
+            })
+        }
     }
 
     static getDerivedStateFromProps(nextProps, prevState){
@@ -70,11 +145,14 @@ class Container extends Component{
     }
 
     componentDidUpdate = () => {
-        if(this.state.fetchedNew && this.state.fetchedRecommended && this.state.fetchedFollowing && this.state.fetchedProfile && !this.state.fetchClear){
+        if(this.props.profile && this.state.fetchedNew && this.state.fetchedRecommended && this.state.fetchedFollowing && this.state.fetchedProfile && !this.state.fetchClear){
             this.setState({
                 loading: false,
                 fetchClear: true
             })
+            if(this.state.pushPermission){
+                this._getToken()
+            }
         }
     }
 
@@ -90,15 +168,48 @@ class Container extends Component{
         })
     }
     _handleNoticeNewChange = (noticeNew) => {
+        this.props.getNoticeNew(noticeNew)
         this.setState({
             noticeNew
         })
     }
 
     _handleNotificationNewChange = (notificationNew) => {
+        this.props.getNotificationNew(notificationNew)
         this.setState({
             notificationNew
         })
+    }
+
+    _remount = async() => {
+        const { initApp, checkNoticeAll, checkNotificationAll, getNoticeNew, getNotificationNew } = this.props;
+        const noticeNew = await checkNoticeAll()
+        const notificationNew = await checkNotificationAll()
+        if(noticeNew.is_new){
+            getNoticeNew(true)
+            this.setState({
+                noticeNew: true
+            })
+        }
+        else{
+            getNoticeNew(false)
+            this.setState({
+                noticeNew: false
+            })
+        }
+        if(notificationNew.is_new){
+            getNotificationNew(true)
+            this.setState({
+                notificationNew: true
+            })
+        }
+        else{
+            getNotificationNew(false)
+            this.setState({
+                notificationNew: false
+            })
+        }
+        await initApp()
     }
 
     render(){
@@ -112,14 +223,22 @@ class Container extends Component{
         }
         else{
             return(
-                <HomeScreen 
-                    {...this.props}
-                    {...this.state}
-                    openNoticeModal={this._openNoticeModal}
-                    closeNoticeModal={this._closeNoticeModal}
-                    handleNoticeNewChange={this._handleNoticeNewChange}
-                    handleNotificationNewChange={this._handleNotificationNewChange}
-                />
+                <Fragment>
+                    <NavigationEvents
+                    onWillFocus={payload => {
+                        this._remount()
+                    }}
+                    />
+                    <HomeScreen 
+                        {...this.props}
+                        {...this.state}
+                        openNoticeModal={this._openNoticeModal}
+                        closeNoticeModal={this._closeNoticeModal}
+                        handleNoticeNewChange={this._handleNoticeNewChange}
+                        handleNotificationNewChange={this._handleNotificationNewChange}
+                    />
+                </Fragment>
+                
             )
         }
     }

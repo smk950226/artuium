@@ -57,7 +57,7 @@ class Reply(models.Model):
     replies = models.ManyToManyField('self', blank = True, null = True)
 
     def __str__(self):
-        return  'reply-' + self.author.nickname
+        return  'reply-' + str(self.id) + '-' + self.author.nickname
     
     class Meta:
         ordering = ['-id']

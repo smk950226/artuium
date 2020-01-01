@@ -3,9 +3,11 @@ import Container from './container';
 import { actionCreators as userActions } from '../../redux/modules/user';
 
 const mapStateToProps = (state, ownProps) => {
-    const { user : { profile } } = state;
+    const { user : { profile, notificationNew, noticeNew } } = state;
     return{
-        profile
+        profile,
+        notificationNew,
+        noticeNew
     }
 }
 
@@ -28,6 +30,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         logout: () => {
             dispatch(userActions.getLogout());
+        },
+        getNoticeNew: (noticeNew) => {
+            dispatch(userActions.getNoticeNew(noticeNew))
+        },
+        getNotificationNew: (notificationNew) => {
+            dispatch(userActions.getNotificationNew(notificationNew))
         }
     }
 }

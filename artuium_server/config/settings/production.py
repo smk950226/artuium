@@ -186,3 +186,7 @@ LOGGING = {
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+FCM_DJANGO_SETTINGS = {
+        "APP_VERBOSE_NAME": "Artuium",
+        "FCM_SERVER_KEY": env("FCM_SERVER_KEY"),
+}

@@ -7,27 +7,27 @@ import ArtuiumCard from '../../components/ArtuiumCard';
 import NoticeScreen from '../../screens/NoticeScreen';
 import NotificationScreen from '../../screens/NotificationScreen';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
-import { BottomTabBar } from 'react-navigation-tabs';
 
 const iosStatusBarHeight = getStatusBarHeight()
 
 const { width, height } = Dimensions.get('window')
 
 class HomeScreen extends Component {
-        static propTypes = {
-            newReviews: PropTypes.array,
-            recommendedReviews: PropTypes.array,
-            followingReviews: PropTypes.array,
-            getInitial: PropTypes.func.isRequired,
-            openNoticeModal: PropTypes.func.isRequired,
-            closeNoticeModal: PropTypes.func.isRequired,
-            showNoticeModal :PropTypes.bool.isRequired,
-            noticeNew: PropTypes.bool.isRequired,
-            notificationNew: PropTypes.bool.isRequired
-        }
+    static propTypes = {
+        newReviews: PropTypes.array,
+        recommendedReviews: PropTypes.array,
+        followingReviews: PropTypes.array,
+        getInitial: PropTypes.func.isRequired,
+        openNoticeModal: PropTypes.func.isRequired,
+        closeNoticeModal: PropTypes.func.isRequired,
+        showNoticeModal :PropTypes.bool.isRequired,
+        noticeNew: PropTypes.bool.isRequired,
+        notificationNew: PropTypes.bool.isRequired
+    }
 
     constructor(props){
         super(props)
+        const { profile : { initial } } = props;
         this.state = {
             isMovedUp: false,
             index: 0,
@@ -37,7 +37,8 @@ class HomeScreen extends Component {
             ],
             changedScrollView: false,
             isTop: true,
-            startScroll: false
+            startScroll: false,
+            initial
         }
         this.animatedValue = new Animated.ValueXY();
         this.value = {x: 0, y: 0};
@@ -94,10 +95,14 @@ class HomeScreen extends Component {
                 
             },
             onPanResponderTerminationRequest: () => false,
-            onPanResponderRelease: ( event, gestureState ) => {
+            onPanResponderRelease: async( event, gestureState ) => {
                 if(gestureState.dy <= 0){
                     if(gestureState.dy < -100){
-                        this.props.getInitial(false)
+                        this.setState({
+                            initial: false
+                        })
+                        const result = await this.props.getInitial(false)
+                        this.props.getProfile()
                     }
                 }
             },
@@ -133,7 +138,7 @@ class HomeScreen extends Component {
                                     toValue: 100,
                                     duration: 200,
                                 } ).start(() => {
-                                    
+
                                 });
                             })
                         }
@@ -205,8 +210,8 @@ class HomeScreen extends Component {
     }
 
     render() {
-        const { changedScrollView } = this.state;
-        const { newReviews, recommendedReviews, followingReviews, initial, showNoticeModal, noticeNew, notificationNew } = this.props;
+        const { changedScrollView, initial } = this.state;
+        const { newReviews, recommendedReviews, followingReviews, showNoticeModal, noticeNew, notificationNew } = this.props;
         return (
             <View style={[styles.container]}>
                 <Animated.View style={[styles.bgWhite, {width: width, height: this.headerHeight, position: 'absolute', top: 0, opacity: this.headerOpacity, zIndex: 995}]} />

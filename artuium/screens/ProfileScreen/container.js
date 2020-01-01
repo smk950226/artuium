@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import ProfileScreen from './presenter';
 import { ActivityIndicator, View } from 'react-native';
 import styles from '../../styles';
+import { NavigationEvents } from "react-navigation";
 
 class Container extends Component{
     static propTypes = {
@@ -11,18 +12,22 @@ class Container extends Component{
         checkNoticeAll: PropTypes.func.isRequired,
         checkNotificationAll: PropTypes.func.isRequired,
         getReviewList: PropTypes.func.isRequired,
-        getReviewListMore: PropTypes.func.isRequired
+        getReviewListMore: PropTypes.func.isRequired,
+        getNoticeNew: PropTypes.func.isRequired,
+        getNotificationNew: PropTypes.func.isRequired,
+        noticeNew: PropTypes.bool.isRequired,
+        notificationNew: PropTypes.bool.isRequired
     }
 
     constructor(props){
         super(props)
-        const { profile, profile : { following_count, follower_count, is_following, is_me, following_friends_count, like_exhibition_count, like_artwork_count, like_review_count } } = props;
+        const { profile, profile : { following_count, follower_count, is_following, is_me, following_friends_count, like_exhibition_count, like_artwork_count, like_review_count }, noticeNew, notificationNew } = props;
         this.state = {
             loading: profile.id ? false : true,
             loadingReviewList: true,
             showNoticeModal: false,
-            noticeNew: false,
-            notificationNew: false,
+            noticeNew,
+            notificationNew,
             following_count, 
             follower_count, 
             is_following, 
@@ -40,18 +45,32 @@ class Container extends Component{
     }
 
     componentDidMount = async() => {
-        const { checkNoticeAll, getReviewList, getProfile, checkNotificationAll } = this.props;
+        const { checkNoticeAll, getReviewList, getProfile, checkNotificationAll, getNoticeNew, getNotificationNew } = this.props;
         await getProfile()
         const noticeNew = await checkNoticeAll()
         const notificationNew = await checkNotificationAll()
         if(noticeNew.is_new){
+            getNoticeNew(true)
             this.setState({
                 noticeNew: true
             })
         }
+        else{
+            getNoticeNew(false)
+            this.setState({
+                noticeNew: false
+            })
+        }
         if(notificationNew.is_new){
+            getNotificationNew(true)
             this.setState({
                 notificationNew: true
+            })
+        }
+        else{
+            getNotificationNew(false)
+            this.setState({
+                notificationNew: false
             })
         }
         const reviewList = await getReviewList()
@@ -135,14 +154,52 @@ class Container extends Component{
     }
 
     _handleNoticeNewChange = (noticeNew) => {
+        this.props.getNoticeNew(noticeNew)
         this.setState({
             noticeNew
         })
     }
 
     _handleNotificationNewChange = (notificationNew) => {
+        this.props.getNotificationNew(notificationNew)
         this.setState({
             notificationNew
+        })
+    }
+
+    _remount = async() => {
+        const { checkNoticeAll, getReviewList, getProfile, checkNotificationAll, getNoticeNew, getNotificationNew } = this.props;
+        await getProfile()
+        const noticeNew = await checkNoticeAll()
+        const notificationNew = await checkNotificationAll()
+        if(noticeNew.is_new){
+            getNoticeNew(true)
+            this.setState({
+                noticeNew: true
+            })
+        }
+        else{
+            getNoticeNew(false)
+            this.setState({
+                noticeNew: false
+            })
+        }
+        if(notificationNew.is_new){
+            getNotificationNew(true)
+            this.setState({
+                notificationNew: true
+            })
+        }
+        else{
+            getNotificationNew(false)
+            this.setState({
+                notificationNew: false
+            })
+        }
+        const reviewList = await getReviewList()
+        this.setState({
+            reviewList,
+            loadingReviewList: false
         })
     }
 
@@ -157,16 +214,23 @@ class Container extends Component{
         }
         else{
             return(
-                <ProfileScreen 
-                {...this.props}
-                {...this.state}
-                openNoticeModal={this._openNoticeModal}
-                closeNoticeModal={this._closeNoticeModal}
-                handleNoticeNewChange={this._handleNoticeNewChange}
-                reviewListMore={this._reviewListMore}
-                refresh={this._refresh}
-                handleNotificationNewChange={this._handleNotificationNewChange}
-                />
+                <Fragment>
+                    <NavigationEvents
+                    onWillFocus={payload => {
+                        this._remount()
+                    }}
+                    />
+                    <ProfileScreen 
+                    {...this.props}
+                    {...this.state}
+                    openNoticeModal={this._openNoticeModal}
+                    closeNoticeModal={this._closeNoticeModal}
+                    handleNoticeNewChange={this._handleNoticeNewChange}
+                    reviewListMore={this._reviewListMore}
+                    refresh={this._refresh}
+                    handleNotificationNewChange={this._handleNotificationNewChange}
+                    />
+                </Fragment>
             )
         }
     }

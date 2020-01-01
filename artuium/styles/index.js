@@ -755,6 +755,10 @@ const styles = StyleSheet.create({
         borderColor: '#F0F0F0',
         borderWidth: 1
     },
+    borderGrayE6: {
+        borderColor: '#E6E6E6',
+        borderWidth: 1
+    },
     overflowHidden: {
         overflow: 'hidden'
     },

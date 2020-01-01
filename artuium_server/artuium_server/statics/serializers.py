@@ -51,6 +51,7 @@ class ReplySerializer(serializers.ModelSerializer):
     author = users_serializers.ProfileSerializer()
     reply_count = serializers.SerializerMethodField()
     initial_replies = serializers.SerializerMethodField()
+    review = ReviewSerializer()
     
     class Meta:
         model = models.Reply

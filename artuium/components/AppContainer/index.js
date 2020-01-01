@@ -17,6 +17,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         initApp: () => {
             dispatch(userActions.getProfile())
+        },
+        setPushToken: (pushToken) => {
+            return dispatch(userActions.setPushToken(pushToken))
         }
     }
 }

@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import styles from '../../styles';
 import PropTypes from 'prop-types';
 import ExhibitionScreen from './presenter';
+import { NavigationEvents } from "react-navigation";
 
 class Container extends Component{
     static propTypes = {
@@ -13,7 +14,28 @@ class Container extends Component{
         pastExhibitions: PropTypes.array,
         initialExhibition: PropTypes.func.isRequired,
         checkNoticeAll: PropTypes.func.isRequired,
-        checkNotificationAll: PropTypes.func.isRequired
+        checkNotificationAll: PropTypes.func.isRequired,
+        getNoticeNew: PropTypes.func.isRequired,
+        getNotificationNew: PropTypes.func.isRequired,
+        noticeNew: PropTypes.bool.isRequired,
+        notificationNew: PropTypes.bool.isRequired
+    }
+
+    constructor(props){
+        super(props);
+        const { noticeNew, notificationNew } = props;
+        this.state = {
+            loading: true,
+            fetchedNew: false,
+            fetchedRecommended: false,
+            fetchedHot: false,
+            fetchedPast: false,
+            fetchClear: false,
+            showNoticeModal: false,
+            noticeNew,
+            notificationNew,
+            refreshing: false
+        }
     }
 
     state = {
@@ -30,17 +52,31 @@ class Container extends Component{
     }
 
     componentDidMount = async() => {
-        const { initialExhibition, checkNoticeAll, checkNotificationAll } = this.props;
+        const { initialExhibition, checkNoticeAll, checkNotificationAll, getNoticeNew, getNotificationNew } = this.props;
         const noticeNew = await checkNoticeAll()
         const notificationNew = await checkNotificationAll()
         if(noticeNew.is_new){
+            getNoticeNew(true)
             this.setState({
                 noticeNew: true
             })
         }
+        else{
+            getNoticeNew(false)
+            this.setState({
+                noticeNew: false
+            })
+        }
         if(notificationNew.is_new){
+            getNotificationNew(true)
             this.setState({
                 notificationNew: true
+            })
+        }
+        else{
+            getNotificationNew(false)
+            this.setState({
+                notificationNew: false
             })
         }
         await initialExhibition()
@@ -109,15 +145,48 @@ class Container extends Component{
         })
     }
     _handleNoticeNewChange = (noticeNew) => {
+        this.props.getNoticeNew(noticeNew)
         this.setState({
             noticeNew
         })
     }
 
     _handleNotificationNewChange = (notificationNew) => {
+        this.props.getNotificationNew(notificationNew)
         this.setState({
             notificationNew
         })
+    }
+
+    _remount = async() => {
+        const { initialExhibition, checkNoticeAll, checkNotificationAll, getNoticeNew, getNotificationNew } = this.props;
+        const noticeNew = await checkNoticeAll()
+        const notificationNew = await checkNotificationAll()
+        if(noticeNew.is_new){
+            getNoticeNew(true)
+            this.setState({
+                noticeNew: true
+            })
+        }
+        else{
+            getNoticeNew(false)
+            this.setState({
+                noticeNew: false
+            })
+        }
+        if(notificationNew.is_new){
+            getNotificationNew(true)
+            this.setState({
+                notificationNew: true
+            })
+        }
+        else{
+            getNotificationNew(false)
+            this.setState({
+                notificationNew: false
+            })
+        }
+        await initialExhibition()
     }
 
     render(){
@@ -131,15 +200,23 @@ class Container extends Component{
         }
         else{
             return(
-                <ExhibitionScreen 
-                    {...this.props}
-                    {...this.state}
-                    openNoticeModal={this._openNoticeModal}
-                    closeNoticeModal={this._closeNoticeModal}
-                    handleNoticeNewChange={this._handleNoticeNewChange}
-                    handleNotificationNewChange={this._handleNotificationNewChange}
-                    refresh={this._refresh}
-                />
+                <Fragment>
+                    <NavigationEvents
+                    onWillFocus={payload => {
+                        this._remount()
+                    }}
+                    />
+                    <ExhibitionScreen 
+                        {...this.props}
+                        {...this.state}
+                        openNoticeModal={this._openNoticeModal}
+                        closeNoticeModal={this._closeNoticeModal}
+                        handleNoticeNewChange={this._handleNoticeNewChange}
+                        handleNotificationNewChange={this._handleNotificationNewChange}
+                        refresh={this._refresh}
+                    />
+                </Fragment>
+                
             )
         }
     }
