@@ -74,9 +74,29 @@ class ArtuiumCard4 extends Component{
         this.props.openFollowModal(mode)
     }
 
+
+
+    lastTap = null
+
+    _handleDoubleTap = () => {
+        const now = Date.now();
+        const DOUBLE_PRESS_DELAY = 300;
+        if (this.lastTap && (now - this.lastTap) < DOUBLE_PRESS_DELAY) {
+            if(this.props.is_liked){
+                this.props.unlike()
+            }
+            else{
+                this.props.like()
+            }
+        } else {
+            this.lastTap = now;
+        }
+    }
+
     render(){
         const { artwork, is_liked, like_count, review_count } = this.props;
         return(
+            <TouchableWithoutFeedback onPress={this._handleDoubleTap}>
             <View style={[styles.center, styles.heightFull, styles.screenWidth]}>
                 <View>
                     <View style={[styles.center]}>
@@ -110,6 +130,7 @@ class ArtuiumCard4 extends Component{
                     </View>
                 </TouchableWithoutFeedback>
             </View>
+            </TouchableWithoutFeedback>
         )
     }
 }
