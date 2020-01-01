@@ -88,8 +88,10 @@ class ExhibitionContentScreen extends React.Component {
     }
     constructor(props){
         super(props);
+        const { initialMode } = props;
+
         this.state = {
-            index: 0
+            index: initialMode ? ((initialMode === 'review') || (initialMode === 'list')) ? 1 : 0 : 0
         }
     }
 

@@ -19,6 +19,8 @@ class Container extends Component{
     constructor(props){
         super(props)
         const artwork = props.navigation.getParam('artwork', null)
+        const mode = props.navigation.getParam('mode', null)
+        const review = props.navigation.getParam('review', null)
         const { is_liked, like_count, review_count, is_reviewed, total_rate } = artwork;
         this.state = {
             artwork,
@@ -34,13 +36,13 @@ class Container extends Component{
             reviews: [],
             refreshing: false,
             myReviews: [],
-            mode: 'list',
+            mode: mode ? mode : 'list',
             rating: 0,
             expression: '',
             content: '',
             isSubmittingReview: false,
             total_rate,
-            showingReview: {},
+            showingReview: review ? review : {},
             loadingReply: false,
             isLoadingMoreReply: false,
             pageReply: 1,
@@ -49,30 +51,87 @@ class Container extends Component{
             refreshingReply: false,
             contentReply: '',
             isSubmittingReply: false,
-            selectedReply: {}
+            selectedReply: {},
+            initialMode: mode
         }
     }
 
     componentDidMount = async() => {
-        const { artwork : { id } } = this.state;
-        const { getArtworkReviewList } = this.props;
-        const result = await getArtworkReviewList(id)
-        if(result.status === 'ok'){
+        const { artwork : { id }, initialMode, showingReview } = this.state;
+        if(initialMode === 'review'){
             this.setState({
-                loading: false,
-                reviews: result.reviews,
-                myReviews: result.my_review,
-                thumb: result.thumb,
-                good: result.good,
-                soso: result.soso,
-                sad: result.sad,
-                surprise: result.surprise,
+                loadingReply: true,
+                selectedReply: {}
             })
+            const { getArtworkReviewList } = this.props;
+            const result = await getArtworkReviewList(id)
+            if(result.status === 'ok'){
+                this.setState({
+                    loading: false,
+                    reviews: result.reviews,
+                    myReviews: result.my_review,
+                    thumb: result.thumb,
+                    good: result.good,
+                    soso: result.soso,
+                    sad: result.sad,
+                    surprise: result.surprise,
+                })
+            }
+            else{
+                this.setState({
+                    loading: false
+                })
+            }
+            const { getReplyList } = this.props;
+            const result2 = await getReplyList(showingReview.id)
+            if(result2.status === 'ok'){
+                this.setState({
+                    replies: result2.replies,
+                    isLoadingMoreReply: false,
+                    hasNextPageReply: true,
+                    pageReply: 1,
+                    loadingReply: false
+                })
+            }
+            else if(result2.error){
+                this.setState({
+                    isLoadingMoreReply: false,
+                    hasNextPageReply: true,
+                    pageReply: 1,
+                    loadingReply: false
+                })
+                Alert.alert(null, result2.error)
+            }
+            else{
+                this.setState({
+                    isLoadingMoreReply: false,
+                    hasNextPageReply: true,
+                    pageReply: 1,
+                    loadingReply: false
+                })
+                Alert.alert(null, '오류가 발생하였습니다.')
+            }
         }
         else{
-            this.setState({
-                loading: false
-            })
+            const { getArtworkReviewList } = this.props;
+            const result = await getArtworkReviewList(id)
+            if(result.status === 'ok'){
+                this.setState({
+                    loading: false,
+                    reviews: result.reviews,
+                    myReviews: result.my_review,
+                    thumb: result.thumb,
+                    good: result.good,
+                    soso: result.soso,
+                    sad: result.sad,
+                    surprise: result.surprise,
+                })
+            }
+            else{
+                this.setState({
+                    loading: false
+                })
+            }
         }
     }
 

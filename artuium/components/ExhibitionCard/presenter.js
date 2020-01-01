@@ -16,7 +16,9 @@ const ExhibitionCard = (props) => (
                     <Text style={[styles.fontMedium, styles.font10]}>{`${props.exhibition.open_date.slice(0,4)}.${props.exhibition.open_date.slice(5,7)}.${props.exhibition.open_date.slice(8,10)}-${props.exhibition.close_date.slice(0,4)}.${props.exhibition.close_date.slice(5,7)}.${props.exhibition.close_date.slice(8,10)}`}</Text>
                     <Text style={[styles.fontMedium, styles.font10]}>{props.exhibition.gallery.name}</Text>
                     <View style={[styles.row, styles.mt10, styles.alignItemsCenter]}>
-                        <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment.png')} />
+                        <TouchableWithoutFeedback onPress={() => props.navigation.navigate('ExhibitionContent', { exhibition: props.exhibition, mode: 'list' })}>
+                            <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment.png')} />
+                        </TouchableWithoutFeedback>
                         <Text style={[styles.fontRegular, styles.font8, {color: '#909090', marginLeft: 4}]}>{props.review_count}</Text>
                         <TouchableWithoutFeedback onPress={props.is_liked ? props.unlike : props.like}>
                             <View style={[styles.row, styles.alignItemsCenter]}>

@@ -102,8 +102,8 @@ class ArtuiumCard extends Component{
         const { review, size, showProfileModal, showFollowModal, is_me, is_following, follower_count, following_count, is_liked, like_count, reply_count } = this.props;
         return(
             <Fragment>
-                <TouchableWithoutFeedback onPress={review.artwork ? ()=> this.props.navigation.navigate('ArtworkDetail', { artwork: review.artwork }) : () => this.props.navigation.navigate('ExhibitionDetail', { exhibition: review.exhibition })}>
                 <View style={[(size === 'xsmall') ? {width: (width/2)-30} : null, (size === 'small') ? {width: (width/2)-20} : null, (size === 'large') ? { width: width-30 } : null, (size === 'xlarge') ? { width: width } : null, styles.mb10, (size === 'xlarge') ? null : styles.artworkBorder, styles.overflowHidden]}>
+                    <TouchableWithoutFeedback onPress={review.artwork ? ()=> this.props.navigation.navigate('ArtworkDetail', { artwork: review.artwork }) : () => this.props.navigation.navigate('ExhibitionDetail', { exhibition: review.exhibition })}>
                     <ImageBackground source={{uri: review.artwork ? review.artwork.image : review.exhibition ? (review.exhibition.images && (review.exhibition.images.length > 0)) ? review.exhibition.images[0].image : null : null}} style={[((size === 'small') || (size === 'xsmall')) ? styles.artworkImage : styles.artworkImageLg, ((size === 'small') || (size === 'xsmall')) ? styles.py5 : styles.py20, ((size === 'small') || (size === 'xsmall')) ? styles.px10 : styles.px15, styles.justifyContentEnd]} resizeMode={'cover'} >
                         {review.artwork ? (
                             <Fragment>
@@ -125,6 +125,7 @@ class ArtuiumCard extends Component{
                             </Fragment>
                         )}
                     </ImageBackground>
+                    </TouchableWithoutFeedback>
                     <View style={[(size === 'xlarge') ? styles.py20 : styles.py10, (size === 'xlarge') ? styles.px30 : styles.px10]}>
                         {((size === 'small') || (size === 'xsmall')) ? (
                             <Fragment>
@@ -180,14 +181,16 @@ class ArtuiumCard extends Component{
                                 </TouchableWithoutFeedback>
                                 <View style={[styles.row, styles.justifyContentBetween, styles.mt5]}>
                                     <View>
-                                        <TouchableWithoutFeedback>
+                                        <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review })}>
                                             <View style={[styles.bgGray12, styles.borderRadius5, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.px10]}>
                                                 <Text style={[styles.fontMedium, styles.font10, styles.white]}>감상 읽기</Text>
                                             </View>
                                         </TouchableWithoutFeedback>
                                     </View>
                                     <View style={[styles.row, styles.alignItemsCenter]}>
-                                        <Image source={require('../../assets/images/icon_comment.png')} style={[styles.icon12]} />
+                                        <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review })}>
+                                            <Image source={require('../../assets/images/icon_comment.png')} style={[styles.icon12]} />
+                                        </TouchableWithoutFeedback>
                                         <Text style={[styles.fontMedium, styles.font10, styles.grayD1]}>{abbreviateNumber(reply_count)}</Text>
                                         <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
                                             <View style={[styles.row, styles.alignItemsCenter]}>
@@ -261,7 +264,9 @@ class ArtuiumCard extends Component{
                                     </Text>
                                 </View>
                                 <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt10]}>
-                                    <Image source={require('../../assets/images/icon_comment.png')} style={[styles.icon30]} />
+                                    <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review })}>
+                                        <Image source={require('../../assets/images/icon_comment.png')} style={[styles.icon30]} />
+                                    </TouchableWithoutFeedback>
                                     <Text style={[styles.fontMedium, styles.font15, styles.grayD1, styles.ml5]}>{abbreviateNumber(reply_count)}</Text>
                                     <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
                                         <View style={[styles.row, styles.alignItemsCenter]}>
@@ -278,7 +283,6 @@ class ArtuiumCard extends Component{
                         )}
                     </View>
                 </View>
-                </TouchableWithoutFeedback>
                 <Modal
                 visible={showProfileModal}
                 onRequestClose={this.props.closeProfileModal}
