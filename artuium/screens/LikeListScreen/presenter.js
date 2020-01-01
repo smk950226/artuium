@@ -30,37 +30,43 @@ class LikeListScreen extends React.Component {
                 { key: 'first', title: '전시' },
                 { key: 'second', title: '작품' },
                 { key: 'third', title: '감상' },
-            ]
+            ],
+            others: props.navigation.getParam('others', null)
         }
     }
 
     _renderExhibitionRoute = () => {
         return(
-            <ExhibitionLikeScreen navigation={this.props.navigation} />
+            <ExhibitionLikeScreen navigation={this.props.navigation} others={this.state.others} />
         )
     }
 
     _renderArtworkRoute = () => {
         return(
-            <ArtworkLikeScreen navigation={this.props.navigation} />
+            <ArtworkLikeScreen navigation={this.props.navigation} others={this.state.others} />
         )
     }
 
     _renderReviewRoute = () => {
         return(
-            <ReviewLikeScreen navigation={this.props.navigation} />
+            <ReviewLikeScreen navigation={this.props.navigation} others={this.state.others} />
         )
     }
 
     render(){
         const { profile } = this.props;
+        const { others } = this.state;
         return(
             <View style={[styles.container]}>
                 <View style={[{height: iosStatusBarHeight+50, paddingTop: iosStatusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
                     <TouchableWithoutFeedback onPress={() => this.props.navigation.goBack(null)}>
                         <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
                     </TouchableWithoutFeedback>
+                    {others ? 
+                    <Text style={[styles.fontBold, styles.font20]}>{`${others.nickname}님이 좋아한`}</Text>
+                    :
                     <Text style={[styles.fontBold, styles.font20]}>{`${profile.nickname}님이 좋아한`}</Text>
+                    }
                     <View style={[{width: 9, height: 17}]} />
                 </View>
                 <TabView

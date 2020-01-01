@@ -82,6 +82,16 @@ class ReplyCard extends Component{
         this.props.openFollowModal(mode)
     }
 
+    _handleGoOthersProfile = () => {
+        this.props.closeProfileModal()
+        if(this.props.is_me){
+            this.props.navigation.navigate('Profile')
+        }
+        else{
+            this.props.navigation.navigate('OthersProfile', {others: this.props.reply.author})
+        }
+    }
+
     render(){
         const { reply, isLoadingMore, hasNextPage, selectedReply, showFollowModal, showProfileModal, is_me, is_following, following_count, follower_count, mode } = this.props;
         return(
@@ -156,20 +166,26 @@ class ReplyCard extends Component{
                     <TouchableWithoutFeedback onPress={this.props.closeProfileModal}>
                         <View style={[styles.widthFull, styles.heightFull, styles.alignItemsCenter, styles.justifyContentCenter]}>
                             <View style={[styles.borderRadius10, styles.exMenuShadow, styles.overflowHidden]}>
-                                {reply.author.background_image ? (
-                                    <Image source={{uri: reply.author.background_image}} resizeMode={'cover'} style={[{height: 140, width: width - 40}, styles.borderTopRadius10, styles.overflowHidden]} />
-                                ) : (
-                                    <View style={[{height: 140, width: width - 40}, styles.bgGrayD1, styles.borderTopRadius10]} />
-                                )}
+                                <TouchableOpacity onPress={()=>this._handleGoOthersProfile()}>
+                                    {reply.author.background_image ? (
+                                        <Image source={{uri: reply.author.background_image}} resizeMode={'cover'} style={[{height: 140, width: width - 40}, styles.borderTopRadius10, styles.overflowHidden]} />
+                                    ) : (
+                                        <View style={[{height: 140, width: width - 40}, styles.bgGrayD1, styles.borderTopRadius10]} />
+                                    )}
+                                </TouchableOpacity>
                                 <View style={[styles.bgWhite, styles.px20, styles.py15, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.borderBtmRadius10]}>
                                     <View style={[styles.row, styles.alignItemsCenter]}>
-                                        {reply.author.profile_image ? (
-                                            <Image source={{uri: reply.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
-                                        ) : (
-                                            <View style={[styles.circle40, styles.bgGrayD1]} />
-                                        )}
+                                        <TouchableOpacity onPress={()=>this._handleGoOthersProfile()}>
+                                            {reply.author.profile_image ? (
+                                                <Image source={{uri: reply.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
+                                            ) : (
+                                                <View style={[styles.circle40, styles.bgGrayD1]} />
+                                            )}
+                                        </TouchableOpacity>
                                         <View style={[styles.ml10]}>
-                                            <Text style={[styles.fontMedium, styles.font16]}>{reply.author.nickname}</Text>
+                                            <TouchableOpacity onPress={()=>this._handleGoOthersProfile()}>
+                                                <Text style={[styles.fontMedium, styles.font16]}>{reply.author.nickname}</Text>
+                                            </TouchableOpacity>
                                             <View style={[styles.row, styles.alignItemsCenter]}>
                                                 <TouchableWithoutFeedback onPress={() => this._openFollowModal('follower')}>
                                                     <View style={[styles.mr5]}>

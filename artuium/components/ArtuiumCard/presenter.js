@@ -309,7 +309,9 @@ class ArtuiumCard extends Component{
                                             )}
                                         </TouchableOpacity>
                                         <View style={[styles.ml10]}>
-                                            <Text style={[styles.fontMedium, styles.font16]}>{review.author.nickname}</Text>
+                                            <TouchableOpacity onPress={()=>this._handleGoOthersProfile()}>
+                                                <Text style={[styles.fontMedium, styles.font16]}>{review.author.nickname}</Text>
+                                            </TouchableOpacity>
                                             <View style={[styles.row, styles.alignItemsCenter]}>
                                                 <TouchableWithoutFeedback onPress={() => this._openFollowModal('follower')}>
                                                     <View style={[styles.mr5]}>

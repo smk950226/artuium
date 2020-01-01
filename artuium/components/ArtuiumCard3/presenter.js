@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Modal } from 'react-native';
+import { View, Text, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Modal, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import StarRating from 'react-native-star-rating';
@@ -86,6 +86,16 @@ class ArtuiumCard3 extends Component{
             })
         }
         this.props.openFollowModal(mode)
+    }
+
+    _handleGoOthersProfile = () => {
+        this.props.closeProfileModal()
+        if(this.props.is_me){
+            this.props.navigation.navigate('Profile')
+        }
+        else{
+            this.props.navigation.navigate('OthersProfile', {others: this.props.review.author})
+        }
     }
 
     render(){
@@ -176,20 +186,26 @@ class ArtuiumCard3 extends Component{
                     <TouchableWithoutFeedback onPress={this.props.closeProfileModal}>
                         <View style={[styles.widthFull, styles.heightFull, styles.alignItemsCenter, styles.justifyContentCenter]}>
                             <View style={[styles.borderRadius10, styles.exMenuShadow, styles.overflowHidden]}>
-                                {review.author.background_image ? (
-                                    <Image source={{uri: review.author.background_image}} resizeMode={'cover'} style={[{height: 140, width: width - 40}, styles.borderTopRadius10, styles.overflowHidden]} />
-                                ) : (
-                                    <View style={[{height: 140, width: width - 40}, styles.bgGrayD1, styles.borderTopRadius10]} />
-                                )}
+                                <TouchableOpacity onPress={()=>this._handleGoOthersProfile()}>
+                                    {review.author.background_image ? (
+                                        <Image source={{uri: review.author.background_image}} resizeMode={'cover'} style={[{height: 140, width: width - 40}, styles.borderTopRadius10, styles.overflowHidden]} />
+                                    ) : (
+                                        <View style={[{height: 140, width: width - 40}, styles.bgGrayD1, styles.borderTopRadius10]} />
+                                    )}
+                                </TouchableOpacity>
                                 <View style={[styles.bgWhite, styles.px20, styles.py15, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.borderBtmRadius10]}>
                                     <View style={[styles.row, styles.alignItemsCenter]}>
-                                        {review.author.profile_image ? (
-                                            <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
-                                        ) : (
-                                            <View style={[styles.circle40, styles.bgGrayD1]} />
-                                        )}
+                                        <TouchableOpacity onPress={()=>this._handleGoOthersProfile()}>
+                                            {review.author.profile_image ? (
+                                                <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
+                                            ) : (
+                                                <View style={[styles.circle40, styles.bgGrayD1]} />
+                                            )}
+                                        </TouchableOpacity>
                                         <View style={[styles.ml10]}>
-                                            <Text style={[styles.fontMedium, styles.font16]}>{review.author.nickname}</Text>
+                                            <TouchableOpacity onPress={()=>this._handleGoOthersProfile()}>
+                                                <Text style={[styles.fontMedium, styles.font16]}>{review.author.nickname}</Text>
+                                            </TouchableOpacity>
                                             <View style={[styles.row, styles.alignItemsCenter]}>
                                                 <TouchableWithoutFeedback onPress={() => this._openFollowModal('follower')}>
                                                     <View style={[styles.mr5]}>
