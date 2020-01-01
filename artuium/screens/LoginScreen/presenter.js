@@ -19,6 +19,7 @@ class LoginScreen extends React.Component {
     }
 
     _handleFacebookLogin = () => {
+        const { handleFacebookLogin } = this.props;
         LoginManager.logInWithPermissions(['public_profile']).then(
             function (result) {
                 if (result.isCancelled) {
@@ -26,7 +27,7 @@ class LoginScreen extends React.Component {
                 } else {
                     AccessToken.getCurrentAccessToken().then(
                         (data) => {
-                            this.props.handleFacebookLogin(data.accessToken.toString())
+                            handleFacebookLogin(data.accessToken.toString())
                         }
                     )
                 }
