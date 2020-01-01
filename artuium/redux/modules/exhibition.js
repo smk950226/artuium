@@ -224,10 +224,10 @@ function createExhibitionReview(exhibitionId, rating, expression, content){
     }
 }
 
-function getExhibitionLikeList(){
+function getExhibitionLikeList(userId){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
-        return fetch(`${FETCH_URL}/api/statics/like/exhibition/?page=1`, {
+        return fetch(`${FETCH_URL}/api/statics/like/exhibition/${userId}/?page=1`, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `JWT ${token}`
@@ -246,10 +246,10 @@ function getExhibitionLikeList(){
     }
 }
 
-function getExhibitionLikeListMore(page){
+function getExhibitionLikeListMore(userId, page){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
-        return fetch(`${FETCH_URL}/api/statics/like/exhibition/?page=${page}`, {
+        return fetch(`${FETCH_URL}/api/statics/like/exhibition/${userId}/?page=${page}`, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `JWT ${token}`

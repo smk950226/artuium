@@ -186,9 +186,8 @@ class Following(APIView):
 
 class LikeReview(APIView):
     permission_classes = [IsAuthenticated]
-    def get(self, request, format = None):
-        user = request.user
-        likes = models.Like.objects.filter(user = user, review__isnull = False)
+    def get(self, request, user_id, format = None):
+        likes = models.Like.objects.filter(user = user_id, review__isnull = False)
         paginator = MainPageNumberPagination()
         result_page = paginator.paginate_queryset(likes, request)
         serializer = serializers.LikeSerializer(result_page, many = True, context = {'request': request})
@@ -232,7 +231,7 @@ class LikeReview(APIView):
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상을 선택해주세요.'})
     
-    def delete(self ,request, format = None):
+    def delete(self, request, format = None):
         review_id = request.data.get('reviewId', None)
         user = request.user
         if review_id:
@@ -252,9 +251,9 @@ class LikeReview(APIView):
 
 class LikeExhibition(APIView):
     permission_classes = [IsAuthenticated]
-    def get(self, request, format = None):
+    def get(self, request, user_id, format = None):
         user = request.user
-        likes = models.Like.objects.filter(user = user, exhibition__isnull = False)
+        likes = models.Like.objects.filter(user = user_id, exhibition__isnull = False)
         paginator = MainPageNumberPagination()
         result_page = paginator.paginate_queryset(likes, request)
         serializer = serializers.LikeSerializer(result_page, many = True, context = {'request': request})
@@ -298,9 +297,8 @@ class LikeExhibition(APIView):
 
 class LikeArtwork(APIView):
     permission_classes = [IsAuthenticated]
-    def get(self, request, format = None):
-        user = request.user
-        likes = models.Like.objects.filter(user = user, artwork__isnull = False)
+    def get(self, request, user_id, format = None):
+        likes = models.Like.objects.filter(user = user_id, artwork__isnull = False)
         paginator = MainPageNumberPagination()
         result_page = paginator.paginate_queryset(likes, request)
         serializer = serializers.LikeSerializer(result_page, many = True, context = {'request': request})

@@ -122,10 +122,10 @@ function unlikeReview(reviewId){
     }
 }
 
-function getReviewLikeList(){
+function getReviewLikeList(userId){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
-        return fetch(`${FETCH_URL}/api/statics/like/review/?page=1`, {
+        return fetch(`${FETCH_URL}/api/statics/like/review/${userId}/?page=1`, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `JWT ${token}`
@@ -144,10 +144,10 @@ function getReviewLikeList(){
     }
 }
 
-function getReviewLikeListMore(page){
+function getReviewLikeListMore(userId, page){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
-        return fetch(`${FETCH_URL}/api/statics/like/review/?page=${page}`, {
+        return fetch(`${FETCH_URL}/api/statics/like/review/${userId}/?page=${page}`, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `JWT ${token}`

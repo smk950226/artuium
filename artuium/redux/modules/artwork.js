@@ -128,10 +128,10 @@ function createArtworkReview(artworkId, rating, expression, content){
     }
 }
 
-function getArtworkLikeList(){
+function getArtworkLikeList(userId){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
-        return fetch(`${FETCH_URL}/api/statics/like/artwork/?page=1`, {
+        return fetch(`${FETCH_URL}/api/statics/like/artwork/${userId}/?page=1`, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `JWT ${token}`
@@ -150,10 +150,10 @@ function getArtworkLikeList(){
     }
 }
 
-function getArtworkLikeListMore(page){
+function getArtworkLikeListMore(userId, page){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
-        return fetch(`${FETCH_URL}/api/statics/like/artwork/?page=${page}`, {
+        return fetch(`${FETCH_URL}/api/statics/like/artwork/${userId}/?page=${page}`, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `JWT ${token}`
