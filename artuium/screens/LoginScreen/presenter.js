@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Alert, ImageBackground, Image, TouchableWithoutFeedback, TextInput, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 import Modal from "react-native-modal";
 import { GoogleSigninButton } from '@react-native-community/google-signin';
-import { LoginButton, AccessToken } from 'react-native-fbsdk';
+import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 
@@ -16,6 +16,24 @@ class LoginScreen extends React.Component {
         handleChangeAgreeTerm: PropTypes.func.isRequired,
         handleChangeShowTerm: PropTypes.func.isRequired,
         showTerm: PropTypes.bool.isRequired
+    }
+
+    _handelFBLogin = () => {
+        LoginManager.logInWithPermissions(["public_profile"]).then(
+            function(result) {
+              if (result.isCancelled) {
+                console.log("Login cancelled");
+              } else {
+                console.log(
+                  "Login success with permissions: " +
+                    result.grantedPermissions.toString()
+                );
+              }
+            },
+            function(error) {
+              console.log("Login fail with error: " + error);
+            }
+          );
     }
 
     render(){
