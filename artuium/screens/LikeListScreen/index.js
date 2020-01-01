@@ -13,23 +13,23 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return{
-        getExhibitionLikeList: () => {
-            return dispatch(exhibitionActions.getExhibitionLikeList())
+        getExhibitionLikeList: (userId) => {
+            return dispatch(exhibitionActions.getExhibitionLikeList(userId))
         },
         getExhibitionLikeListMore: (page) => {
-            return dispatch(exhibitionActions.getExhibitionLikeList(page))
+            return dispatch(exhibitionActions.getExhibitionLikeList(userId, page))
         },
-        getArtworkLikeList: () => {
-            return dispatch(artworkActions.getArtworkLikeList())
+        getArtworkLikeList: (userId) => {
+            return dispatch(artworkActions.getArtworkLikeList(userId))
         },
-        getArtworkLikeListMore: (page) => {
-            return dispatch(artworkActions.getArtworkLikeList(page))
+        getArtworkLikeListMore: (userId, page) => {
+            return dispatch(artworkActions.getArtworkLikeList(userId, page))
         },
-        getReviewLikeList: () => {
-            return dispatch(reviewActions.getReviewLikeList())
+        getReviewLikeList: (userId) => {
+            return dispatch(reviewActions.getReviewLikeList(userId))
         },
-        getReviewLikeListMore: (page) => {
-            return dispatch(reviewActions.getReviewLikeList(page))
+        getReviewLikeListMore: (userId, page) => {
+            return dispatch(reviewActions.getReviewLikeList(userId, page))
         }
     }
 }

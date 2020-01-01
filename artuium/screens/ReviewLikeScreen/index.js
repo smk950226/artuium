@@ -11,11 +11,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return{
-        getReviewLikeList: () => {
-            return dispatch(reviewActions.getReviewLikeList())
+        getReviewLikeList: (userId) => {
+            return dispatch(reviewActions.getReviewLikeList(userId))
         },
-        getReviewLikeListMore: (page) => {
-            return dispatch(reviewActions.getReviewLikeListMore(page))
+        getReviewLikeListMore: (userId, page) => {
+            return dispatch(reviewActions.getReviewLikeListMore(userId, page))
         }
     }
 }

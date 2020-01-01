@@ -11,11 +11,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return{
-        getExhibitionLikeList: () => {
-            return dispatch(exhibitionActions.getExhibitionLikeList())
+        getExhibitionLikeList: (userId) => {
+            return dispatch(exhibitionActions.getExhibitionLikeList(userId))
         },
-        getExhibitionLikeListMore: (page) => {
-            return dispatch(exhibitionActions.getExhibitionLikeListMore(page))
+        getExhibitionLikeListMore: (userId, page) => {
+            return dispatch(exhibitionActions.getExhibitionLikeListMore(userId, page))
         }
     }
 }
