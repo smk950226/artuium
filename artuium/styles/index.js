@@ -1020,6 +1020,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         paddingVertical: 20
     },
+    othersProfileBox: {
+        width: '100%',
+        height: 110,
+        paddingVertical: 20
+    },
     loginBtn: {
         width: 300,
         height: 50
@@ -1089,6 +1094,16 @@ const styles = StyleSheet.create({
     sliderLine: {
         width: 25,
         height: 3
+    },
+    othersFollowBtn: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 15,
+        paddingVertical: 5,
+        backgroundColor: '#1162d0',
+        borderColor: '#1162d0',
+        borderRadius: 5,
+        borderWidth: 1
     }
 })
 
