@@ -1101,9 +1101,15 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 5,
         backgroundColor: '#1162d0',
-        borderColor: '#1162d0',
         borderRadius: 5,
-        borderWidth: 1
+    },
+    othersUnfollowBtn: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 15,
+        paddingVertical: 5,
+        backgroundColor: '#888888',
+        borderRadius: 5,
     }
 })
 

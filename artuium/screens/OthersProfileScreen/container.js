@@ -15,59 +15,85 @@ class Container extends Component{
 
     constructor(props){
         super(props)
-        const { profile, profile : { following_count, follower_count, is_following, is_me, following_friends_count, like_exhibition_count, like_artwork_count, like_review_count }, noticeNew, notificationNew } = props;
+        const { profile } = props;
         this.state = {
+            isSubmitting: false,
             loading: profile.id ? false : true,
             loadingReviewList: true,
             showNoticeModal: false,
-            noticeNew,
-            notificationNew,
-            following_count, 
-            follower_count, 
-            is_following, 
-            is_me, 
-            following_friends_count,
-            like_exhibition_count,
-            like_artwork_count,
-            like_review_count,
             page: 1,
             hasNextPage: true,
             isLoadingMore: false,
             reviewList: [],
-            refreshing: false
+            refreshing: false,
+            others: props.navigation.getParam('others', null)
+        }
+    }
+
+    _follow = async() => {
+        const { others, isSubmitting } = this.state;
+        const { followUser } = this.props;
+        if(!isSubmitting){
+            if(!others.is_me){
+                if(!others.is_following){
+                    this.setState({
+                        isSubmitting: true
+                    })
+                    const result = await followUser(others.id)
+                    if(result.status === 'ok'){
+                        this.setState({
+                            isSubmitting: false,
+                            others: {
+                                ...others,
+                                is_following: true,
+                                follower_count: this.state.others.follower_count + 1
+                            }
+                        })
+                    }
+                    else{
+                        this.setState({
+                            isSubmitting: false
+                        })
+                    }
+                }
+            }
+        }
+    }
+
+    _unfollow = async() => {
+        const { others, isSubmitting } = this.state;
+        const { unfollowUser } = this.props;
+        if(!isSubmitting){
+            if(!others.is_me){
+                if(others.is_following){
+                    this.setState({
+                        isSubmitting: true
+                    })
+                    const result = await unfollowUser(others.id)
+                    if(result.status === 'ok'){
+                        this.setState({
+                            others: {
+                                ...others,
+                                is_following: false,
+                                follower_count: this.state.others.follower_count - 1
+                            },
+                            isSubmitting: false,
+                        })
+                    }
+                    else{
+                        this.setState({
+                            isSubmitting: false
+                        })
+                    }
+                }
+            }
         }
     }
 
     componentDidMount = async() => {
-        const { checkNoticeAll, getReviewList, getProfile, checkNotificationAll, getNoticeNew, getNotificationNew } = this.props;
+        const { getReviewList, getProfile } = this.props;
         await getProfile()
-        const noticeNew = await checkNoticeAll()
-        const notificationNew = await checkNotificationAll()
-        if(noticeNew.is_new){
-            getNoticeNew(true)
-            this.setState({
-                noticeNew: true
-            })
-        }
-        else{
-            getNoticeNew(false)
-            this.setState({
-                noticeNew: false
-            })
-        }
-        if(notificationNew.is_new){
-            getNotificationNew(true)
-            this.setState({
-                notificationNew: true
-            })
-        }
-        else{
-            getNotificationNew(false)
-            this.setState({
-                notificationNew: false
-            })
-        }
-        const reviewList = await getReviewList()
+        const reviewList = await getReviewList(this.state.others.id)
         this.setState({
             reviewList,
             loadingReviewList: false
@@ -76,16 +102,9 @@ class Container extends Component{
 
     static getDerivedStateFromProps(nextProps, prevState){
         if((nextProps.profile)){
-            const { profile : { following_count, follower_count, is_following, is_me, following_friends_count, like_exhibition_count, like_artwork_count, like_review_count } } = nextProps;
+            const { profile } = nextProps;
             return {
-                following_count,
-                follower_count,
-                is_following,
-                is_me,
-                following_friends_count,
-                like_exhibition_count,
-                like_artwork_count,
-                like_review_count
+                profile
             }
         }
         else{
@@ -101,7 +120,7 @@ class Container extends Component{
                 await this.setState({
                     isLoadingMore: true
                 });
-                const result = await getReviewListMore(page+1);
+                const result = await getReviewListMore(this.state.others.id, page+1);
                 if(result){
                     await this.setState({
                         page: this.state.page+1,
@@ -127,70 +146,17 @@ class Container extends Component{
             page: 1,
             hasNextPage: true,
         })
-
-        const reviewList = await getReviewList()
+        const reviewList = await getReviewList(this.state.others.id)
         this.setState({
             reviewList,
             refreshing: false
         })
-    }  
-
-    _openNoticeModal = () => {
-        this.setState({
-            showNoticeModal: true
-        })
-    }
-
-    _closeNoticeModal = () => {
-        this.setState({
-            showNoticeModal: false
-        })
-    }
-
-    _handleNoticeNewChange = (noticeNew) => {
-        this.props.getNoticeNew(noticeNew)
-        this.setState({
-            noticeNew
-        })
-    }
-
-    _handleNotificationNewChange = (notificationNew) => {
-        this.props.getNotificationNew(notificationNew)
-        this.setState({
-            notificationNew
-        })
     }
 
     _remount = async() => {
-        const { checkNoticeAll, getReviewList, getProfile, checkNotificationAll, getNoticeNew, getNotificationNew } = this.props;
+        const { getReviewList, getProfile } = this.props;
         await getProfile()
-        const noticeNew = await checkNoticeAll()
-        const notificationNew = await checkNotificationAll()
-        if(noticeNew.is_new){
-            getNoticeNew(true)
-            this.setState({
-                noticeNew: true
-            })
-        }
-        else{
-            getNoticeNew(false)
-            this.setState({
-                noticeNew: false
-            })
-        }
-        if(notificationNew.is_new){
-            getNotificationNew(true)
-            this.setState({
-                notificationNew: true
-            })
-        }
-        else{
-            getNotificationNew(false)
-            this.setState({
-                notificationNew: false
-            })
-        }
-        const reviewList = await getReviewList()
+        const reviewList = await getReviewList(this.state.others.id)
         this.setState({
             reviewList,
             loadingReviewList: false
@@ -223,6 +189,8 @@ class Container extends Component{
                     reviewListMore={this._reviewListMore}
                     refresh={this._refresh}
                     handleNotificationNewChange={this._handleNotificationNewChange}
+                    follow={this._follow}
+                    unfollow={this._unfollow}
                     />
                 </Fragment>
             )

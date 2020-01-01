@@ -14,11 +14,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         getProfile: () => {
             dispatch(userActions.getProfile())
         },
-        getReviewList: () => {
-            return dispatch(userActions.getReviewList())
+        followUser: (userId) => {
+            return dispatch(userActions.followUser(userId))
         },
-        getReviewListMore: (page) => {
-            return dispatch(userActions.getReviewListMore(page))
+        unfollowUser: (userId) => {
+            return dispatch(userActions.unfollowUser(userId))
+        },
+        getReviewList: (userId) => {
+            return dispatch(userActions.getReviewList(userId))
+        },
+        getReviewListMore: (userId, page) => {
+            return dispatch(userActions.getReviewListMore(userId, page))
         },
     }
 }

@@ -90,7 +90,12 @@ class ArtuiumCard extends Component{
 
     _handleGoOthersProfile = () => {
         this.props.closeProfileModal()
-        this.props.navigation.navigate('OthersProfile')
+        if(this.props.is_me){
+            this.props.navigation.navigate('Profile')
+        }
+        else{
+            this.props.navigation.navigate('OthersProfile', {others: this.props.review.author})
+        }
     }
 
     render(){

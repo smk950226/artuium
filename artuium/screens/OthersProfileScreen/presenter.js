@@ -17,15 +17,6 @@ class ProfileScreen extends React.Component {
         this.state = {
             scrollY: new Animated.Value(0),
             profile: PropTypes.object.isRequired,
-            following_count: PropTypes.number.isRequired, 
-            follower_count: PropTypes.number.isRequired,
-            is_following: PropTypes.bool.isRequired, 
-            is_me: PropTypes.bool.isRequired, 
-            following_friends_count: PropTypes.number.isRequired,
-            like_exhibition_count: PropTypes.number.isRequired, 
-            like_artwork_count: PropTypes.number.isRequired, 
-            like_review_count: PropTypes.number.isRequired,
-            loadingReviewList: PropTypes.bool.isRequired,
             reviewListMore: PropTypes.func.isRequired,
             isLoadingMore: PropTypes.bool.isRequired,
             hasNextPage: PropTypes.bool.isRequired,
@@ -36,14 +27,14 @@ class ProfileScreen extends React.Component {
     }
 
     render(){
-        const { profile, following_count, follower_count, is_following, is_me, following_friends_count, like_exhibition_count, like_artwork_count, like_review_count, loadingReviewList, isLoadingMore, hasNextPage, reviewList, refreshing } = this.props;
+        const { others, profile, loadingReviewList, isLoadingMore, hasNextPage, reviewList, refreshing } = this.props;
         return(
             <SafeAreaView style={[styles.container]}>
                 <View style={[styles.row, styles.justifyContentBetween, styles.alignItemsCenter, styles.px25, styles.bgWhite, {width, height: iosStatusBarHeight+50, paddingTop: iosStatusBarHeight}]}>
                     <TouchableWithoutFeedback onPress={() => this.props.navigation.goBack(null)}>
                         <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
                     </TouchableWithoutFeedback>
-                    <Text style={[styles.fontBold, styles.font20]}>{`${profile.nickname}님의 프로필`}</Text>
+                    <Text style={[styles.fontBold, styles.font20]}>{`${others.nickname}님의 프로필`}</Text>
                     <View style={{width: 9*1.6}} />
                 </View>
                 <ScrollView
@@ -58,14 +49,14 @@ class ProfileScreen extends React.Component {
                     bounces={false}
                     scrollEventThrottle={16}
                 >
-                    {profile.background_image ? (
+                    {others.background_image ? (
                         <ImageBackground
-                            source={{uri: profile.background_image}}
+                            source={{uri: others.background_image}}
                             style={[styles.paddingIOS, styles.px15, styles.justifyContentEnd, styles.pb15, {height: 210}]}
                             resizeMode={'cover'}
                         >
-                            {profile.profile_image ? (
-                                <Image source={{uri: profile.profile_image}} style={[styles.profileImage70]} />
+                            {others.profile_image ? (
+                                <Image source={{uri: others.profile_image}} style={[styles.profileImage70]} />
                             ) : (
                                 <View style={[styles.profileImage70, styles.bgGrayC9]} />
                             )}
@@ -76,8 +67,8 @@ class ProfileScreen extends React.Component {
                             style={[styles.paddingIOS, styles.px15, styles.justifyContentEnd, styles.pb15, {height: 210}]}
                             resizeMode={'cover'}
                         >
-                            {profile.profile_image ? (
-                                <Image source={{uri: profile.profile_image}} style={[styles.profileImage70]} />
+                            {others.profile_image ? (
+                                <Image source={{uri: others.profile_image}} style={[styles.profileImage70]} />
                             ) : (
                                 <View style={[styles.profileImage70, styles.bgGrayC9]} />
                             )}
@@ -86,31 +77,37 @@ class ProfileScreen extends React.Component {
                     
                     <ImageBackground source={require('../../assets/images/gradient.png')} style={[styles.px15, {paddingBottom: 70}]}>
                         <View style={[styles.row, styles.pt20, styles.px5, styles.justifyContentBetween]}>
-                            <Text style={[styles.fontBold, styles.font25]}>{profile.nickname}</Text>
+                            <Text style={[styles.fontBold, styles.font25]}>{others.nickname}</Text>
                             <View style={[styles.row]}>
-                                <TouchableOpacity style={[styles.othersFollowBtn]}>
+                                {others.is_following ?
+                                <TouchableOpacity style={[styles.othersUnfollowBtn]} onPress={()=>this.props.unfollow()}>
+                                    <Text style={[styles.fontMedium, styles.font15, styles.white]}>팔로우 중</Text>
+                                </TouchableOpacity>
+                                :
+                                <TouchableOpacity style={[styles.othersFollowBtn]} onPress={()=>this.props.follow()}>
                                     <Text style={[styles.fontMedium, styles.font15, styles.white]}>팔로우</Text>
                                 </TouchableOpacity>
+                                }
                             </View>
                         </View>
                         <View style={[styles.row, styles.px5]}>
                             <Text style={[styles.fontMedium, styles.font13, {color: '#a7a7a7'}]}>팔로워</Text>
-                            <Text style={[styles.fontMedium, styles.font13, styles.ml10, {color: '#a7a7a7'}]}>{follower_count}</Text>
+                            <Text style={[styles.fontMedium, styles.font13, styles.ml10, {color: '#a7a7a7'}]}>{others.follower_count}</Text>
                             <Text style={[styles.fontMedium, styles.font13, styles.ml30, {color: '#a7a7a7'}]}>팔로잉</Text>
-                            <Text style={[styles.fontMedium, styles.font13, styles.ml10, {color: '#a7a7a7'}]}>{following_count}</Text>
+                            <Text style={[styles.fontMedium, styles.font13, styles.ml10, {color: '#a7a7a7'}]}>{others.following_count}</Text>
                         </View>
-                        <TouchableWithoutFeedback onPress={()=>this.props.navigation.navigate('LikeList')}>
+                        <TouchableWithoutFeedback onPress={()=>this.props.navigation.navigate('LikeList', {others})}>
                             <View style={[styles.row, styles.justifyContentEven, styles.othersProfileBox, styles.mt10]}>
                                 <View style={[styles.alignItemsCenter]}>
-                                    <Text style={[styles.fontBold, styles.font35, {color: '#fff'}]}>{like_exhibition_count}</Text>
+                                    <Text style={[styles.fontBold, styles.font35, {color: '#fff'}]}>{others.like_exhibition_count}</Text>
                                     <Text style={[styles.fontMedium, styles.font16, {color: '#fff'}]}>좋아한 전시</Text>
                                 </View>
                                 <View style={[styles.alignItemsCenter]}>
-                                    <Text style={[styles.fontBold, styles.font35, {color: '#fff'}]}>{like_artwork_count}</Text>
+                                    <Text style={[styles.fontBold, styles.font35, {color: '#fff'}]}>{others.like_artwork_count}</Text>
                                     <Text style={[styles.fontMedium, styles.font16, {color: '#fff'}]}>좋아한 작품</Text>
                                 </View>
                                 <View style={[styles.alignItemsCenter]}>
-                                    <Text style={[styles.fontBold, styles.font35, {color: '#fff'}]}>{like_review_count}</Text>
+                                    <Text style={[styles.fontBold, styles.font35, {color: '#fff'}]}>{others.like_review_count}</Text>
                                     <Text style={[styles.fontMedium, styles.font16, {color: '#fff'}]}>좋아한 감상</Text>
                                 </View>
                             </View>
