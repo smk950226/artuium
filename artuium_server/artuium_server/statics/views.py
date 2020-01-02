@@ -193,61 +193,6 @@ class LikeReview(APIView):
         serializer = serializers.LikeSerializer(result_page, many = True, context = {'request': request})
         return Response(status = status.HTTP_200_OK, data = serializer.data)
 
-    def post(self ,request, format = None):
-        review_id = request.data.get('reviewId', None)
-        user = request.user
-        if review_id:
-            try:
-                review = models.Review.objects.get(id = review_id)
-                pre = models.Like.objects.filter(user = user, review = review)
-                if pre.count() > 0:
-                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 좋아하는 감상입니다.'})
-                else:
-                    like = models.Like.objects.create(user = user, review = review)
-                    like.save()
-                    if user.id != review.author.id:
-                        notification = models.Notification.objects.create(
-                            from_user = user,
-                            to_user = review.author,
-                            type = 'like_review',
-                            review = review
-                        )
-                        notification.save()
-                        if review.author.push_token:
-
-                            text = ''
-                            text += user.nickname
-                            text += ' 님이 회원님의 '
-                            if review.artwork:
-                                text += "'" + review.artwork.name + "'"
-                            elif review.exhibition:
-                                text += "'" + review.exhibition.name + "'" + '전시 '
-                            text += '감상을 좋아합니다.'
-                            fcm_send_message(registration_id = review.author.push_token, title='좋아요 알림', body=text, android_channel_id = 'artuium', icon='ic_notification')
-
-                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
-            except:
-                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
-        else:
-            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상을 선택해주세요.'})
-    
-    def delete(self, request, format = None):
-        review_id = request.data.get('reviewId', None)
-        user = request.user
-        if review_id:
-            try:
-                review = models.Review.objects.get(id = review_id)
-                pre = models.Like.objects.filter(user = user, review = review)
-                if pre.count() == 0:
-                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '좋아하는 감상이 아닙니다.'})
-                else:
-                    pre.delete()
-                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
-            except:
-                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
-        else:
-            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상을 선택해주세요.'})
-
 
 class LikeReviewOnly(APIView):
     permission_classes = [IsAuthenticated]
@@ -317,40 +262,6 @@ class LikeExhibition(APIView):
         serializer = serializers.LikeSerializer(result_page, many = True, context = {'request': request})
         return Response(status = status.HTTP_200_OK, data = serializer.data)
 
-    def post(self ,request, format = None):
-        exhibition_id = request.data.get('exhibitionId', None)
-        user = request.user
-        if exhibition_id:
-            try:
-                exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
-                pre = models.Like.objects.filter(user = user, exhibition = exhibition)
-                if pre.count() > 0:
-                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 좋아하는 전시입니다.'})
-                else:
-                    like = models.Like.objects.create(user = user, exhibition = exhibition)
-                    like.save()
-                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
-            except:
-                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
-        else:
-            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
-    
-    def delete(self ,request, format = None):
-        exhibition_id = request.data.get('exhibitionId', None)
-        user = request.user
-        if exhibition_id:
-            try:
-                exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
-                pre = models.Like.objects.filter(user = user, exhibition = exhibition)
-                if pre.count() == 0:
-                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '좋아하는 전시가 아닙니다.'})
-                else:
-                    pre.delete()
-                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
-            except:
-                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
-        else:
-            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
 
 class LikeExhibitionOnly(APIView):
     permission_classes = [IsAuthenticated]
@@ -398,41 +309,6 @@ class LikeArtwork(APIView):
         result_page = paginator.paginate_queryset(likes, request)
         serializer = serializers.LikeSerializer(result_page, many = True, context = {'request': request})
         return Response(status = status.HTTP_200_OK, data = serializer.data)
-
-    def post(self ,request, format = None):
-        artwork_id = request.data.get('artworkId', None)
-        user = request.user
-        if artwork_id:
-            try:
-                artwork = artwork_models.Artwork.objects.get(id = artwork_id)
-                pre = models.Like.objects.filter(user = user, artwork = artwork)
-                if pre.count() > 0:
-                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 좋아하는 아트워크입니다.'})
-                else:
-                    like = models.Like.objects.create(user = user, artwork = artwork)
-                    like.save()
-                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
-            except:
-                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
-        else:
-            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
-    
-    def delete(self ,request, format = None):
-        artwork_id = request.data.get('artworkId', None)
-        user = request.user
-        if artwork_id:
-            try:
-                artwork = artwork_models.Artwork.objects.get(id = artwork_id)
-                pre = models.Like.objects.filter(user = user, artwork = artwork)
-                if pre.count() == 0:
-                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '좋아하는 아트워크가 아닙니다.'})
-                else:
-                    pre.delete()
-                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
-            except:
-                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
-        else:
-            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
 
 
 class LikeArtworkOnly(APIView):

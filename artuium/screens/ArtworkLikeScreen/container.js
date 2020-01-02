@@ -29,7 +29,7 @@ class Container extends Component{
             likes.map(img => {
                 images.push({
                     ...img,
-                    uri: img.artwork.image
+                    URL: img.artwork.image
                 })
             })
             this.setState({
@@ -44,7 +44,7 @@ class Container extends Component{
             likes.map(img => {
                 images.push({
                     ...img,
-                    uri: img.artwork.image
+                    URL: img.artwork.image
                 })
             })
             this.setState({
@@ -66,10 +66,18 @@ class Container extends Component{
                     });
                     const result = await getArtworkLikeListMore(others.id, page+1);
                     if(result){
+                        let images = []
+                        result.map(img => {
+                            images.push({
+                                ...img,
+                                URL: img.artwork.image
+                            })
+                        })
                         await this.setState({
                             page: this.state.page+1,
                             isLoadingMore: false,
-                            likes: [...this.state.likes, ...result]
+                            likes: [...this.state.likes, ...result],
+                            images: this.state.images.concat(images)
                         })
                     }
                     else{
@@ -89,10 +97,18 @@ class Container extends Component{
                     });
                     const result = await getArtworkLikeListMore(profile.id, page+1);
                     if(result){
+                        let images = []
+                        result.map(img => {
+                            images.push({
+                                ...img,
+                                URL: img.artwork.image
+                            })
+                        })
                         await this.setState({
                             page: this.state.page+1,
                             isLoadingMore: false,
-                            likes: [...this.state.likes, ...result]
+                            likes: [...this.state.likes, ...result],
+                            images: this.state.images.concat(images)
                         })
                     }
                     else{
@@ -116,19 +132,39 @@ class Container extends Component{
         })
         if(others){
             const likes = await getArtworkLikeList(others.id)
+            let images = []
+            likes.map(img => {
+                images.push({
+                    ...img,
+                    URL: img.artwork.image
+                })
+            })
             this.setState({
                 likes,
-                refreshing: false
+                refreshing: false,
+                images
             })
         }
         else{
             const likes = await getArtworkLikeList(profile.id)
+            let images = []
+            likes.map(img => {
+                images.push({
+                    ...img,
+                    URL: img.artwork.image
+                })
+            })
             this.setState({
                 likes,
-                refreshing: false
+                refreshing: false,
+                images
             })
         }
-    }  
+    }
+
+    _onPressImage = (item, index) => {
+        this.props.navigation.navigate('ArtworkDetail', { artwork: item.artwork })
+    }
 
     render(){
         const { loading } = this.state;
@@ -146,6 +182,7 @@ class Container extends Component{
                 {...this.state}
                 artworkMore={this._artworkMore}
                 refresh={this._refresh}
+                onPressImage={this._onPressImage}
                 />
             )
         }
