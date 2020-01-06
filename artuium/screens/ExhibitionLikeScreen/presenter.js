@@ -21,7 +21,7 @@ class ExhibitionLikeScreen extends React.Component {
     render(){
         const { profile, likes, refreshing, hasNextPage, isLoadingMore } = this.props;
         return(
-            <View style={[styles.container, styles.pt20, styles.px5]}>
+            <View style={[styles.container, styles.px5]}>
                 {likes && likes.length > 0 ? (
                     <FlatList 
                     data={likes} 

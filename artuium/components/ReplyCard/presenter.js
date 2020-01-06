@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Modal } from 'react-native';
+import { View, Text, Image, Dimensions, TouchableWithoutFeedback, TouchableOpacity, Modal } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';

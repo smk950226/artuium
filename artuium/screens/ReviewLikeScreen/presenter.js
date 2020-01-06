@@ -20,7 +20,7 @@ class ReviewLikeScreen extends React.Component {
     render(){
         const { profile, likes, refreshing, hasNextPage, isLoadingMore } = this.props;
         return(
-            <View style={[styles.container, styles.pt20]}>
+            <View style={[styles.container]}>
                 {likes && likes.length > 0 ? (
                     <FlatList 
                     data={likes} 
@@ -31,7 +31,7 @@ class ReviewLikeScreen extends React.Component {
                     keyExtractor={item => String(item.id)} 
                     refreshing={refreshing} 
                     onRefresh={this.props.refresh} 
-                    onEndReached={hasNextPage ? this.props.artworkMore : null} 
+                    onEndReached={hasNextPage ? this.props.reviewMore : null} 
                     onEndReachedThreshold={0.5} 
                     bounces={true} 
                     ListFooterComponent={isLoadingMore ? (
