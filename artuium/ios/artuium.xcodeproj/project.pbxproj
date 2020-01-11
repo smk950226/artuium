@@ -18,6 +18,9 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* artuiumTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* artuiumTests.m */; };
 		2F3FCFD023B34BA900343B76 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 2F3FCFCF23B34BA900343B76 /* Fonts */; };
+		2F43572023C9C2460067B2DD /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F43571F23C9C2460067B2DD /* libRNGoogleSignin.a */; };
+		2F43572223C9C2840067B2DD /* libRNKakao.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F43572123C9C2840067B2DD /* libRNKakao.a */; };
+		2F43572423C9C2EE0067B2DD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F43572323C9C2EE0067B2DD /* GoogleService-Info.plist */; };
 		7706E3B76B55CF0AC826DD71 /* libPods-artuium-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19BF5FEE5D7FE88BAEC86E5D /* libPods-artuium-tvOS.a */; };
 		8F1009425CF1B23F225AB69C /* libPods-artuiumTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9AB98AE47ADFACFE0FE681E /* libPods-artuiumTests.a */; };
 		F26B343AB4240560935A6DFF /* libPods-artuium-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 949F440C66CDCDE9D0BD059A /* libPods-artuium-tvOSTests.a */; };
@@ -60,6 +63,9 @@
 		2D02E4901E0B4A5D006451C7 /* artuium-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "artuium-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E8822A1F858EFE129D3330C /* Pods-artuiumTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-artuiumTests.debug.xcconfig"; path = "Target Support Files/Pods-artuiumTests/Pods-artuiumTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2F3FCFCF23B34BA900343B76 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fonts; sourceTree = "<group>"; };
+		2F43571F23C9C2460067B2DD /* libRNGoogleSignin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGoogleSignin.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F43572123C9C2840067B2DD /* libRNKakao.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNKakao.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F43572323C9C2EE0067B2DD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6393EAA438F516C81F9A2100 /* libPods-artuium.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-artuium.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8444424E928CFBF97BC29211 /* Pods-artuium-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-artuium-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-artuium-tvOSTests/Pods-artuium-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		949F440C66CDCDE9D0BD059A /* libPods-artuium-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-artuium-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,6 +90,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F43572223C9C2840067B2DD /* libRNKakao.a in Frameworks */,
+				2F43572023C9C2460067B2DD /* libRNGoogleSignin.a in Frameworks */,
 				1680159FE38369781F924E83 /* libPods-artuium.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -127,6 +135,7 @@
 		13B07FAE1A68108700A75B9A /* artuium */ = {
 			isa = PBXGroup;
 			children = (
+				2F43572323C9C2EE0067B2DD /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -141,6 +150,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2F43572123C9C2840067B2DD /* libRNKakao.a */,
+				2F43571F23C9C2460067B2DD /* libRNGoogleSignin.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				6393EAA438F516C81F9A2100 /* libPods-artuium.a */,
@@ -341,6 +352,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F3FCFD023B34BA900343B76 /* Fonts in Resources */,
+				2F43572423C9C2EE0067B2DD /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);

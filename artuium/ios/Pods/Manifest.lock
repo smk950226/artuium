@@ -369,6 +369,7 @@ DEPENDENCIES:
   - Firebase/Messaging (~> 6.4.0)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - GoogleSignIn (~> 5.0.2)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -562,6 +563,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 9cc2366d8ad9354f435ce596d508575ea2baa84a
+PODFILE CHECKSUM: afecea59c5ac02304a1693222433f5054d2cc544
 
 COCOAPODS: 1.8.4

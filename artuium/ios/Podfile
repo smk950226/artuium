@@ -37,6 +37,7 @@ target 'artuium' do
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
   pod 'Firebase/Messaging', '~> 6.4.0'
+  pod 'GoogleSignIn', '~> 5.0.2'
 
   target 'artuiumTests' do
     inherit! :search_paths
