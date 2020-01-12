@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Alert, ImageBackground, Image, TouchableWithoutFeedback, TextInput, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Alert, ImageBackground, Image, TouchableWithoutFeedback, TextInput, Dimensions, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import Modal from "react-native-modal";
 import { GoogleSigninButton } from '@react-native-community/google-signin';
 import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk';
@@ -219,17 +219,25 @@ class LoginScreen extends React.Component {
                                 <Image source={require('../../assets/images/login_kakao.png')} style={[styles.loginBtn]} resizeMode={'contain'} />
                             </View>
                         </TouchableWithoutFeedback>
-                        <GoogleSigninButton
-                            style={[styles.mt25, { width: 308, height: 58 }]}
-                            size={GoogleSigninButton.Size.Wide}
-                            color={GoogleSigninButton.Color.Light}
-                            onPress={()=>this.props.handleGoogleLogin()}
-                        />
+                        {Platform.OS === 'ios' ?
+                            <TouchableWithoutFeedback onPress={this.props.handleGoogleLogin}>
+                                <View style={[styles.loginBtn, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px20, styles.mt25, { backgroundColor: '#fff', borderRadius: 3 }]}>
+                                    <Image source={require('../../assets/images/logo_google.png')} style={[{width: 30, height: 30}, styles.alignSelfCenter]} />
+                                    <Text style={[styles.fontBold, styles.font14, styles.textCenter, {marginRight: 35, opacity: 0.54}]}>Google 계정으로 로그인</Text>
+                                </View>
+                            </TouchableWithoutFeedback>
+                        :
+                            <GoogleSigninButton
+                                style={[styles.mt25, { width: 308, height: 58 }]}
+                                size={GoogleSigninButton.Size.Wide}
+                                color={GoogleSigninButton.Color.Light}
+                                onPress={()=>this.props.handleGoogleLogin()}
+                            />
+                        }
                         <TouchableWithoutFeedback onPress={this._handleFacebookLogin}>
                             <View style={[styles.loginBtn, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px20, styles.mt25, { backgroundColor: '#3B77EA', borderRadius: 3 }]}>
                                 <Image source={require('../../assets/images/logo_fb.png')} style={[{width: 30, height: 30}, styles.alignSelfCenter]} />
-                                <Text style={[styles.white, styles.fontBold, styles.font14, styles.textCenter]}>Facebook으로 계속하기</Text>
-                                <Image source={require('../../assets/images/logo_fb.png')} style={[{width: 30, height: 30}, styles.alignSelfCenter, styles.hidden]} />
+                                <Text style={[styles.white, styles.fontBold, styles.font14, styles.textCenter, {marginRight: 35}]}>Facebook으로 계속하기</Text>
                             </View>
                         </TouchableWithoutFeedback>
                     </View>
