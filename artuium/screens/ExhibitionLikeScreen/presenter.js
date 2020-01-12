@@ -26,7 +26,7 @@ class ExhibitionLikeScreen extends React.Component {
                     <FlatList 
                     data={likes} 
                     renderItem={({item}) => (
-                        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('ExhibitionDetail', { exhibition: item.exhibition })}>
+                        <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('ExhibitionDetail', { exhibition: item.exhibition, from: 'LikeList' })}>
                             <ImageBackground source={{uri: item.exhibition.images ? item.exhibition.images.length > 0 ? item.exhibition.images[0].image : null : null}} resizeMode={'cover'} style={[{height: 190, width: (width-40)/3}, styles.mx5, styles.mb5, styles.borderRadius5, styles.exCardShadow, styles.overflowHidden]} />
                         </TouchableWithoutFeedback>
                     )} 

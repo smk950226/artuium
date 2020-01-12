@@ -278,7 +278,7 @@ class HomeScreen extends Component {
                                 <View style={[styles.row, (recommendedReviews && (recommendedReviews.length > 0)) ? styles.justifyContentBetween : styles.justifyContentCenter, styles.flexWrap, styles.widthFull]}>
                                     {(recommendedReviews && (recommendedReviews.length > 0)) ? (
                                         recommendedReviews.map((review, index) => (
-                                            <ArtuiumCard key={index} review={review} size={'small'} navigation={this.props.navigation} />
+                                            <ArtuiumCard from={'Home'} key={index} review={review} size={'small'} navigation={this.props.navigation} />
                                         ))
                                     ) : (
                                         <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
@@ -299,7 +299,7 @@ class HomeScreen extends Component {
                                 >
                                     {(newReviews && (newReviews.length > 0)) ? (
                                         newReviews.map((review, index) => (
-                                            <ArtuiumCard key={index} review={review} size={'large'} navigation={this.props.navigation} />
+                                            <ArtuiumCard from={'Home'} key={index} review={review} size={'large'} navigation={this.props.navigation} />
                                         ))
                                     ) : (
                                         <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
@@ -327,7 +327,7 @@ class HomeScreen extends Component {
                                 >
                                     {(followingReviews && (followingReviews.length > 0)) ? (
                                         followingReviews.map((review, index) => (
-                                            <ArtuiumCard key={index} review={review} size={'large'} navigation={this.props.navigation} />
+                                            <ArtuiumCard from={'Home'} key={index} review={review} size={'large'} navigation={this.props.navigation} />
                                         ))
                                     ) : (
                                         <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
@@ -428,7 +428,7 @@ class HomeScreen extends Component {
                             <View style={[styles.row, (recommendedReviews && (recommendedReviews.length > 0)) ? styles.justifyContentBetween : styles.justifyContentCenter, styles.flexWrap, styles.widthFull]}>
                                 {(recommendedReviews && (recommendedReviews.length > 0)) ? (
                                     recommendedReviews.map((review, index) => (
-                                        <ArtuiumCard key={index} review={review} size={'small'} navigation={this.props.navigation} />
+                                        <ArtuiumCard from={'Home'} key={index} review={review} size={'small'} navigation={this.props.navigation} />
                                     ))
                                 ) : (
                                     <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
@@ -449,7 +449,7 @@ class HomeScreen extends Component {
                             >
                                 {(newReviews && (newReviews.length > 0)) ? (
                                     newReviews.map((review, index) => (
-                                        <ArtuiumCard key={index} review={review} size={'large'} navigation={this.props.navigation} />
+                                        <ArtuiumCard from={'Home'} key={index} review={review} size={'large'} navigation={this.props.navigation} />
                                     ))
                                 ) : (
                                     <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
@@ -477,7 +477,7 @@ class HomeScreen extends Component {
                             >
                                 {(followingReviews && (followingReviews.length > 0)) ? (
                                     followingReviews.map((review, index) => (
-                                        <ArtuiumCard key={index} review={review} size={'large'} navigation={this.props.navigation} />
+                                        <ArtuiumCard from={'Home'} key={index} review={review} size={'large'} navigation={this.props.navigation} />
                                     ))
                                 ) : (
                                     <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>

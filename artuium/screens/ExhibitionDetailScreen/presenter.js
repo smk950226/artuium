@@ -34,6 +34,7 @@ class ExhibitionDetailScreen extends Component{
         is_liked: PropTypes.bool.isRequired,
         like: PropTypes.func.isRequired,
         unlike: PropTypes.func.isRequired,
+        from: PropTypes.string
     }
 
     lastTap = null
@@ -54,14 +55,14 @@ class ExhibitionDetailScreen extends Component{
     }
 
     render(){
-        const { exhibition, like_count, review_count, is_liked } = this.props;
+        const { exhibition, like_count, review_count, is_liked, from } = this.props;
         return(
             <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
                 <TouchableWithoutFeedback onPress={this._handleDoubleTap}>
                     <SafeAreaView style={[styles.container]}>
                         {exhibition ? (
                             <Fragment>
-                                <TouchableWithoutFeedback onPress={()=> this.props.navigation.goBack(null)}>
+                                <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from) : ()=> this.props.navigation.goBack(null)}>
                                     <View style={[styles.alignItemsCenter, styles.px15, {height: 40, flexDirection: 'row-reverse', position: 'absolute', top: iosStatusBarHeight + 15, right: 0, zIndex: 99}]}>
                                         <View style={[styles.exitBtn]}>
                                             <Text style={[styles.fontBold, styles.font16, styles.white]}>나가기</Text>
@@ -92,12 +93,12 @@ class ExhibitionDetailScreen extends Component{
                                                 <Text style={[styles.fontBold, styles.font30, styles.textCenter]}>{exhibition.name}</Text>
                                             </View>
                                             <Text style={[styles.fontMedium, styles.font14]}>{exhibition.gallery.name}, {`${exhibition.open_date.slice(0,4)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} ~ ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
-                                            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('ExhibitionArtwork', { exhibition })}>
+                                            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('ExhibitionArtwork', { exhibition, from })}>
                                                 <View style={[styles.relatedBtn, styles.mt30]}>
                                                     <Text style={[styles.fontMedium, styles.font18, styles.white]}>전시 입장</Text>
                                                 </View>
                                             </TouchableWithoutFeedback>
-                                            <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ExhibitionContent', { exhibition })}>
+                                            <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ExhibitionContent', { exhibition, from })}>
                                                 <View style={[{marginTop: 40}]}>
                                                     <Image source={require('../../assets/images/arrow_up_exhibition.png')} style={[styles.upBtn]}/>
                                                 </View>

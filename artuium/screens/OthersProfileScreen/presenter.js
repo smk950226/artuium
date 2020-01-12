@@ -122,7 +122,7 @@ class ProfileScreen extends React.Component {
                             <FlatList 
                             data={reviewList} 
                             renderItem={({item}) => (
-                                <ArtuiumCard review={item} size={'xlarge'} navigation={this.props.navigation} />
+                                <ArtuiumCard from={'OthersProfile'} review={item} size={'xlarge'} navigation={this.props.navigation} />
                             )} 
                             numColumns={1} 
                             keyExtractor={item => String(item.id)} 

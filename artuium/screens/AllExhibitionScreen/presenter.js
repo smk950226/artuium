@@ -170,7 +170,7 @@ const AllExhibitionScreen = (props) => (
                     <FlatList 
                     data={props.exhibitions} 
                     renderItem={({item}) => (
-                        <ExhibitionCard exhibition={item} full={true} navigation={props.navigation} />
+                        <ExhibitionCard from={'AllExhibition'} exhibition={item} full={true} navigation={props.navigation} />
                     )} 
                     numColumns={1} 
                     keyExtractor={item => String(item.id)} 

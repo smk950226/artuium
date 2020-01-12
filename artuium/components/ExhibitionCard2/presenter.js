@@ -6,7 +6,7 @@ import styles from '../../styles';
 const { width, height } = Dimensions.get('window')
 
 const ExhibitionCard2 = (props) => (
-    <TouchableWithoutFeedback onPress={() => props.navigation.navigate('ExhibitionDetail', { exhibition: props.exhibition })}>
+    <TouchableWithoutFeedback onPress={() => props.navigation.navigate('ExhibitionDetail', { exhibition: props.exhibition, from: props.from })}>
         <View style={[styles.mr10, {width: 130, height: 250}]}>
             <Image source={{uri: props.exhibition ? (props.exhibition.images && (props.exhibition.images.length > 0)) ? props.exhibition.images[0].image : null : null}} style={[styles.widthFull, {height: 190, borderRadius: 5}]} resizeMode={'cover'} />
             <View style={[styles.mt10]}>

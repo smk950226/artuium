@@ -21,6 +21,7 @@ class Container extends Component{
         const exhibition = props.navigation.getParam('exhibition', null)
         const mode = props.navigation.getParam('mode', null)
         const review = props.navigation.getParam('review', null)
+        const from = props.navigation.getParam('from', null)
         const { is_liked, like_count, review_count, is_reviewed, total_rate } = exhibition;
         this.state = {
             exhibition,
@@ -52,7 +53,8 @@ class Container extends Component{
             contentReply: '',
             isSubmittingReply: false,
             selectedReply: {},
-            initialMode: mode
+            initialMode: mode,
+            from
         }
     }
 

@@ -94,7 +94,7 @@ class ArtuiumCard4 extends Component{
     }
 
     render(){
-        const { artwork, is_liked, like_count, review_count } = this.props;
+        const { artwork, is_liked, like_count, review_count, from } = this.props;
         return(
             <TouchableWithoutFeedback onPress={this._handleDoubleTap}>
             <View style={[styles.center, styles.heightFull, styles.screenWidth]}>
@@ -124,7 +124,7 @@ class ArtuiumCard4 extends Component{
                         <Text style={[styles.fontMedium, styles.font14, { marginBottom: 150 }]}>{artwork.author.name}, {`${artwork.created.slice(0,4)}.${artwork.created.slice(5,7)}.${artwork.created.slice(8,10)}`}, {artwork.material}</Text>
                     </View>
                 </View>
-                <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ArtworkContent', { artwork })}>
+                <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ArtworkContent', { artwork, from })}>
                     <View style={[{position: 'absolute', bottom: height*0.1}]}>
                         <Image source={require('../../assets/images/arrow_up_exhibition.png')} style={[styles.upBtn]}/>
                     </View>

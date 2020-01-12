@@ -25,7 +25,7 @@ class ReviewLikeScreen extends React.Component {
                     <FlatList 
                     data={likes} 
                     renderItem={({item}) => (
-                        <ArtuiumCard review={item.review} size={'xlarge'} navigation={this.props.navigation} />
+                        <ArtuiumCard from={'ReviewLike'} review={item.review} size={'xlarge'} navigation={this.props.navigation} />
                     )} 
                     numColumns={1} 
                     keyExtractor={item => String(item.id)} 

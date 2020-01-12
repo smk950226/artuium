@@ -14,6 +14,7 @@ class Container extends Component{
     constructor(props){
         super(props);
         const artwork = props.navigation.getParam('artwork', null)
+        const from = props.navigation.getParam('from', null)
         const { is_liked, like_count, review_count } = artwork;
         this.state = {
             artwork,
@@ -21,7 +22,8 @@ class Container extends Component{
             like_count,
             review_count,
             isSubmitting: false,
-            loading: true
+            loading: true,
+            from
         }
     }
 

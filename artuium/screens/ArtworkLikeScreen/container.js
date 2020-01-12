@@ -163,7 +163,7 @@ class Container extends Component{
     }
 
     _onPressImage = (item, index) => {
-        this.props.navigation.navigate('ArtworkDetail', { artwork: item.artwork })
+        this.props.navigation.navigate('ArtworkDetail', { artwork: item.artwork, from: 'LikeList' })
     }
 
     render(){

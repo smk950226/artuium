@@ -52,7 +52,7 @@ const AllArtworkScreen = (props) => (
                 <FlatList 
                 data={props.reviews} 
                 renderItem={({item}) => (
-                    <ArtuiumCard review={item} size={'xlarge'} navigation={props.navigation} />
+                    <ArtuiumCard from={'AllArtwork'} review={item} size={'xlarge'} navigation={props.navigation} />
                 )} 
                 numColumns={1} 
                 keyExtractor={item => String(item.id)} 

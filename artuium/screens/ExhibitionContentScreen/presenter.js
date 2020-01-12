@@ -96,12 +96,12 @@ class ExhibitionContentScreen extends React.Component {
     }
 
     render(){
-        const { exhibition, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply } = this.props;
+        const { exhibition, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from } = this.props;
         return(
             exhibition ? (
                 <View style={[styles.container]}>
                     <View style={[styles.alignItemsCenter, styles.px15, {height: 40, flexDirection: 'row-reverse', position: 'absolute', top: iosStatusBarHeight + 15, right: 0, zIndex: 99}]}>
-                        <TouchableWithoutFeedback onPress={()=>this.props.navigation.goBack()}>
+                        <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from) : ()=>this.props.navigation.goBack()}>
                             <View style={[styles.transExitBtn]}>
                                 <Text style={[styles.fontBold, styles.font16, styles.white]}>나가기</Text>
                             </View>
@@ -146,7 +146,7 @@ class ExhibitionContentScreen extends React.Component {
                                             <Text style={[styles.font14]}>정보</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
-                                    <TouchableWithoutFeedback style={[styles.flex1]} onPress={()=>this.props.navigation.navigate('ExhibitionDetail', { exhibition })}>   
+                                    <TouchableWithoutFeedback style={[styles.flex1]} onPress={()=>this.props.navigation.navigate('ExhibitionDetail', { exhibition, from })}>   
                                         <View >
                                             <Image source={require('../../assets/images/arrow_down_exhibition.png')} style={[styles.upBtn]}/>
                                         </View>
@@ -214,7 +214,7 @@ class ExhibitionContentScreen extends React.Component {
                                                                     style={[{height: 160}, styles.mt15]}
                                                                     >
                                                                         {myReviews.map((review, index) => (
-                                                                            <ArtuiumCard3 key={index} review={review} navigation={this.props.navigation} my={true} handleChangeMode={this.props.handleChangeMode} />
+                                                                            <ArtuiumCard3 from={from} key={index} review={review} navigation={this.props.navigation} my={true} handleChangeMode={this.props.handleChangeMode} />
                                                                         ))}
                                                                     </ScrollView>
                                                                     <View style={[styles.widthFull, styles.px15]}>
@@ -317,7 +317,7 @@ class ExhibitionContentScreen extends React.Component {
                                                             <FlatList 
                                                             data={reviews} 
                                                             renderItem={({item}) => (
-                                                                <ArtuiumCard3 review={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
+                                                                <ArtuiumCard3 from={from} review={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
                                                             )} 
                                                             numColumns={1} 
                                                             keyExtractor={item => String(item.id)} 
@@ -405,7 +405,7 @@ class ExhibitionContentScreen extends React.Component {
                                             )}
                                             {mode === 'review' && (
                                                 <View style={[styles.pb30]}>
-                                                    <ArtuiumCard5 review={showingReview} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
+                                                    <ArtuiumCard5 from={from} review={showingReview} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
                                                     <View style={[styles.divView, styles.mt15]} />
                                                     <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px30, styles.pt20, styles.mb15]}>
                                                         <Text style={[styles.font20, styles.fontBold, {color: '#382a2a'}]}>댓글</Text>

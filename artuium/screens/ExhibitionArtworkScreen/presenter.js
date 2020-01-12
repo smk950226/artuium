@@ -39,20 +39,20 @@ class ExhibitionArtworkScreen extends Component{
 
     render(){
         let position = Animated.divide(this.state.scrollX, width);
-        const { exhibition } = this.props;
+        const { exhibition, from } = this.props;
         return(
             <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
             <SafeAreaView style={[styles.container]}>
                 {exhibition ? (
                     <Fragment>
                         <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.widthFull, styles.px15, {height: 40, position: 'absolute', top: iosStatusBarHeight + 15}]}>
-                            <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ExhibitionDetail', { exhibition })}>
+                            <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ExhibitionDetail', { exhibition, from })}>
                                 <View style={[styles.row, styles.alignItemsCenter, {zIndex: 10}]}>
                                     <Image source={require('../../assets/images/icon_back_gray.png')} style={[{width: 26, height: 26}]} />
                                     <Text style={[styles.fontBlack, styles.font17, styles.gray8B, styles.ml5]}>{exhibition.name}</Text>
                                 </View>
                             </TouchableWithoutFeedback>
-                            <TouchableWithoutFeedback onPress={()=> this.props.navigation.goBack(null)}>
+                            <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from) : ()=>this.props.navigation.goBack()}>
                                 <View style={[styles.exitBtn, { zIndex: 999 }]}>
                                     <Text style={[styles.fontBold, styles.font16, styles.white]}>나가기</Text>
                                 </View>
@@ -77,7 +77,7 @@ class ExhibitionArtworkScreen extends Component{
                             {exhibition.artworks && exhibition.artworks.length > 0 && (
                                 exhibition.artworks.map((artwork, index) => (
                                     <View key={index} style={[styles.center, styles.heightFull, styles.screenWidth]}>
-                                        <ArtuiumCard4 artwork={artwork} navigation={this.props.navigation} />
+                                        <ArtuiumCard4 from={from} artwork={artwork} navigation={this.props.navigation} />
                                         
                                     </View>
                                 ))

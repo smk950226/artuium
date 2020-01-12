@@ -54,14 +54,14 @@ class ArtworkDetailScreen extends Component{
     }
 
     render(){
-        const { artwork, exhibition, like_count, review_count, is_liked } = this.props;
+        const { artwork, exhibition, like_count, review_count, is_liked, from } = this.props;
         return(
             <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
                 <TouchableWithoutFeedback onPress={this._handleDoubleTap}>
                     <SafeAreaView style={[styles.container]}>
                         {artwork ? (
                             <Fragment>
-                                <TouchableWithoutFeedback onPress={()=> this.props.navigation.goBack(null)}>
+                                <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from) : ()=>this.props.navigation.goBack()}>
                                     <View style={[styles.alignItemsCenter, styles.px15, {height: 40, flexDirection: 'row-reverse', position: 'absolute', top: iosStatusBarHeight + 15, right: 0, zIndex: 99}]}>
                                         <View style={[styles.exitBtn]}>
                                             <Text style={[styles.fontBold, styles.font16, styles.white]}>나가기</Text>
@@ -92,12 +92,12 @@ class ArtworkDetailScreen extends Component{
                                                 <Text style={[styles.fontBold, styles.font30, styles.textCenter]}>{artwork.name}</Text>
                                             </View>
                                             <Text style={[styles.fontMedium, styles.font14]}>{artwork.author.name}, {`${artwork.created.slice(0,4)}.${artwork.created.slice(5,7)}.${artwork.created.slice(8,10)}`}, {artwork.material}</Text>
-                                            <TouchableWithoutFeedback onPress={exhibition ? () => this.props.navigation.navigate('ExhibitionDetail', { exhibition }) : null}>
+                                            <TouchableWithoutFeedback onPress={exhibition ? () => this.props.navigation.navigate('ExhibitionDetail', { exhibition, from }) : null}>
                                                 <View style={[styles.relatedBtn2, styles.mt30, exhibition ? null : styles.hidden]}>
                                                     <Text style={[styles.fontMedium, styles.font18, styles.gray8B]}>관련 전시</Text>
                                                 </View>
                                             </TouchableWithoutFeedback>
-                                            <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ArtworkContent', { artwork })}>
+                                            <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ArtworkContent', { artwork, from })}>
                                                 <View style={[{marginTop: 40}]}>
                                                     <Image source={require('../../assets/images/arrow_up_exhibition.png')} style={[styles.upBtn]}/>
                                                 </View>

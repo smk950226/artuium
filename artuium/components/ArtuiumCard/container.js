@@ -10,7 +10,8 @@ class Container extends Component{
         unfollowUser: PropTypes.func.isRequired,
         initialReview: PropTypes.func.isRequired,
         likeReview: PropTypes.func.isRequired,
-        unlikeReview: PropTypes.func.isRequired
+        unlikeReview: PropTypes.func.isRequired,
+        from: PropTypes.string
     }
 
     constructor(props){

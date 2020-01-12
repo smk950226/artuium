@@ -6,7 +6,7 @@ import styles from '../../styles';
 const { width, height } = Dimensions.get('window')
 
 const ExhibitionCard3 = (props) => (
-    <TouchableWithoutFeedback onPress={() => props.navigation.navigate('ExhibitionDetail', { exhibition: props.exhibition })}>
+    <TouchableWithoutFeedback onPress={() => props.navigation.navigate('ExhibitionDetail', { exhibition: props.exhibition, from: props.from })}>
         <ImageBackground
             resizeMode={'cover'} source={{uri : props.exhibition ? (props.exhibition.images && (props.exhibition.images.length > 0)) ? props.exhibition.images[0].image : null : null}}
             style={[{width: width, height: 400, zIndex: 999}, styles.justifyContentEnd]}

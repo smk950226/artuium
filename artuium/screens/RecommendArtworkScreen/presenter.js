@@ -123,7 +123,7 @@ class RecommendArtworkScreen extends Component{
                                 {artworks && artworks.length > 0 ? (
                                     artworks.map((review, index) => {
                                         return(
-                                            <ArtuiumCard key={index} review={review} size={'xsmall'} navigation={this.props.navigation} />
+                                            <ArtuiumCard from={'RecommendArtwork'} key={index} review={review} size={'xsmall'} navigation={this.props.navigation} />
                                         )
                                     })
                                 ) : (
@@ -137,7 +137,7 @@ class RecommendArtworkScreen extends Component{
                                 {exhibitions && exhibitions.length > 0 ? (
                                     exhibitions.map((review, index) => {
                                         return(
-                                            <ArtuiumCard key={index} review={review} size={'xsmall'} navigation={this.props.navigation} />
+                                            <ArtuiumCard from={'RecommendArtwork'} key={index} review={review} size={'xsmall'} navigation={this.props.navigation} />
                                         )
                                     })
                                 ) : (
