@@ -8,12 +8,10 @@ import { NavigationEvents } from "react-navigation";
 
 class Container extends Component{
     static propTypes = {
-        initialStatus: PropTypes.string,
         newReviews: PropTypes.array,
         recommendedReviews: PropTypes.array,
         followingReviews: PropTypes.array,
         initApp: PropTypes.func.isRequired,
-        getInitial: PropTypes.func.isRequired,
         checkNoticeAll: PropTypes.func.isRequired,
         checkNotificationAll: PropTypes.func.isRequired,
         setPushToken: PropTypes.func.isRequired,
