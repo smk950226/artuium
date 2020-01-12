@@ -58,7 +58,7 @@ class ProfileScreen extends React.Component {
                             {others.profile_image ? (
                                 <Image source={{uri: others.profile_image}} style={[styles.profileImage70]} />
                             ) : (
-                                <View style={[styles.profileImage70, styles.bgGrayC9]} />
+                                <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage70]} />
                             )}
                         </ImageBackground>
                     ) : (
@@ -70,7 +70,7 @@ class ProfileScreen extends React.Component {
                             {others.profile_image ? (
                                 <Image source={{uri: others.profile_image}} style={[styles.profileImage70]} />
                             ) : (
-                                <View style={[styles.profileImage70, styles.bgGrayC9]} />
+                                <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage70]} />
                             )}
                         </ImageBackground>
                     )}

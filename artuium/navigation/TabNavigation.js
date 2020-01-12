@@ -7,7 +7,6 @@ import HomeContainer from '../routes/HomeRoute';
 import ExhibitionContainer from '../routes/ExhibitionRoute';
 import ArtworkContainer from '../routes/ArtworkRoute';
 import ProfileContainer from '../routes/ProfileRoute';
-import TabBar from '../components/TabBar';
 
 const TabNavigation = createBottomTabNavigator({
     홈: {
@@ -52,19 +51,17 @@ const TabNavigation = createBottomTabNavigator({
         labelPosition: 'below-icon',
         style: {
             backgroundColor: '#ffffff',
-            height: 60,
+            height: 80,
             borderTopColor: "rgb(209,209,209)",
+            paddingTop: 15,
         },
         labelStyle: {
             fontSize: 10,
             fontFamily: 'NotoSansKR-Medium',
             includeFontPadding: false,
-            marginTop: -15
+            marginBottom: 20,
         }
     },
-    tabBarComponent: props => (
-        <TabBar {...props} />
-    )
 });
 
 const TabContainer = createAppContainer(TabNavigation);

@@ -21,7 +21,7 @@ class UserComp extends Component{
                     {user.profile_image ? (
                         <Image source={{uri: user.profile_image}} style={[size === 'large' ? styles.profileImage50 : styles.profileImage40]} resizeMode={'cover'} />
                     ) : (
-                        <View style={[styles.circle40, styles.bgGrayD1]} />
+                        <Image source={require('../../assets/images/empty_profile.png')} style={[size === 'large' ? styles.profileImage50 : styles.profileImage40]} />
                     )}
                     <View style={[styles.ml10]}>
                         <Text style={[styles.fontMedium, styles.font16]}>{user.nickname}</Text>

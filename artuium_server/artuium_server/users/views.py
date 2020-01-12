@@ -202,6 +202,23 @@ class ChangeNickname(APIView):
 
         return Response(status = status.HTTP_200_OK, data = serializer.data)
 
+class ChangeProfile(APIView):
+    def put(self, request, format = None):
+        nickname = request.data.get('nickname', None)
+        background_image = request.data.get('backgroundImg', None)
+        profile_image = request.data.get('profileImg', None)
+
+        user = request.user
+        user.background_image = background_image
+        user.profile_image = profile_image
+        user.nickname = nickname
+
+        user.save()
+
+        serializer = serializers.ProfileSerializer(user, context = {'request': request})
+
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+
 class AddInfo(APIView):
     def put(self, request, format = None):
         profile_image = request.data.get('profileImg', None)

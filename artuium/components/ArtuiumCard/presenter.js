@@ -137,7 +137,7 @@ class ArtuiumCard extends Component{
                                                     {review.author.profile_image ? (
                                                         <Image source={{uri: review.author.profile_image}} style={[styles.profileImage30]} resizeMode={'cover'} />
                                                     ) : (
-                                                        <View style={[styles.circle30, styles.bgGrayD1]} />
+                                                        <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage30]} />
                                                     )}
                                                     {review.expression === 'good' && (
                                                         <Image source={require('../../assets/images/icon_good.png')} style={[styles.emoji, { position: 'absolute', top: 16, left: 16 }]} resizeMode={'cover'} />
@@ -216,7 +216,7 @@ class ArtuiumCard extends Component{
                                                     {review.author.profile_image ? (
                                                         <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
                                                     ) : (
-                                                        <View style={[styles.circle40, styles.bgGrayD1]} />
+                                                        <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage40]} />
                                                     )}
                                                     {review.expression === 'good' && (
                                                         <Image source={require('../../assets/images/icon_good.png')} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
@@ -292,7 +292,7 @@ class ArtuiumCard extends Component{
                 >
                     <TouchableWithoutFeedback onPress={this.props.closeProfileModal}>
                         <View style={[styles.widthFull, styles.heightFull, styles.alignItemsCenter, styles.justifyContentCenter]}>
-                            <View style={[styles.borderRadius10, styles.exMenuShadow, styles.overflowHidden]}>
+                            <View style={[styles.borderRadius10, styles.exMenuShadow, styles.overflowHidden, styles.bgWhite]}>
                                 <TouchableOpacity onPress={()=>this._handleGoOthersProfile()}>
                                     {review.author.background_image ? (
                                         <Image source={{uri: review.author.background_image}} resizeMode={'cover'} style={[{height: 140, width: width - 40}, styles.borderTopRadius10, styles.overflowHidden]} />
@@ -306,7 +306,7 @@ class ArtuiumCard extends Component{
                                             {review.author.profile_image ? (
                                                 <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
                                             ) : (
-                                                <View style={[styles.circle40, styles.bgGrayD1]} />
+                                                <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage40]} />
                                             )}
                                         </TouchableOpacity>
                                         <View style={[styles.ml10]}>
@@ -328,23 +328,25 @@ class ArtuiumCard extends Component{
                                         </View>
                                     </View>
                                     <View style={[styles.row, styles.alignItemsCenter]}>
-                                        {is_following ? (
-                                            <View style={[styles.borderRadius5, styles.bgGrayD1, styles.alignItemsCenter, styles.justifyContentCenter, styles.px25, styles.py5]}>
-                                                <TouchableWithoutFeedback onPress={is_me ? null : this.props.unfollow}>
-                                                    <View>
-                                                        <Text style={[styles.fontMedium, styles.font13, styles.white]}>언팔로우</Text>
-                                                    </View>
-                                                </TouchableWithoutFeedback>
-                                            </View>
-                                        ) : (
-                                            <View style={[styles.borderRadius5, styles.bgBlue, styles.alignItemsCenter, styles.justifyContentCenter, styles.px25, styles.py5]}>
-                                                <TouchableWithoutFeedback onPress={is_me ? null : this.props.follow}>
-                                                    <View>
-                                                        <Text style={[styles.fontMedium, styles.font13, styles.white]}>팔로우</Text>
-                                                    </View>
-                                                </TouchableWithoutFeedback>
-                                            </View>
-                                        )}
+                                        {is_me ? null :
+                                            is_following ? (
+                                                <View style={[styles.borderRadius5, styles.bgGrayD1, styles.alignItemsCenter, styles.justifyContentCenter, styles.px25, styles.py5]}>
+                                                    <TouchableWithoutFeedback onPress={this.props.unfollow}>
+                                                        <View>
+                                                            <Text style={[styles.fontMedium, styles.font13, styles.white]}>언팔로우</Text>
+                                                        </View>
+                                                    </TouchableWithoutFeedback>
+                                                </View>
+                                            ) : (
+                                                <View style={[styles.borderRadius5, styles.bgBlue, styles.alignItemsCenter, styles.justifyContentCenter, styles.px25, styles.py5]}>
+                                                    <TouchableWithoutFeedback onPress={this.props.follow}>
+                                                        <View>
+                                                            <Text style={[styles.fontMedium, styles.font13, styles.white]}>팔로우</Text>
+                                                        </View>
+                                                    </TouchableWithoutFeedback>
+                                                </View>
+                                            )
+                                        }
                                         <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
                                     </View>
                                 </View>

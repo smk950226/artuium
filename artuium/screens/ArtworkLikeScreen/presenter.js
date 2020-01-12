@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableWithoutFeedback, ImageBackground, ScrollView, RefreshControl, FlatList, Dimensions, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
-// import Masonry from 'react-native-masonry-layout';
 import styles from '../../styles';
 import MasonryList from "react-native-masonry-list";
 

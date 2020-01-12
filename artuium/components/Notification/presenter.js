@@ -106,7 +106,7 @@ const Notification = (props) => (
                                 {props.notification.reply.author.profile_image ? (
                                     <Image source={{uri: props.notification.reply.author.profile_image}} style={[styles.profileImage30]} resizeMode={'cover'} />
                                 ) : (
-                                    <View style={[styles.circle30, styles.bgGrayD1]} />
+                                    <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage30]} />
                                 )}
                                 <Text style={[styles.fontBold, styles.font14, styles.ml5]}>{props.notification.reply.author.nickname}</Text>
                                 <Text style={[styles.fontBold, styles.font11, styles.grayBa, styles.ml5]}>{`${props.notification.reply.time.slice(0,4)}.${props.notification.reply.time.slice(5,7)}.${props.notification.reply.time.slice(8,10)}`}</Text>

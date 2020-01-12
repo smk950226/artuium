@@ -45,7 +45,7 @@ class EditProfileScreen extends React.Component {
                             {this.props.profile.profile_image ?
                             <Image source={{uri: this.props.profile.profile_image}} style={[styles.profileImage70]} />
                             :
-                            <View style={[styles.profileImage70, {backgroundColor: '#e0e0e0'}]} />
+                            <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage70]} />
                             }
                             <TouchableWithoutFeedback onPress={()=>this.props.handleChangeProfileImg()}>
                                 <View style={[styles.blueBtn, styles.mt15]}>
