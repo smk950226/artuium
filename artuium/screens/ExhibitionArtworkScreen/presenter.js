@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, ScrollView, Image, SafeAreaView, ImageBackground, Dimensions, TouchableWithoutFeedback, Animated } from 'react-native';
+import { View, Text, ScrollView, Image, SafeAreaView, ImageBackground, Dimensions, TouchableWithoutFeedback, Animated, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import { getStatusBarHeight } from "react-native-status-bar-height";
@@ -58,14 +58,14 @@ class ExhibitionArtworkScreen extends Component{
                                 </View>
                             </TouchableWithoutFeedback>
                         </View>
-                        <ScrollView 
+                        <FlatList 
                         style={[styles.mt40]}
                         contentContainerStyle={[{height: height - 40}]}
                         scrollEnabled={true}
                         horizontal={true}
                         pagingEnabled={true}
                         showsHorizontalScrollIndicator={false}
-                        ref={'scrollView'}
+                        ref={el => this.scrollView = el}
                         onScroll={Animated.event(
                             [{ nativeEvent: {
                                 contentOffset: {
@@ -73,16 +73,15 @@ class ExhibitionArtworkScreen extends Component{
                                 }
                             }}]
                         )}
+                        keyExtractor={(item, index) => String(index)}
+                        data={exhibition.artworks}
+                        renderItem={({item, index, separators}) => (
+                            <View key={index} style={[styles.center, styles.heightFull, styles.screenWidth]}>
+                                <ArtuiumCard4 from={from} artwork={item} navigation={this.props.navigation} />
+                            </View>
+                        )}
                         scrollEventThrottle={16}
-                        >
-                            {exhibition.artworks && exhibition.artworks.length > 0 && (
-                                exhibition.artworks.map((artwork, index) => (
-                                    <View key={index} style={[styles.center, styles.heightFull, styles.screenWidth]}>
-                                        <ArtuiumCard4 from={from} artwork={artwork} navigation={this.props.navigation} />
-                                    </View>
-                                ))
-                            )}
-                        </ScrollView>
+                        />
                         <View style={[styles.alignItemsCenter, styles.mb10, {width: width, posizion: 'absolute', bottom: height*0.1}]}>
                             <View
                                 style={[styles.row]}
