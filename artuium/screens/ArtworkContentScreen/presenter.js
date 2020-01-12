@@ -146,7 +146,12 @@ class ArtworkContentScreen extends React.Component {
                                             <Text style={[styles.font14]}>정보</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
-                                    <TouchableWithoutFeedback style={[styles.flex1]} onPress={()=>this.props.navigation.navigate('ArtworkDetail', { artwork, from })}>   
+                                    {/* <TouchableWithoutFeedback style={[styles.flex1]} onPress={()=>this.props.navigation.navigate('ArtworkDetail', { artwork, from })}>   
+                                        <View>
+                                            <Image source={require('../../assets/images/arrow_down_exhibition.png')} style={[styles.upBtn]}/>
+                                        </View>
+                                    </TouchableWithoutFeedback> */}
+                                    <TouchableWithoutFeedback style={[styles.flex1]} onPress={()=>this.props.navigation.goBack(null)}>   
                                         <View>
                                             <Image source={require('../../assets/images/arrow_down_exhibition.png')} style={[styles.upBtn]}/>
                                         </View>
