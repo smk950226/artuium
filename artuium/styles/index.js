@@ -249,6 +249,10 @@ const styles = StyleSheet.create({
         color: '#939393',
         includeFontPadding: false
     },
+    gray91: {
+        color: '#919191',
+        includeFontPadding: false
+    },
     gray71: {
         color: '#717171',
         includeFontPadding: false
@@ -757,6 +761,10 @@ const styles = StyleSheet.create({
     },
     borderGrayE6: {
         borderColor: '#E6E6E6',
+        borderWidth: 1
+    },
+    borderGray91: {
+        borderColor: '#919191',
         borderWidth: 1
     },
     overflowHidden: {

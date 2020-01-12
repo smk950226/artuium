@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import styles from '../../styles';
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import ArtuiumCard4 from '../../components/ArtuiumCard4'
+import HTML from 'react-native-render-html';
+
 const { width, height } = Dimensions.get('window')
 
 const iosStatusBarHeight = getStatusBarHeight();
@@ -32,10 +34,16 @@ class ExhibitionArtworkScreen extends Component{
         review_count: PropTypes.number.isRequired,
         is_liked: PropTypes.bool.isRequired,
     }
-
-    state = {
-        scrollX: new Animated.Value(0),
-        showingIndex: 0
+    
+    constructor(props){
+        super(props)
+        const { exhibition } = props;
+        this.state = {
+            exhibition,
+            artworks: exhibition.artworks.concat({id: -1}),
+            scrollX: new Animated.Value(0),
+            showingIndex: 0
+        }
     }
 
     _handleViewable = (info) => {
@@ -48,9 +56,8 @@ class ExhibitionArtworkScreen extends Component{
 
     render(){
         let position = Animated.divide(this.state.scrollX, width);
-        const { exhibition, from } = this.props;
-        const { showingIndex } = this.state;
-        console.log(showingIndex)
+        const { from } = this.props;
+        const { exhibition, showingIndex, artworks } = this.state;
         return(
             <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
             <SafeAreaView style={[styles.screenHeight, styles.screenWidth]}>
@@ -63,11 +70,13 @@ class ExhibitionArtworkScreen extends Component{
                                     <Text style={[styles.fontBlack, styles.font17, styles.gray8B, styles.ml5]}>{exhibition.name}</Text>
                                 </View>
                             </TouchableWithoutFeedback>
-                            <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from) : ()=>this.props.navigation.goBack()}>
-                                <View style={[styles.exitBtn, { zIndex: 999 }]}>
-                                    <Text style={[styles.fontBold, styles.font16, styles.white]}>나가기</Text>
-                                </View>
-                            </TouchableWithoutFeedback>
+                            {showingIndex !== artworks.length - 1 && (
+                                <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from) : ()=>this.props.navigation.goBack()}>
+                                    <View style={[styles.exitBtn, { zIndex: 999 }]}>
+                                        <Text style={[styles.fontBold, styles.font16, styles.white]}>나가기</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            )}
                         </View>
                         <FlatList 
                         style={[styles.mt40]}
@@ -89,37 +98,73 @@ class ExhibitionArtworkScreen extends Component{
                         viewabilityConfig={{
                             viewAreaCoveragePercentThreshold: 95
                         }}
-                        data={exhibition.artworks}
-                        renderItem={({item, index, separators}) => (
-                            <View key={index} style={[styles.center, styles.heightFull, styles.screenWidth]}>
-                                <ArtuiumCard4 from={from} artwork={item} navigation={this.props.navigation} />
-                            </View>
-                        )}
+                        data={artworks}
+                        renderItem={({item, index, separators}) => {
+                            if(index === (artworks.length - 1)){
+                                return(
+                                    <ScrollView alwaysBounceVertical={false} showsVerticalScrollIndicator={false} style={[{height: height - (165 + height*0.05)}, styles.screenWidth, styles.px30]}>
+                                        <Text style={[styles.fontBold, styles.font35, styles.mt50, { maxWidth: 130 }]}>{exhibition.name}</Text>
+                                        <View style={[styles.mt10, styles.row, styles.alignItemsCenter]}>
+                                            <View style={[styles.borderRadius5, styles.borderGray91, styles.py5, styles.px15]}>
+                                                <Text style={[styles.fontMedium, styles.font14, styles.gray91, styles.textCenter]}>평점</Text>
+                                                <Text style={[styles.fontBlack, styles.font25, styles.gray91, styles.textCenter]}>{exhibition.total_rate}</Text>
+                                            </View>
+                                            <View style={[styles.borderRadius5, styles.borderGray91, styles.py5, styles.px15, styles.ml10, styles.row, styles.alignItemsCenter]}>
+                                                <Image source={require('../../assets/images/icon_heart_gray.png')} style={[{width: 107*0.4, height: 99*0.4}]} />
+                                                <View style={[styles.ml5]}>
+                                                    <Text style={[styles.fontMedium, styles.font14, styles.gray91, styles.textCenter]}>좋아요</Text>
+                                                    <Text style={[styles.fontBlack, styles.font25, styles.gray91, styles.textCenter]}>{abbreviateNumber(exhibition.like_count)}</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+                                        <View style={[styles.mt15]}>
+                                            <HTML html={exhibition.content} imagesMaxWidth={width} />
+                                        </View>
+                                    </ScrollView>
+                                )
+                            }
+                            else{
+                                return(
+                                    <View key={index} style={[styles.center, styles.heightFull, styles.screenWidth]}>
+                                        <ArtuiumCard4 from={from} artwork={item} navigation={this.props.navigation} />
+                                    </View>
+                                )
+                            }
+                        }}
                         scrollEventThrottle={16}
                         />
-                        <View style={[styles.alignItemsCenter, styles.mb10, {width: width, posizion: 'absolute', bottom: height*0.1}]}>
-                            <View
-                                style={[styles.row]}
-                            >
-                                {exhibition.artworks.map((_, ind) => {
-                                    let opacity2 = position.interpolate({
-                                        inputRange: [ind - 1, ind, ind + 1],
-                                        outputRange: [0, 1, 0],
-                                        extrapolate: 'clamp'
-                                    });
-                                    return (
-                                        <View key={ind} style={[styles.sliderLine, styles.bgWhite, styles.center]}>
-                                            <Animated.View
-                                                style={[styles.sliderLine, styles.bgBlack, {opacity: opacity2}]}
-                                            />
-                                        </View>
-                                    );
-                                })}
-                            </View>
+                        <View style={[styles.alignItemsCenter, {width: width, posizion: 'absolute', bottom: height*0.05}]}>
+                            {showingIndex !== (artworks.length - 1) ? (
+                                <View
+                                    style={[styles.row]}
+                                >
+                                    {artworks.map((_, ind) => {
+                                        let opacity2 = position.interpolate({
+                                            inputRange: [ind - 1, ind, ind + 1],
+                                            outputRange: [0, 1, 0],
+                                            extrapolate: 'clamp'
+                                        });
+                                        return (
+                                            <View key={ind} style={[styles.sliderLine, styles.bgWhite, styles.center]}>
+                                                <Animated.View
+                                                    style={[styles.sliderLine, styles.bgBlack, {opacity: opacity2}]}
+                                                />
+                                            </View>
+                                        );
+                                    })}
+                                </View>
+                            ) : (
+                                <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from) : ()=>this.props.navigation.goBack()}>
+                                    <View style={[styles.relatedBtn]}>
+                                        <Text style={[styles.fontMedium, styles.font18, styles.white]}>전시 나가기</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            )}
+                            
                         </View>
 
-                        <View style={[styles.alignItemsCenter, styles.mb25, {width: width, posizion: 'absolute', bottom: height*0.1}]}>
-                            <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ArtworkContent', { artwork : exhibition.artworks[showingIndex], from })}>
+                        <View style={[styles.alignItemsCenter, {width: width, posizion: 'absolute', bottom: height*0.05}]}>
+                            <TouchableWithoutFeedback onPress={showingIndex === artworks.length - 1 ? ()=> this.props.navigation.navigate('ExhibitionContent', { exhibition : exhibition, from }) : ()=> this.props.navigation.navigate('ArtworkContent', { artwork : artworks[showingIndex], from })}>
                                 <View style={[styles.mt30]}>
                                     <Image source={require('../../assets/images/arrow_up_exhibition.png')} style={[styles.upBtn]}/>
                                 </View>

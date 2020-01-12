@@ -154,22 +154,26 @@ class ProfileScreen extends React.Component {
                             <Text style={[styles.fontMedium, styles.font13, styles.ml30, {color: '#a7a7a7'}]}>팔로잉</Text>
                             <Text style={[styles.fontMedium, styles.font13, styles.ml10, {color: '#a7a7a7'}]}>{following_count}</Text>
                         </View>
-                        <TouchableWithoutFeedback onPress={()=>this.props.navigation.navigate('LikeList')}>
                             <View style={[styles.row, styles.justifyContentEven, styles.profileBox, styles.mt20]}>
-                                <View style={[styles.alignItemsCenter]}>
-                                    <Text style={[styles.fontBold, styles.font35, {color: '#bfbfbf'}]}>{like_exhibition_count}</Text>
-                                    <Text style={[styles.fontMedium, styles.font16, {color: '#bfbfbf'}]}>좋아한 전시</Text>
-                                </View>
-                                <View style={[styles.alignItemsCenter]}>
-                                    <Text style={[styles.fontBold, styles.font35, {color: '#bfbfbf'}]}>{like_artwork_count}</Text>
-                                    <Text style={[styles.fontMedium, styles.font16, {color: '#bfbfbf'}]}>좋아한 작품</Text>
-                                </View>
-                                <View style={[styles.alignItemsCenter]}>
-                                    <Text style={[styles.fontBold, styles.font35, {color: '#bfbfbf'}]}>{like_review_count}</Text>
-                                    <Text style={[styles.fontMedium, styles.font16, {color: '#bfbfbf'}]}>좋아한 감상</Text>
-                                </View>
+                                <TouchableWithoutFeedback onPress={()=>this.props.navigation.navigate('LikeList', { index: 0 })}>
+                                    <View style={[styles.alignItemsCenter]}>
+                                        <Text style={[styles.fontBold, styles.font35, {color: '#bfbfbf'}]}>{like_exhibition_count}</Text>
+                                        <Text style={[styles.fontMedium, styles.font16, {color: '#bfbfbf'}]}>좋아한 전시</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                                <TouchableWithoutFeedback onPress={()=>this.props.navigation.navigate('LikeList', { index: 1 })}>
+                                    <View style={[styles.alignItemsCenter]}>
+                                        <Text style={[styles.fontBold, styles.font35, {color: '#bfbfbf'}]}>{like_artwork_count}</Text>
+                                        <Text style={[styles.fontMedium, styles.font16, {color: '#bfbfbf'}]}>좋아한 작품</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                                <TouchableWithoutFeedback onPress={()=>this.props.navigation.navigate('LikeList', { index: 2 })}>
+                                    <View style={[styles.alignItemsCenter]}>
+                                        <Text style={[styles.fontBold, styles.font35, {color: '#bfbfbf'}]}>{like_review_count}</Text>
+                                        <Text style={[styles.fontMedium, styles.font16, {color: '#bfbfbf'}]}>좋아한 감상</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
                             </View>
-                        </TouchableWithoutFeedback>
                     </ImageBackground>
                     {loadingReviewList ? (
                         <View style={[styles.mt20, styles.alignItemsCenter, styles.justifyContentCenter]}>

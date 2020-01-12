@@ -24,8 +24,9 @@ class LikeListScreen extends React.Component {
     }
     constructor(props){
         super(props);
+        const index = props.navigation.getParam('index', null)
         this.state = {
-            index: 0,
+            index: index,
             routes: [
                 { key: 'first', title: '전시' },
                 { key: 'second', title: '작품' },
