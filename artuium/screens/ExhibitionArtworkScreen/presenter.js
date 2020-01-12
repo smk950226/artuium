@@ -35,11 +35,22 @@ class ExhibitionArtworkScreen extends Component{
 
     state = {
         scrollX: new Animated.Value(0),
+        showingIndex: 0
+    }
+
+    _handleViewable = (info) => {
+        if(info.viewableItems[0]){
+            this.setState({
+                showingIndex: Number(info.viewableItems[0].key)
+            })
+        }
     }
 
     render(){
         let position = Animated.divide(this.state.scrollX, width);
         const { exhibition, from } = this.props;
+        const { showingIndex } = this.state;
+        console.log(showingIndex)
         return(
             <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
             <SafeAreaView style={[styles.screenHeight, styles.screenWidth]}>
@@ -74,6 +85,10 @@ class ExhibitionArtworkScreen extends Component{
                             }}]
                         )}
                         keyExtractor={(item, index) => String(index)}
+                        onViewableItemsChanged={this._handleViewable}
+                        viewabilityConfig={{
+                            viewAreaCoveragePercentThreshold: 95
+                        }}
                         data={exhibition.artworks}
                         renderItem={({item, index, separators}) => (
                             <View key={index} style={[styles.center, styles.heightFull, styles.screenWidth]}>
@@ -104,7 +119,7 @@ class ExhibitionArtworkScreen extends Component{
                         </View>
 
                         <View style={[styles.alignItemsCenter, styles.mb25, {width: width, posizion: 'absolute', bottom: height*0.1}]}>
-                            <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ArtworkContent', { artwork, from })}>
+                            <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ArtworkContent', { artwork : exhibition.artworks[showingIndex], from })}>
                                 <View style={[styles.mt30]}>
                                     <Image source={require('../../assets/images/arrow_up_exhibition.png')} style={[styles.upBtn]}/>
                                 </View>
