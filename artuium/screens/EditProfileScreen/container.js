@@ -77,16 +77,20 @@ class Container extends Component{
     }
 
     _handleChangeProfile = async() => {
-        const { nickname, nicknameForm, checkedNickname, savedProfileImg, savedBackgroundImg } = this.state;
-        if(nicknameForm && checkedNickname){
-            await this.props.changeProfile(nickname, savedProfileImg, savedBackgroundImg)
-            this.props.navigation.goBack(null)
+        const { nickname, nicknameForm, checkedNickname, savedProfileImg, savedBackgroundImg, availableNickname } = this.state;
+        if(nickname !== this.props.profile.nickname){
+            if(nicknameForm && checkedNickname && availableNickname){
+                await this.props.changeProfile(nickname, savedProfileImg, savedBackgroundImg)
+                this.props.navigation.goBack(null)
+            }
+            else{
+                Alert.alert(null, '닉네임 중복확인이 필요합니다.')
+            }
         }
         else{
-            await this.setState({
-                nickname: this.props.profile.nickname,
-            })
-            await this.props.changeProfile(nickname, savedProfileImg, savedBackgroundImg)
+            if(savedProfileImg || savedBackgroundImg){
+                await this.props.changeProfile(nickname, savedProfileImg, savedBackgroundImg)
+            }
             this.props.navigation.goBack(null)
         }
     }
