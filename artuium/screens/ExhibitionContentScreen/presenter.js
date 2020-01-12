@@ -146,7 +146,12 @@ class ExhibitionContentScreen extends React.Component {
                                             <Text style={[styles.font14]}>정보</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
-                                    <TouchableWithoutFeedback style={[styles.flex1]} onPress={()=>this.props.navigation.navigate('ExhibitionDetail', { exhibition, from })}>   
+                                    {/* <TouchableWithoutFeedback style={[styles.flex1]} onPress={()=>this.props.navigation.navigate('ExhibitionDetail', { exhibition, from })}>   
+                                        <View >
+                                            <Image source={require('../../assets/images/arrow_down_exhibition.png')} style={[styles.upBtn]}/>
+                                        </View>
+                                    </TouchableWithoutFeedback> */}
+                                    <TouchableWithoutFeedback style={[styles.flex1]} onPress={()=>this.props.navigation.goBack(null)}>   
                                         <View >
                                             <Image source={require('../../assets/images/arrow_down_exhibition.png')} style={[styles.upBtn]}/>
                                         </View>
