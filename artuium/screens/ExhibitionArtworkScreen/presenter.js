@@ -42,7 +42,7 @@ class ExhibitionArtworkScreen extends Component{
         const { exhibition, from } = this.props;
         return(
             <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
-            <SafeAreaView style={[styles.container]}>
+            <SafeAreaView style={[styles.screenHeight, styles.screenWidth]}>
                 {exhibition ? (
                     <Fragment>
                         <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.widthFull, styles.px15, {height: 40, position: 'absolute', top: iosStatusBarHeight + 15}]}>
@@ -60,6 +60,7 @@ class ExhibitionArtworkScreen extends Component{
                         </View>
                         <ScrollView 
                         style={[styles.mt40]}
+                        contentContainerStyle={[{height: height - 40}]}
                         scrollEnabled={true}
                         horizontal={true}
                         pagingEnabled={true}
@@ -78,12 +79,11 @@ class ExhibitionArtworkScreen extends Component{
                                 exhibition.artworks.map((artwork, index) => (
                                     <View key={index} style={[styles.center, styles.heightFull, styles.screenWidth]}>
                                         <ArtuiumCard4 from={from} artwork={artwork} navigation={this.props.navigation} />
-                                        
                                     </View>
                                 ))
                             )}
                         </ScrollView>
-                        <View style={[styles.alignItemsCenter, styles.mb25, {width: width, posizion: 'absolute', bottom: height*0.2}]}>
+                        <View style={[styles.alignItemsCenter, styles.mb10, {width: width, posizion: 'absolute', bottom: height*0.1}]}>
                             <View
                                 style={[styles.row]}
                             >
@@ -102,6 +102,14 @@ class ExhibitionArtworkScreen extends Component{
                                     );
                                 })}
                             </View>
+                        </View>
+
+                        <View style={[styles.alignItemsCenter, styles.mb25, {width: width, posizion: 'absolute', bottom: height*0.1}]}>
+                            <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ArtworkContent', { artwork, from })}>
+                                <View style={[styles.mt30]}>
+                                    <Image source={require('../../assets/images/arrow_up_exhibition.png')} style={[styles.upBtn]}/>
+                                </View>
+                            </TouchableWithoutFeedback>
                         </View>
                     </Fragment>
                 ) : (
