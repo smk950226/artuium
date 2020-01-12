@@ -136,7 +136,7 @@ class ArtuiumCard extends Component{
                                                     {review.author.profile_image ? (
                                                         <Image source={{uri: review.author.profile_image}} style={[styles.profileImage30]} resizeMode={'cover'} />
                                                     ) : (
-                                                        <View style={[styles.circle30, styles.bgGrayD1]} />
+                                                        <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage30]} />
                                                     )}
                                                     {review.expression === 'good' && (
                                                         <Image source={require('../../assets/images/icon_good.png')} style={[styles.emoji, { position: 'absolute', top: 16, left: 16 }]} resizeMode={'cover'} />
@@ -215,7 +215,7 @@ class ArtuiumCard extends Component{
                                                     {review.author.profile_image ? (
                                                         <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
                                                     ) : (
-                                                        <View style={[styles.circle40, styles.bgGrayD1]} />
+                                                        <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage40]} />
                                                     )}
                                                     {review.expression === 'good' && (
                                                         <Image source={require('../../assets/images/icon_good.png')} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
@@ -305,7 +305,7 @@ class ArtuiumCard extends Component{
                                             {review.author.profile_image ? (
                                                 <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
                                             ) : (
-                                                <View style={[styles.circle40, styles.bgGrayD1]} />
+                                                <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage40]} />
                                             )}
                                         </TouchableOpacity>
                                         <View style={[styles.ml10]}>

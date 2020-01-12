@@ -104,7 +104,7 @@ class ReplyCard extends Component{
                                 {reply.author.profile_image ? (
                                     <Image source={{uri: reply.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
                                 ) : (
-                                    <View style={[styles.circle40, styles.bgGrayD1]} />
+                                    <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage40]} />
                                 )}
                             </View>
                         </TouchableWithoutFeedback>
@@ -179,7 +179,7 @@ class ReplyCard extends Component{
                                             {reply.author.profile_image ? (
                                                 <Image source={{uri: reply.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
                                             ) : (
-                                                <View style={[styles.circle40, styles.bgGrayD1]} />
+                                                <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage40]} />
                                             )}
                                         </TouchableOpacity>
                                         <View style={[styles.ml10]}>

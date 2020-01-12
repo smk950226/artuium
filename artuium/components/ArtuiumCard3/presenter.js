@@ -113,7 +113,7 @@ class ArtuiumCard3 extends Component{
                                                 {review.author.profile_image ? (
                                                     <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
                                                 ) : (
-                                                    <View style={[styles.circle40, styles.bgGrayD1]} />
+                                                    <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage40]} />
                                                 )}
                                                 {review.expression === 'good' && (
                                                     <Image source={require('../../assets/images/icon_good.png')} style={[styles.emoji, { position: 'absolute', top: 26, left: 24 }]} resizeMode={'cover'} />
@@ -199,7 +199,7 @@ class ArtuiumCard3 extends Component{
                                             {review.author.profile_image ? (
                                                 <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
                                             ) : (
-                                                <View style={[styles.circle40, styles.bgGrayD1]} />
+                                                <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage40]} />
                                             )}
                                         </TouchableOpacity>
                                         <View style={[styles.ml10]}>

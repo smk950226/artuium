@@ -15,7 +15,11 @@ const ArtuiumCard2 = (props) => (
                 <View style={[styles.row, styles.justifyContentBetween]}>
                     <View style={[styles.row]}>
                         <View>
-                            <Image source={{uri: props.artwork.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
+                            {props.artwork.profile_image ? 
+                                <Image source={{uri: props.artwork.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
+                            :
+                                <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage40]} />
+                            }
                             <Image source={props.artwork.emoji} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
                         </View>
                         <View style={[styles.ml10]}>
