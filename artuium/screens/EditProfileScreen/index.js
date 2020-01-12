@@ -17,14 +17,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         checkNickname: (nickname) => {
             return dispatch(userActions.checkNickname(nickname))
         },
-        changeNickname: (nickname) => {
-            dispatch(userActions.changeNickname(nickname))
-        },
-        changeProfileImg: (profileImg) => {
-            dispatch(userActions.changeProfileImg(profileImg))
-        },
-        changeBackgroundImg: (backgroundImg) => {
-            dispatch(userActions.changeBackgroundImg(backgroundImg))
+        changeProfile: (nickname, profileImg, backgroundImg) => {
+            dispatch(userActions.changeProfile(nickname, profileImg, backgroundImg))
         },
     }
 }

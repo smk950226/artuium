@@ -76,16 +76,17 @@ class Container extends Component{
         })
     }
 
-    _handleChangeNickname = async(nickname) => {
-        const { nicknameForm, checkedNickname } = this.state;
+    _handleChangeProfile = async() => {
+        const { nickname, nicknameForm, checkedNickname, savedProfileImg, savedBackgroundImg } = this.state;
         if(nicknameForm && checkedNickname){
-            await this.props.changeNickname(nickname)
+            await this.props.changeProfile(nickname, savedProfileImg, savedBackgroundImg)
             this.props.navigation.goBack(null)
         }
         else{
             await this.setState({
-                nickname: this.props.profile.nickname
+                nickname: this.props.profile.nickname,
             })
+            await this.props.changeProfile(nickname, savedProfileImg, savedBackgroundImg)
             this.props.navigation.goBack(null)
         }
     }
@@ -123,8 +124,10 @@ class Container extends Component{
             if (response.didCancel) {
             } else if (response.error) {
             } else {
-            const source = { uri: response.uri, type: response.type };
-            this.props.changeProfileImg(source)
+                const source = { uri: response.uri, type: response.type };
+                this.setState({
+                    savedProfileImg: source
+                })
             }
         })
     }
@@ -139,8 +142,10 @@ class Container extends Component{
             if (response.didCancel) {
             } else if (response.error) {
             } else {
-            const source = { uri: response.uri, type: response.type };
-            this.props.changeBackgroundImg(source)
+                const source = { uri: response.uri, type: response.type };
+                this.setState({
+                    savedBackgroundImg: source
+                })
             }
         })
     }
@@ -154,7 +159,7 @@ class Container extends Component{
             handleChangeBackgroundImg={this._handleChangeBackgroundImg}
             handleNicknameChange={this._handleNicknameChange}
             handleNicknameClear={this._handleNicknameClear}
-            handleChangeNickname={this._handleChangeNickname}
+            handleChangeProfile={this._handleChangeProfile}
             handleCheckNickname={this._handleCheckNickname}
             />
         )

@@ -762,18 +762,18 @@ function changeProfile(nickname, profileImg, backgroundImg){
                 type: backgroundImg.type,
                 name: `${uuidv1()}.` + bgext
             })
-            if(profileImg){
-                const pftemp = profileImg.type.split('/')
-                const pfext = pftemp[pftemp.length - 1]
-                formData.append('profileImg',{
-                    uri: profileImg.uri,
-                    type: profileImg.type,
-                    name: `${uuidv1()}.` + pfext
-                })
-            }
-            if(nickname){
-                formData.append('nickname', nickname)
-            }
+        }
+        if(profileImg){
+            const pftemp = profileImg.type.split('/')
+            const pfext = pftemp[pftemp.length - 1]
+            formData.append('profileImg',{
+                uri: profileImg.uri,
+                type: profileImg.type,
+                name: `${uuidv1()}.` + pfext
+            })
+        }
+        if(nickname){
+            formData.append('nickname', nickname)
         }
         fetch(`${FETCH_URL}/api/users/change/profile/`, {
             method: 'PUT',

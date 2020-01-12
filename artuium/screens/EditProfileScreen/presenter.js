@@ -16,23 +16,29 @@ class EditProfileScreen extends React.Component {
                         <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
                     </TouchableWithoutFeedback>
                     <Text style={[styles.fontBold, styles.font20]}>프로필 변경</Text>
-                    <TouchableOpacity onPress={() => this.props.handleChangeNickname(this.props.nickname)}>
+                    <TouchableOpacity onPress={() => this.props.handleChangeProfile()}>
                         <Text style={[styles.fontMedium, styles.font16, {color: '#044ae6'}]}>완료</Text>
                     </TouchableOpacity>
                 </View>
                 <ScrollView bounces={false}>
                     <KeyboardAvoidingView behavior={'padding'}>
                         <View style={[styles.alignItemsCenter]}>
-                            {this.props.profile.background_image ? 
-                            <Image
-                                source={{uri: this.props.profile.background_image}}
-                                style={[{width, height: 210}]} resizeMode={'cover'}
-                            />
+                            {this.props.savedBackgroundImg ? 
+                                <Image
+                                    source={{uri: this.props.savedBackgroundImg.uri}}
+                                    style={[{width, height: 210}]}
+                                />
                             :
-                            <Image
-                                source={require('../../assets/images/empty_bg.png')}
-                                style={[{width, height: 210}]}
-                            />
+                                this.props.profile.background_image ? 
+                                    <Image
+                                        source={{uri: this.props.profile.background_image}}
+                                        style={[{width, height: 210}]} resizeMode={'cover'}
+                                    />
+                                :
+                                    <Image
+                                        source={require('../../assets/images/empty_bg.png')}
+                                        style={[{width, height: 210}]}
+                                    />
                             }
                             <TouchableWithoutFeedback onPress={()=>this.props.handleChangeBackgroundImg()}>
                                 <View style={[styles.blueBtn, styles.my15]}>
@@ -42,10 +48,16 @@ class EditProfileScreen extends React.Component {
                         </View>
                         <View style={[styles.divGray]} />
                         <View style={[styles.center, {height: 150}]}>
-                            {this.props.profile.profile_image ?
-                            <Image source={{uri: this.props.profile.profile_image}} style={[styles.profileImage70]} />
+                            {this.props.savedProfileImg ? 
+                                <Image
+                                    source={{uri: this.props.savedProfileImg.uri}}
+                                    style={[styles.profileImage70]}
+                                />
                             :
-                            <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage70]} />
+                                this.props.profile.profile_image ?
+                                    <Image source={{uri: this.props.profile.profile_image}} style={[styles.profileImage70]} />
+                                :
+                                    <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage70]} />
                             }
                             <TouchableWithoutFeedback onPress={()=>this.props.handleChangeProfileImg()}>
                                 <View style={[styles.blueBtn, styles.mt15]}>

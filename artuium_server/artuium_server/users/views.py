@@ -209,10 +209,11 @@ class ChangeProfile(APIView):
         profile_image = request.data.get('profileImg', None)
 
         user = request.user
-        user.background_image = background_image
-        user.profile_image = profile_image
         user.nickname = nickname
-
+        if background_image:
+            user.background_image = background_image
+        if profile_image:
+            user.profile_image = profile_image
         user.save()
 
         serializer = serializers.ProfileSerializer(user, context = {'request': request})
