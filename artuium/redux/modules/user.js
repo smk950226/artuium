@@ -750,6 +750,51 @@ function changeProfileImg(profileImg){
     }
 }
 
+function changeProfile(nickname, profileImg, backgroundImg){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        let formData = new FormData();
+        if(backgroundImg){
+            const bgtemp = backgroundImg.type.split('/')
+            const bgext = bgtemp[bgtemp.length - 1]
+            formData.append('backgroundImg',{
+                uri: backgroundImg.uri,
+                type: backgroundImg.type,
+                name: `${uuidv1()}.` + bgext
+            })
+            if(profileImg){
+                const pftemp = profileImg.type.split('/')
+                const pfext = pftemp[pftemp.length - 1]
+                formData.append('profileImg',{
+                    uri: profileImg.uri,
+                    type: profileImg.type,
+                    name: `${uuidv1()}.` + pfext
+                })
+            }
+            if(nickname){
+                formData.append('nickname', nickname)
+            }
+        }
+        fetch(`${FETCH_URL}/api/users/change/profile/`, {
+            method: 'PUT',
+            headers: {
+                "Authorization": `JWT ${token}`
+            },
+            body: formData
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(logout());
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => dispatch(setProfile(json)))
+    }
+}
+
 function changeBackgroundImg(backgroundImg){
     return (dispatch, getState) => {
         const { user : { token } } = getState();
@@ -1144,6 +1189,7 @@ const actionCreators = {
     changeNickname,
     changeProfileImg,
     changeBackgroundImg,
+    changeProfile,
     addInfo,
     kakaoLogin,
     getNotification,

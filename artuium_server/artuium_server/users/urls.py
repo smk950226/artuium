@@ -13,6 +13,7 @@ urlpatterns = [
     path('change/nickname/', views.ChangeNickname.as_view()),
     path('change/profileimg/', views.ChangeProfileImg.as_view()),
     path('change/backgroundimg/', views.ChangeBackgroundImg.as_view()),
+    path('change/profile/', views.ChangeProfile.as_view()),
     path('accounts/', include('allauth.urls')),
     path('addinfo/', views.AddInfo.as_view()),
     path('initial/', views.Initial.as_view()),
