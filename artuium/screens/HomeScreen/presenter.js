@@ -50,7 +50,7 @@ class HomeScreen extends Component {
     render() {
         const { newReviews, recommendedReviews, followingReviews, showNoticeModal, noticeNew, notificationNew } = this.props;
         return (
-            <View style={[styles.container]}>
+            <View style={[styles.container, styles.paddingIOS]}>
                 <View
                     style={[styles.row, styles.alignItemsCenter, styles.spaceBetween, styles.px15,
                     {width: width, height: 50, zIndex: 998}
@@ -79,23 +79,23 @@ class HomeScreen extends Component {
                             <Image resizeMode={'cover'} source={require('../../assets/images/goh.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
                         </ScrollView>
                         <View style={[styles.center, styles.alignSelfCenter, styles.bgWhite, styles.homeMenuShadow,
-                            {width: width*0.9, height: 80, borderRadius: 10, marginTop: -40},
+                            {width: width*0.9, height: 80, borderRadius: 10, marginTop: -40, zIndex: 999 },
                         ]}>
                             <View style={[styles.row, styles.spaceAround, styles.width80]}>
                                 <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('RecommendArtwork')}>
-                                    <View style={[styles.center, { zIndex: 999 }]}>
+                                    <View style={[styles.center]}>
                                         <Image style={{width: 24, height: 24}} source={require('../../assets/images/recommend.png')} />
                                         <Text style={[styles.font12, styles.mt5]}>추천 감상</Text>
                                     </View>
                                 </TouchableWithoutFeedback>
                                 <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
-                                    <View style={[styles.center, { zIndex: 999 }]}>
+                                    <View style={[styles.center]}>
                                         <Image style={{width: 24, height: 24}} source={require('../../assets/images/total.png')} />
                                         <Text style={[styles.font12, styles.mt5]}>전체 감상</Text>
                                     </View>
                                 </TouchableWithoutFeedback>
                                 <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('FollowArtwork')}>
-                                    <View style={[styles.center, { zIndex: 999 }]}>
+                                    <View style={[styles.center]}>
                                         <Image style={{width: 24, height: 24}} source={require('../../assets/images/follow.png')} />
                                         <Text style={[styles.font12, styles.mt5]}>팔로우 감상</Text>
                                     </View>
