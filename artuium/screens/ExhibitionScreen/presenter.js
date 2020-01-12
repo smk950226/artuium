@@ -32,6 +32,8 @@ class ExhibitionScreen extends React.Component {
                 { key: 'first', title: '알림' },
                 { key: 'second', title: '공지사항' },
             ],
+            scrollTop: true,
+            topOpacity: new Animated.Value(1)
         }
     }
 
@@ -63,32 +65,61 @@ class ExhibitionScreen extends React.Component {
         )
     }
 
+    _handleScroll = (event) => {
+        if(event.nativeEvent.contentOffset.y === 0){
+            if(!this.state.scrollTop){
+                Animated.timing( this.state.topOpacity, {
+                    toValue: 1,
+                    duration: 200,
+                } ).start(() => {
+                    this.setState({
+                        scrollTop: true
+                    })
+                });
+            }
+        }
+        else{
+            if(this.state.scrollTop){
+                Animated.timing( this.state.topOpacity, {
+                    toValue: 0,
+                    duration: 200,
+                } ).start(() => {
+                    this.setState({
+                        scrollTop: false
+                    })
+                });
+            }
+        }
+    }
+
     render() {
         let position = Animated.divide(this.state.scrollX, width);
         let position2 = Animated.divide(this.state.scrollX2, width);
         const { noticeNew, notificationNew, newExhibitions, recommendedExhibitions, hotExhibitions, pastExhibitions, showNoticeModal, refreshing } = this.props;
         return(
             <View style={[styles.container]}>
-                <View
+                <Animated.View
                     style={[styles.row, styles.alignItemsCenter, styles.spaceBetween, styles.px15,
-                    {width: width, height: 50, position: 'absolute', top: getStatusBarHeight(), zIndex: 900}
+                    {width: width, height: 50, position: 'absolute', top: getStatusBarHeight(), zIndex: 900, opacity: this.state.topOpacity}
                 ]}>
                     <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
                         <View>
-                            <Image style={{width: 38.4, height: 38.4, zIndex: 999}} source={require('../../assets/images/notification.png')} />
-                            {((noticeNew) || (notificationNew)) && (
-                                <View style={[styles.bgRed, styles.circle6, {position: 'absolute', top: 0, right: 0}]} />
+                            {((noticeNew) || (notificationNew)) ? (
+                                <Image style={{width: 32, height: 32, zIndex: 999}} source={require('../../assets/images/notification_alert.png')} />
+                            ) : (
+                                <Image style={{width: 32, height: 32, zIndex: 999}} source={require('../../assets/images/notification.png')} />
                             )}
                         </View>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Search')}>
                         <View>
-                            <Image style={{width: 38.4, height: 38.4, zIndex: 999}} source={require('../../assets/images/search.png')} />
+                            <Image style={{width: 32, height: 32, zIndex: 999}} source={require('../../assets/images/search.png')} />
                         </View>
                     </TouchableWithoutFeedback>
-                </View>
+                </Animated.View>
                 <ScrollView
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={this.props.refresh} tintColor={'#000000'} />}
+                onScroll={this._handleScroll}
                 >
                 <View style={[styles.widthFull]}>
                     <View>

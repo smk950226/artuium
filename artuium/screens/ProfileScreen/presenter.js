@@ -83,16 +83,17 @@ class ProfileScreen extends React.Component {
                 ]}>
                     <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
                         <View>
-                            <Image style={{width: 38.4, height: 38.4, zIndex: 999}} source={require('../../assets/images/notification.png')} />
-                            {((noticeNew) || (notificationNew)) && (
-                                <View style={[styles.bgRed, styles.circle6, {position: 'absolute', top: 0, right: 0}]} />
+                            {((noticeNew) || (notificationNew)) ? (
+                                <Image style={{width: 32, height: 32, zIndex: 999}} source={require('../../assets/images/notification_alert.png')} />
+                            ) : (
+                                <Image style={{width: 32, height: 32, zIndex: 999}} source={require('../../assets/images/notification.png')} />
                             )}
                         </View>
                     </TouchableWithoutFeedback>
                     <Animated.Text style={[styles.fontBold, styles.font20, {opacity: headerOpacity}]}>{`${profile.nickname}님의 프로필`}</Animated.Text>
                     <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Search')}>
                         <View>
-                            <Image style={{width: 38.4, height: 38.4, zIndex: 999}} source={require('../../assets/images/search.png')} />
+                            <Image style={{width: 32, height: 32, zIndex: 999}} source={require('../../assets/images/search.png')} />
                         </View>
                     </TouchableWithoutFeedback>
                 </View>
