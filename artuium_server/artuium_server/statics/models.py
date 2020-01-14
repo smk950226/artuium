@@ -19,17 +19,17 @@ class Notice(models.Model):
 class Review(models.Model):
     author = models.ForeignKey('users.User', on_delete = models.CASCADE, related_name = 'reviews')
     time = models.DateTimeField('작성일', auto_now_add = True)
-    content = models.TextField('내용')
+    content = models.TextField('내용', blank = True, null = True)
     exhibition = models.ForeignKey('exhibition.Exhibition', on_delete = models.CASCADE, blank = True, null = True, related_name = 'reviews')
     artwork = models.ForeignKey('artwork.Artwork', on_delete = models.CASCADE, blank = True, null = True, related_name = 'reviews')
-    rate = models.FloatField('평점')
+    rate = models.FloatField('평점', blank = True, null = True)
     expression = models.CharField(max_length = 100, choices = (
         ('good', 'Good'),
         ('soso', 'Soso'),
         ('sad', 'Sad'),
         ('surprise', 'Surprise'),
         ('thumb', 'Thumb'),
-    ))
+    ), blank = True, null = True)
     recommended = models.BooleanField('추천 여부', default = False)
 
     def __str__(self):

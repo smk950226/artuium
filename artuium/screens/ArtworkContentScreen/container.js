@@ -326,7 +326,7 @@ class Container extends Component{
         const { rating, expression, content, isSubmittingReview, artwork : { id } } = this.state;
         const { createArtworkReview } = this.props;
         if(!isSubmittingReview){
-            if(rating && expression && content){
+            if(rating || expression || content){
                 this.setState({
                     isSubmittingReview: true
                 })

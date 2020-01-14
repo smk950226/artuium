@@ -23,7 +23,7 @@ class InitialReview(APIView):
 
         following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
 
-        reviews = models.Review.objects.all()
+        reviews = models.Review.objects.filter(content__isnull = False)
 
         new_reviews = reviews.order_by('-time')[:5]
         recommended_reviews = reviews.filter(recommended = True)[:5]
@@ -48,18 +48,18 @@ class Review(APIView):
 
         if list_type:
             if list_type == 'all':
-                reviews = models.Review.objects.all()
+                reviews = models.Review.objects.all(content__isnull = False)
             elif list_type == 'recommended':
-                reviews = models.Review.objects.filter(recommended = True)
+                reviews = models.Review.objects.filter(recommended = True, content__isnull = False)
             elif list_type == 'friend':
                 following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
-                reviews = models.Review.objects.filter(author__id__in = following)
+                reviews = models.Review.objects.filter(author__id__in = following, content__isnull = False)
             elif list_type == 'exhibition':
-                reviews = models.Review.objects.filter(exhibition__isnull = False)
+                reviews = models.Review.objects.filter(exhibition__isnull = False, content__isnull = False)
             else:
-                reviews = models.Review.objects.all()
+                reviews = models.Review.objects.all(content__isnull = False)
         else:
-            reviews = models.Review.objects.all()
+            reviews = models.Review.objects.all(content__isnull = False)
 
         if filter_type:
             if filter_type == 'new':
@@ -357,18 +357,20 @@ class ExhibitionReview(APIView):
         if exhibition_id:
             try:
                 exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
-                reviews = exhibition.reviews.all().order_by('time')
+                reviews = exhibition.reviews.filter(content__isnull = False).order_by('time')
+                reviews_count = exhibition.reviews.all().order_by('time')
+
                 paginator = MainPageNumberPagination()
                 result_page = paginator.paginate_queryset(reviews, request)
                 serializer = serializers.ReviewSerializer(result_page, many = True, context = {'request': request})
 
                 if page == '1':
                     my_review = reviews.filter(author = request.user)
-                    thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
-                    good = reviews.filter(expression = 'good').count()/reviews.count()
-                    soso = reviews.filter(expression = 'soso').count()/reviews.count()
-                    sad = reviews.filter(expression = 'sad').count()/reviews.count()
-                    surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+                    thumb = reviews_count.filter(expression = 'thumb').count()/reviews_count.count()
+                    good = reviews_count.filter(expression = 'good').count()/reviews_count.count()
+                    soso = reviews_count.filter(expression = 'soso').count()/reviews_count.count()
+                    sad = reviews_count.filter(expression = 'sad').count()/reviews_count.count()
+                    surprise = reviews_count.filter(expression = 'surprise').count()/reviews_count.count()
 
                     return Response(status = status.HTTP_200_OK, data = {
                         'status': 'ok', 
@@ -390,10 +392,10 @@ class ExhibitionReview(APIView):
     def post(self, request, format = None):
         exhibition_id = request.data.get('exhibitionId', None)
         rate = request.data.get('rating', None)
-        expression = request.data.get('expression')
-        content = request.data.get('content')
+        expression = request.data.get('expression', None)
+        content = request.data.get('content', None)
         user = request.user
-        if exhibition_id and rate and expression and content:
+        if exhibition_id and (rate or expression or content):
             try:
                 exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
                 review = models.Review.objects.create(author = user, exhibition = exhibition, rate = rate, content = content, expression = expression)
@@ -432,18 +434,19 @@ class ArtworkReview(APIView):
         if artwork_id:
             try:
                 artwork = artwork_models.Artwork.objects.get(id = artwork_id)
-                reviews = artwork.reviews.all().order_by('time')
+                reviews = artwork.reviews.filter(content__isnull = False).order_by('time')
+                reviews_count = artwork.reviews.all().order_by('time')
                 paginator = MainPageNumberPagination()
                 result_page = paginator.paginate_queryset(reviews, request)
                 serializer = serializers.ReviewSerializer(result_page, many = True, context = {'request': request})
 
                 if page == '1':
                     my_review = reviews.filter(author = request.user)
-                    thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
-                    good = reviews.filter(expression = 'good').count()/reviews.count()
-                    soso = reviews.filter(expression = 'soso').count()/reviews.count()
-                    sad = reviews.filter(expression = 'sad').count()/reviews.count()
-                    surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+                    thumb = reviews_count.filter(expression = 'thumb').count()/reviews_count.count()
+                    good = reviews_count.filter(expression = 'good').count()/reviews_count.count()
+                    soso = reviews_count.filter(expression = 'soso').count()/reviews_count.count()
+                    sad = reviews_count.filter(expression = 'sad').count()/reviews_count.count()
+                    surprise = reviews_count.filter(expression = 'surprise').count()/reviews_count.count()
 
                     return Response(status = status.HTTP_200_OK, data = {
                         'status': 'ok', 
@@ -465,10 +468,10 @@ class ArtworkReview(APIView):
     def post(self, request, format = None):
         artwork_id = request.data.get('artworkId', None)
         rate = request.data.get('rating', None)
-        expression = request.data.get('expression')
-        content = request.data.get('content')
+        expression = request.data.get('expression', None)
+        content = request.data.get('content', None)
         user = request.user
-        if artwork_id and rate and expression and content:
+        if artwork_id and (rate or expression or content):
             try:
                 artwork = artwork_models.Artwork.objects.get(id = artwork_id)
                 review = models.Review.objects.create(author = user, artwork = artwork, rate = rate, content = content, expression = expression)
