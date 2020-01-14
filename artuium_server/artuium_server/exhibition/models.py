@@ -70,3 +70,12 @@ class ExhibitionImage(models.Model):
         ordering = ['-id']
         verbose_name = '전시 이미지'
         verbose_name_plural = '전시 이미지'
+
+    @property
+    def size(self):
+        if self.image.width > self.image.height:
+            return 'horizontal'
+        elif self.image.width == self.image.height:
+            return 'square'
+        else:
+            return 'vertical'

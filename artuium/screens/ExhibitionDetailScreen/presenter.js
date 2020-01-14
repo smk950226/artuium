@@ -56,6 +56,7 @@ class ExhibitionDetailScreen extends Component{
 
     render(){
         const { exhibition, like_count, review_count, is_liked, from } = this.props;
+        console.log(exhibition.images[0])
         return(
             <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
                 <TouchableWithoutFeedback onPress={this._handleDoubleTap}>
@@ -71,8 +72,49 @@ class ExhibitionDetailScreen extends Component{
                                 </TouchableWithoutFeedback>
                                 <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_exhibition.png')}>
                                     <View>
-                                        <View style={[styles.center]}>
-                                            <Image source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : null : null}} style={{width: 360, height: 240}} resizeMode={'cover'} />
+                                        <View style={[styles.center, {width, height: (width > 364) ? 355 : 355*width*0.9/235}]}>
+                                            {exhibition.images ? exhibition.images.length > 0 ? (
+                                                <Fragment>
+                                                    {exhibition.images[0].size === 'horizontal' && (
+                                                        <Fragment>
+                                                            <Image source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : null : null}} style={{width: (width > 364) ? 364 : width*0.9, height: (width > 364) ? 246 : 246*width*0.9/364}} resizeMode={'cover'} />
+                                                            <View style={[{width: (width > 364) ? 364 : width*0.9, height: (width > 364) ? 246 : 246*width*0.9/364, position: 'absolute'}, styles.center]}>
+                                                                {is_liked ? (
+                                                                    <Image source={require('../../assets/images/frame_horizontal_active.png')}  style={{width: (width > 364) ? 364 : width*0.9, height: (width > 364) ? 246 : 246*width*0.9/364}} />
+                                                                ) : (
+                                                                    <Image source={require('../../assets/images/frame_horizontal_inactive.png')}  style={{width: (width > 364) ? 364 : width*0.9, height: (width > 364) ? 246 : 246*width*0.9/364}} />
+                                                                )}
+                                                            </View>
+                                                        </Fragment>
+                                                    )}
+                                                    {exhibition.images[0].size === 'square' && (
+                                                        <Fragment>
+                                                        <Image source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : null : null}} style={{width: (width > 240) ? 240 : width*0.9, height: (width > 240) ? 240 : 240*width*0.9/240}} resizeMode={'cover'} />
+                                                        <View style={[{width: (width > 240) ? 240 : width*0.9, height: (width > 240) ? 240 : 240*width*0.9/240, position: 'absolute'}, styles.center]}>
+                                                            {is_liked ? (
+                                                                <Image source={require('../../assets/images/frame_square_active.png')}  style={{width: (width > 240) ? 240 : width*0.9, height: (width > 240) ? 240 : 240*width*0.9/240}} />
+                                                            ) : (
+                                                                <Image source={require('../../assets/images/frame_square_inactive.png')}  style={{width: (width > 240) ? 240 : width*0.9, height: (width > 240) ? 240 : 240*width*0.9/240}} />
+                                                            )}
+                                                        </View>
+                                                        </Fragment>
+                                                    )}
+                                                    {exhibition.images[0].size === 'vertical' && (
+                                                        <Fragment>
+                                                        <Image source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : null : null}} style={{width: (width > 235) ? 235 : width*0.9, height: (width > 235) ? 355 : 355*width*0.9/235}} resizeMode={'cover'} />
+                                                        <View style={[{width: (width > 235) ? 235 : width*0.9, height: (width > 235) ? 355 : 355*width*0.9/235, position: 'absolute'}, styles.center]}>
+                                                            {is_liked ? (
+                                                                <Image source={require('../../assets/images/frame_vertical_active.png')}  style={{width: (width > 235) ? 235 : width*0.9, height: (width > 235) ? 355 : 355*width*0.9/235}} />
+                                                            ) : (
+                                                                <Image source={require('../../assets/images/frame_vertical_inactive.png')}  style={{width: (width > 235) ? 235 : width*0.9, height: (width > 235) ? 355 : 355*width*0.9/235}} />
+                                                            )}
+                                                        </View>
+                                                        </Fragment>
+                                                    )}
+                                                </Fragment>
+                                            ) : (
+                                                null
+                                            ) : null}
                                         </View>
                                         <View style={[styles.alignItemsCenter, {marginTop: 60}]}>
                                             <View style={[styles.row, styles.mt10, styles.alignItemsCenter]}>

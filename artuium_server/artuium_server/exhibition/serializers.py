@@ -14,7 +14,7 @@ class GallerySerializer(serializers.ModelSerializer):
 class ExhibitionImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ExhibitionImage
-        fields = ['id', 'image']
+        fields = ['id', 'image', 'size']
 
 
 class ExhibitionSerializer(serializers.ModelSerializer):

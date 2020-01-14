@@ -47,3 +47,12 @@ class Artwork(models.Model):
             for review in reviews:
                 total += review.rate
             return total/reviews.count()
+    
+    @property
+    def size(self):
+        if self.image.width > self.image.height:
+            return 'horizontal'
+        elif self.image.width == self.image.height:
+            return 'square'
+        else:
+            return 'vertical'
