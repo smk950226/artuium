@@ -77,7 +77,7 @@ class ExhibitionDetailScreen extends Component{
                                                 <Fragment>
                                                     {exhibition.images[0].size === 'horizontal' && (
                                                         <Fragment>
-                                                            <Image source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : null : null}} style={{width: (width > 364) ? 364 : width*0.9, height: (width > 364) ? 246 : 246*width*0.9/364}} resizeMode={'cover'} />
+                                                            <Image source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : '' : ''}} style={{width: (width > 364) ? 364 : width*0.9, height: (width > 364) ? 246 : 246*width*0.9/364}} resizeMode={'cover'} />
                                                             <View style={[{width: (width > 364) ? 364 : width*0.9, height: (width > 364) ? 246 : 246*width*0.9/364, position: 'absolute'}, styles.center]}>
                                                                 {is_liked ? (
                                                                     <Image source={require('../../assets/images/frame_horizontal_active.png')}  style={{width: (width > 364) ? 364 : width*0.9, height: (width > 364) ? 246 : 246*width*0.9/364}} />
@@ -89,7 +89,7 @@ class ExhibitionDetailScreen extends Component{
                                                     )}
                                                     {exhibition.images[0].size === 'square' && (
                                                         <Fragment>
-                                                        <Image source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : null : null}} style={{width: (width > 240) ? 240 : width*0.9, height: (width > 240) ? 240 : 240*width*0.9/240}} resizeMode={'cover'} />
+                                                        <Image source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : '' : ''}} style={{width: (width > 240) ? 240 : width*0.9, height: (width > 240) ? 240 : 240*width*0.9/240}} resizeMode={'cover'} />
                                                         <View style={[{width: (width > 240) ? 240 : width*0.9, height: (width > 240) ? 240 : 240*width*0.9/240, position: 'absolute'}, styles.center]}>
                                                             {is_liked ? (
                                                                 <Image source={require('../../assets/images/frame_square_active.png')}  style={{width: (width > 240) ? 240 : width*0.9, height: (width > 240) ? 240 : 240*width*0.9/240}} />
@@ -101,7 +101,7 @@ class ExhibitionDetailScreen extends Component{
                                                     )}
                                                     {exhibition.images[0].size === 'vertical' && (
                                                         <Fragment>
-                                                        <Image source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : null : null}} style={{width: (width > 235) ? 235 : width*0.9, height: (width > 235) ? 355 : 355*width*0.9/235}} resizeMode={'cover'} />
+                                                        <Image source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : '' : ''}} style={{width: (width > 235) ? 235 : width*0.9, height: (width > 235) ? 355 : 355*width*0.9/235}} resizeMode={'cover'} />
                                                         <View style={[{width: (width > 235) ? 235 : width*0.9, height: (width > 235) ? 355 : 355*width*0.9/235, position: 'absolute'}, styles.center]}>
                                                             {is_liked ? (
                                                                 <Image source={require('../../assets/images/frame_vertical_active.png')}  style={{width: (width > 235) ? 235 : width*0.9, height: (width > 235) ? 355 : 355*width*0.9/235}} />

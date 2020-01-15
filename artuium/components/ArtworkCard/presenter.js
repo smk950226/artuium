@@ -15,7 +15,7 @@ class ArtworkCard extends Component{
         return(
             <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('ArtworkDetail', { artwork })}>
                 <View style={[{width: 130}, styles.mr10]}>
-                    <Image source={{uri: artwork.image}} style={[{width: 130, height: 130}]} resizeMode={'cover'} />
+                    <Image source={{uri: artwork.image ? artwork.image : ''}} style={[{width: 130, height: 130}]} resizeMode={'cover'} />
                     <Text style={[styles.fontBold, styles.font12, styles.mt10]}>{artwork.name}</Text>
                     <Text style={[styles.fontLight, styles.font10]}>{artwork.author.name}</Text>
                 </View>

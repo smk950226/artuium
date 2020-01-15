@@ -10,7 +10,7 @@ const { width, height } = Dimensions.get('window')
 const ArtuiumCard2 = (props) => (
     <TouchableWithoutFeedback>
         <View style={[styles.screenWidth, styles.mb10]}>
-            <Image source={{uri: props.artwork.image}} style={[styles.artworkImageLg]} resizeMode={'cover'} />
+            <Image source={{uri: props.artwork.image ? props.artwork.image : ''}} style={[styles.artworkImageLg]} resizeMode={'cover'} />
             <View style={[styles.py20, styles.px30]}>
                 <View style={[styles.row, styles.justifyContentBetween]}>
                     <View style={[styles.row]}>
@@ -20,7 +20,7 @@ const ArtuiumCard2 = (props) => (
                             :
                                 <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage40]} />
                             }
-                            <Image source={props.artwork.emoji} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
+                            <Image source={{uri: props.artwork.emoji}} style={[styles.emojiLg, { position: 'absolute', top: 23, left: 23 }]} resizeMode={'cover'} />
                         </View>
                         <View style={[styles.ml10]}>
                             <StarRating

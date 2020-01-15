@@ -8,11 +8,11 @@ const { width, height } = Dimensions.get('window')
 const ExhibitionCard3 = (props) => (
     <TouchableWithoutFeedback onPress={() => props.navigation.navigate('ExhibitionDetail', { exhibition: props.exhibition, from: props.from })}>
         <ImageBackground
-            resizeMode={'cover'} source={{uri : props.exhibition ? (props.exhibition.images && (props.exhibition.images.length > 0)) ? props.exhibition.images[0].image : null : null}}
+            resizeMode={'cover'} source={{uri : props.exhibition ? (props.exhibition.images && (props.exhibition.images.length > 0)) ? props.exhibition.images[0].image : '' : ''}}
             style={[{width: width, height: 400, zIndex: 999}, styles.justifyContentEnd]}
             blurRadius={20}
         >
-            <Image source={{uri: props.exhibition ? (props.exhibition.images && (props.exhibition.images.length > 0)) ? props.exhibition.images[0].image : null : null}} resizeMode={'contain'} style={[styles.heightFull]} />
+            <Image source={{uri: props.exhibition ? (props.exhibition.images && (props.exhibition.images.length > 0)) ? props.exhibition.images[0].image : '' : ''}} resizeMode={'contain'} style={[styles.heightFull]} />
             <View style={[{position: 'absolute', bottom: 50, left: 30}]}>
                 <Text style={[styles.fontMedium, styles.font14, styles.yellow]}>{props.exhibition.name}</Text>
                 <Text style={[styles.fontBold, styles.font30, styles.white]}>{props.exhibition.name}</Text>

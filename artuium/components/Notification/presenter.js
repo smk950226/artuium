@@ -117,10 +117,10 @@ const Notification = (props) => (
                         </View>
                         <View style={[{width: 100}, styles.justifyContentCenter]}>
                             {props.notification.review.exhibition && (
-                                <Image source={{uri: props.notification.review.exhibition.images && props.notification.review.exhibition.images.length > 0 ? props.notification.review.exhibition.images[0].image : null}} style={[styles.borderRadius10, {width: 100, height: 100}]} resizeMode={'cover'} />
+                                <Image source={{uri: props.notification.review.exhibition.images && props.notification.review.exhibition.images.length > 0 ? props.notification.review.exhibition.images[0].image : ''}} style={[styles.borderRadius10, {width: 100, height: 100}]} resizeMode={'cover'} />
                             )}
                             {props.notification.review.artwork && (
-                                <Image source={{uri: props.notification.review.artwork.image}} style={[styles.widthFull]} style={[styles.borderRadius10, {width: 100, height: 100}]} resizeMode={'cover'} />
+                                <Image source={{uri: props.notification.review.artwork.image ? props.notification.review.artwork.image : ''}} style={[styles.widthFull]} style={[styles.borderRadius10, {width: 100, height: 100}]} resizeMode={'cover'} />
                             )}
                         </View>
                         

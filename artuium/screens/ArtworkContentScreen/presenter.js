@@ -108,7 +108,7 @@ class ArtworkContentScreen extends React.Component {
                         </TouchableWithoutFeedback>
                     </View>
                     <ScrollView style={[styles.flex1]} bounces={false} showsVerticalScrollIndicator={false} ref={'scrollView'}>
-                        <ImageBackground resizeMode={'cover'} source={{uri: artwork.image}} style={[Platform.OS === 'ios' ? styles.paddingIOS : null, styles.justifyContentEnd, {height: height*0.5}]}>
+                        <ImageBackground resizeMode={'cover'} source={{uri: artwork.image ? artwork.image : ''}} style={[Platform.OS === 'ios' ? styles.paddingIOS : null, styles.justifyContentEnd, {height: height*0.5}]}>
                             <LinearGradient
                                 colors={['#00000000', '#000000']}
                                 style={[styles.pl30, styles.pb30, styles.justifyContentEnd, {height: height*0.3}]}

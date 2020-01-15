@@ -56,7 +56,7 @@ class HomeScreen extends Component {
                     {width: width, height: 50, zIndex: 998}
                 ]}>
                     <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
-                        <View>
+                        <View style={[styles.flex1]}>
                             {((noticeNew) || (notificationNew)) ? (
                                 <Image style={{width: 32, height: 32, zIndex: 999}} source={require('../../assets/images/notification_alert.png')} />
                             ) : (
@@ -64,10 +64,10 @@ class HomeScreen extends Component {
                             )}
                         </View>
                     </TouchableWithoutFeedback>
-                    <Animated.Image style={{opacity: this.headerOpacity, height: 40}} resizeMode={'contain'} source={require('../../assets/images/icon_horizontal.png')} />
+                    <Animated.Image style={{opacity: this.headerOpacity, height: 40, flex: 1}} resizeMode={'contain'} source={require('../../assets/images/icon_horizontal.png')} />
 
                     <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Search')}>
-                        <View>
+                        <View style={[styles.flex1, styles.alignItemsEnd]}>
                             <Image style={{width: 32, height: 32}} source={require('../../assets/images/search.png')} />
                         </View>
                     </TouchableWithoutFeedback>
