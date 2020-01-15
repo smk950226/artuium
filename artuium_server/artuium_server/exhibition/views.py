@@ -23,7 +23,7 @@ class InitialExhibition(APIView):
         now = timezone.localtime()
         today = datetime.date(now.year, now.month, now.day)
 
-        exhibitions = models.Exhibition.objects.all()
+        exhibitions = models.Exhibition.objects.all().order_by('index')
 
         new_exhibitions = exhibitions.filter(open_date__lte = today).order_by('-open_date')[:5]
         recommended_exhibitions = exhibitions.filter(recommended = True)[:5]
@@ -56,11 +56,11 @@ class Exhibition(APIView):
 
         if list_type:
             if list_type == 'all':
-                exhibitions = models.Exhibition.objects.all()
+                exhibitions = models.Exhibition.objects.all().order_by('index')
             else:
-                exhibitions = models.Exhibition.objects.all()
+                exhibitions = models.Exhibition.objects.all().order_by('index')
         else:
-            exhibitions = models.Exhibition.objects.all()
+            exhibitions = models.Exhibition.objects.all().order_by('index')
         
         if period:
             if period == 'past':
@@ -72,16 +72,16 @@ class Exhibition(APIView):
         
         if scale:
             if scale == '중대형':
-                exhibitions = exhibitions.filter(scale = '중대형')
+                exhibitions = exhibitions.filter(gallery__scale = '중대형')
             elif scale == '소형':
-                exhibitions = exhibitions.filter(scale = '소형')
+                exhibitions = exhibitions.filter(gallery__scale = '소형')
         
         if region:
             if region != 'else':
                 region_list = region.split('/')
                 q_regions = Q()
                 for region in region_list:
-                    q_regions |= Q(region__contains = region)
+                    q_regions |= Q(gallery__region__name__contains = region)
                 
                 exhibitions = exhibitions.filter(q_regions)
 

@@ -4,11 +4,17 @@ from . import models
 from artuium_server.artwork import serializers as artwork_serializers
 from artuium_server.statics import models as statics_models
 
+class RegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Region
+        fields = ['name']
+
 
 class GallerySerializer(serializers.ModelSerializer):
+    region = RegionSerializer()
     class Meta:
         model = models.Gallery
-        fields = ['id', 'name', 'location']
+        fields = ['id', 'name', 'location', 'region', 'address', 'scale', 'website']
 
 
 class ExhibitionImageSerializer(serializers.ModelSerializer):
@@ -26,7 +32,7 @@ class ExhibitionSerializer(serializers.ModelSerializer):
     is_reviewed = serializers.SerializerMethodField()
     class Meta:
         model = models.Exhibition
-        fields = ['id', 'name', 'content', 'open_date', 'close_date', 'open_time', 'close_time', 'notopendate', 'region', 'address', 'scale', 'fee', 'artists', 'artworks', 'gallery', 'images', 'review_count', 'like_count', 'is_liked', 'total_rate', 'is_reviewed']
+        fields = ['id', 'name', 'content', 'open_date', 'close_date', 'open_time', 'close_time', 'notopendate', 'fee', 'artists', 'artworks', 'gallery', 'images', 'review_count', 'like_count', 'is_liked', 'total_rate', 'is_reviewed']
 
     def get_is_liked(self, obj):
         if 'request' in self.context:

@@ -20,6 +20,7 @@ class Artwork(models.Model):
     created = models.DateField('작품 날짜')
     material = models.CharField(max_length = 500)
     content = RichTextField()
+    index = models.PositiveIntegerField('순서', default = 1)
 
     def __str__(self):
         return self.name

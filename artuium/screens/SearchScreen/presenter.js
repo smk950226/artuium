@@ -100,7 +100,7 @@ const SearchScreen = (props) => (
         </View>
         <View style={[styles.mt15, styles.px25]}>
             <Text style={[styles.fontBold, styles.font16]}>전시</Text>
-            <View style={[{height: 230}]}>
+            <View style={[{height: 300}]}>
                 {props.exhibitions && props.exhibitions.length > 0 ? (
                     <ScrollView
                     horizontal={true}

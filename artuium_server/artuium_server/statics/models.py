@@ -31,6 +31,7 @@ class Review(models.Model):
         ('thumb', 'Thumb'),
     ), blank = True, null = True)
     recommended = models.BooleanField('추천 여부', default = False)
+    index = models.PositiveIntegerField('순서', default = 1)
 
     def __str__(self):
         return self.author.nickname + '-' + str(self.rate)

@@ -75,11 +75,16 @@ class ProfileScreen extends React.Component {
             outputRange: [0, 1],
             extrapolate: 'clamp'
         });
+        const headerColor = this.state.scrollY.interpolate({
+            inputRange: [0, 50],
+            outputRange: ['rgba(255,255,255,0)', 'rgba(255,255,255,1)'],
+            extrapolate: 'clamp'
+        });
         const { profile, noticeNew, notificationNew, showNoticeModal, following_count, follower_count, is_following, is_me, following_friends_count, like_exhibition_count, like_artwork_count, like_review_count, loadingReviewList, isLoadingMore, hasNextPage, reviewList, refreshing } = this.props;
         return(
             <View style={[styles.container]}>
-                <View style={[styles.row, styles.justifyContentBetween, styles.alignItemsCenter, styles.px15,
-                    {width, height: 50, position: 'absolute', top: iosStatusBarHeight, zIndex: 999}
+                <Animated.View style={[styles.row, styles.justifyContentBetween, styles.alignItemsCenter, styles.px15,
+                    {width, height: 50 + iosStatusBarHeight, position: 'absolute', top: 0, paddingTop: iosStatusBarHeight, zIndex: 999, backgroundColor: headerColor}
                 ]}>
                     <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
                         <View>
@@ -96,8 +101,7 @@ class ProfileScreen extends React.Component {
                             <Image style={{width: 32, height: 32, zIndex: 999}} source={require('../../assets/images/search.png')} />
                         </View>
                     </TouchableWithoutFeedback>
-                </View>
-                <Animated.View style={[{width, height: headerHeight, zIndex: 900, paddingTop: headerPadding}]} />
+                </Animated.View>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     onScroll={Animated.event(

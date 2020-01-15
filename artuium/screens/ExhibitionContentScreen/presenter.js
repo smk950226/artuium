@@ -178,7 +178,7 @@ class ExhibitionContentScreen extends React.Component {
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>전시 장소</Text>
                                                     <View style={[styles.ml10]}>
                                                         <Text style={[styles.fontRegular, styles.font14]}>{exhibition.gallery.name}</Text>
-                                                        <Text style={[styles.fontRegular, styles.font14, styles.mt5]}>{exhibition.address}</Text>
+                                                        <Text style={[styles.fontRegular, styles.font14, styles.mt5]}>{exhibition.gallery.address}</Text>
                                                     </View>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
@@ -187,7 +187,7 @@ class ExhibitionContentScreen extends React.Component {
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>입장료</Text>
-                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{`${numberWithCommas(exhibition.fee)}원`}</Text>
+                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{exhibition.fee}</Text>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>휴관일</Text>

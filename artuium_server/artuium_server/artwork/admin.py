@@ -9,5 +9,5 @@ class ArtistAdmin(admin.ModelAdmin):
 
 @admin.register(models.Artwork)
 class ArtworkAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", 'author', 'created']
+    list_display = ["id", "name", 'author', 'created', 'index']
     list_display_links = ["id", "name"]

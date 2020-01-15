@@ -1,9 +1,25 @@
 from django.db import models
 from ckeditor.fields import RichTextField
 
+class Region(models.Model):
+    name = models.CharField('이름', max_length = 300)
+
+    def __str__(self):
+        return  self.name
+    
+    class Meta:
+        ordering = ['-id']
+        verbose_name = '갤러리 지역'
+        verbose_name_plural = '갤러리 지역'
+
+
 class Gallery(models.Model):
     name = models.CharField('이름', max_length = 300)
     location = models.CharField('위치', max_length = 500)
+    region = models.ForeignKey(Region, verbose_name = '지역', on_delete = models.CASCADE, blank = True, null = True)
+    address = models.CharField('주소', max_length = 500, blank = True, null = True)
+    scale = models.CharField('규모', choices = (('중대형', '중대형'), ('소형', '소형')), max_length = 500, blank = True, null = True)
+    website = models.CharField('웹 사이트', max_length = 500, blank = True, null = True)
 
     def __str__(self):
         return  self.name
@@ -22,14 +38,12 @@ class Exhibition(models.Model):
     open_time = models.TimeField()
     close_time = models.TimeField()
     notopendate = models.CharField(blank = True, null = True, max_length = 500)
-    region = models.CharField('지역', max_length = 255)
-    address = models.CharField('주소', max_length = 500)
-    scale = models.CharField('규모', choices = (('중대형', '중대형'), ('소형', '소형')), max_length = 500)
-    fee = models.FloatField('요금')
+    fee = models.TextField('요금')
     artists = models.ManyToManyField('artwork.Artist', related_name = 'exhibitions')
     artworks = models.ManyToManyField('artwork.Artwork', related_name = 'exhibitions')
     gallery = models.ForeignKey(Gallery, on_delete = models.CASCADE, related_name = 'exhibitions')
     recommended = models.BooleanField('추천 여부', default = False)
+    index = models.PositiveIntegerField('순서', default = 1)
 
     def __str__(self):
         return  self.name

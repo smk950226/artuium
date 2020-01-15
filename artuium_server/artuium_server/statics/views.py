@@ -23,7 +23,7 @@ class InitialReview(APIView):
 
         following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
 
-        reviews = models.Review.objects.filter(content__isnull = False)
+        reviews = models.Review.objects.filter(content__isnull = False).order_by('index')
 
         new_reviews = reviews.order_by('-time')[:5]
         recommended_reviews = reviews.filter(recommended = True)[:5]
@@ -48,18 +48,18 @@ class Review(APIView):
 
         if list_type:
             if list_type == 'all':
-                reviews = models.Review.objects.all(content__isnull = False)
+                reviews = models.Review.objects.filter(content__isnull = False).order_by('index')
             elif list_type == 'recommended':
-                reviews = models.Review.objects.filter(recommended = True, content__isnull = False)
+                reviews = models.Review.objects.filter(recommended = True, content__isnull = False).order_by('index')
             elif list_type == 'friend':
                 following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
-                reviews = models.Review.objects.filter(author__id__in = following, content__isnull = False)
+                reviews = models.Review.objects.filter(author__id__in = following, content__isnull = False).order_by('index')
             elif list_type == 'exhibition':
-                reviews = models.Review.objects.filter(exhibition__isnull = False, content__isnull = False)
+                reviews = models.Review.objects.filter(exhibition__isnull = False, content__isnull = False).order_by('index')
             else:
-                reviews = models.Review.objects.all(content__isnull = False)
+                reviews = models.Review.objects.filter(content__isnull = False).order_by('index')
         else:
-            reviews = models.Review.objects.all(content__isnull = False)
+            reviews = models.Review.objects.all(content__isnull = False).order_by('index')
 
         if filter_type:
             if filter_type == 'new':
@@ -357,8 +357,8 @@ class ExhibitionReview(APIView):
         if exhibition_id:
             try:
                 exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
-                reviews = exhibition.reviews.filter(content__isnull = False).order_by('time')
-                reviews_count = exhibition.reviews.all().order_by('time')
+                reviews = exhibition.reviews.filter(content__isnull = False).order_by('index')
+                reviews_count = exhibition.reviews.all().order_by('index')
 
                 paginator = MainPageNumberPagination()
                 result_page = paginator.paginate_queryset(reviews, request)
@@ -434,8 +434,8 @@ class ArtworkReview(APIView):
         if artwork_id:
             try:
                 artwork = artwork_models.Artwork.objects.get(id = artwork_id)
-                reviews = artwork.reviews.filter(content__isnull = False).order_by('time')
-                reviews_count = artwork.reviews.all().order_by('time')
+                reviews = artwork.reviews.filter(content__isnull = False).order_by('index')
+                reviews_count = artwork.reviews.all().order_by('index')
                 paginator = MainPageNumberPagination()
                 result_page = paginator.paginate_queryset(reviews, request)
                 serializer = serializers.ReviewSerializer(result_page, many = True, context = {'request': request})

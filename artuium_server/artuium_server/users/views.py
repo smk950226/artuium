@@ -86,9 +86,9 @@ class Search(APIView):
 
             q_exhibition_name = Q(name__icontains = q)
             q_exhibition_content = Q(content__icontains = q)
-            q_exhibition_region = Q(region__icontains = q)
-            q_exhibition_address = Q(address__icontains = q)
-            q_exhibition_scale = Q(scale__icontains = q)
+            q_exhibition_region = Q(gallery__region__name__icontains = q)
+            q_exhibition_address = Q(gallery__address__icontains = q)
+            q_exhibition_scale = Q(gallery__scale__icontains = q)
             q_exhibition_gallery_name = Q(gallery__name__icontains = q)
             q_exhibition_gallery_location = Q(gallery__location__icontains = q)
             q_exhibition_artist_name = Q(artists__name__icontains = q)
@@ -111,7 +111,7 @@ class Search(APIView):
 class Recommended(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, format = None):
-        recommended_reviews = statics_models.Review.objects.filter(recommended = True, content__isnull = False)
+        recommended_reviews = statics_models.Review.objects.filter(recommended = True, content__isnull = False).order_by('index')
         artwork_list = recommended_reviews.filter(artwork__isnull = False)
         exhibition_list = recommended_reviews.filter(exhibition__isnull = False)
         user_list = User.objects.filter(recommended = True)[:5]
@@ -156,7 +156,7 @@ class CheckNickname(APIView):
 class ReviewList(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, user_id, format = None):
-        reviews = statics_models.Review.objects.filter(author = user_id, content__isnull = False)
+        reviews = statics_models.Review.objects.filter(author = user_id, content__isnull = False).order_by('index')
         paginator = MainPageNumberPagination()
         result_page = paginator.paginate_queryset(reviews, request)
         serializer = statics_serializers.ReviewSerializer(result_page, many = True, context = {'request': request})
