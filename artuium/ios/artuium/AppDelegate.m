@@ -57,7 +57,7 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<NSString *,id> *)options {
     if ([KOSession isKakaoAccountLoginCallback:url]) {
-        return [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url options:options] || [RNGoogleSignin application:application openURL:url options:options] || [KOSession handleOpenURL:url];
+        return [KOSession handleOpenURL:url];
     }
     return [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url options:options] || [RNGoogleSignin application:application openURL:url options:options] || NO;
 }
