@@ -64,7 +64,7 @@ target/
 # pyenv
 .python-version
 
-*.plist
+GoogleService-Info.plist
 google-services.json
 
 # Environments
