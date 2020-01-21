@@ -9,7 +9,7 @@ const Notice = (props) => (
             <View style={[styles.row, styles.justifyContentBetween]}>
                 <View style={[styles.flex9]}>
                     <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween]}>
-                        <View>
+                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween]}>
                             <View style={[styles.bgRed, styles.circle6, styles.mr5, props.is_new ? null : styles.hidden]} />
                             <Text style={[styles.fontBold, styles.font13]}>
                                 {props.notice.title}
@@ -27,7 +27,7 @@ const Notice = (props) => (
                             </View>
                         </TouchableWithoutFeedback>
                     </View>
-                    <Text style={[styles.fontMedium, styles.font13, styles.grayD1]}>
+                    <Text style={[styles.fontMedium, styles.font13, styles.grayD1, styles.ml10]}>
                         {`${props.notice.date.slice(0,4)}.${props.notice.date.slice(5,7)}.${props.notice.date.slice(8,10)}`}
                     </Text>
                 </View>

@@ -4,9 +4,6 @@ import { Animated, View, PanResponder, Text, ScrollView, Image, Modal, Dimension
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import styles from '../../styles';
 import ArtuiumCard from '../../components/ArtuiumCard';
-import NoticeScreen from '../../screens/NoticeScreen';
-import NotificationScreen from '../../screens/NotificationScreen';
-import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
 const iosStatusBarHeight = getStatusBarHeight()
 
@@ -17,45 +14,19 @@ class HomeScreen extends Component {
         newReviews: PropTypes.array,
         recommendedReviews: PropTypes.array,
         followingReviews: PropTypes.array,
-        openNoticeModal: PropTypes.func.isRequired,
-        closeNoticeModal: PropTypes.func.isRequired,
-        showNoticeModal :PropTypes.bool.isRequired,
         noticeNew: PropTypes.bool.isRequired,
         notificationNew: PropTypes.bool.isRequired
     }
 
-    constructor(props){
-        super(props)
-        this.state = {
-            index: 0,
-            routes: [
-                { key: 'first', title: '알림' },
-                { key: 'second', title: '공지사항' },
-            ],
-        }
-    }
-
-    _renderNoticeRouter = () => {
-        return (
-            <NoticeScreen handleNoticeNewChange={this.props.handleNoticeNewChange} />
-        )
-    }
-
-    _renderNotificationRouter = () => {
-        return (
-            <NotificationScreen handleNotificationNewChange={this.props.handleNotificationNewChange} />
-        )
-    }
-
     render() {
-        const { newReviews, recommendedReviews, followingReviews, showNoticeModal, noticeNew, notificationNew } = this.props;
+        const { newReviews, recommendedReviews, followingReviews, noticeNew, notificationNew } = this.props;
         return (
             <View style={[styles.container, styles.paddingIOS]}>
                 <View
                     style={[styles.row, styles.alignItemsCenter, styles.spaceBetween, styles.px15,
                     {width: width, height: 50, zIndex: 998}
                 ]}>
-                    <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
+                    <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Alert', { notificationNew, noticeNew, handleNoticeNewChange: this.props.handleNoticeNewChange, handleNotificationNewChange: this.props.handleNotificationNewChange })}>
                         <View style={[styles.flex1]}>
                             {((noticeNew) || (notificationNew)) ? (
                                 <Image style={{width: 32, height: 32, zIndex: 999}} source={require('../../assets/images/notification_alert.png')} />
@@ -179,57 +150,6 @@ class HomeScreen extends Component {
                         </View>
                     </ScrollView>
                 </View>
-                <Modal
-                visible={showNoticeModal}
-                onRequestClose={this.props.closeNoticeModal}
-                animationType={'fade'}
-                transparent={true}
-                >
-                    <View style={[styles.container, styles.bgWhite]}>
-                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentEnd, styles.px15, styles.borderBtmGrayE6, { marginTop: iosStatusBarHeight, height: 50 }]}>
-                            <TouchableWithoutFeedback onPress={this.props.closeNoticeModal}>
-                                <View>
-                                    <Text style={[styles.fontMedium, styles.font16, styles.gray93]}>
-                                        닫기
-                                    </Text>
-                                </View>
-                            </TouchableWithoutFeedback>
-                        </View>
-                        <TabView
-                            navigationState={this.state}
-                            onIndexChange={index => this.setState({ index })}
-                            swipeEnabled={false}
-                            renderScene={SceneMap({
-                                first: this._renderNotificationRouter,
-                                second: this._renderNoticeRouter
-                            })}
-                            renderTabBar={props =>
-                                <TabBar
-                                    {...props}
-                                    activeColor = {'#1162d0'}
-                                    inactiveColor = {'#e6e6e6'}
-                                    labelStyle = {[styles.font15, styles.fontMedium]}
-                                    renderLabel={({ route, focused }) => (
-                                        <View>
-                                             <Text style={[styles.fontMedium, styles.font15, focused ? styles.blue : styles.grayE6]}>
-                                                 {route.title}
-                                             </Text>
-                                             {(route.title === '공지사항') && noticeNew && (
-                                                 <View style={[styles.bgRed, styles.circle6, focused ? null : {opacity: 0.4}, {position: 'absolute', top: 0, right: -5}]} />
-                                             )}
-                                             {(route.title === '알림') && notificationNew && (
-                                                 <View style={[styles.bgRed, styles.circle6, focused ? null : {opacity: 0.4}, {position: 'absolute', top: 0, right: -5}]} />
-                                             )}
-                                        </View>
-                                      )}
-                                    bounces={false}
-                                    indicatorStyle={{ backgroundColor: '#1162d0', height: 1 }}
-                                    style={[styles.bgGrayF8]}
-                                />
-                            }
-                        />
-                    </View>
-                </Modal>
             </View>
         );
     }

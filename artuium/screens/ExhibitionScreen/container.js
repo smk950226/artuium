@@ -31,24 +31,10 @@ class Container extends Component{
             fetchedHot: false,
             fetchedPast: false,
             fetchClear: false,
-            showNoticeModal: false,
             noticeNew,
             notificationNew,
             refreshing: false
         }
-    }
-
-    state = {
-        loading: true,
-        fetchedNew: false,
-        fetchedRecommended: false,
-        fetchedHot: false,
-        fetchedPast: false,
-        fetchClear: false,
-        showNoticeModal: false,
-        noticeNew: false,
-        notificationNew: false,
-        refreshing: false
     }
 
     componentDidMount = async() => {
@@ -133,17 +119,6 @@ class Container extends Component{
         })
     }
 
-    _openNoticeModal = () => {
-        this.setState({
-            showNoticeModal: true
-        })
-    }
-
-    _closeNoticeModal = () => {
-        this.setState({
-            showNoticeModal: false
-        })
-    }
     _handleNoticeNewChange = (noticeNew) => {
         this.props.getNoticeNew(noticeNew)
         this.setState({
@@ -209,8 +184,6 @@ class Container extends Component{
                     <ExhibitionScreen 
                         {...this.props}
                         {...this.state}
-                        openNoticeModal={this._openNoticeModal}
-                        closeNoticeModal={this._closeNoticeModal}
                         handleNoticeNewChange={this._handleNoticeNewChange}
                         handleNotificationNewChange={this._handleNotificationNewChange}
                         refresh={this._refresh}

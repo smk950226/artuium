@@ -56,7 +56,6 @@ class ExhibitionDetailScreen extends Component{
 
     render(){
         const { exhibition, like_count, review_count, is_liked, from } = this.props;
-        console.log(exhibition.images[0])
         return(
             <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
                 <TouchableWithoutFeedback onPress={this._handleDoubleTap}>

@@ -17,8 +17,8 @@ class Container extends Component{
         setPushToken: PropTypes.func.isRequired,
         getNoticeNew: PropTypes.func.isRequired,
         getNotificationNew: PropTypes.func.isRequired,
-        noticeNew: PropTypes.bool.isRequired,
-        notificationNew: PropTypes.bool.isRequired
+        noticeNew: PropTypes.bool,
+        notificationNew: PropTypes.bool
     }
 
     constructor(props){
@@ -31,7 +31,6 @@ class Container extends Component{
             fetchedRecommended: false,
             fetchedFollowing: false,
             fetchClear: false,
-            showNoticeModal: false,
             noticeNew,
             notificationNew,
             pushPermission: false
@@ -154,17 +153,6 @@ class Container extends Component{
         }
     }
 
-    _openNoticeModal = () => {
-        this.setState({
-            showNoticeModal: true
-        })
-    }
-
-    _closeNoticeModal = () => {
-        this.setState({
-            showNoticeModal: false
-        })
-    }
     _handleNoticeNewChange = (noticeNew) => {
         this.props.getNoticeNew(noticeNew)
         this.setState({
@@ -230,8 +218,6 @@ class Container extends Component{
                     <HomeScreen 
                         {...this.props}
                         {...this.state}
-                        openNoticeModal={this._openNoticeModal}
-                        closeNoticeModal={this._closeNoticeModal}
                         handleNoticeNewChange={this._handleNoticeNewChange}
                         handleNotificationNewChange={this._handleNotificationNewChange}
                     />

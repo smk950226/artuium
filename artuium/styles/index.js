@@ -1001,9 +1001,7 @@ const styles = StyleSheet.create({
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#676767',
         borderRadius: 25,
-        opacity: 0.2,
     },
     divView: {
         width: "100%",

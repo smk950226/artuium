@@ -25,7 +25,6 @@ class Container extends Component{
         this.state = {
             loading: profile.id ? false : true,
             loadingReviewList: true,
-            showNoticeModal: false,
             noticeNew,
             notificationNew,
             following_count, 
@@ -141,18 +140,6 @@ class Container extends Component{
         })
     }  
 
-    _openNoticeModal = () => {
-        this.setState({
-            showNoticeModal: true
-        })
-    }
-
-    _closeNoticeModal = () => {
-        this.setState({
-            showNoticeModal: false
-        })
-    }
-
     _handleNoticeNewChange = (noticeNew) => {
         this.props.getNoticeNew(noticeNew)
         this.setState({
@@ -223,8 +210,6 @@ class Container extends Component{
                     <ProfileScreen 
                     {...this.props}
                     {...this.state}
-                    openNoticeModal={this._openNoticeModal}
-                    closeNoticeModal={this._closeNoticeModal}
                     handleNoticeNewChange={this._handleNoticeNewChange}
                     reviewListMore={this._reviewListMore}
                     refresh={this._refresh}

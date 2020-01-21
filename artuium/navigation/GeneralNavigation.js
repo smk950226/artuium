@@ -11,6 +11,7 @@ import OthersProfileScreen from '../screens/OthersProfileScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ArtworkDetailScreen from '../screens/ArtworkDetailScreen';
 import ArtworkContentScreen from '../screens/ArtworkContentScreen';
+import AlertScreen from '../screens/AlertScreen';
 
 const GeneralNavigation = createStackNavigator({
     Root: {
@@ -63,6 +64,12 @@ const GeneralNavigation = createStackNavigator({
     },
     OthersProfile: {
         screen: OthersProfileScreen,
+        navigationOptions: ({screenProps, navigation}) => ({
+            header: null
+        })
+    },
+    Alert: {
+        screen: AlertScreen,
         navigationOptions: ({screenProps, navigation}) => ({
             header: null
         })

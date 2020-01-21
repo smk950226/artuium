@@ -19,43 +19,63 @@ class Container extends Component{
         }
     }
 
-    componentDidUpdate = async(prevProps, prevState) => {
-        if(!prevState.expand && this.state.expand){
-            const { checkNotification, handleNotificationNewChange, notification : { id } } = this.props;
-            const { is_new, isSubmitting } = this.state;
-            if(!isSubmitting){
-                if(is_new){
+    _openExpand = async() => {
+        const { checkNotification, handleNotificationNewChange, notification, notification : { id }, navigation, clearNotification } = this.props;
+        const { is_new, isSubmitting } = this.state;
+        if(!isSubmitting){
+            if(is_new){
+                this.setState({
+                    isSubmitting: true
+                })
+                const result = await checkNotification(id)
+                if(result === 'clear'){
+                    clearNotification()
+                    handleNotificationNewChange(false)
                     this.setState({
-                        isSubmitting: true
+                        is_new: false,
+                        isSubmitting: false
                     })
-                    const result = await checkNotification(id)
-                    if(result === 'clear'){
-                        handleNotificationNewChange(false)
-                        this.setState({
-                            is_new: false,
-                            isSubmitting: false
-                        })
-                    }
-                    else if(result){
-                        this.setState({
-                            is_new: false,
-                            isSubmitting: false
-                        })
-                    }
-                    else{
-                        this.setState({
-                            isSubmitting: false
-                        })
-                    }
+                }
+                else if(result){
+                    this.setState({
+                        is_new: false,
+                        isSubmitting: false
+                    })
+                }
+                else{
+                    this.setState({
+                        isSubmitting: false
+                    })
                 }
             }
+            if(notification.type === 'comment_review'){
+                if(notification.review.exhibition){
+                    navigation.navigate('ExhibitionContent', { exhibition: notification.review.exhibition, mode: 'review', review: notification.review })
+                }
+                else{
+                    navigation.navigate('ArtworkContent', { artwork: notification.review.artwork, mode: 'review', review: notification.review })
+                }
+            }
+            else if(notification.type === 'comment_reply'){
+                if(notification.review.exhibition){
+                    navigation.navigate('ExhibitionContent', { exhibition: notification.review.exhibition, mode: 'review', review: notification.review })
+                }
+                else{
+                    navigation.navigate('ArtworkContent', { artwork: notification.review.artwork, mode: 'review', review: notification.review })
+                }
+            }
+            else if(notification.type === 'like_review'){
+                if(notification.review.exhibition){
+                    navigation.navigate('ExhibitionContent', { exhibition: notification.review.exhibition, mode: 'review', review: notification.review })
+                }
+                else{
+                    navigation.navigate('ArtworkContent', { artwork: notification.review.artwork, mode: 'review', review: notification.review })
+                }
+            }
+            else if(notification.type === 'following'){
+                navigation.navigate('OthersProfile', { others: notification.from_user })
+            }
         }
-    }
-
-    _openExpand = () => {
-        this.setState({
-            expand: true
-        })
     }
 
     _closeExpand = () => {
