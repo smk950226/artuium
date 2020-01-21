@@ -238,7 +238,6 @@ class Container extends Component{
             unfollow={this._unfollow}
             like={this._like}
             unlike={this._unlike}
-            report={this._report}
             handleOption={this._handleOption}
             />
         )

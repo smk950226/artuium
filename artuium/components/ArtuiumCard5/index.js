@@ -16,6 +16,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         unlikeReview: (reviewId) => {
             return dispatch(reviewActions.unlikeReview(reviewId))
+        },
+        reportReview: (reviewId) => {
+            return dispatch(reviewActions.reportReview(reviewId))
         }
     }
 }

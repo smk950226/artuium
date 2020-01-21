@@ -51,7 +51,6 @@ class ArtuiumCard extends Component{
         like_count: PropTypes.number.isRequired,
         reply_count: PropTypes.number.isRequired,
         from: PropTypes.string,
-        report: PropTypes.func.isRequired,
         handleOption: PropTypes.func.isRequired
     }
 
@@ -364,14 +363,7 @@ class ArtuiumCard extends Component{
                                                 </View>
                                             )
                                         }
-                                        <ModalDropdown options={is_me ? ['수정하기', '삭제하기'] : ['신고하기']}
-                                        showsVerticalScrollIndicator={false}
-                                        dropdownStyle={is_me ? {height: 80} : {height: 40}}
-                                        dropdownTextStyle={{fontSize: 13}}
-                                        onSelect={this.props.handleOption}
-                                        >
-                                            <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
-                                        </ModalDropdown>
+                                        <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
                                     </View>
                                 </View>
                             </View>
