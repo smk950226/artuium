@@ -185,26 +185,26 @@ class ExhibitionContentScreen extends React.Component {
                                             <View style={[styles.bgGrayf0, styles.py20, styles.px30, styles.mt15]}>
                                                 <View style={[styles.row]}>
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>전시 기간</Text>
-                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{`${exhibition.open_date.slice(0,4)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} - ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
+                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10, { width: width - 180 }]}>{`${exhibition.open_date.slice(0,4)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} - ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>전시 장소</Text>
                                                     <View style={[styles.ml10]}>
-                                                        <Text style={[styles.fontRegular, styles.font14]}>{exhibition.gallery.name}</Text>
-                                                        <Text style={[styles.fontRegular, styles.font14, styles.mt5]}>{exhibition.gallery.address}</Text>
+                                                        <Text style={[styles.fontRegular, styles.font14, { width: width - 180 }]}>{exhibition.gallery.name}</Text>
+                                                        <Text style={[styles.fontRegular, styles.font14, styles.mt5, { width: width - 180 }]}>{exhibition.gallery.address}</Text>
                                                     </View>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>관람 시간</Text>
-                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{`${exhibition.open_time.slice(0,5)} - ${exhibition.close_time.slice(0,5)}`}</Text>
+                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10, { width: width - 180 }]}>{`${exhibition.open_time.slice(0,5)} - ${exhibition.close_time.slice(0,5)}`}</Text>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>입장료</Text>
-                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{exhibition.fee}</Text>
+                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10, { width: width - 180 }]}>{exhibition.fee}</Text>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>휴관일</Text>
-                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{exhibition.notopendate ? exhibition.notopendate : '없음'}</Text>
+                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10, { width: width - 180 }]}>{exhibition.notopendate ? exhibition.notopendate : '없음'}</Text>
                                                 </View>
                                             </View>
                                             <View style={[{marginTop: 25}]}>

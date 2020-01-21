@@ -106,7 +106,7 @@ class ExhibitionArtworkScreen extends Component{
                             if(index === (artworks.length - 1)){
                                 return(
                                     <ScrollView alwaysBounceVertical={false} showsVerticalScrollIndicator={false} style={[{height: height - (165 + height*0.05)}, styles.screenWidth, styles.px30]}>
-                                        <Text style={[styles.fontBold, styles.font35, styles.mt50, { maxWidth: 130 }]}>{exhibition.name}</Text>
+                                        <Text style={[styles.fontBold, styles.font35, styles.mt50, { maxWidth: (width - 15)/2, flexWrap: 'wrap' }]}>{exhibition.name}</Text>
                                         <View style={[styles.mt10, styles.row, styles.alignItemsCenter]}>
                                             <View style={[styles.borderRadius5, styles.borderGray91, styles.py5, styles.px15]}>
                                                 <Text style={[styles.fontMedium, styles.font14, styles.gray91, styles.textCenter]}>평점</Text>
