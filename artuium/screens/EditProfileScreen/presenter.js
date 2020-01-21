@@ -13,11 +13,15 @@ class EditProfileScreen extends React.Component {
             <View style={[styles.container, styles.bgGrayf0]}>
                 <View style={[styles.row, styles.justifyContentBetween, styles.alignItemsCenter, styles.px25, styles.bgWhite, {width, height: iosStatusBarHeight+50, paddingTop: iosStatusBarHeight}]}>
                     <TouchableWithoutFeedback onPress={() => this.props.navigation.goBack(null)}>
-                        <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
+                        <View style={[styles.pr20]}>
+                            <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
+                        </View>
                     </TouchableWithoutFeedback>
                     <Text style={[styles.fontBold, styles.font20]}>프로필 변경</Text>
                     <TouchableOpacity onPress={() => this.props.handleChangeProfile()}>
-                        <Text style={[styles.fontMedium, styles.font16, {color: '#044ae6'}]}>완료</Text>
+                        <View style={[styles.pl20]}>
+                            <Text style={[styles.fontMedium, styles.font16, {color: '#044ae6'}]}>완료</Text>
+                        </View>
                     </TouchableOpacity>
                 </View>
                 <ScrollView bounces={false}>

@@ -365,7 +365,7 @@ class ExhibitionContentScreen extends React.Component {
                                                     <TouchableWithoutFeedback onPress={()=>this.props.handleChangeRating(0)}>
                                                         <View>
                                                         <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('list')}>
-                                                            <View style={[styles.ml25, { width: 20 }]}>
+                                                            <View style={[styles.ml25, { width: 40 }]}>
                                                                 <Image style={[{width: 14, height: 26}]} source={require('../../assets/images/icon_back.png')} />
                                                             </View>
                                                         </TouchableWithoutFeedback>

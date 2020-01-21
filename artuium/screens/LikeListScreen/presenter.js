@@ -61,14 +61,18 @@ class LikeListScreen extends React.Component {
             <View style={[styles.container]}>
                 <View style={[{height: iosStatusBarHeight+50, paddingTop: iosStatusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
                     <TouchableWithoutFeedback onPress={() => this.props.navigation.goBack(null)}>
-                        <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
+                        <View style={[styles.pr20]}>
+                            <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
+                        </View>
                     </TouchableWithoutFeedback>
                     {others ? 
                     <Text style={[styles.fontBold, styles.font20]}>{`${others.nickname}님이 좋아한`}</Text>
                     :
                     <Text style={[styles.fontBold, styles.font20]}>{`${profile.nickname}님이 좋아한`}</Text>
                     }
-                    <View style={[{width: 9, height: 17}]} />
+                    <View style={[styles.pl20, styles.bgBlue, styles.hidden]} >
+                        <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
+                    </View>
                 </View>
                 <TabView
                     navigationState={this.state}

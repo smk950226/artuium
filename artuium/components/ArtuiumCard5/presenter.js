@@ -107,7 +107,7 @@ class ArtuiumCard5 extends Component{
                 <Fragment>
                     <View style={[styles.row, styles.justifyContentBetween]}>
                         <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('list')}>
-                            <View style={[styles.ml25]}>
+                            <View style={[styles.ml25, styles.pr20]}>
                                 <Image style={[{width: 14, height: 26}]} source={require('../../assets/images/icon_back.png')} />
                             </View>
                         </TouchableWithoutFeedback>
@@ -134,7 +134,7 @@ class ArtuiumCard5 extends Component{
                             )}
                         </View>
                         <TouchableWithoutFeedback>
-                            <View style={[styles.mr25, styles.hidden]}>
+                            <View style={[styles.mr25, styles.pl20, styles.hidden]}>
                                 <Image style={[{width: 14, height: 26}]} source={require('../../assets/images/icon_back.png')} />
                             </View>
                         </TouchableWithoutFeedback>

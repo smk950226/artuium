@@ -97,11 +97,13 @@ const AllExhibitionScreen = (props) => (
         <View style={[styles.container]}>
             <View style={[{height:50, marginTop: statusBarHeight}, styles.bgWhite, styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px25, styles.borderBtmGrayDb]}>
                 <TouchableWithoutFeedback onPress={() => props.navigation.goBack(null)}>
-                    <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
+                    <View style={[styles.pr20]}>
+                        <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
+                    </View>
                 </TouchableWithoutFeedback>
                 <Text style={[styles.fontBold, styles.font18]}>전체 전시</Text>
                 <TouchableWithoutFeedback onPress={() => props.navigation.navigate('Search')}>
-                    <View>
+                    <View style={[styles.pl20]}>
                         <Image source={require('../../assets/images/search.png')} style={[{width: 17*1.6, height: 17*1.6}]} />
                     </View>
                 </TouchableWithoutFeedback>
