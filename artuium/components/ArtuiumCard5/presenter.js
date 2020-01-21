@@ -7,6 +7,7 @@ import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import FollowerList from '../FollowerList';
 import FollowingList from '../FollowingList';
 import stripHtml from "string-strip-html";
+import ModalDropdown from 'react-native-modal-dropdown';
 
 const { width, height } = Dimensions.get('window')
 
@@ -48,7 +49,8 @@ class ArtuiumCard5 extends Component{
         follower_count: PropTypes.number.isRequired,
         following_count: PropTypes.number.isRequired,
         my: PropTypes.bool,
-        handleChangeMode: PropTypes.func
+        handleChangeMode: PropTypes.func,
+        handleOption: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -168,7 +170,14 @@ class ArtuiumCard5 extends Component{
                                 <Text style={[styles.fontRegular, styles.font8, {color: '#d1d1d1', marginLeft: 4}]}>{abbreviateNumber(like_count)}</Text>
                             </View>
                         </TouchableWithoutFeedback>
-                        <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon15, styles.ml10]} />
+                        <ModalDropdown options={is_me ? ['수정하기', '삭제하기'] : ['신고하기']}
+                        showsVerticalScrollIndicator={false}
+                        dropdownStyle={is_me ? {height: 80} : {height: 40}}
+                        dropdownTextStyle={{fontSize: 13}}
+                        onSelect={this.props.handleOption}
+                        >
+                            <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon15, styles.ml10]} />
+                        </ModalDropdown>
                     </View>
                 </Fragment>
                 <Modal

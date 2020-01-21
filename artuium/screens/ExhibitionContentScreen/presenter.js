@@ -84,19 +84,31 @@ class ExhibitionContentScreen extends React.Component {
         isSubmittingReply: PropTypes.bool.isRequired,
         createReview: PropTypes.func.isRequired,
         selectReply: PropTypes.func.isRequired,
-        selectedReply: PropTypes.object.isRequired
+        selectedReply: PropTypes.object.isRequired,
+        update: PropTypes.func.isRequired,
+        handleUpdateMode: PropTypes.func.isRequired
     }
     constructor(props){
         super(props);
         const { initialMode } = props;
 
         this.state = {
-            index: initialMode ? ((initialMode === 'review') || (initialMode === 'list')) ? 1 : 0 : 0
+            index: initialMode ? ((initialMode === 'review') || (initialMode === 'list') || (initialMode === 'create')) ? 1 : 0 : 0,
+            initialMode
         }
+    }
+
+    _goUpdate = (review) => {
+        this.setState({
+            initialMode: 'create',
+            index: 1
+        })
+        this.props.handleUpdateMode(review)
     }
 
     render(){
         const { exhibition, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from } = this.props;
+        const { initialMode } = this.state;
         return(
             exhibition ? (
                 <View style={[styles.container]}>
@@ -219,7 +231,7 @@ class ExhibitionContentScreen extends React.Component {
                                                                     style={[{height: 160}, styles.mt15]}
                                                                     >
                                                                         {myReviews.map((review, index) => (
-                                                                            <ArtuiumCard3 from={from} key={index} review={review} navigation={this.props.navigation} my={true} handleChangeMode={this.props.handleChangeMode} />
+                                                                            <ArtuiumCard3 goUpdate={this._goUpdate} from={from} key={index} review={review} navigation={this.props.navigation} my={true} handleChangeMode={this.props.handleChangeMode} />
                                                                         ))}
                                                                     </ScrollView>
                                                                     <View style={[styles.widthFull, styles.px15]}>
@@ -322,7 +334,7 @@ class ExhibitionContentScreen extends React.Component {
                                                             <FlatList 
                                                             data={reviews} 
                                                             renderItem={({item}) => (
-                                                                <ArtuiumCard3 from={from} review={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
+                                                                <ArtuiumCard3 goUpdate={this._goUpdate} from={from} review={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
                                                             )} 
                                                             numColumns={1} 
                                                             keyExtractor={item => String(item.id)} 
@@ -400,9 +412,9 @@ class ExhibitionContentScreen extends React.Component {
                                                         <Text style={[styles.fontMedium, styles.font14, { position: 'absolute', bottom: 15, right: 25 }]}>{content.length}<Text style={[styles.grayD1]}>/500자</Text></Text>
                                                     </View>
                                                     <View style={[styles.mt30, styles.alignItemsCenter, { marginBottom: 70 }]}>
-                                                        <TouchableWithoutFeedback onPress={this.props.submit}>
+                                                        <TouchableWithoutFeedback onPress={initialMode === 'create' ? this.props.update : this.props.submit}>
                                                             <View style={[styles.bgBlack, styles.borderRadius5, styles.px30, styles.py5, isSubmittingReview ? styles.opacity07 : null]}>
-                                                                <Text style={[styles.fontMedium, styles.font16, styles.white]}>등록하기</Text>
+                                                                <Text style={[styles.fontMedium, styles.font16, styles.white]}>{initialMode === 'create' ? `수정하기` : `등록하기`}</Text>
                                                             </View>
                                                         </TouchableWithoutFeedback>
                                                     </View>
@@ -410,7 +422,7 @@ class ExhibitionContentScreen extends React.Component {
                                             )}
                                             {mode === 'review' && (
                                                 <View style={[styles.pb30]}>
-                                                    <ArtuiumCard5 from={from} review={showingReview} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
+                                                    <ArtuiumCard5 goUpdate={this._goUpdate} from={from} review={showingReview} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
                                                     <View style={[styles.divView, styles.mt15]} />
                                                     <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px30, styles.pt20, styles.mb15]}>
                                                         <Text style={[styles.font20, styles.fontBold, {color: '#382a2a'}]}>댓글</Text>

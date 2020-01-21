@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Alert } from 'react-native';
 import PropTypes from 'prop-types';
 import ArtuiumCard3 from './presenter';
 
@@ -10,6 +11,7 @@ class Container extends Component{
         likeReview: PropTypes.func.isRequired,
         unlikeReview: PropTypes.func.isRequired,
         my: PropTypes.bool,
+        reportReview: PropTypes.func.isRequired,
         handleChangeMode:  PropTypes.func
     }
 
@@ -27,7 +29,9 @@ class Container extends Component{
             showProfileModal: false,
             mode: 'follower',
             showFollowModal: false,
-            isSubmitting: false
+            isSubmitting: false,
+            isReporting: false,
+            goUpdate: PropTypes.func.isRequired
         }
     }
 
@@ -177,6 +181,48 @@ class Container extends Component{
             }
         }
     }
+
+    _handleOption = async(index, value) => {
+        console.log(value)
+        if(value === '신고하기'){
+            const { isReporting, is_reported } = this.state;
+            const { reportReview, review : { id } } = this.props;
+            if(!isReporting){
+                if(is_reported){
+                    Alert.alert(null, "이미 신고되었습니다.")
+                }
+                else{
+                    this.setState({
+                        isReporting: true
+                    })
+                    const result = await reportReview(id)
+                    if(result.status === 'ok'){
+                        this.setState({
+                            is_reported: true,
+                            isReporting: false
+                        })
+                        Alert.alert(null, '신고되었습니다.')
+                    }
+                    else if(result.error){
+                        this.setState({
+                            isReporting: false
+                        })
+                        Alert.alert(null, result.error)
+                    }
+                    else{
+                        this.setState({
+                            isReporting: false
+                        })
+                        Alert.alert(null, '오류가 발생하였습니다.')
+                    }
+                }
+            }
+        }
+        else if(value === '수정하기'){
+            const { review, goUpdate } = this.props;
+            goUpdate(review)
+        }
+    }
     
     render(){
         return(
@@ -191,6 +237,7 @@ class Container extends Component{
             unfollow={this._unfollow}
             like={this._like}
             unlike={this._unlike}
+            handleOption={this._handleOption}
             />
         )
     }
