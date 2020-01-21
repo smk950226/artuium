@@ -111,7 +111,13 @@ class ArtuiumCard extends Component{
             return(
                 <Fragment>
                     <View style={[(size === 'xsmall') ? {width: (width/2)-30} : null, (size === 'small') ? {width: (width/2)-20} : null, (size === 'large') ? { width: width-30 } : null, (size === 'xlarge') ? { width: width } : null, styles.mb10, (size === 'xlarge') ? null : styles.artworkBorder, styles.overflowHidden]}>
-                        <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })}>
+                        <TouchableWithoutFeedback onPress={
+                            (size === 'small') ? (
+                                review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })
+                            ) : (
+                                review.artwork ? () => this.props.navigation.navigate('ArtworkDetail', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionDetail', { exhibition: review.exhibition, mode: 'review', review: review, from })
+                            )
+                        }>
                         <ImageBackground source={{uri: review.artwork ? review.artwork.image : review.exhibition ? (review.exhibition.images && (review.exhibition.images.length > 0)) ? review.exhibition.images[0].image : '' : ''}} style={[((size === 'small') || (size === 'xsmall')) ? styles.artworkImage : styles.artworkImageLg, ((size === 'small') || (size === 'xsmall')) ? styles.py5 : styles.py20, ((size === 'small') || (size === 'xsmall')) ? styles.px10 : styles.px15, styles.justifyContentEnd]} resizeMode={'cover'} >
                             {review.artwork ? (
                                 <Fragment>
@@ -194,32 +200,29 @@ class ArtuiumCard extends Component{
                                             </View>
                                         </View>
                                     </TouchableWithoutFeedback>
-                                    <View style={[styles.row, styles.justifyContentBetween, styles.mt5]}>
-                                        <View>
-                                            <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })}>
-                                                <View style={[styles.bgGray12, styles.borderRadius5, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.px10]}>
-                                                    <Text style={[styles.fontMedium, styles.font10, styles.white]}>감상 읽기</Text>
-                                                </View>
-                                            </TouchableWithoutFeedback>
+                                    <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })}>
+                                        <View style={[styles.mt10, { height: 110 }]}>
+                                            <Text style={[styles.fontRegular, styles.font13, styles.lineHeight20]} numberOfLines={5}>
+                                                {stripHtml(review.content)}
+                                            </Text>
                                         </View>
-                                        <View style={[styles.row, styles.alignItemsCenter]}>
-                                            <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })}>
-                                                <Image source={require('../../assets/images/icon_comment.png')} style={[styles.icon12]} />
-                                            </TouchableWithoutFeedback>
-                                            <Text style={[styles.fontMedium, styles.font10, styles.grayD1]}>{abbreviateNumber(reply_count)}</Text>
+                                    </TouchableWithoutFeedback>
+                                    <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })}>
+                                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt10]}>
+                                                <Image source={require('../../assets/images/icon_comment.png')} style={[styles.icon20]} />
+                                            <Text style={[styles.fontMedium, styles.font14, styles.grayD1, styles.ml5]}>{abbreviateNumber(reply_count)}</Text>
                                             <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
                                                 <View style={[styles.row, styles.alignItemsCenter]}>
                                                     {is_liked ? (
-                                                        <Image source={require('../../assets/images/icon_like_active.png')} style={[styles.icon12, styles.ml10]} />
-    
-                                                    ) : (
-                                                        <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon12, styles.ml10]} />
-                                                    )}
-                                                    <Text style={[styles.fontMedium, styles.font10, styles.grayD1]}>{abbreviateNumber(like_count)}</Text>
+                                                        <Image source={require('../../assets/images/icon_like_active.png')} style={[styles.icon20, styles.ml10]} />
+                                                        ) : (
+                                                            <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon20, styles.ml10]} />
+                                                            )}
+                                                    <Text style={[styles.fontMedium, styles.font14, styles.grayD1, styles.ml5]}>{abbreviateNumber(like_count)}</Text>
                                                 </View>
                                             </TouchableWithoutFeedback>
                                         </View>
-                                    </View>
+                                    </TouchableWithoutFeedback>
                                 </Fragment>
                             ) : (
                                 <Fragment>
@@ -280,27 +283,29 @@ class ArtuiumCard extends Component{
                                             </View>
                                         </View>
                                     </TouchableWithoutFeedback>
-                                    <View style={[styles.mt10]}>
-                                        <Text style={[styles.fontRegular, styles.font13, styles.lineHeight20]} numberOfLines={4}>
-                                            {stripHtml(review.content)}
-                                        </Text>
-                                    </View>
-                                    <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt10]}>
-                                        <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })}>
-                                            <Image source={require('../../assets/images/icon_comment.png')} style={[styles.icon30]} />
-                                        </TouchableWithoutFeedback>
-                                        <Text style={[styles.fontMedium, styles.font15, styles.grayD1, styles.ml5]}>{abbreviateNumber(reply_count)}</Text>
-                                        <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
-                                            <View style={[styles.row, styles.alignItemsCenter]}>
-                                                {is_liked ? (
-                                                    <Image source={require('../../assets/images/icon_like_active.png')} style={[styles.icon30, styles.ml20]} />
-                                                ) : (
-                                                    <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon30, styles.ml20]} />
-                                                )}
-                                                <Text style={[styles.fontMedium, styles.font15, styles.grayD1, styles.ml5]}>{abbreviateNumber(like_count)}</Text>
-                                            </View>
-                                        </TouchableWithoutFeedback>
-                                    </View>
+                                    <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })}>
+                                        <View style={[styles.mt10]}>
+                                            <Text style={[styles.fontRegular, styles.font13, styles.lineHeight20]} numberOfLines={4}>
+                                                {stripHtml(review.content)}
+                                            </Text>
+                                        </View>
+                                    </TouchableWithoutFeedback>
+                                    <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })}>
+                                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt10]}>
+                                                <Image source={require('../../assets/images/icon_comment.png')} style={[styles.icon30]} />
+                                            <Text style={[styles.fontMedium, styles.font15, styles.grayD1, styles.ml5]}>{abbreviateNumber(reply_count)}</Text>
+                                            <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
+                                                <View style={[styles.row, styles.alignItemsCenter]}>
+                                                    {is_liked ? (
+                                                        <Image source={require('../../assets/images/icon_like_active.png')} style={[styles.icon30, styles.ml20]} />
+                                                        ) : (
+                                                            <Image source={require('../../assets/images/icon_like.png')} style={[styles.icon30, styles.ml20]} />
+                                                            )}
+                                                    <Text style={[styles.fontMedium, styles.font15, styles.grayD1, styles.ml5]}>{abbreviateNumber(like_count)}</Text>
+                                                </View>
+                                            </TouchableWithoutFeedback>
+                                        </View>
+                                    </TouchableWithoutFeedback>
                                 </Fragment>
                             )}
                         </View>

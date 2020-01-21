@@ -812,7 +812,7 @@ const styles = StyleSheet.create({
     },
     artworkImage: {
         width: '100%',
-        height: 125
+        height: 80
     },
     artworkImageLg: {
         width: '100%',
