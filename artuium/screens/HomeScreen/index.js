@@ -4,9 +4,10 @@ import { actionCreators as reviewActions } from '../../redux/modules/review';
 import { actionCreators as userActions } from '../../redux/modules/user';
 
 const mapStateToProps = (state, ownProps) => {
-    const { review : { initialStatus, newReviews, recommendedReviews, followingReviews }, user : { profile, notificationNew, noticeNew } } = state;
+    const { review : { initialStatus, banners, newReviews, recommendedReviews, followingReviews }, user : { profile, notificationNew, noticeNew } } = state;
     return {
         initialStatus,
+        banners,
         newReviews,
         recommendedReviews,
         followingReviews,

@@ -20,8 +20,9 @@ class AlertScreen extends Component{
 
     constructor(props){
         super(props)
+        const { index } = props;
         this.state = {
-            index: 0,
+            index,
             routes: [
                 { key: 'first', title: '알림' },
                 { key: 'second', title: '공지사항' },

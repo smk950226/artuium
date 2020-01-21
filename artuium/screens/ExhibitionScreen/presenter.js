@@ -112,6 +112,7 @@ class ExhibitionScreen extends React.Component {
                                 <ScrollView
                                     style={[{width: width, height: 400}]}
                                     horizontal={true}
+                                    alwaysBounceVertical={false}
                                     pagingEnabled={true}
                                     showsHorizontalScrollIndicator={false}
                                     onScroll={Animated.event(
@@ -125,7 +126,7 @@ class ExhibitionScreen extends React.Component {
                                 >
                                 {recommendedExhibitions.map((exhibition, index) => {
                                     return(
-                                        <TouchableWithoutFeedback key={index} onPress={() => this.props.navigation.navigate('ExhibitionDetail', { exhibition, from: 'Exhibition' })}>
+                                        <TouchableWithoutFeedback key={index} onPress={() => this.props.navigation.navigate('ExhibitionArtwork', { exhibition, from: 'Exhibition' })}>
                                             <View style={[{zIndex: 999}]}>
                                                 <ExhibitionCard3 from={'Exhibition'} exhibition={exhibition} navigation={this.props.navigation} />
                                             </View>
@@ -202,6 +203,7 @@ class ExhibitionScreen extends React.Component {
                             {recommendedExhibitions && recommendedExhibitions.length > 0 ? (
                                 <ScrollView
                                 horizontal={true}
+                                alwaysBounceVertical={false}
                                 pagingEnabled={true}
                                 showsHorizontalScrollIndicator={false}
                                 onScroll={Animated.event(
@@ -270,7 +272,7 @@ class ExhibitionScreen extends React.Component {
                         </View>
                         <View style={{height: 280}}>
                             {newExhibitions && newExhibitions.length > 0 ? (
-                                <ScrollView contentContainerStyle={[styles.pl15]} horizontal={true} showsHorizontalScrollIndicator={false}>
+                                <ScrollView contentContainerStyle={[styles.pl15]} alwaysBounceVertical={false} horizontal={true} showsHorizontalScrollIndicator={false}>
                                 {newExhibitions.map((exhibition, index) => {
                                     return(
                                         <ExhibitionCard2 from={'Exhibition'} key={index} exhibition={exhibition} navigation={this.props.navigation} />
@@ -292,7 +294,7 @@ class ExhibitionScreen extends React.Component {
                         </View>
                         <View style={{height: 280}}>
                                 {hotExhibitions && hotExhibitions.length > 0 ? (
-                                    <ScrollView contentContainerStyle={[styles.pl15]} horizontal={true} showsHorizontalScrollIndicator={false}>
+                                    <ScrollView contentContainerStyle={[styles.pl15]} horizontal={true} alwaysBounceVertical={false} showsHorizontalScrollIndicator={false}>
                                     {hotExhibitions.map((exhibition, index) => {
                                         return(
                                             <ExhibitionCard2 from={'Exhibition'} key={index} exhibition={exhibition} navigation={this.props.navigation} />
@@ -312,7 +314,7 @@ class ExhibitionScreen extends React.Component {
                         </View>
                         <View style={{height: 280}}>
                                 {pastExhibitions && pastExhibitions.length > 0 ? (
-                                    <ScrollView contentContainerStyle={[styles.pl15]} horizontal={true} showsHorizontalScrollIndicator={false}>
+                                    <ScrollView contentContainerStyle={[styles.pl15]} horizontal={true} alwaysBounceVertical={false} showsHorizontalScrollIndicator={false}>
                                     {pastExhibitions.map((exhibition, index) => {
                                         return(
                                             <ExhibitionCard2 from={'Exhibition'} key={index} exhibition={exhibition} navigation={this.props.navigation} />

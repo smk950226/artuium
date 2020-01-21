@@ -84,6 +84,7 @@ const SearchScreen = (props) => (
                 {props.artworks && props.artworks.length > 0 ? (
                     <ScrollView
                     horizontal={true}
+                    alwaysBounceVertical={false}
                     showsHorizontalScrollIndicator={false}
                     style={[styles.mt15]}
                     >
@@ -104,6 +105,7 @@ const SearchScreen = (props) => (
                 {props.exhibitions && props.exhibitions.length > 0 ? (
                     <ScrollView
                     horizontal={true}
+                    alwaysBounceVertical={false}
                     showsHorizontalScrollIndicator={false}
                     style={[styles.mt15]}
                     >

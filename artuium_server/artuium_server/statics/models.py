@@ -6,6 +6,7 @@ class Notice(models.Model):
     content = models.TextField('내용')
     image = models.ImageField('이미지', upload_to = 'notice/image/', blank = True, null = True)
     is_banner = models.BooleanField('배너 여부')
+    index = models.PositiveIntegerField('순서', default = 1)
 
     def __str__(self):
         return self.title

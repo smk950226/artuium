@@ -86,6 +86,7 @@ class ExhibitionArtworkScreen extends Component{
                         scrollEnabled={true}
                         horizontal={true}
                         pagingEnabled={true}
+                        alwaysBounceVertical={false}
                         showsHorizontalScrollIndicator={false}
                         ref={el => this.scrollView = el}
                         onScroll={Animated.event(

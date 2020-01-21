@@ -11,6 +11,7 @@ const { width, height } = Dimensions.get('window')
 
 class HomeScreen extends Component {
     static propTypes = {
+        banners: PropTypes.array,
         newReviews: PropTypes.array,
         recommendedReviews: PropTypes.array,
         followingReviews: PropTypes.array,
@@ -19,7 +20,7 @@ class HomeScreen extends Component {
     }
 
     render() {
-        const { newReviews, recommendedReviews, followingReviews, noticeNew, notificationNew } = this.props;
+        const { banners, newReviews, recommendedReviews, followingReviews, noticeNew, notificationNew } = this.props;
         return (
             <View style={[styles.container, styles.paddingIOS]}>
                 <View
@@ -45,11 +46,23 @@ class HomeScreen extends Component {
                 </View>
                 <View style={[styles.container]}>
                     <ScrollView>
-                        <ScrollView scrollEventThrottle={16} horizontal={true} pagingEnabled={true} style={[styles.bgWhite, {width, height: 280, zIndex: 10}]} >
-                            <Image resizeMode={'cover'} source={require('../../assets/images/mona.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
-                            <Image resizeMode={'cover'} source={require('../../assets/images/monc.jpg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
-                            <Image resizeMode={'cover'} source={require('../../assets/images/goh.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
-                        </ScrollView>
+                        {banners && banners.length > 0 ? (
+                            <ScrollView alwaysBounceVertical={false} alwaysBounceVertical={false} horizontal={true} pagingEnabled={true} style={[styles.bgWhite, {width, height: 280, zIndex: 10}]} >
+                                {banners.map((ban, index) => (
+                                    <TouchableWithoutFeedback key={index} onPress={() => this.props.navigation.navigate('Alert', { notificationNew, noticeNew, handleNoticeNewChange: this.props.handleNoticeNewChange, handleNotificationNewChange: this.props.handleNotificationNewChange, index: 1 })}>
+                                        <View>
+                                            <Image resizeMode={'cover'} source={{uri: ban.image ? ban.image : ''}} resizeMode={'cover'} style={[{height: '100%', width}]} />
+                                        </View>
+                                    </TouchableWithoutFeedback>
+                                ))}
+                            </ScrollView>
+                        ) : (
+                            <ScrollView alwaysBounceVertical={false} scrollEventThrottle={16} alwaysBounceVertical={false} horizontal={true} pagingEnabled={true} style={[styles.bgWhite, {width, height: 280, zIndex: 10}]} >
+                                <Image resizeMode={'cover'} source={require('../../assets/images/mona.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
+                                <Image resizeMode={'cover'} source={require('../../assets/images/monc.jpg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
+                                <Image resizeMode={'cover'} source={require('../../assets/images/goh.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
+                            </ScrollView>
+                        )}
                         <View style={[styles.center, styles.alignSelfCenter, styles.bgWhite, styles.homeMenuShadow,
                             {width: width*0.9, height: 80, borderRadius: 10, marginTop: -40, zIndex: 999 },
                         ]}>
@@ -100,6 +113,7 @@ class HomeScreen extends Component {
                             </View>
                             <ScrollView
                                 horizontal={(newReviews && (newReviews.length > 0)) ? true : false}
+                                alwaysBounceVertical={false}
                                 pagingEnabled={(newReviews && (newReviews.length > 0)) ? true : false}
                                 scrollEnabled={(newReviews && (newReviews.length > 0)) ? true : false}
                                 showsHorizontalScrollIndicator={false}
@@ -130,6 +144,7 @@ class HomeScreen extends Component {
                             horizontal={(followingReviews && (followingReviews.length > 0)) ? true : false}
                             pagingEnabled={(followingReviews && (followingReviews.length > 0)) ? true : false}
                             scrollEnabled={(followingReviews && (followingReviews.length > 0)) ? true : false}
+                            alwaysBounceVertical={false}
                             showsHorizontalScrollIndicator={false}
                             >
                                 {(followingReviews && (followingReviews.length > 0)) ? (

@@ -3,7 +3,7 @@ from . import models
 
 @admin.register(models.Notice)
 class NoticeAdmin(admin.ModelAdmin):
-    list_display = ["id", "title", 'date']
+    list_display = ["id", "title", 'date', 'is_banner', 'index']
     list_display_links = ["id", "title"]
 
 

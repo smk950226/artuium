@@ -329,7 +329,10 @@ function getExhibitionLikeListMore(userId, page){
 }
 
 const initialState = {
-    
+    newExhibitions: [],
+    recommendedExhibitions: [],
+    hotExhibitions: [],
+    pastExhibitions: [],
 };
 
 function reducer(state = initialState, action){

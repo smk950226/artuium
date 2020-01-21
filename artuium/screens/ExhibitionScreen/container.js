@@ -25,7 +25,7 @@ class Container extends Component{
         super(props);
         const { noticeNew, notificationNew } = props;
         this.state = {
-            loading: true,
+            loading: false,
             fetchedNew: false,
             fetchedRecommended: false,
             fetchedHot: false,

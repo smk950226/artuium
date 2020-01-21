@@ -29,11 +29,14 @@ class InitialReview(APIView):
         recommended_reviews = reviews.filter(recommended = True)[:5]
         following_reviews = reviews.filter(author__id__in = following)[:5]
 
+        banners = models.Notice.objects.filter(is_banner = True).order_by('index')
+
         return Response(status = status.HTTP_200_OK, data = {
             'status': 'ok',
             'new_reviews': serializers.ReviewSerializer(new_reviews, many = True, context = {'request': request}).data,
             'recommended_reviews': serializers.ReviewSerializer(recommended_reviews, many = True, context = {'request': request}).data,
             'following_reviews': serializers.ReviewSerializer(following_reviews, many = True, context = {'request': request}).data,
+            'banners': serializers.NoticeSerializer(banners, many = True, context = {'request': request}).data
         })
 
 

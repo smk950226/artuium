@@ -9,10 +9,12 @@ class Container extends Component{
         const noticeNew = props.navigation.getParam('noticeNew', null)
         const handleNoticeNewChange = props.navigation.getParam('handleNoticeNewChange', null)
         const handleNotificationNewChange = props.navigation.getParam('handleNotificationNewChange', null)
+        const index = props.navigation.getParam('index', 0)
 
         this.state = {
             notificationNew,
-            noticeNew
+            noticeNew,
+            index
         }
 
         this.handleNoticeNewChange = handleNoticeNewChange

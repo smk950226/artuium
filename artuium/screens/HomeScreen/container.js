@@ -8,6 +8,7 @@ import { NavigationEvents } from "react-navigation";
 
 class Container extends Component{
     static propTypes = {
+        banners: PropTypes.array,
         newReviews: PropTypes.array,
         recommendedReviews: PropTypes.array,
         followingReviews: PropTypes.array,
@@ -25,7 +26,7 @@ class Container extends Component{
         super(props);
         const { noticeNew, notificationNew } = props;
         this.state = {
-            loading: true,
+            loading: false,
             fetchedProfile: false,
             fetchedNew: false,
             fetchedRecommended: false,
@@ -144,7 +145,6 @@ class Container extends Component{
     componentDidUpdate = () => {
         if(this.props.profile && this.state.fetchedNew && this.state.fetchedRecommended && this.state.fetchedFollowing && this.state.fetchedProfile && !this.state.fetchClear){
             this.setState({
-                loading: false,
                 fetchClear: true
             })
             if(this.state.pushPermission){

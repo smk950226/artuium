@@ -228,6 +228,7 @@ class ExhibitionContentScreen extends React.Component {
                                                                     scrollEnabled={myReviews.length > 1 ? true : false}
                                                                     pagingEnabled={true}
                                                                     horizontal={true}
+                                                                    alwaysBounceVertical={false}
                                                                     showsHorizontalScrollIndicator={false}
                                                                     style={[{height: 160}, styles.mt15]}
                                                                     >
