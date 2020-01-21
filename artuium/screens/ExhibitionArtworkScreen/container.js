@@ -5,7 +5,8 @@ import ExhibitionArtworkScreen from './presenter';
 class Container extends Component{
     static propTypes = {
         likeExhibition: PropTypes.func.isRequired,
-        unlikeExhibition: PropTypes.func.isRequired
+        unlikeExhibition: PropTypes.func.isRequired,
+        viewExhibition: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -22,6 +23,13 @@ class Container extends Component{
             from,
             isSubmitting: false
         }
+    }
+
+    componentDidMount = () => {
+        const { viewExhibition } = this.props;
+        const { exhibition : { id } } = this.state;
+        console.log('???????')
+        viewExhibition(id)
     }
 
     _like = async() => {

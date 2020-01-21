@@ -328,6 +328,27 @@ function getExhibitionLikeListMore(userId, page){
     }
 }
 
+function viewExhibition(exhibitionId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        fetch(`${FETCH_URL}/api/exhibition/exhibition/view/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            },
+            body: JSON.stringify({
+                exhibitionId
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+            }
+        })
+    }
+}
+
 const initialState = {
     newExhibitions: [],
     recommendedExhibitions: [],
@@ -369,7 +390,8 @@ const actionCreators = {
     getExhibitionLikeList,
     getExhibitionLikeListMore,
     updateExhibitionReview,
-    deleteExhibitionReview
+    deleteExhibitionReview,
+    viewExhibition
 }
 
 export { actionCreators }

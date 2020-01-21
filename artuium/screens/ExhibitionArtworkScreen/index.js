@@ -9,6 +9,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         unlikeExhibition: (exhibitionId) => {
             return dispatch(exhibitionActions.unlikeExhibition(exhibitionId))
+        },
+        viewExhibition: (exhibitionId) => {
+            return dispatch(exhibitionActions.viewExhibition(exhibitionId))
         }
     }
 }
