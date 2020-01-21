@@ -158,6 +158,33 @@ function updateArtworkReview(artworkId, reviewId, rating, expression, content){
     }
 }
 
+function deleteArtworkReview(artworkId, reviewId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/review/artwork/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            },
+            body: JSON.stringify({
+                artworkId,
+                reviewId
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 function getArtworkLikeList(userId){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
@@ -224,7 +251,8 @@ const actionCreators = {
     createArtworkReview,
     getArtworkLikeList,
     getArtworkLikeListMore,
-    updateArtworkReview
+    updateArtworkReview,
+    deleteArtworkReview
 }
 
 export { actionCreators }

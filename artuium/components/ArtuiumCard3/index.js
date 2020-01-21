@@ -2,6 +2,8 @@ import { connect } from 'react-redux';
 import Container from './container';
 import { actionCreators as userActions } from '../../redux/modules/user';
 import { actionCreators as reviewActions } from '../../redux/modules/review';
+import { actionCreators as exhibitionActions } from '../../redux/modules/exhibition';
+import { actionCreators as artworkActions } from '../../redux/modules/artwork';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return{
@@ -19,6 +21,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         reportReview: (reviewId) => {
             return dispatch(reviewActions.reportReview(reviewId))
+        },
+        deleteExhibitionReview: (exhibitionId, reviewId) => {
+            return dispatch(exhibitionActions.deleteExhibitionReview(exhibitionId, reviewId))
+        },
+        deleteArtworkReview: (artworkId, reviewId) => {
+            return dispatch(artworkActions.deleteArtworkReview(artworkId, reviewId))
         }
     }
 }

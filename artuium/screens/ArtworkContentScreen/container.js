@@ -592,6 +592,42 @@ class Container extends Component{
         })
     }
 
+    _deleteReview = (reviewId) => {
+        let newMyReviews = []
+        this.state.myReviews.map(rev => {
+            if(rev.id === reviewId){
+                return null
+            }
+            else{
+                newMyReviews.push(rev)
+            }
+        })
+        let newReviews = []
+        this.state.reviews.map(rev => {
+            if(rev.id === reviewId){
+                return null
+            }
+            else{
+                newReviews.push(rev)
+            }
+        })
+        if(newMyReviews.length > 0){
+            this.setState({
+                myReviews: newMyReviews,
+                reviews: newReviews,
+                mode: 'list'
+            })
+        }
+        else{
+            this.setState({
+                myReviews: [],
+                is_reviewed: false,
+                reviews: newReviews,
+                mode: 'list'
+            })
+        }
+    }
+
     render(){
         return(
             <ArtworkContentScreen 
@@ -613,6 +649,7 @@ class Container extends Component{
             selectReply={this._selectReply}
             update={this._update}
             handleUpdateMode={this._handleUpdateMode}
+            deleteReview={this._deleteReview}
             />
         )
     }

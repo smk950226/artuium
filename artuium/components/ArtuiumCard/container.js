@@ -13,7 +13,9 @@ class Container extends Component{
         likeReview: PropTypes.func.isRequired,
         unlikeReview: PropTypes.func.isRequired,
         from: PropTypes.string,
-        reportReview: PropTypes.func.isRequired
+        reportReview: PropTypes.func.isRequired,
+        deleteExhibitionReview: PropTypes.func.isRequired,
+        deleteArtworkReview: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -32,7 +34,9 @@ class Container extends Component{
             follower_count,
             mode: 'follower',
             showFollowModal: false,
-            isReporting: false
+            isReporting: false,
+            isDeleting: false,
+            deleted: false
         }
     }
 
@@ -230,6 +234,86 @@ class Container extends Component{
             }
             else{
                 navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'create', review: review, from })
+            }
+        }
+        else if(value === '삭제하기'){
+            const { isDeleting } = this.state;
+            const { deleteArtworkReview, deleteExhibitionReview, review } = this.props;
+            if(review.artwork){
+                if(!isDeleting){
+                    Alert.alert(null, '정말 삭제하시겠습니까?',
+                    [
+                        {text: 'YES', onPress: async() => {
+                            this.setState({
+                                isDeleting: true
+                            })
+                            const result = await deleteArtworkReview(review.artwork.id, review.id)
+                            if(result.status === 'ok'){
+                                this.setState({
+                                    isDeleting: false,
+                                    deleted: true
+                                })
+                            }
+                            else if(result.error){
+                                this.setState({
+                                    isDeleting: false,
+                                    deleted: false
+                                })
+                                Alert.alert(null, result.error)
+                            }
+                            else{
+                                this.setState({
+                                    isDeleting: false,
+                                    deleted: false
+                                })
+                                Alert.alert(null, '오류가 발생하였습니다.')
+                            }
+                        }},
+                        {
+                          text: 'CANCEL',
+                          onPress: () => console.log('Cancel Pressed'),
+                          style: 'cancel',
+                        }
+                    ])
+                }
+            }
+            else{
+                if(!isDeleting){
+                    Alert.alert(null, '정말 삭제하시겠습니까?',
+                    [
+                        {text: 'YES', onPress: async() => {
+                            this.setState({
+                                isDeleting: true
+                            })
+                            const result = await deleteExhibitionReview(review.exhibition.id, review.id)
+                            if(result.status === 'ok'){
+                                this.setState({
+                                    isDeleting: false,
+                                    deleted: true
+                                })
+                            }
+                            else if(result.error){
+                                this.setState({
+                                    isDeleting: false,
+                                    deleted: false
+                                })
+                                Alert.alert(null, result.error)
+                            }
+                            else{
+                                this.setState({
+                                    isDeleting: false,
+                                    deleted: false
+                                })
+                                Alert.alert(null, '오류가 발생하였습니다.')
+                            }
+                        }},
+                        {
+                          text: 'CANCEL',
+                          onPress: () => console.log('Cancel Pressed'),
+                          style: 'cancel',
+                        }
+                    ])
+                }
             }
         }
     }

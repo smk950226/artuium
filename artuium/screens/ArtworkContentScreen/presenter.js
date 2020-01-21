@@ -85,7 +85,8 @@ class ArtworkContentScreen extends React.Component {
         createReview: PropTypes.func.isRequired,
         selectReply: PropTypes.func.isRequired,
         selectedReply: PropTypes.object.isRequired,
-        handleUpdateMode: PropTypes.func.isRequired
+        handleUpdateMode: PropTypes.func.isRequired,
+        deleteReview: PropTypes.func.isRequired
     }
     constructor(props){
         super(props);
@@ -204,7 +205,7 @@ class ArtworkContentScreen extends React.Component {
                                                                     style={[{height: 160}, styles.mt15]}
                                                                     >
                                                                         {myReviews.map((review, index) => (
-                                                                            <ArtuiumCard3 goUpdate={this._goUpdate} from={from} key={index} review={review} navigation={this.props.navigation} my={true} handleChangeMode={this.props.handleChangeMode} />
+                                                                            <ArtuiumCard3 deleteReview={this.props.deleteReview} goUpdate={this._goUpdate} from={from} key={index} review={review} navigation={this.props.navigation} my={true} handleChangeMode={this.props.handleChangeMode} />
                                                                         ))}
                                                                     </ScrollView>
                                                                     <View style={[styles.widthFull, styles.px15]}>
@@ -307,7 +308,7 @@ class ArtworkContentScreen extends React.Component {
                                                             <FlatList 
                                                             data={reviews} 
                                                             renderItem={({item}) => (
-                                                                <ArtuiumCard3 goUpdate={this._goUpdate} from={from} review={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
+                                                                <ArtuiumCard3 deleteReview={this.props.deleteReview} goUpdate={this._goUpdate} from={from} review={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
                                                             )} 
                                                             numColumns={1} 
                                                             keyExtractor={item => String(item.id)} 
@@ -395,7 +396,7 @@ class ArtworkContentScreen extends React.Component {
                                             )}
                                             {mode === 'review' && (
                                                 <View style={[styles.pb30]}>
-                                                    <ArtuiumCard5 goUpdate={this._goUpdate} from={from} review={showingReview} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
+                                                    <ArtuiumCard5 deleteReview={this.props.deleteReview} goUpdate={this._goUpdate} from={from} review={showingReview} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
                                                     <View style={[styles.divView, styles.mt15]} />
                                                     <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px30, styles.pt20, styles.mb15]}>
                                                         <Text style={[styles.font20, styles.fontBold, {color: '#382a2a'}]}>댓글</Text>

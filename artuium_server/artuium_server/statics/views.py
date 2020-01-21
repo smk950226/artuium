@@ -366,22 +366,34 @@ class ExhibitionReview(APIView):
 
                 if page == '1':
                     my_review = reviews.filter(author = request.user)
-                    thumb = reviews_count.filter(expression = 'thumb').count()/reviews_count.count()
-                    good = reviews_count.filter(expression = 'good').count()/reviews_count.count()
-                    soso = reviews_count.filter(expression = 'soso').count()/reviews_count.count()
-                    sad = reviews_count.filter(expression = 'sad').count()/reviews_count.count()
-                    surprise = reviews_count.filter(expression = 'surprise').count()/reviews_count.count()
+                    if reviews_count.count() > 0:
+                        thumb = reviews_count.filter(expression = 'thumb').count()/reviews_count.count()
+                        good = reviews_count.filter(expression = 'good').count()/reviews_count.count()
+                        soso = reviews_count.filter(expression = 'soso').count()/reviews_count.count()
+                        sad = reviews_count.filter(expression = 'sad').count()/reviews_count.count()
+                        surprise = reviews_count.filter(expression = 'surprise').count()/reviews_count.count()
 
-                    return Response(status = status.HTTP_200_OK, data = {
-                        'status': 'ok', 
-                        'reviews': serializer.data, 
-                        'my_review': serializers.ReviewSerializer(my_review, many = True, context = {'request': request}).data,
-                        'thumb': thumb,
-                        'good': good,
-                        'soso': soso,
-                        'sad': sad,
-                        'surprise': surprise
-                    })
+                        return Response(status = status.HTTP_200_OK, data = {
+                            'status': 'ok', 
+                            'reviews': serializer.data, 
+                            'my_review': serializers.ReviewSerializer(my_review, many = True, context = {'request': request}).data,
+                            'thumb': thumb,
+                            'good': good,
+                            'soso': soso,
+                            'sad': sad,
+                            'surprise': surprise
+                        })
+                    else:
+                        return Response(status = status.HTTP_200_OK, data = {
+                            'status': 'ok', 
+                            'reviews': serializer.data, 
+                            'my_review': serializers.ReviewSerializer(my_review, many = True, context = {'request': request}).data,
+                            'thumb': 0,
+                            'good': 0,
+                            'soso': 0,
+                            'sad': 0,
+                            'surprise': 0
+                        })
                 else:
                     return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'reviews': serializer.data})
             except:
@@ -404,22 +416,34 @@ class ExhibitionReview(APIView):
                 exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
                 total_rate = exhibition.total_rate
                 reviews = exhibition.reviews
-                thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
-                good = reviews.filter(expression = 'good').count()/reviews.count()
-                soso = reviews.filter(expression = 'soso').count()/reviews.count()
-                sad = reviews.filter(expression = 'sad').count()/reviews.count()
-                surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+                if reviews.count() > 0:
+                    thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                    good = reviews.filter(expression = 'good').count()/reviews.count()
+                    soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                    sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                    surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
 
-                return Response(status = status.HTTP_200_OK, data = {
-                    'status': 'ok', 
-                    'review': serializer.data,
-                    'thumb': thumb,
-                    'good': good,
-                    'soso': soso,
-                    'sad': sad,
-                    'surprise': surprise,
-                    'total_rate': total_rate
-                })
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'review': serializer.data,
+                        'thumb': thumb,
+                        'good': good,
+                        'soso': soso,
+                        'sad': sad,
+                        'surprise': surprise,
+                        'total_rate': total_rate
+                    })
+                else:
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'review': serializer.data,
+                        'thumb': 0,
+                        'good': 0,
+                        'soso': 0,
+                        'sad': 0,
+                        'surprise': 0,
+                        'total_rate': total_rate
+                    })
             except:
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
         else:
@@ -443,22 +467,77 @@ class ExhibitionReview(APIView):
                 exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
                 total_rate = exhibition.total_rate
                 reviews = exhibition.reviews
-                thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
-                good = reviews.filter(expression = 'good').count()/reviews.count()
-                soso = reviews.filter(expression = 'soso').count()/reviews.count()
-                sad = reviews.filter(expression = 'sad').count()/reviews.count()
-                surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+                if reviews.count() > 0:
+                    thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                    good = reviews.filter(expression = 'good').count()/reviews.count()
+                    soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                    sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                    surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
 
-                return Response(status = status.HTTP_200_OK, data = {
-                    'status': 'ok', 
-                    'review': serializer.data,
-                    'thumb': thumb,
-                    'good': good,
-                    'soso': soso,
-                    'sad': sad,
-                    'surprise': surprise,
-                    'total_rate': total_rate
-                })
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'review': serializer.data,
+                        'thumb': thumb,
+                        'good': good,
+                        'soso': soso,
+                        'sad': sad,
+                        'surprise': surprise,
+                        'total_rate': total_rate
+                    })
+                else:
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'review': serializer.data,
+                        'thumb': 0,
+                        'good': 0,
+                        'soso': 0,
+                        'sad': 0,
+                        'surprise': 0,
+                        'total_rate': total_rate
+                    })
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상을 선택해주세요.'})
+    
+
+    def delete(self, request, format = None):
+        review_id = request.data.get('reviewId', None)
+        exhibition_id = request.data.get('exhibitionId', None)
+        user = request.user
+        if review_id and exhibition_id:
+            try:
+                review = models.Review.objects.get(id = review_id)
+                review.delete()
+                exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
+                total_rate = exhibition.total_rate
+                reviews = exhibition.reviews
+                if reviews.count() > 0:
+                    thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                    good = reviews.filter(expression = 'good').count()/reviews.count()
+                    soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                    sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                    surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'thumb': thumb,
+                        'good': good,
+                        'soso': soso,
+                        'sad': sad,
+                        'surprise': surprise,
+                        'total_rate': total_rate
+                    })
+                else:
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'thumb': 0,
+                        'good': 0,
+                        'soso': 0,
+                        'sad': 0,
+                        'surprise': 0,
+                        'total_rate': total_rate
+                    })
             except:
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
         else:
@@ -481,22 +560,34 @@ class ArtworkReview(APIView):
 
                 if page == '1':
                     my_review = reviews.filter(author = request.user)
-                    thumb = reviews_count.filter(expression = 'thumb').count()/reviews_count.count()
-                    good = reviews_count.filter(expression = 'good').count()/reviews_count.count()
-                    soso = reviews_count.filter(expression = 'soso').count()/reviews_count.count()
-                    sad = reviews_count.filter(expression = 'sad').count()/reviews_count.count()
-                    surprise = reviews_count.filter(expression = 'surprise').count()/reviews_count.count()
+                    if reviews_count.count() > 0:
+                        thumb = reviews_count.filter(expression = 'thumb').count()/reviews_count.count()
+                        good = reviews_count.filter(expression = 'good').count()/reviews_count.count()
+                        soso = reviews_count.filter(expression = 'soso').count()/reviews_count.count()
+                        sad = reviews_count.filter(expression = 'sad').count()/reviews_count.count()
+                        surprise = reviews_count.filter(expression = 'surprise').count()/reviews_count.count()
 
-                    return Response(status = status.HTTP_200_OK, data = {
-                        'status': 'ok', 
-                        'reviews': serializer.data, 
-                        'my_review': serializers.ReviewSerializer(my_review, many = True, context = {'request': request}).data,
-                        'thumb': thumb,
-                        'good': good,
-                        'soso': soso,
-                        'sad': sad,
-                        'surprise': surprise
-                    })
+                        return Response(status = status.HTTP_200_OK, data = {
+                            'status': 'ok', 
+                            'reviews': serializer.data, 
+                            'my_review': serializers.ReviewSerializer(my_review, many = True, context = {'request': request}).data,
+                            'thumb': thumb,
+                            'good': good,
+                            'soso': soso,
+                            'sad': sad,
+                            'surprise': surprise
+                        })
+                    else:
+                        return Response(status = status.HTTP_200_OK, data = {
+                            'status': 'ok', 
+                            'reviews': serializer.data, 
+                            'my_review': serializers.ReviewSerializer(my_review, many = True, context = {'request': request}).data,
+                            'thumb': 0,
+                            'good': 0,
+                            'soso': 0,
+                            'sad': 0,
+                            'surprise': 0
+                        })
                 else:
                     return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'reviews': serializer.data})
             except:
@@ -519,22 +610,34 @@ class ArtworkReview(APIView):
                 artwork = artwork_models.Artwork.objects.get(id = artwork_id)
                 total_rate = artwork.total_rate
                 reviews = artwork.reviews
-                thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
-                good = reviews.filter(expression = 'good').count()/reviews.count()
-                soso = reviews.filter(expression = 'soso').count()/reviews.count()
-                sad = reviews.filter(expression = 'sad').count()/reviews.count()
-                surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+                if reviews.count() > 0:
+                    thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                    good = reviews.filter(expression = 'good').count()/reviews.count()
+                    soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                    sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                    surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
 
-                return Response(status = status.HTTP_200_OK, data = {
-                    'status': 'ok', 
-                    'review': serializer.data,
-                    'thumb': thumb,
-                    'good': good,
-                    'soso': soso,
-                    'sad': sad,
-                    'surprise': surprise,
-                    'total_rate': total_rate
-                })
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'review': serializer.data,
+                        'thumb': thumb,
+                        'good': good,
+                        'soso': soso,
+                        'sad': sad,
+                        'surprise': surprise,
+                        'total_rate': total_rate
+                    })
+                else:
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'review': serializer.data,
+                        'thumb': 0,
+                        'good': 0,
+                        'soso': 0,
+                        'sad': 0,
+                        'surprise': 0,
+                        'total_rate': total_rate
+                    })
             except:
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
         else:
@@ -558,26 +661,80 @@ class ArtworkReview(APIView):
                 artwork = artwork_models.Artwork.objects.get(id = artwork_id)
                 total_rate = artwork.total_rate
                 reviews = artwork.reviews
-                thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
-                good = reviews.filter(expression = 'good').count()/reviews.count()
-                soso = reviews.filter(expression = 'soso').count()/reviews.count()
-                sad = reviews.filter(expression = 'sad').count()/reviews.count()
-                surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+                if reviews.count() > 0:
+                    thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                    good = reviews.filter(expression = 'good').count()/reviews.count()
+                    soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                    sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                    surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
 
-                return Response(status = status.HTTP_200_OK, data = {
-                    'status': 'ok', 
-                    'review': serializer.data,
-                    'thumb': thumb,
-                    'good': good,
-                    'soso': soso,
-                    'sad': sad,
-                    'surprise': surprise,
-                    'total_rate': total_rate
-                })
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'review': serializer.data,
+                        'thumb': thumb,
+                        'good': good,
+                        'soso': soso,
+                        'sad': sad,
+                        'surprise': surprise,
+                        'total_rate': total_rate
+                    })
+                else:
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'review': serializer.data,
+                        'thumb': 0,
+                        'good': 0,
+                        'soso': 0,
+                        'sad': 0,
+                        'surprise': 0,
+                        'total_rate': total_rate
+                    })
             except:
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '작품이 존재하지 않습니다.'})
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '작품을 선택해주세요.'})
+    
+    def delete(self, request, format = None):
+        review_id = request.data.get('reviewId', None)
+        artwork_id = request.data.get('artworkId', None)
+        user = request.user
+        if review_id and artwork_id:
+            try:
+                review = models.Review.objects.get(id = review_id)
+                review.delete()
+                artwork = artwork_models.Artwork.objects.get(id = artwork_id)
+                total_rate = artwork.total_rate
+                reviews = artwork.reviews
+                if reviews.count() > 0:
+                    thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                    good = reviews.filter(expression = 'good').count()/reviews.count()
+                    soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                    sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                    surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'thumb': thumb,
+                        'good': good,
+                        'soso': soso,
+                        'sad': sad,
+                        'surprise': surprise,
+                        'total_rate': total_rate
+                    })
+                else:
+                    return Response(status = status.HTTP_200_OK, data = {
+                        'status': 'ok', 
+                        'thumb': 0,
+                        'good': 0,
+                        'soso': 0,
+                        'sad': 0,
+                        'surprise': 0,
+                        'total_rate': 0
+                    })
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상을 선택해주세요.'})
 
 
 class Notification(APIView):
