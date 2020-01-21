@@ -13,18 +13,33 @@ class UserComp extends Component{
         size: PropTypes.string
     }
 
+    _handleGoToProfile = () => {
+        if(this.props.is_me){
+            this.props.navigation.navigate('Profile')
+        }
+        else{
+            this.props.navigation.navigate('OthersProfile', {others: this.props.user})
+        }
+    }
+
     render(){
         const { user, is_following, is_me, size } = this.props;
         return(
             <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px20, styles.py15]}>
                  <View style={[styles.row, styles.alignItemsCenter]}>
-                    {user.profile_image ? (
-                        <Image source={{uri: user.profile_image}} style={[size === 'large' ? styles.profileImage50 : styles.profileImage40]} resizeMode={'cover'} />
-                    ) : (
-                        <Image source={require('../../assets/images/empty_profile.png')} style={[size === 'large' ? styles.profileImage50 : styles.profileImage40]} />
-                    )}
+                     <TouchableWithoutFeedback onPress={this._handleGoToProfile}>
+                         <View>
+                            {user.profile_image ? (
+                                <Image source={{uri: user.profile_image}} style={[size === 'large' ? styles.profileImage50 : styles.profileImage40]} resizeMode={'cover'} />
+                            ) : (
+                                <Image source={require('../../assets/images/empty_profile.png')} style={[size === 'large' ? styles.profileImage50 : styles.profileImage40]} />
+                            )}
+                         </View>
+                     </TouchableWithoutFeedback>
                     <View style={[styles.ml10]}>
-                        <Text style={[styles.fontMedium, styles.font16]}>{user.nickname}</Text>
+                        <TouchableWithoutFeedback onPress={this._handleGoToProfile}>
+                            <Text style={[styles.fontMedium, styles.font16]}>{user.nickname}</Text>
+                        </TouchableWithoutFeedback>
                         <Text style={[styles.fontRegular, styles.font12]}>{`팔로우하는 내 친구 ${user.following_friends_count}명`}</Text>
                     </View>
                 </View>

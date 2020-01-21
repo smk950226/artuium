@@ -29,7 +29,7 @@ class ProfileScreen extends React.Component {
     render(){
         const { others, profile, loadingReviewList, isLoadingMore, hasNextPage, reviewList, refreshing } = this.props;
         return(
-            <SafeAreaView style={[styles.container]}>
+            <View style={[styles.container]}>
                 <View style={[styles.row, styles.justifyContentBetween, styles.alignItemsCenter, styles.px25, styles.bgWhite, {width, height: iosStatusBarHeight+50, paddingTop: iosStatusBarHeight}]}>
                     <TouchableWithoutFeedback onPress={() => this.props.navigation.goBack(null)}>
                         <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
@@ -149,7 +149,7 @@ class ProfileScreen extends React.Component {
                         )
                     )}
                 </ScrollView>
-            </SafeAreaView>
+            </View>
         )
     }
 }

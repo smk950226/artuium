@@ -103,8 +103,8 @@ class ArtuiumCard extends Component{
         const { review, size, showProfileModal, showFollowModal, is_me, is_following, follower_count, following_count, is_liked, like_count, reply_count, from } = this.props;
         return(
             <Fragment>
-                <View style={[(size === 'xsmall') ? {width: (width/2)-30} : null, (size === 'small') ? {width: (width/2)-20} : null, (size === 'large') ? { width: width-30 } : null, (size === 'xlarge') ? { width: width } : null, styles.mb10, (size === 'xlarge') ? null : styles.artworkBorder, styles.overflowHidden]}>
-                    <TouchableWithoutFeedback onPress={review.artwork ? ()=> this.props.navigation.navigate('ArtworkDetail', { artwork: review.artwork, from }) : () => this.props.navigation.navigate('ExhibitionDetail', { exhibition: review.exhibition, from })}>
+                <View style={[(size === 'xsmall') ? {width: (width/2)-30} : null, (size === 'small') ? {width: (width/2)-20} : null, (size === 'large') ? { width: width-30 } : null, (size === 'xlarge') ? { width: width } : null, styles.mb10, (size === 'xlarge') ? null : styles.artworkBorder, styles.overflowHidden]}>    
+                <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })}>
                     <ImageBackground source={{uri: review.artwork ? review.artwork.image : review.exhibition ? (review.exhibition.images && (review.exhibition.images.length > 0)) ? review.exhibition.images[0].image : '' : ''}} style={[((size === 'small') || (size === 'xsmall')) ? styles.artworkImage : styles.artworkImageLg, ((size === 'small') || (size === 'xsmall')) ? styles.py5 : styles.py20, ((size === 'small') || (size === 'xsmall')) ? styles.px10 : styles.px15, styles.justifyContentEnd]} resizeMode={'cover'} >
                         {review.artwork ? (
                             <Fragment>
@@ -182,11 +182,11 @@ class ArtuiumCard extends Component{
                                 </TouchableWithoutFeedback>
                                 <View style={[styles.row, styles.justifyContentBetween, styles.mt5]}>
                                     <View>
-                                        <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })}>
+                                        {/* <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })}>
                                             <View style={[styles.bgGray12, styles.borderRadius5, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.px10]}>
                                                 <Text style={[styles.fontMedium, styles.font10, styles.white]}>감상 읽기</Text>
                                             </View>
-                                        </TouchableWithoutFeedback>
+                                        </TouchableWithoutFeedback> */}
                                     </View>
                                     <View style={[styles.row, styles.alignItemsCenter]}>
                                         <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })}>
