@@ -276,9 +276,11 @@ class ArtuiumCard extends Component{
                                     </View>
                                 </TouchableWithoutFeedback>
                                 <View style={[styles.mt10]}>
-                                    <Text style={[styles.fontRegular, styles.font13, styles.lineHeight20]} numberOfLines={4}>
-                                        {stripHtml(review.content)}
-                                    </Text>
+                                    <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })}>                                    
+                                        <Text style={[styles.fontRegular, styles.font13, styles.lineHeight20]} numberOfLines={4}>
+                                            {stripHtml(review.content)}
+                                        </Text>
+                                    </TouchableWithoutFeedback>
                                 </View>
                                 <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt10]}>
                                     <TouchableWithoutFeedback onPress={review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })}>
