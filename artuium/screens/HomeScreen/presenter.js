@@ -19,8 +19,19 @@ class HomeScreen extends Component {
         notificationNew: PropTypes.bool.isRequired
     }
 
+    constructor(props){
+        super(props);
+        this.state = {
+            scrollX: new Animated.Value(0),
+            scrollX2: new Animated.Value(0),
+        }
+    }
+
     render() {
         const { banners, newReviews, recommendedReviews, followingReviews, noticeNew, notificationNew } = this.props;
+        let position = Animated.divide(this.state.scrollX, width);
+        let position2 = Animated.divide(this.state.scrollX2, width);
+
         return (
             <View style={[styles.container, styles.paddingIOS]}>
                 <View
@@ -117,6 +128,14 @@ class HomeScreen extends Component {
                                 pagingEnabled={(newReviews && (newReviews.length > 0)) ? true : false}
                                 scrollEnabled={(newReviews && (newReviews.length > 0)) ? true : false}
                                 showsHorizontalScrollIndicator={false}
+                                onScroll={Animated.event(
+                                    [{ nativeEvent: {
+                                        contentOffset: {
+                                            x: this.state.scrollX
+                                        }
+                                    }}]
+                                )}
+                                scrollEventThrottle={16}
                             >
                                 {(newReviews && (newReviews.length > 0)) ? (
                                     newReviews.map((review, index) => (
@@ -126,6 +145,28 @@ class HomeScreen extends Component {
                                     <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
                                 )}
                             </ScrollView>
+                            <View style={[styles.center, styles.mt10]}>
+                                <View
+                                    style={{ flexDirection: 'row' }}
+                                >
+                                    {newReviews && newReviews.length > 0 && (
+                                        newReviews.map((_, i) => {
+                                            let opacity = position.interpolate({
+                                                inputRange: [i - 1, i, i + 1],
+                                                outputRange: [0, 1, 0],
+                                                extrapolate: 'clamp'
+                                            });
+                                            return (
+                                                <View key={i} style={[styles.sliderDotGrayEmpty, styles.center, {marginRight: 6}]}>
+                                                    <Animated.View
+                                                        style={[styles.sliderDotGray, {opacity}]}
+                                                    />
+                                                </View>
+                                            );
+                                        })
+                                    )}
+                                </View>
+                            </View>
                             <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15]}>
                                 <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
                                     <View style={[styles.bgBlack, styles.borderRadius5, styles.py10, { width: 220 }]}>
@@ -146,6 +187,14 @@ class HomeScreen extends Component {
                             scrollEnabled={(followingReviews && (followingReviews.length > 0)) ? true : false}
                             alwaysBounceVertical={false}
                             showsHorizontalScrollIndicator={false}
+                            onScroll={Animated.event(
+                                [{ nativeEvent: {
+                                    contentOffset: {
+                                        x: this.state.scrollX2
+                                    }
+                                }}]
+                            )}
+                            scrollEventThrottle={16}
                             >
                                 {(followingReviews && (followingReviews.length > 0)) ? (
                                     followingReviews.map((review, index) => (
@@ -155,6 +204,28 @@ class HomeScreen extends Component {
                                     <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
                                 )}
                             </ScrollView>
+                            <View style={[styles.center, styles.mt10]}>
+                                <View
+                                    style={{ flexDirection: 'row' }}
+                                >
+                                    {followingReviews && followingReviews.length > 0 && (
+                                        followingReviews.map((_, i) => {
+                                            let opacity = position2.interpolate({
+                                                inputRange: [i - 1, i, i + 1],
+                                                outputRange: [0, 1, 0],
+                                                extrapolate: 'clamp'
+                                            });
+                                            return (
+                                                <View key={i} style={[styles.sliderDotGrayEmpty, styles.center, {marginRight: 6}]}>
+                                                    <Animated.View
+                                                        style={[styles.sliderDotGray, {opacity}]}
+                                                    />
+                                                </View>
+                                            );
+                                        })
+                                    )}
+                                </View>
+                            </View>
                             <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15, { marginBottom: 60 }]}>
                                 <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('FollowArtwork')}>
                                     <View style={[styles.bgBlack, styles.borderRadius5, styles.py10, { width: 220 }]}>

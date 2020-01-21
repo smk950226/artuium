@@ -951,6 +951,21 @@ const styles = StyleSheet.create({
         height: 8,
         borderRadius: 4,
     },
+    sliderDotGray: {
+        borderColor: '#c9c9c9',
+        borderWidth: 1,
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+        backgroundColor: '#c9c9c9'
+    },
+    sliderDotGrayEmpty: {
+        borderColor: '#c9c9c9',
+        borderWidth: 1,
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+    },
     exhibitionFull: {
         flexDirection: 'row',
         borderWidth: 1,
