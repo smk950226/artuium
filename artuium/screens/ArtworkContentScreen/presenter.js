@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { View, Text, ScrollView, FlatList, RefreshControl, ActivityIndicator, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform, TextInput } from 'react-native';
+import { View, Text, ScrollView, FlatList, RefreshControl, ActivityIndicator, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform, TextInput, KeyboardAvoidingView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
@@ -459,7 +459,7 @@ class ArtworkContentScreen extends React.Component {
                         null
                     )}
                     {this.state.index === 1 && mode === 'review' && (
-                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.py10, styles.bgWhite, styles.widthFull, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
+                        <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, Platform.OS === 'ios' ? {paddingBottom: 20} : null, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
                             <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
                                 <TextInput
                                     style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
@@ -476,7 +476,7 @@ class ArtworkContentScreen extends React.Component {
                                     <Text style={[styles.fontMedium, styles.font16, styles.white]}>등록</Text>
                                 </View>
                             </TouchableWithoutFeedback>
-                        </View>
+                        </KeyboardAvoidingView>
                     )}
                 </View>
             )

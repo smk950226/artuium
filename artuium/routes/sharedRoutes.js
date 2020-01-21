@@ -1,7 +1,5 @@
 import React, { Fragment } from 'react';
 
-
-
 const sharedRoutes = {
     
 };

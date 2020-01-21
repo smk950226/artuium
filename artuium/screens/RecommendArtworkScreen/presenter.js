@@ -73,7 +73,7 @@ class RecommendArtworkScreen extends Component{
                                         {users.map((user, index) => {
                                             return(
                                                 <View key={index} style={[styles.borderRadius10, styles.bgWhite, {width: width - 40}, styles.mx20, styles.alignSelfCenter, styles.exMenuShadow]}>
-                                                    <UserComp user={user} size={'large'} />
+                                                    <UserComp user={user} size={'large'} navigation={this.props.navigation} />
                                                 </View>
                                             )
                                         })}

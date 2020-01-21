@@ -7,11 +7,12 @@ import ExhibitionDetailScreen from '../screens/ExhibitionDetailScreen';
 import ExhibitionContentScreen from '../screens/ExhibitionContentScreen';
 import ExhibitionArtworkScreen from '../screens/ExhibitionArtworkScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
-import OthersProfileScreen from '../screens/OthersProfileScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ArtworkDetailScreen from '../screens/ArtworkDetailScreen';
 import ArtworkContentScreen from '../screens/ArtworkContentScreen';
 import AlertScreen from '../screens/AlertScreen';
+import OthersProfileScreen from '../screens/OthersProfileScreen';
+import LikeListScreen from '../screens/LikeListScreen';
 
 const GeneralNavigation = createStackNavigator({
     Root: {
@@ -56,14 +57,14 @@ const GeneralNavigation = createStackNavigator({
             header: null
         })
     },
-    ArtworkContent: {
-        screen: ArtworkContentScreen,
+    OthersProfile: {
+        screen: OthersProfileScreen,
         navigationOptions: ({screenProps, navigation}) => ({
             header: null
         })
     },
-    OthersProfile: {
-        screen: OthersProfileScreen,
+    LikeList: {
+        screen: LikeListScreen,
         navigationOptions: ({screenProps, navigation}) => ({
             header: null
         })
@@ -73,7 +74,13 @@ const GeneralNavigation = createStackNavigator({
         navigationOptions: ({screenProps, navigation}) => ({
             header: null
         })
-    }
+    },
+    ArtworkContent: {
+        screen: ArtworkContentScreen,
+        navigationOptions: ({screenProps, navigation}) => ({
+            header: null
+        })
+    },
 },
 {
     mode: 'slide',
