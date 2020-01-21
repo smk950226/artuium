@@ -452,7 +452,7 @@ class ArtworkContentScreen extends React.Component {
                         null
                     )}
                     {this.state.index === 1 && mode === 'review' && (
-                        <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, Platform.OS === 'ios' ? {paddingBottom: 15} : null, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
+                        <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, Platform.OS === 'ios' ? {paddingBottom: 20} : null, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
                             <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
                                 <TextInput
                                     style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}

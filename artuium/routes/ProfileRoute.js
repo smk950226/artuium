@@ -3,7 +3,6 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import ProfileScreen from '../screens/ProfileScreen';
 import sharedRoutes, { sharedOptions } from './sharedRoutes';
-import LikeListScreen from '../screens/LikeListScreen';
 
 const ProfileRoute = createStackNavigator(
     {
@@ -12,12 +11,6 @@ const ProfileRoute = createStackNavigator(
             navigationOptions: {
                 header: null
             }
-        },
-        LikeList: {
-            screen: LikeListScreen,
-            navigationOptions: ({screenProps, navigation}) => ({
-                header: null
-            })
         },
         ...sharedRoutes
     },
