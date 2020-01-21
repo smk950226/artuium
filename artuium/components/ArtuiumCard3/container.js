@@ -30,7 +30,8 @@ class Container extends Component{
             mode: 'follower',
             showFollowModal: false,
             isSubmitting: false,
-            isReporting: false
+            isReporting: false,
+            goUpdate: PropTypes.func.isRequired
         }
     }
 
@@ -182,6 +183,7 @@ class Container extends Component{
     }
 
     _handleOption = async(index, value) => {
+        console.log(value)
         if(value === '신고하기'){
             const { isReporting, is_reported } = this.state;
             const { reportReview, review : { id } } = this.props;
@@ -215,6 +217,10 @@ class Container extends Component{
                     }
                 }
             }
+        }
+        else if(value === '수정하기'){
+            const { review, goUpdate } = this.props;
+            goUpdate(review)
         }
     }
     

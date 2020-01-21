@@ -128,6 +128,36 @@ function createArtworkReview(artworkId, rating, expression, content){
     }
 }
 
+function updateArtworkReview(artworkId, reviewId, rating, expression, content){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/review/artwork/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            },
+            body: JSON.stringify({
+                artworkId,
+                reviewId,
+                rating,
+                expression,
+                content
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 function getArtworkLikeList(userId){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
@@ -193,7 +223,8 @@ const actionCreators = {
     getArtworkReviewListMore,
     createArtworkReview,
     getArtworkLikeList,
-    getArtworkLikeListMore
+    getArtworkLikeListMore,
+    updateArtworkReview
 }
 
 export { actionCreators }

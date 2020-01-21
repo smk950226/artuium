@@ -31,6 +31,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         createReplyReply: (replyId, content) => {
             return dispatch(userActions.createReplyReply(replyId, content))
+        },
+        updateExhibitionReview: (exhibitionId, reviewId, rating, expression, content) => {
+            return dispatch(exhibitionActions.updateExhibitionReview(exhibitionId, reviewId, rating, expression, content))
         }
     }
 }

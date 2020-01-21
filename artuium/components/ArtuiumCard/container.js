@@ -223,6 +223,15 @@ class Container extends Component{
                 }
             }
         }
+        else if(value === '수정하기'){
+            const { review, navigation, from } = this.props;
+            if(review.artwork){
+                navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'create', review: review, from })
+            }
+            else{
+                navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'create', review: review, from })
+            }
+        }
     }
     
     render(){

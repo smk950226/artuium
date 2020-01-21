@@ -215,6 +215,10 @@ class Container extends Component{
                 }
             }
         }
+        else if(value === '수정하기'){
+            const { review, goUpdate } = this.props;
+            goUpdate(review)
+        }
     }
     
     render(){

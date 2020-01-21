@@ -424,6 +424,45 @@ class ExhibitionReview(APIView):
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
+    
+    def put(self, request, format = None):
+        review_id = request.data.get('reviewId', None)
+        exhibition_id = request.data.get('exhibitionId', None)
+        rate = request.data.get('rating', None)
+        expression = request.data.get('expression', None)
+        content = request.data.get('content', None)
+        user = request.user
+        if review_id and exhibition_id and (rate or expression or content):
+            try:
+                review = models.Review.objects.get(id = review_id)
+                review.rate = rate
+                review.expression = expression
+                review.content = content
+                review.save()
+                serializer = serializers.ReviewSerializer(review, context = {'request': request})
+                exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
+                total_rate = exhibition.total_rate
+                reviews = exhibition.reviews
+                thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                good = reviews.filter(expression = 'good').count()/reviews.count()
+                soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+
+                return Response(status = status.HTTP_200_OK, data = {
+                    'status': 'ok', 
+                    'review': serializer.data,
+                    'thumb': thumb,
+                    'good': good,
+                    'soso': soso,
+                    'sad': sad,
+                    'surprise': surprise,
+                    'total_rate': total_rate
+                })
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상을 선택해주세요.'})
 
 
 class ArtworkReview(APIView):
@@ -500,6 +539,45 @@ class ArtworkReview(APIView):
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시를 선택해주세요.'})
+    
+    def put(self, request, format = None):
+        review_id = request.data.get('reviewId', None)
+        artwork_id = request.data.get('artworkId', None)
+        rate = request.data.get('rating', None)
+        expression = request.data.get('expression', None)
+        content = request.data.get('content', None)
+        user = request.user
+        if review_id and artwork_id and (rate or expression or content):
+            try:
+                review = models.Review.objects.get(id = review_id)
+                review.rate = rate
+                review.expression = expression
+                review.content = content
+                review.save()
+                serializer = serializers.ReviewSerializer(review, context = {'request': request})
+                artwork = artwork_models.Artwork.objects.get(id = artwork_id)
+                total_rate = artwork.total_rate
+                reviews = artwork.reviews
+                thumb = reviews.filter(expression = 'thumb').count()/reviews.count()
+                good = reviews.filter(expression = 'good').count()/reviews.count()
+                soso = reviews.filter(expression = 'soso').count()/reviews.count()
+                sad = reviews.filter(expression = 'sad').count()/reviews.count()
+                surprise = reviews.filter(expression = 'surprise').count()/reviews.count()
+
+                return Response(status = status.HTTP_200_OK, data = {
+                    'status': 'ok', 
+                    'review': serializer.data,
+                    'thumb': thumb,
+                    'good': good,
+                    'soso': soso,
+                    'sad': sad,
+                    'surprise': surprise,
+                    'total_rate': total_rate
+                })
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '작품이 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '작품을 선택해주세요.'})
 
 
 class Notification(APIView):

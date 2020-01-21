@@ -13,7 +13,8 @@ class Container extends Component{
         getReplyList: PropTypes.func.isRequired,
         getReplyListMore: PropTypes.func.isRequired,
         createReviewReply: PropTypes.func.isRequired,
-        createReplyReply: PropTypes.func.isRequired
+        createReplyReply: PropTypes.func.isRequired,
+        updateArtworkReview: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -38,9 +39,9 @@ class Container extends Component{
             refreshing: false,
             myReviews: [],
             mode: mode ? mode : 'list',
-            rating: 0,
-            expression: '',
-            content: '',
+            rating: mode === 'create' ? review.rate : 0,
+            expression: mode === 'create' ? review.expression : '',
+            content: mode === 'create' ? review.content : '',
             isSubmittingReview: false,
             total_rate,
             showingReview: review ? review : {},
@@ -54,7 +55,8 @@ class Container extends Component{
             isSubmittingReply: false,
             selectedReply: {},
             initialMode: mode,
-            from
+            from,
+            review
         }
     }
 
@@ -366,6 +368,68 @@ class Container extends Component{
         }
     }
 
+    _update = async() => {
+        const { rating, expression, content, isSubmittingReview, review : { id }, artwork } = this.state;
+        const { updateArtworkReview } = this.props;
+        if(!isSubmittingReview){
+            if(rating || expression || content){
+                this.setState({
+                    isSubmittingReview: true
+                })
+                const result = await updateArtworkReview(artwork.id, id, rating, expression, content)
+                if(result.status === 'ok'){
+                    let newReviews = []
+                    this.state.reviews.map(rev => {
+                        if(rev.id === result.review.id){
+                            newReviews.push(result.review)
+                        }
+                        else{
+                            newReviews.push(rev)
+                        }
+                    })
+                    let newMyReviews = []
+                    this.state.myReviews.map(rev => {
+                        if(rev.id === result.review.id){
+                            newMyReviews.push(result.review)
+                        }
+                        else{
+                            newMyReviews.push(rev)
+                        }
+                    })
+                    this.setState({
+                        reviews: newReviews,
+                        myReviews: newMyReviews,
+                        total_rate: result.total_rate,
+                        thumb: result.thumb,
+                        good: result.good,
+                        soso: result.soso,
+                        sad: result.sad,
+                        surprise: result.surprise,
+                        isSubmittingReview: false,
+                        mode: 'list',
+                        is_reviewed: true,
+                        selectedReply: {}
+                    })
+                }
+                else if(result.error){
+                    this.setState({
+                        isSubmittingReview: false
+                    })
+                    Alert.alert(null, result.error)
+                }
+                else{
+                    this.setState({
+                        isSubmittingReview: false
+                    })
+                    Alert.alert(null, '오류가 발생하였습니다.')
+                }
+            }
+            else{
+                Alert.alert(null, "감상 정보를 입력해주세요.")
+            }
+        }
+    }
+
     _replyListMore = async() => {
         const { getReplyListMore } = this.props;
         const { pageReply, hasNextPageReply, isLoadingMoreReply, showingReview : { id } } = this.state;
@@ -518,6 +582,16 @@ class Container extends Component{
         })
     }
 
+    _handleUpdateMode = (review) => {
+        this.setState({
+            review,
+            mode: 'create',
+            rating: review.rate,
+            expression: review.expression,
+            content: review.content,
+        })
+    }
+
     render(){
         return(
             <ArtworkContentScreen 
@@ -537,6 +611,8 @@ class Container extends Component{
             handleChangeContentReply={this._handleChangeContentReply}
             createReview={this._createReview}
             selectReply={this._selectReply}
+            update={this._update}
+            handleUpdateMode={this._handleUpdateMode}
             />
         )
     }
