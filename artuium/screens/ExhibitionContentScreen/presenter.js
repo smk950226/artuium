@@ -361,41 +361,47 @@ class ExhibitionContentScreen extends React.Component {
                                             )}
                                             {mode === 'create' && (
                                                 <Fragment>
-                                                    <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('list')}>
-                                                        <View style={[styles.ml25]}>
-                                                            <Image style={[{width: 14, height: 26}]} source={require('../../assets/images/icon_back.png')} />
+                                                    <TouchableWithoutFeedback onPress={()=>this.props.handleChangeRating(0)}>
+                                                        <View>
+                                                        <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('list')}>
+                                                            <View style={[styles.ml25, { width: 20 }]}>
+                                                                <Image style={[{width: 14, height: 26}]} source={require('../../assets/images/icon_back.png')} />
+                                                            </View>
+                                                        </TouchableWithoutFeedback>
+                                                            <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.alignSelfCenter, styles.mt15, styles.borderBtmGrayE8, styles.pb15, styles.widthFull]}>
+                                                                <Stars
+                                                                half={true}
+                                                                default={rating}
+                                                                update={(val)=>this.props.handleChangeRating(val)}
+                                                                spacing={4}
+                                                                starSize={34}
+                                                                count={5}
+                                                                emptyStar={require('../../assets/images/icon_star_disabled.png')}
+                                                                fullStar={require('../../assets/images/icon_star.png')}
+                                                                halfStar={require('../../assets/images/icon_star_half.png')}
+                                                                />
+                                                            </View>
                                                         </View>
                                                     </TouchableWithoutFeedback>
-                                                    <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.alignSelfCenter, styles.mt15, styles.borderBtmGrayE8, styles.pb15, styles.widthFull]}>
-                                                        <Stars
-                                                        half={true}
-                                                        default={rating}
-                                                        update={(val)=>this.props.handleChangeRating(val)}
-                                                        spacing={4}
-                                                        starSize={34}
-                                                        count={5}
-                                                        emptyStar={require('../../assets/images/icon_star_disabled.png')}
-                                                        fullStar={require('../../assets/images/icon_star.png')}
-                                                        halfStar={require('../../assets/images/icon_star_half.png')}
-                                                        />
-                                                    </View>
-                                                    <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.alignSelfCenter, styles.mt10, styles.borderBtmGrayE8, styles.pb15, styles.widthFull]}>
-                                                        <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('thumb')}>
-                                                            <Image source={require('../../assets/images/icon_thumb.png')} style={[styles.emojiXl, styles.mx5, expression === 'thumb' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                        </TouchableWithoutFeedback>
-                                                        <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('sad')}>
-                                                            <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emojiXl, styles.mx5, expression === 'sad' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                        </TouchableWithoutFeedback>
-                                                        <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('soso')}>
-                                                            <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emojiXl, styles.mx5, expression === 'soso' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                        </TouchableWithoutFeedback>
-                                                        <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('surprise')}>
-                                                            <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emojiXl, styles.mx5, expression === 'surprise' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                        </TouchableWithoutFeedback>
-                                                        <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('good')}>
-                                                            <Image source={require('../../assets/images/icon_good.png')} style={[styles.emojiXl, styles.mx5, expression === 'good' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                        </TouchableWithoutFeedback>
-                                                    </View>
+                                                    <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('')}>
+                                                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.alignSelfCenter, styles.mt10, styles.borderBtmGrayE8, styles.pb15, styles.widthFull]}>
+                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('thumb')}>
+                                                                <Image source={require('../../assets/images/icon_thumb.png')} style={[styles.emojiXl, styles.mx5, expression === 'thumb' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
+                                                            </TouchableWithoutFeedback>
+                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('sad')}>
+                                                                <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emojiXl, styles.mx5, expression === 'sad' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
+                                                            </TouchableWithoutFeedback>
+                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('soso')}>
+                                                                <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emojiXl, styles.mx5, expression === 'soso' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
+                                                            </TouchableWithoutFeedback>
+                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('surprise')}>
+                                                                <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emojiXl, styles.mx5, expression === 'surprise' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
+                                                            </TouchableWithoutFeedback>
+                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('good')}>
+                                                                <Image source={require('../../assets/images/icon_good.png')} style={[styles.emojiXl, styles.mx5, expression === 'good' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
+                                                            </TouchableWithoutFeedback>
+                                                        </View>
+                                                    </TouchableWithoutFeedback>
                                                     <View style={[styles.widthFull, {height: 300, borderWidth: 1, borderColor: '#e8e8e8'}]}>
                                                         <TextInput
                                                             style={[styles.font15, styles.widthFull, styles.px25, styles.py10, styles.widthFull, {height: 300, minHeight: 300, flex: 1}]}

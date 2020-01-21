@@ -33,6 +33,8 @@ class ExhibitionArtworkScreen extends Component{
         like_count: PropTypes.number.isRequired,
         review_count: PropTypes.number.isRequired,
         is_liked: PropTypes.bool.isRequired,
+        like: PropTypes.func.isRequired,
+        unlike: PropTypes.func.isRequired,
     }
     
     constructor(props){
@@ -56,7 +58,7 @@ class ExhibitionArtworkScreen extends Component{
 
     render(){
         let position = Animated.divide(this.state.scrollX, width);
-        const { from } = this.props;
+        const { from, is_liked, like_count } = this.props;
         const { exhibition, showingIndex, artworks } = this.state;
         return(
             <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
@@ -107,15 +109,17 @@ class ExhibitionArtworkScreen extends Component{
                                         <View style={[styles.mt10, styles.row, styles.alignItemsCenter]}>
                                             <View style={[styles.borderRadius5, styles.borderGray91, styles.py5, styles.px15]}>
                                                 <Text style={[styles.fontMedium, styles.font14, styles.gray91, styles.textCenter]}>평점</Text>
-                                                <Text style={[styles.fontBlack, styles.font25, styles.gray91, styles.textCenter]}>{exhibition.total_rate}</Text>
+                                                <Text style={[styles.fontBlack, styles.font25, styles.gray91, styles.textCenter]}>{exhibition.total_rate.toFixed(2)}</Text>
                                             </View>
-                                            <View style={[styles.borderRadius5, styles.borderGray91, styles.py5, styles.px15, styles.ml10, styles.row, styles.alignItemsCenter]}>
-                                                <Image source={require('../../assets/images/icon_heart_gray.png')} style={[{width: 107*0.4, height: 99*0.4}]} />
-                                                <View style={[styles.ml5]}>
-                                                    <Text style={[styles.fontMedium, styles.font14, styles.gray91, styles.textCenter]}>좋아요</Text>
-                                                    <Text style={[styles.fontBlack, styles.font25, styles.gray91, styles.textCenter]}>{abbreviateNumber(exhibition.like_count)}</Text>
+                                            <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
+                                                <View style={[styles.borderRadius5, styles.borderGray91, styles.py5, styles.px15, styles.ml10, styles.row, styles.alignItemsCenter]}>
+                                                    <Image source={is_liked ? require('../../assets/images/icon_heart_red.png') : require('../../assets/images/icon_heart_gray.png')} style={[{width: 107*0.4, height: 99*0.4}]} />
+                                                    <View style={[styles.ml5]}>
+                                                        <Text style={[styles.fontMedium, styles.font14, styles.gray91, styles.textCenter]}>좋아요</Text>
+                                                        <Text style={[styles.fontBlack, styles.font25, styles.gray91, styles.textCenter]}>{abbreviateNumber(like_count)}</Text>
+                                                    </View>
                                                 </View>
-                                            </View>
+                                            </TouchableWithoutFeedback>
                                         </View>
                                         <View style={[styles.mt15]}>
                                             <HTML html={exhibition.content} imagesMaxWidth={width} />
