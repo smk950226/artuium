@@ -49,7 +49,7 @@ class ExhibitionSerializer(serializers.ModelSerializer):
         if 'request' in self.context:
             request = self.context['request']
             user = request.user
-            review_check = statics_models.Review.objects.filter(author = user, exhibition = obj)
+            review_check = statics_models.Review.objects.filter(author = user, exhibition = obj, deleted = False)
             if review_check.count() > 0:
                 return True
             else:

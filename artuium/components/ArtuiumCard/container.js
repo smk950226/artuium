@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Alert } from 'react-native';
 import PropTypes from 'prop-types';
 import ArtuiumCard from './presenter';
 
@@ -11,30 +12,33 @@ class Container extends Component{
         initialReview: PropTypes.func.isRequired,
         likeReview: PropTypes.func.isRequired,
         unlikeReview: PropTypes.func.isRequired,
-        from: PropTypes.string
+        from: PropTypes.string,
+        reportReview: PropTypes.func.isRequired
     }
 
     constructor(props){
         super(props);
-        const { review : { author : { is_me, is_following, following_count, follower_count }, is_liked, like_count, reply_count } } = props;
+        const { review : { author : { is_me, is_following, following_count, follower_count }, is_liked, like_count, reply_count, is_reported } } = props;
         this.state = {
             is_me,
             is_following,
             is_liked,
             like_count,
             reply_count,
+            is_reported,
             isSubmitting: false,
             showProfileModal: false,
             following_count,
             follower_count,
             mode: 'follower',
-            showFollowModal: false
+            showFollowModal: false,
+            isReporting: false
         }
     }
 
     componentDidUpdate = (prevProps, prevState) => {
         if(prevProps.review !== this.props.review){
-            const { review : { author : { is_me, is_following, following_count, follower_count }, is_liked, like_count, reply_count } } = this.props;
+            const { review : { author : { is_me, is_following, following_count, follower_count }, is_liked, like_count, reply_count, is_reported } } = this.props;
             this.setState({
                 is_me,
                 is_following,
@@ -42,7 +46,8 @@ class Container extends Component{
                 follower_count, 
                 is_liked, 
                 like_count, 
-                reply_count
+                reply_count,
+                is_reported
             })
         }
     }
@@ -182,6 +187,43 @@ class Container extends Component{
             }
         }
     }
+
+    _handleOption = async(index, value) => {
+        if(value === '신고하기'){
+            const { isReporting, is_reported } = this.state;
+            const { reportReview, review : { id } } = this.props;
+            if(!isReporting){
+                if(is_reported){
+                    Alert.alert(null, "이미 신고되었습니다.")
+                }
+                else{
+                    this.setState({
+                        isReporting: true
+                    })
+                    const result = await reportReview(id)
+                    if(result.status === 'ok'){
+                        this.setState({
+                            is_reported: true,
+                            isReporting: false
+                        })
+                        Alert.alert(null, '신고되었습니다.')
+                    }
+                    else if(result.error){
+                        this.setState({
+                            isReporting: false
+                        })
+                        Alert.alert(null, result.error)
+                    }
+                    else{
+                        this.setState({
+                            isReporting: false
+                        })
+                        Alert.alert(null, '오류가 발생하였습니다.')
+                    }
+                }
+            }
+        }
+    }
     
     render(){
         return(
@@ -196,6 +238,8 @@ class Container extends Component{
             unfollow={this._unfollow}
             like={this._like}
             unlike={this._unlike}
+            report={this._report}
+            handleOption={this._handleOption}
             />
         )
     }

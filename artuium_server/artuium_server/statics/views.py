@@ -23,7 +23,7 @@ class InitialReview(APIView):
 
         following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
 
-        reviews = models.Review.objects.filter(content__isnull = False).order_by('index')
+        reviews = models.Review.objects.filter(content__isnull = False, deleted = False).order_by('index')
 
         new_reviews = reviews.order_by('-time')[:5]
         recommended_reviews = reviews.filter(recommended = True)[:5]
@@ -48,18 +48,18 @@ class Review(APIView):
 
         if list_type:
             if list_type == 'all':
-                reviews = models.Review.objects.filter(content__isnull = False).order_by('index')
+                reviews = models.Review.objects.filter(content__isnull = False, deleted = False).order_by('index')
             elif list_type == 'recommended':
-                reviews = models.Review.objects.filter(recommended = True, content__isnull = False).order_by('index')
+                reviews = models.Review.objects.filter(recommended = True, content__isnull = False, deleted = False).order_by('index')
             elif list_type == 'friend':
                 following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
-                reviews = models.Review.objects.filter(author__id__in = following, content__isnull = False).order_by('index')
+                reviews = models.Review.objects.filter(author__id__in = following, content__isnull = False, deleted = False).order_by('index')
             elif list_type == 'exhibition':
-                reviews = models.Review.objects.filter(exhibition__isnull = False, content__isnull = False).order_by('index')
+                reviews = models.Review.objects.filter(exhibition__isnull = False, content__isnull = False, deleted = False).order_by('index')
             else:
-                reviews = models.Review.objects.filter(content__isnull = False).order_by('index')
+                reviews = models.Review.objects.filter(content__isnull = False, deleted = False).order_by('index')
         else:
-            reviews = models.Review.objects.all(content__isnull = False).order_by('index')
+            reviews = models.Review.objects.all(content__isnull = False, deleted = False).order_by('index')
 
         if filter_type:
             if filter_type == 'new':
@@ -201,7 +201,7 @@ class LikeReviewOnly(APIView):
         user = request.user
         if review_id:
             try:
-                review = models.Review.objects.get(id = review_id)
+                review = models.Review.objects.get(id = review_id, deleted = False)
                 pre = models.Like.objects.filter(user = user, review = review)
                 if pre.count() > 0:
                     return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 좋아하는 감상입니다.'})
@@ -239,7 +239,7 @@ class LikeReviewOnly(APIView):
         user = request.user
         if review_id:
             try:
-                review = models.Review.objects.get(id = review_id)
+                review = models.Review.objects.get(id = review_id, deleted = False)
                 pre = models.Like.objects.filter(user = user, review = review)
                 if pre.count() == 0:
                     return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '좋아하는 감상이 아닙니다.'})
@@ -567,7 +567,7 @@ class Reply(APIView):
         review_id = request.query_params.get('reviewId', None)
 
         if review_id:
-            review = models.Review.objects.get(id = review_id)
+            review = models.Review.objects.get(id = review_id, deleted = False)
             replies = review.replies.all().order_by('time')
 
             paginator = MainPageNumberPagination()
@@ -585,7 +585,7 @@ class Reply(APIView):
 
         if review_id and content:
             try:
-                review = models.Review.objects.get(id = review_id)
+                review = models.Review.objects.get(id = review_id, deleted = False)
 
                 reply = models.Reply.objects.create(
                     review = review,
@@ -692,5 +692,22 @@ class Replies(APIView):
                 return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'reply': serializer.data})
             except:
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+
+
+class ReportReview(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        review_id = request.query_params.get('reviewId', None)
+        user = request.user
+        if review_id:
+            try:
+                review = models.Review.objects.get(id = review_id)
+                reporting = models.Reporting.objects.create(user = user, review = review)
+                reporting.save()
+                return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})

@@ -32,6 +32,7 @@ class Review(models.Model):
     ), blank = True, null = True)
     recommended = models.BooleanField('추천 여부', default = False)
     index = models.PositiveIntegerField('순서', default = 1)
+    deleted = models.BooleanField('목록 삭제 여부', default = False)
 
     def __str__(self):
         return self.author.nickname + '-' + str(self.rate)
@@ -143,3 +144,16 @@ class NotificationCheck(models.Model):
         ordering = ['-id']
         verbose_name = '알림 확인 여부'
         verbose_name_plural = '알림 확인 여부'
+
+class Reporting(models.Model):
+    user = models.ForeignKey('users.User', on_delete = models.CASCADE, related_name = 'reportings')
+    review = models.ForeignKey(Review, on_delete = models.CASCADE)
+    reported_at = models.DateTimeField(auto_now_add = True)
+
+    def __str__(self):
+        return  self.user.nickname + ' - ' + str(self.review.id)
+    
+    class Meta:
+        ordering = ['-id']
+        verbose_name = '신고 목록'
+        verbose_name_plural = '신고 목록'

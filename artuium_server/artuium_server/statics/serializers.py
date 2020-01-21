@@ -10,9 +10,10 @@ class ReviewSerializer(serializers.ModelSerializer):
     exhibition = exhibition_serializers.ExhibitionSerializer()
     artwork = artwork_serializers.ArtworkSerializer()
     is_liked = serializers.SerializerMethodField()
+    is_reported = serializers.SerializerMethodField()
     class Meta:
         model = models.Review
-        fields = ['id', 'author', 'time', 'content', 'exhibition', 'artwork', 'rate', 'expression', 'recommended', 'reply_count', 'like_count', 'is_liked']
+        fields = ['id', 'author', 'time', 'content', 'exhibition', 'artwork', 'rate', 'expression', 'recommended', 'reply_count', 'like_count', 'is_liked', 'is_reported']
     
     def get_is_liked(self, obj):
         if 'request' in self.context:
@@ -20,6 +21,17 @@ class ReviewSerializer(serializers.ModelSerializer):
             user = request.user
             like_check = models.Like.objects.filter(user = user, review = obj)
             if like_check.count() > 0:
+                return True
+            else:
+                return False
+        return False
+    
+    def get_is_reported(self, obj):
+        if 'request' in self.context:
+            request = self.context['request']
+            user = request.user
+            reporting_check = models.Reporting.objects.filter(user = user, review = obj)
+            if reporting_check.count() > 0:
                 return True
             else:
                 return False

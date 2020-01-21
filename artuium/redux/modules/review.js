@@ -169,6 +169,29 @@ function getReviewLikeListMore(userId, page){
     }
 }
 
+
+function reportReview(reviewId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/report/review/?reviewId=${reviewId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if((response.status === 401) || (response.status === 403)){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     
 };
@@ -200,7 +223,8 @@ const actionCreators = {
     likeReview,
     unlikeReview,
     getReviewLikeList,
-    getReviewLikeListMore
+    getReviewLikeListMore,
+    reportReview
 }
 
 export { actionCreators }

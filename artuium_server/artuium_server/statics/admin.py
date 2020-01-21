@@ -9,7 +9,7 @@ class NoticeAdmin(admin.ModelAdmin):
 
 @admin.register(models.Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ["id", "author", 'time', 'rate', 'recommended', 'index']
+    list_display = ["id", "author", 'time', 'rate', 'recommended', 'index', 'deleted']
     list_display_links = ["id", "author"]
 
 
@@ -47,3 +47,9 @@ class NotificationAdmin(admin.ModelAdmin):
 class NotificationCheckAdmin(admin.ModelAdmin):
     list_display = ["id", "user", 'notification']
     list_display_links = ["id"]
+
+
+@admin.register(models.Reporting)
+class ReportingAdmin(admin.ModelAdmin):
+    list_display = ["id", "user", 'review']
+    list_display_links = ["id", 'user']

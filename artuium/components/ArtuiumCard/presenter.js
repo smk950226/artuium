@@ -7,6 +7,7 @@ import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import FollowerList from '../FollowerList';
 import FollowingList from '../FollowingList';
 import stripHtml from "string-strip-html";
+import ModalDropdown from 'react-native-modal-dropdown';
 
 const { width, height } = Dimensions.get('window')
 
@@ -49,7 +50,9 @@ class ArtuiumCard extends Component{
         is_liked: PropTypes.bool.isRequired,
         like_count: PropTypes.number.isRequired,
         reply_count: PropTypes.number.isRequired,
-        from: PropTypes.string
+        from: PropTypes.string,
+        report: PropTypes.func.isRequired,
+        handleOption: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -176,7 +179,14 @@ class ArtuiumCard extends Component{
                                             </View>
                                         </View>
                                         <View>
-                                            <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                            <ModalDropdown options={is_me ? ['수정하기', '삭제하기'] : ['신고하기']}
+                                            showsVerticalScrollIndicator={false}
+                                            dropdownStyle={is_me ? {height: 80} : {height: 40}}
+                                            dropdownTextStyle={{fontSize: 13}}
+                                            onSelect={this.props.handleOption}
+                                            >
+                                                <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                            </ModalDropdown>
                                         </View>
                                     </View>
                                 </TouchableWithoutFeedback>
@@ -255,7 +265,14 @@ class ArtuiumCard extends Component{
                                             </View>
                                         </View>
                                         <View>
-                                            <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon30]} />
+                                            <ModalDropdown options={is_me ? ['수정하기', '삭제하기'] : ['신고하기']}
+                                            showsVerticalScrollIndicator={false}
+                                            dropdownStyle={is_me ? {height: 80} : {height: 40}}
+                                            dropdownTextStyle={{fontSize: 13}}
+                                            onSelect={this.props.handleOption}
+                                            >
+                                                <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon30]} />
+                                            </ModalDropdown>
                                         </View>
                                     </View>
                                 </TouchableWithoutFeedback>
@@ -347,7 +364,14 @@ class ArtuiumCard extends Component{
                                                 </View>
                                             )
                                         }
-                                        <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                        <ModalDropdown options={is_me ? ['수정하기', '삭제하기'] : ['신고하기']}
+                                        showsVerticalScrollIndicator={false}
+                                        dropdownStyle={is_me ? {height: 80} : {height: 40}}
+                                        dropdownTextStyle={{fontSize: 13}}
+                                        onSelect={this.props.handleOption}
+                                        >
+                                            <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                        </ModalDropdown>
                                     </View>
                                 </View>
                             </View>

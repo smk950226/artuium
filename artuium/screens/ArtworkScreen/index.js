@@ -5,7 +5,7 @@ import styles from '../../styles';
 
 const ArtworkScreen = (props) => (
     <View style={[styles.container, styles.center]}>
-        <Image source={require('../../assets/images/artwork_ready.png')} style={[styles.width90]} resizeMode={'contain'} />
+        <Image source={require('../../assets/images/artwork_ready.png')} style={[styles.width60]} resizeMode={'contain'} />
     </View>
 )
 
