@@ -30,7 +30,9 @@ class InitialExhibition(APIView):
         hot_exhibitions = sorted(exhibitions, key=lambda t: t.like_count + t.review_count, reverse=True)
 
         views = models.ExhibitionView.objects.filter(user = user).order_by('-viewed_at').values_list('exhibition', flat = True)[:5]
-        past_exhibitions = models.Exhibition.objects.filter(id__in = views).order_by('index')
+        past_exhibitions = []
+        for view in views:
+            past_exhibitions.append(models.Exhibition.objects.get(id = view))
         # past_exhibitions = exhibitions.filter(close_date__lte = today)[:5]
 
         return Response(status = status.HTTP_200_OK, data = {

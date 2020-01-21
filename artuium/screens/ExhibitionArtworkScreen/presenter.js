@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, ScrollView, Image, SafeAreaView, ImageBackground, Dimensions, TouchableWithoutFeedback, Animated, FlatList } from 'react-native';
+import { View, Text, ScrollView, Image, SafeAreaView, ImageBackground, Dimensions, TouchableWithoutFeedback, Animated, FlatList, PanResponder } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import { getStatusBarHeight } from "react-native-status-bar-height";
@@ -39,13 +39,47 @@ class ExhibitionArtworkScreen extends Component{
     
     constructor(props){
         super(props)
-        const { exhibition } = props;
+        const { exhibition, from } = props;
         this.state = {
             exhibition,
             artworks: exhibition.artworks.concat({id: -1}),
             scrollX: new Animated.Value(0),
             showingIndex: 0
         }
+        this.cardsPanResponder = PanResponder.create({
+            onStartShouldSetPanResponder: () => false,
+            onStartShouldSetPanResponderCapture: () => false,
+            onMoveShouldSetPanResponder: () => false,
+            onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
+                if(gestureState.dy < 0){
+                    if(gestureState.dy < -30){
+                        return true
+                    }
+                    else{
+                        return false
+                    }
+                }
+                else{
+                    return false
+                }
+            },
+            onPanResponderMove: ( event, gestureState ) => {
+            },
+            onPanResponderTerminationRequest: () => false,
+            onPanResponderRelease: ( event, gestureState ) => {
+                if(gestureState.dy < 0){
+                    if(gestureState.dy < -50){
+                        const { showingIndex, artworks } = this.state;
+                        if(showingIndex === artworks.length - 1){
+                            this.props.navigation.navigate('ExhibitionContent', { exhibition : exhibition, from })
+                        }
+                        else{
+                            this.props.navigation.navigate('ArtworkContent', { artwork : artworks[showingIndex], from })
+                        }
+                    }
+                }
+            }
+        })
     }
 
     _handleViewable = (info) => {
@@ -61,6 +95,7 @@ class ExhibitionArtworkScreen extends Component{
         const { from, is_liked, like_count } = this.props;
         const { exhibition, showingIndex, artworks } = this.state;
         return(
+            <Animated.View { ...this.cardsPanResponder.panHandlers }>
             <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
             <SafeAreaView style={[styles.screenHeight, styles.screenWidth]}>
                 {exhibition ? (
@@ -186,6 +221,7 @@ class ExhibitionArtworkScreen extends Component{
                 
             </SafeAreaView>
             </ImageBackground>
+            </Animated.View>
         )
     }
 }

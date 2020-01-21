@@ -118,27 +118,29 @@ class ArtuiumCard extends Component{
                                 review.artwork ? () => this.props.navigation.navigate('ArtworkDetail', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionDetail', { exhibition: review.exhibition, mode: 'review', review: review, from })
                             )
                         }>
-                        <ImageBackground source={{uri: review.artwork ? review.artwork.image : review.exhibition ? (review.exhibition.images && (review.exhibition.images.length > 0)) ? review.exhibition.images[0].image : '' : ''}} style={[((size === 'small') || (size === 'xsmall')) ? styles.artworkImage : styles.artworkImageLg, ((size === 'small') || (size === 'xsmall')) ? styles.py5 : styles.py20, ((size === 'small') || (size === 'xsmall')) ? styles.px10 : styles.px15, styles.justifyContentEnd]} resizeMode={'cover'} >
-                            {review.artwork ? (
-                                <Fragment>
-                                    <Text style={[styles.fontBold, ((size === 'small') || (size === 'xsmall')) ? styles.font15 : styles.font20, styles.white]}>
-                                        {review.artwork.name}
-                                    </Text>
-                                    <Text style={[styles.fontMedium, ((size === 'small') || (size === 'xsmall')) ? styles.font8 : styles.font11, styles.white]}>
-                                        {review.artwork.author.name}
-                                    </Text>
-                                </Fragment>
-                            ) : (
-                                <Fragment>
-                                    <Text style={[styles.fontBold, ((size === 'small') || (size === 'xsmall')) ? styles.font15 : styles.font20, styles.white]}>
-                                        <Text style={[styles.yellow]}>{'전시  '}</Text>{review.exhibition ? review.exhibition.name : ""}
-                                    </Text>
-                                    <Text style={[styles.fontMedium, ((size === 'small') || (size === 'xsmall')) ? styles.font8 : styles.font11, styles.white]}>
-                                        {review.exhibition ? `${review.exhibition.open_date.slice(0,4)}.${review.exhibition.open_date.slice(5,7)}.${review.exhibition.open_date.slice(8,10)}-${review.exhibition.close_date.slice(0,4)}.${review.exhibition.close_date.slice(5,7)}.${review.exhibition.close_date.slice(8,10)} ${review.exhibition.gallery.name}` : ""}
-                                    </Text>
-                                </Fragment>
-                            )}
-                        </ImageBackground>
+                            <View>
+                            <ImageBackground source={{uri: review.artwork ? review.artwork.image : review.exhibition ? (review.exhibition.images && (review.exhibition.images.length > 0)) ? review.exhibition.images[0].image : '' : ''}} style={[((size === 'small') || (size === 'xsmall')) ? styles.artworkImage : styles.artworkImageLg, ((size === 'small') || (size === 'xsmall')) ? styles.py5 : styles.py20, ((size === 'small') || (size === 'xsmall')) ? styles.px10 : styles.px15, styles.justifyContentEnd]} resizeMode={'cover'} >
+                                {review.artwork ? (
+                                    <Fragment>
+                                        <Text style={[styles.fontBold, ((size === 'small') || (size === 'xsmall')) ? styles.font15 : styles.font20, styles.white]}>
+                                            {review.artwork.name}
+                                        </Text>
+                                        <Text style={[styles.fontMedium, ((size === 'small') || (size === 'xsmall')) ? styles.font8 : styles.font11, styles.white]}>
+                                            {review.artwork.author.name}
+                                        </Text>
+                                    </Fragment>
+                                ) : (
+                                    <Fragment>
+                                        <Text style={[styles.fontBold, ((size === 'small') || (size === 'xsmall')) ? styles.font15 : styles.font20, styles.white]}>
+                                            <Text style={[styles.yellow]}>{'전시  '}</Text>{review.exhibition ? review.exhibition.name : ""}
+                                        </Text>
+                                        <Text style={[styles.fontMedium, ((size === 'small') || (size === 'xsmall')) ? styles.font8 : styles.font11, styles.white]}>
+                                            {review.exhibition ? `${review.exhibition.open_date.slice(0,4)}.${review.exhibition.open_date.slice(5,7)}.${review.exhibition.open_date.slice(8,10)}-${review.exhibition.close_date.slice(0,4)}.${review.exhibition.close_date.slice(5,7)}.${review.exhibition.close_date.slice(8,10)} ${review.exhibition.gallery.name}` : ""}
+                                        </Text>
+                                    </Fragment>
+                                )}
+                            </ImageBackground>
+                            </View>
                         </TouchableWithoutFeedback>
                         <View style={[(size === 'xlarge') ? styles.py20 : styles.py10, (size === 'xlarge') ? styles.px30 : styles.px10]}>
                             {((size === 'small') || (size === 'xsmall')) ? (
