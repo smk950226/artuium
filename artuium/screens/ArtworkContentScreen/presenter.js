@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { View, Text, ScrollView, FlatList, RefreshControl, ActivityIndicator, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform, TextInput, KeyboardAvoidingView } from 'react-native';
+import { View, Text, ScrollView, FlatList, RefreshControl, ActivityIndicator, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform, TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
@@ -93,8 +93,29 @@ class ArtworkContentScreen extends React.Component {
         const { initialMode } = props;
         this.state = {
             index: initialMode ? ((initialMode === 'review') || (initialMode === 'list') || (initialMode === 'create')) ? 1 : 0 : 0,
-            initialMode
+            initialMode,
+            keyboardHeight: 0
         }
+
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+    }
+
+    componentWillUnmount = () => {
+        this.keyboardDidShowListener.remove()
+        this.keyboardDidHideListener.remove()
+    }
+
+    _keyboardDidShow = (e) => {
+        this.setState({
+            keyboardHeight: e.endCoordinates.height
+        })
+    }
+
+    _keyboardDidHide = () => {
+        this.setState({
+            keyboardHeight: 0
+        })
     }
 
     _goUpdate = (review) => {
@@ -107,7 +128,7 @@ class ArtworkContentScreen extends React.Component {
 
     render(){
         const { artwork, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from } = this.props;
-        const { initialMode } = this.state;
+        const { initialMode, keyboardHeight } = this.state;
         if(artwork){
             return(
                 <View style={[styles.container]}>
@@ -392,7 +413,7 @@ class ArtworkContentScreen extends React.Component {
                                                         />
                                                         <Text style={[styles.fontMedium, styles.font14, { position: 'absolute', bottom: 15, right: 25 }]}>{content.length}<Text style={[styles.grayD1]}>/500자</Text></Text>
                                                     </View>
-                                                    <View style={[styles.mt30, styles.alignItemsCenter, { marginBottom: 70 }]}>
+                                                    <View style={[styles.mt30, styles.alignItemsCenter, { marginBottom: Platform.OS === 'ios' ? 70 + keyboardHeight : 70 }]}>
                                                         <TouchableWithoutFeedback onPress={initialMode === 'create' ? this.props.update : this.props.submit}>
                                                             <View style={[styles.bgBlack, styles.borderRadius5, styles.px30, styles.py5, isSubmittingReview ? styles.opacity07 : null]}>
                                                                 <Text style={[styles.fontMedium, styles.font16, styles.white]}>{initialMode === 'create' ? `수정하기` : `등록하기`}</Text>
