@@ -28,7 +28,6 @@ class Container extends Component{
     componentDidMount = () => {
         const { viewExhibition } = this.props;
         const { exhibition : { id } } = this.state;
-        console.log('???????')
         viewExhibition(id)
     }
 

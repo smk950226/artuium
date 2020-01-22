@@ -95,6 +95,7 @@ class ArtworkDetailScreen extends Component{
             <Animated.View { ...this.cardsPanResponder.panHandlers }>
             <ImageBackground style={[styles.center, styles.screenHeight, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
                 <TouchableWithoutFeedback onPress={this._handleDoubleTap}>
+                    <View>
                         {artwork ? (
                             <Fragment>
                                 <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from) : ()=>this.props.navigation.goBack()}>
@@ -239,7 +240,7 @@ class ArtworkDetailScreen extends Component{
                                 </Text>
                             </View>
                         )}
-                        
+                        </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={exhibition ? () => this.props.navigation.navigate('ExhibitionDetail', { exhibition, from }) : null}>
                     <View style={[styles.relatedBtn2, styles.alignItemsCenter, styles.alignSelfCenter, exhibition ? null : styles.hidden, {position: 'absolute', bottom: height*0.17*ratioV}]}>

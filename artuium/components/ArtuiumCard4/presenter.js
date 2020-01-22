@@ -98,7 +98,6 @@ class ArtuiumCard4 extends Component{
 
     render(){
         const { artwork, is_liked, like_count, review_count, from } = this.props;
-        console.log(height)
         return(
             <TouchableWithoutFeedback onPress={this._handleDoubleTap}>
             <View style={[styles.screenWidth, styles.alignItemsCenter]}>

@@ -96,6 +96,7 @@ class ExhibitionDetailScreen extends Component{
             <Animated.View { ...this.cardsPanResponder.panHandlers }>
             <ImageBackground style={[styles.center, styles.screenHeight, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
                 <TouchableWithoutFeedback onPress={this._handleDoubleTap}>
+                    <View>
                         {exhibition ? (
                             <Fragment>
                                 <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from) : ()=> this.props.navigation.goBack(null)}>
@@ -246,6 +247,7 @@ class ExhibitionDetailScreen extends Component{
                                 </Text>
                             </View>
                         )}
+                        </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('ExhibitionArtwork', { exhibition, from })}>
                     <View style={[styles.relatedBtn, styles.alignItemsCenter, styles.alignSelfCenter, {position: 'absolute', bottom: height*0.17*ratioV}]}>
