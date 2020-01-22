@@ -27,7 +27,7 @@ class InitialExhibition(APIView):
 
         new_exhibitions = exhibitions.filter(open_date__lte = today).order_by('-open_date')[:5]
         recommended_exhibitions = exhibitions.filter(recommended = True)[:5]
-        hot_exhibitions = sorted(exhibitions, key=lambda t: t.like_count + t.review_count, reverse=True)
+        hot_exhibitions = sorted(exhibitions, key=lambda t: t.like_count + t.review_count, reverse=True)[:5]
 
         views = models.ExhibitionView.objects.filter(user = user).order_by('-viewed_at').values_list('exhibition', flat = True)[:5]
         past_exhibitions = []
