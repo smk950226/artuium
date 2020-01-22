@@ -139,7 +139,7 @@ class ArtworkContentScreen extends React.Component {
                                             </View>
                                         </TouchableWithoutFeedback>
                                     </View>
-                                    <View style={[styles.row, styles.alignItemsCenter, styles.flexWrap, {width: 200}]}>
+                                    <View style={[styles.row, styles.alignItemsCenter, styles.flexWrap]}>
                                         <Text style={[styles.fontBold, styles.font30, styles.white]}>{artwork.name}</Text>
                                     </View>
                                     <Text style={[styles.fontMedium, styles.font14, styles.white]}>{artwork.author.name}, {`${artwork.created.slice(0,4)}.${artwork.created.slice(5,7)}.${artwork.created.slice(8,10)}`}, {artwork.material}</Text>

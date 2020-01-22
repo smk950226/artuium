@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { View, Text, ScrollView, FlatList, RefreshControl, ActivityIndicator, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform, TextInput, KeyboardAvoidingView } from 'react-native';
+import { View, Text, ScrollView, FlatList, RefreshControl, ActivityIndicator, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform, TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
@@ -95,8 +95,28 @@ class ExhibitionContentScreen extends React.Component {
 
         this.state = {
             index: initialMode ? ((initialMode === 'review') || (initialMode === 'list') || (initialMode === 'create')) ? 1 : 0 : 0,
-            initialMode
+            initialMode,
+            keyboardHeight: 0
         }
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+    }
+
+    componentWillUnmount = () => {
+        this.keyboardDidShowListener.remove()
+        this.keyboardDidHideListener.remove()
+    }
+
+    _keyboardDidShow = (e) => {
+        this.setState({
+            keyboardHeight: e.endCoordinates.height
+        })
+    }
+
+    _keyboardDidHide = () => {
+        this.setState({
+            keyboardHeight: 0
+        })
     }
 
     _goUpdate = (review) => {
@@ -109,7 +129,7 @@ class ExhibitionContentScreen extends React.Component {
 
     render(){
         const { exhibition, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from } = this.props;
-        const { initialMode } = this.state;
+        const { initialMode, keyboardHeight } = this.state;
         return(
             exhibition ? (
                 <View style={[styles.container]}>
@@ -141,7 +161,7 @@ class ExhibitionContentScreen extends React.Component {
                                         </View>
                                     </TouchableWithoutFeedback>
                                 </View>
-                                <View style={[styles.flexWrap, {width: 200}]}>
+                                <View style={[styles.flexWrap]}>
                                     <Text style={[styles.fontBold, styles.font30, styles.white]}><Text style={[styles.fontBold, styles.font30, styles.yellow]}>{'전시 '}</Text>{exhibition.name}</Text>
                                 </View>
                                 <Text style={[styles.fontMedium, styles.font14, styles.white]}>{exhibition.gallery.name}, {`${exhibition.open_date.slice(8,10)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} ~ ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
@@ -419,7 +439,7 @@ class ExhibitionContentScreen extends React.Component {
                                                         />
                                                         <Text style={[styles.fontMedium, styles.font14, { position: 'absolute', bottom: 15, right: 25 }]}>{content.length}<Text style={[styles.grayD1]}>/500자</Text></Text>
                                                     </View>
-                                                    <View style={[styles.mt30, styles.alignItemsCenter, { marginBottom: 70 }]}>
+                                                    <View style={[styles.mt30, styles.alignItemsCenter, { marginBottom: Platform.OS === 'ios' ? 70 + keyboardHeight : 70 }]}>
                                                         <TouchableWithoutFeedback onPress={initialMode === 'create' ? this.props.update : this.props.submit}>
                                                             <View style={[styles.bgBlack, styles.borderRadius5, styles.px30, styles.py5, isSubmittingReview ? styles.opacity07 : null]}>
                                                                 <Text style={[styles.fontMedium, styles.font16, styles.white]}>{initialMode === 'create' ? `수정하기` : `등록하기`}</Text>
@@ -487,24 +507,46 @@ class ExhibitionContentScreen extends React.Component {
                         null
                     )}
                     {this.state.index === 1 && mode === 'review' && (
-                        <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, Platform.OS === 'ios' ? {paddingBottom: 20} : null, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
-                            <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
-                                <TextInput
-                                    style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
-                                    autoCapitalize={'none'} 
-                                    autoCorrect={false} 
-                                    value={contentReply} 
-                                    onChangeText={this.props.handleChangeContentReply} 
-                                    returnKeyType={'done'} 
-                                    placeholderTextColor={'#000000'}
-                                />
-                            </View>
-                            <TouchableWithoutFeedback onPress={this.props.createReview}>
-                                <View style={[styles.flex2, styles.bgGray33, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.py5, styles.borderRadius5, isSubmittingReply ? { opacity: .4 } : null]}>
-                                    <Text style={[styles.fontMedium, styles.font16, styles.white]}>등록</Text>
+                        Platform.OS === 'ios' ? (
+                            <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, styles.pb10, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
+                                <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
+                                    <TextInput
+                                        style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
+                                        autoCapitalize={'none'} 
+                                        autoCorrect={false} 
+                                        value={contentReply} 
+                                        onChangeText={this.props.handleChangeContentReply} 
+                                        returnKeyType={'done'} 
+                                        placeholderTextColor={'#000000'}
+                                    />
                                 </View>
-                            </TouchableWithoutFeedback>
-                        </KeyboardAvoidingView>
+                                <TouchableWithoutFeedback onPress={this.props.createReview}>
+                                    <View style={[styles.flex2, styles.bgGray33, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.py5, styles.borderRadius5, isSubmittingReply ? { opacity: .4 } : null]}>
+                                        <Text style={[styles.fontMedium, styles.font16, styles.white]}>등록</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </KeyboardAvoidingView>
+                        ) : (
+                            <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, styles.pb10, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
+                                <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
+                                    <TextInput
+                                        style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
+                                        autoCapitalize={'none'} 
+                                        autoCorrect={false} 
+                                        value={contentReply} 
+                                        onChangeText={this.props.handleChangeContentReply} 
+                                        returnKeyType={'done'} 
+                                        placeholderTextColor={'#000000'}
+                                    />
+                                </View>
+                                <TouchableWithoutFeedback onPress={this.props.createReview}>
+                                    <View style={[styles.flex2, styles.bgGray33, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.py5, styles.borderRadius5, isSubmittingReply ? { opacity: .4 } : null]}>
+                                        <Text style={[styles.fontMedium, styles.font16, styles.white]}>등록</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </View>
+                        )
+                        
                     )}
                     
                 </View>
