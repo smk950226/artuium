@@ -27,6 +27,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         deleteArtworkReview: (artworkId, reviewId) => {
             return dispatch(artworkActions.deleteArtworkReview(artworkId, reviewId))
+        },
+        reportUser: (userId) => {
+            return dispatch(userActions.reportUser(userId))
         }
     }
 }

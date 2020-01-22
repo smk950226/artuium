@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Modal, TouchableOpacity, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import StarRating from 'react-native-star-rating';
@@ -52,7 +52,8 @@ class ArtuiumCard extends Component{
         reply_count: PropTypes.number.isRequired,
         from: PropTypes.string,
         handleOption: PropTypes.func.isRequired,
-        deleted: PropTypes.bool.isRequired
+        deleted: PropTypes.bool.isRequired,
+        reportUser: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -193,8 +194,8 @@ class ArtuiumCard extends Component{
                                             <View>
                                                 <ModalDropdown options={is_me ? ['수정하기', '삭제하기'] : ['신고하기']}
                                                 showsVerticalScrollIndicator={false}
-                                                dropdownStyle={is_me ? {height: 80} : {height: 40}}
-                                                dropdownTextStyle={{fontSize: 13}}
+                                                dropdownStyle={is_me ? {height: Platform.OS === 'ios' ? 60 :  80} : {height: Platform.OS === 'ios' ? 30 :  40}}
+                                                dropdownTextStyle={{fontSize: 10, height: Platform.OS === 'ios' ? 30 :  40}}
                                                 onSelect={this.props.handleOption}
                                                 >
                                                     <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
@@ -276,8 +277,8 @@ class ArtuiumCard extends Component{
                                             <View>
                                                 <ModalDropdown options={is_me ? ['수정하기', '삭제하기'] : ['신고하기']}
                                                 showsVerticalScrollIndicator={false}
-                                                dropdownStyle={is_me ? {height: 80} : {height: 40}}
-                                                dropdownTextStyle={{fontSize: 13}}
+                                                dropdownStyle={is_me ? {height: Platform.OS === 'ios' ? 60 :  80} : {height: Platform.OS === 'ios' ? 30 :  40}}
+                                                dropdownTextStyle={{fontSize: 10, height: Platform.OS === 'ios' ? 30 :  40}}
                                                 onSelect={this.props.handleOption}
                                                 >
                                                     <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon30]} />
@@ -375,7 +376,18 @@ class ArtuiumCard extends Component{
                                                     </View>
                                                 )
                                             }
-                                            <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                            {is_me ? (
+                                                <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                            ) : (
+                                                <ModalDropdown options={['신고하기']}
+                                                showsVerticalScrollIndicator={false}
+                                                dropdownStyle={{height: Platform.OS === 'ios' ? 30 :  40}}
+                                                dropdownTextStyle={{fontSize: 10, height: Platform.OS === 'ios' ? 30 :  40}}
+                                                onSelect={this.props.reportUser}
+                                                >
+                                                    <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                                </ModalDropdown>
+                                            )}
                                         </View>
                                     </View>
                                 </View>

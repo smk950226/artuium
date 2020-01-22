@@ -147,8 +147,9 @@ class NotificationCheck(models.Model):
         verbose_name_plural = '알림 확인 여부'
 
 class Reporting(models.Model):
-    user = models.ForeignKey('users.User', on_delete = models.CASCADE, related_name = 'reportings')
-    review = models.ForeignKey(Review, on_delete = models.CASCADE)
+    user = models.ForeignKey('users.User', verbose_name = '신고한 유저', on_delete = models.CASCADE, related_name = 'reportings')
+    to_user = models.ForeignKey('users.User', verbose_name = '신고당한 유저', on_delete = models.CASCADE, related_name = 'reporteds', blank = True, null = True)
+    review = models.ForeignKey(Review, verbose_name = '신고당한 감상', on_delete = models.CASCADE, blank = True, null = True)
     reported_at = models.DateTimeField(auto_now_add = True)
 
     def __str__(self):

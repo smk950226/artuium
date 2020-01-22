@@ -5,6 +5,7 @@ import styles from '../../styles';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import FollowerList from '../FollowerList';
 import FollowingList from '../FollowingList';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 const { width, height } = Dimensions.get('window')
 
@@ -45,7 +46,8 @@ class ReplyCard extends Component{
         is_following: PropTypes.bool.isRequired,
         following_count: PropTypes.number.isRequired,
         follower_count: PropTypes.number.isRequired,
-        mode: PropTypes.string.isRequired
+        mode: PropTypes.string.isRequired,
+        reportUser: PropTypes.func.isRequired
     }
 
     state = {
@@ -220,7 +222,18 @@ class ReplyCard extends Component{
                                                 </View>
                                             )
                                         }
-                                        <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                        {is_me ? (
+                                            <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                        ) : (
+                                            <ModalDropdown options={['신고하기']}
+                                            showsVerticalScrollIndicator={false}
+                                            dropdownStyle={{height: Platform.OS === 'ios' ? 30 :  40}}
+                                            dropdownTextStyle={{fontSize: 10, height: Platform.OS === 'ios' ? 30 :  40}}
+                                            onSelect={this.props.reportUser}
+                                            >
+                                                <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                            </ModalDropdown>
+                                        )}
                                     </View>
                                 </View>
                             </View>

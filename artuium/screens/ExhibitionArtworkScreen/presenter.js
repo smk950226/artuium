@@ -102,7 +102,7 @@ class ExhibitionArtworkScreen extends Component{
             <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
                 {exhibition ? (
                     <Fragment>
-                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.widthFull, styles.px15, {height: 40, position: 'absolute', top: iosStatusBarHeight + 15}]}>
+                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.widthFull, styles.px15, {height: 40, position: 'absolute', top: iosStatusBarHeight + 15, zIndex: 999}]}>
                             <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('ExhibitionDetail', { exhibition, from })}>
                                 <View style={[styles.row, styles.alignItemsCenter, {zIndex: 10}]}>
                                     <Image source={require('../../assets/images/icon_back_gray.png')} style={[{width: 26, height: 26}]} />

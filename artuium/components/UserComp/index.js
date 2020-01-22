@@ -9,6 +9,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         unfollowUser: (userId) => {
             return dispatch(userActions.unfollowUser(userId))
+        },
+        reportUser: (userId) => {
+            return dispatch(userActions.reportUser(userId))
         }
     }
 }

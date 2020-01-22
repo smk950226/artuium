@@ -15,7 +15,8 @@ class Container extends Component{
         from: PropTypes.string,
         reportReview: PropTypes.func.isRequired,
         deleteExhibitionReview: PropTypes.func.isRequired,
-        deleteArtworkReview: PropTypes.func.isRequired
+        deleteArtworkReview: PropTypes.func.isRequired,
+        reportUser: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -317,6 +318,37 @@ class Container extends Component{
             }
         }
     }
+
+    _reportUser = async(index, value) => {
+        if(value === '신고하기'){
+            const { isReporting } = this.state;
+            const { reportUser, review : { author : { id } } } = this.props;
+            if(!isReporting){
+                this.setState({
+                    isReporting: true
+                })
+                const result = await reportUser(id)
+                if(result.status === 'ok'){
+                    this.setState({
+                        isReporting: false
+                    })
+                    Alert.alert(null, '신고되었습니다.')
+                }
+                else if(result.error){
+                    this.setState({
+                        isReporting: false
+                    })
+                    Alert.alert(null, result.error)
+                }
+                else{
+                    this.setState({
+                        isReporting: false
+                    })
+                    Alert.alert(null, '오류가 발생하였습니다.')
+                }
+            }
+        }
+    }
     
     render(){
         return(
@@ -332,6 +364,7 @@ class Container extends Component{
             like={this._like}
             unlike={this._unlike}
             handleOption={this._handleOption}
+            reportUser={this._reportUser}
             />
         )
     }

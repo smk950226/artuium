@@ -22,4 +22,5 @@ urlpatterns = [
     path('reply/', views.Reply.as_view()),
     path('replies/', views.Replies.as_view()),
     path('report/review/', views.ReportReview.as_view()),
+    path('report/user/', views.ReportUser.as_view()),
 ]

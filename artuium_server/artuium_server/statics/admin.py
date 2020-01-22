@@ -51,5 +51,5 @@ class NotificationCheckAdmin(admin.ModelAdmin):
 
 @admin.register(models.Reporting)
 class ReportingAdmin(admin.ModelAdmin):
-    list_display = ["id", "user", 'review']
+    list_display = ["id", "user", 'review', 'to_user']
     list_display_links = ["id", 'user']

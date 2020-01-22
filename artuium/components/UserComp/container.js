@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import { Alert } from 'react-native';
 import PropTypes from 'prop-types';
 import UserComp from './presenter';
 
 class Container extends Component{
     static propTypes = {
         user: PropTypes.object.isRequired,
-        size: PropTypes.string
+        size: PropTypes.string,
+        reportUser: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -14,7 +16,8 @@ class Container extends Component{
         this.state = {
             is_following,
             is_me,
-            isSubmitting: false
+            isSubmitting: false,
+            isReporting: false
         }
     }
 
@@ -69,6 +72,37 @@ class Container extends Component{
             }
         }
     }
+
+    _reportUser = async(index, value) => {
+        if(value === '신고하기'){
+            const { isReporting } = this.state;
+            const { reportUser, user: { id } } = this.props;
+            if(!isReporting){
+                this.setState({
+                    isReporting: true
+                })
+                const result = await reportUser(id)
+                if(result.status === 'ok'){
+                    this.setState({
+                        isReporting: false
+                    })
+                    Alert.alert(null, '신고되었습니다.')
+                }
+                else if(result.error){
+                    this.setState({
+                        isReporting: false
+                    })
+                    Alert.alert(null, result.error)
+                }
+                else{
+                    this.setState({
+                        isReporting: false
+                    })
+                    Alert.alert(null, '오류가 발생하였습니다.')
+                }
+            }
+        }
+    }
     
     render(){
         return(
@@ -77,6 +111,7 @@ class Container extends Component{
             {...this.state}
             follow={this._follow}
             unfollow={this._unfollow}
+            reportUser={this._reportUser}
             />
         )
     }

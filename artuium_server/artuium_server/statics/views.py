@@ -942,10 +942,35 @@ class ReportReview(APIView):
         if review_id:
             try:
                 review = models.Review.objects.get(id = review_id)
-                reporting = models.Reporting.objects.create(user = user, review = review)
-                reporting.save()
-                return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+                pre = models.Reporting.objects.filter(user = user, review = review)
+                if pre.count() > 0:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 신고되었습니다.'})
+                else:
+                    reporting = models.Reporting.objects.create(user = user, review = review)
+                    reporting.save()
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
             except:
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+
+
+class ReportUser(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user_id = request.query_params.get('userId', None)
+        user = request.user
+        if user_id:
+            try:
+                to_user = User.objects.get(id = user_id)
+                pre = models.Reporting.objects.filter(user = user, to_user = to_user)
+                if pre.count() > 0:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 신고되었습니다.'})
+                else:
+                    reporting = models.Reporting.objects.create(user = user, to_user = to_user)
+                    reporting.save()
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '유저가 존재하지 않습니다.'})
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
