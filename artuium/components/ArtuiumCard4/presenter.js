@@ -9,6 +9,9 @@ import FollowingList from '../FollowingList';
 
 const { width, height } = Dimensions.get('window')
 
+const ratio = width/411.429
+const ratioV = height/797.714
+
 function abbreviateNumber(value) {
     var newValue = value;
     if (value >= 1000) {
@@ -95,49 +98,113 @@ class ArtuiumCard4 extends Component{
 
     render(){
         const { artwork, is_liked, like_count, review_count, from } = this.props;
+        console.log(height)
         return(
             <TouchableWithoutFeedback onPress={this._handleDoubleTap}>
-            <View style={[styles.center, styles.heightFull, styles.screenWidth]}>
+            <View style={[styles.screenWidth, styles.alignItemsCenter]}>
                 <View>
-                    <View style={[styles.center, {width, height: (width > 364) ? 355 : 355*width*0.9/235}]}>
+                    <View style={[styles.center, {width: width*ratio, height: (width > 364) ? 355*ratio : 355*width*0.9/235*ratio}]}>
                         {artwork.size === 'horizontal' && (
                             <Fragment>
-                                <Image source={{uri: artwork.image ? artwork.image : ''}} style={{width: (width > 364) ? 364 : width*0.9, height: (width > 364) ? 246 : 246*width*0.9/364}} resizeMode={'cover'} />
-                                <View style={[{width: (width > 364) ? 364 : width*0.9, height: (width > 364) ? 246 : 246*width*0.9/364, position: 'absolute'}, styles.center]}>
+                                <Image source={{uri: artwork.image ? artwork.image : ''}} style={{
+                                    width: (width > 364) ? 364*ratio : width*0.9*ratio, 
+                                    height: (width > 364) ? 246*ratio : 246*width*0.9/364*ratio,
+                                    maxWidth: (width > 364) ? 364 : width*0.9, 
+                                    maxHeight: (width > 364) ? 246 : 246*width*0.9/364,
+                                }} resizeMode={'cover'} />
+                                <View style={[{
+                                    width: (width > 364) ? 364*ratio : width*0.9*ratio, 
+                                    height: (width > 364) ? 246*ratio : 246*width*0.9/364*ratio, 
+                                    maxWidth: (width > 364) ? 364 : width*0.9, 
+                                    maxHeight: (width > 364) ? 246 : 246*width*0.9/364, 
+                                    position: 'absolute'
+                                }, styles.center]}>
                                     {is_liked ? (
-                                        <Image source={require('../../assets/images/frame_horizontal_active.png')}  style={{width: (width > 364) ? 364 : width*0.9, height: (width > 364) ? 246 : 246*width*0.9/364}} />
+                                        <Image source={require('../../assets/images/frame_horizontal_active.png')}  style={{
+                                            width: (width > 364) ? 364*ratio : width*0.9*ratio, 
+                                            height: (width > 364) ? 246*ratio : 246*width*0.9/364*ratio,
+                                            maxWidth: (width > 364) ? 364 : width*0.9, 
+                                            maxHeight: (width > 364) ? 246 : 246*width*0.9/364
+                                        }} />
                                     ) : (
-                                        <Image source={require('../../assets/images/frame_horizontal_inactive.png')}  style={{width: (width > 364) ? 364 : width*0.9, height: (width > 364) ? 246 : 246*width*0.9/364}} />
+                                        <Image source={require('../../assets/images/frame_horizontal_inactive.png')}  style={{
+                                            width: (width > 364) ? 364*ratio : width*0.9*ratio, 
+                                            height: (width > 364) ? 246*ratio : 246*width*0.9/364*ratio,
+                                            maxWidth: (width > 364) ? 364 : width*0.9, 
+                                            maxHeight: (width > 364) ? 246 : 246*width*0.9/364
+                                        }} />
                                     )}
                                 </View>
                             </Fragment>
                         )}
                         {artwork.size === 'square' && (
                             <Fragment>
-                            <Image source={{uri: artwork.image ? artwork.image : ''}} style={{width: (width > 240) ? 240 : width*0.9, height: (width > 240) ? 240 : 240*width*0.9/240}} resizeMode={'cover'} />
-                            <View style={[{width: (width > 240) ? 240 : width*0.9, height: (width > 240) ? 240 : 240*width*0.9/240, position: 'absolute'}, styles.center]}>
+                            <Image source={{uri: artwork.image ? artwork.image : ''}} style={{
+                                width: (width > 240) ? 240*ratio : width*0.9*ratio, 
+                                height: (width > 240) ? 240*ratio : 240*width*0.9/240*ratio,
+                                maxWidth: (width > 240) ? 240 : width*0.9, 
+                                maxHeight: (width > 240) ? 240 : 240*width*0.9/240
+                            }} resizeMode={'cover'} />
+                            <View style={[{
+                                width: (width > 240) ? 240*ratio : width*0.9*ratio, 
+                                height: (width > 240) ? 240*ratio : 240*width*0.9/240*ratio, 
+                                maxWidth: (width > 240) ? 240 : width*0.9, 
+                                maxHeight: (width > 240) ? 240 : 240*width*0.9/240, 
+                                position: 'absolute'
+                            }, styles.center]}>
                                 {is_liked ? (
-                                    <Image source={require('../../assets/images/frame_square_active.png')}  style={{width: (width > 240) ? 240 : width*0.9, height: (width > 240) ? 240 : 240*width*0.9/240}} />
+                                    <Image source={require('../../assets/images/frame_square_active.png')}  style={{
+                                        width: (width > 240) ? 240*ratio : width*0.9*ratio, 
+                                        height: (width > 240) ? 240*ratio : 240*width*0.9/240*ratio,
+                                        maxWidth: (width > 240) ? 240 : width*0.9, 
+                                        maxHeight: (width > 240) ? 240 : 240*width*0.9/240
+                                    }} />
                                 ) : (
-                                    <Image source={require('../../assets/images/frame_square_inactive.png')}  style={{width: (width > 240) ? 240 : width*0.9, height: (width > 240) ? 240 : 240*width*0.9/240}} />
+                                    <Image source={require('../../assets/images/frame_square_inactive.png')}  style={{
+                                        width: (width > 240) ? 240*ratio : width*0.9*ratio, 
+                                        height: (width > 240) ? 240*ratio : 240*width*0.9/240*ratio,
+                                        maxWidth: (width > 240) ? 240 : width*0.9, 
+                                        maxHeight: (width > 240) ? 240 : 240*width*0.9/240
+                                    }} />
                                 )}
                             </View>
                             </Fragment>
                         )}
                         {artwork.size === 'vertical' && (
                             <Fragment>
-                            <Image source={{uri: artwork.image ? artwork.image : ''}} style={{width: (width > 235) ? 235 : width*0.9, height: (width > 235) ? 355 : 355*width*0.9/235}} resizeMode={'cover'} />
-                            <View style={[{width: (width > 235) ? 235 : width*0.9, height: (width > 235) ? 355 : 355*width*0.9/235, position: 'absolute'}, styles.center]}>
+                            <Image source={{uri: artwork.image ? artwork.image : ''}} style={{
+                                width: (width > 235) ? 235*ratio : width*0.9*ratio, 
+                                height: (width > 235) ? 355*ratio : 355*width*0.9/235*ratio,
+                                maxWidth: (width > 235) ? 235 : width*0.9, 
+                                maxHeight: (width > 235) ? 355 : 355*width*0.9/235
+                            }} resizeMode={'cover'} />
+                            <View style={[{
+                                width: (width > 235) ? 235*ratio : width*0.9*ratio, 
+                                height: (width > 235) ? 355*ratio : 355*width*0.9/235*ratio, 
+                                maxWidth: (width > 235) ? 235 : width*0.9, 
+                                maxHeight: (width > 235) ? 355 : 355*width*0.9/235, 
+                                position: 'absolute'
+                            }, styles.center]}>
                                 {is_liked ? (
-                                    <Image source={require('../../assets/images/frame_vertical_active.png')}  style={{width: (width > 235) ? 235 : width*0.9, height: (width > 235) ? 355 : 355*width*0.9/235}} />
+                                    <Image source={require('../../assets/images/frame_vertical_active.png')}  style={{
+                                        width: (width > 235) ? 235*ratio : width*0.9*ratio, 
+                                        height: (width > 235) ? 355*ratio : 355*width*0.9/235*ratio,
+                                        maxWidth: (width > 235) ? 235 : width*0.9, 
+                                        maxHeight: (width > 235) ? 355 : 355*width*0.9/235
+                                    }} />
                                 ) : (
-                                    <Image source={require('../../assets/images/frame_vertical_inactive.png')}  style={{width: (width > 235) ? 235 : width*0.9, height: (width > 235) ? 355 : 355*width*0.9/235}} />
+                                    <Image source={require('../../assets/images/frame_vertical_inactive.png')}  style={{
+                                        width: (width > 235) ? 235*ratio : width*0.9*ratio, 
+                                        height: (width > 235) ? 355*ratio : 355*width*0.9/235*ratio,
+                                        maxWidth: (width > 235) ? 235*ratio : width*0.9*ratio, 
+                                        maxHeight: (width > 235) ? 355*ratio : 355*width*0.9/235*ratio
+                                    }} />
                                 )}
                             </View>
                             </Fragment>
                         )}
                     </View>
-                    <View style={[styles.alignItemsCenter, {marginTop: 60}]}>
+                    <View style={[styles.alignItemsCenter, {marginTop: 30*ratioV}]}>
                         <View style={[styles.row, styles.mt10, styles.alignItemsCenter]}>
                             <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment.png')} />
                             <Text style={[styles.fontRegular, styles.font8, {color: '#909090', marginLeft: 4}]}>{abbreviateNumber(review_count)}</Text>
@@ -153,7 +220,7 @@ class ArtuiumCard4 extends Component{
                                 </View>
                             </TouchableWithoutFeedback>
                         </View>
-                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.flexWrap, {width: 200}]}>
+                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.flexWrap]}>
                             <Text style={[styles.fontBold, styles.font30, styles.textCenter]}>{artwork.name}</Text>
                         </View>
                         <Text style={[styles.fontMedium, styles.font14, { marginBottom: 150 }]}>{artwork.author ? artwork.author.name : ""}, {`${artwork.created.slice(0,4)}.${artwork.created.slice(5,7)}.${artwork.created.slice(8,10)}`}, {artwork.material}</Text>

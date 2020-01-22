@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, ScrollView, Image, SafeAreaView, ImageBackground, Dimensions, TouchableWithoutFeedback, Animated, FlatList, PanResponder } from 'react-native';
+import { View, Text, ScrollView, Image, SafeAreaView, ImageBackground, Dimensions, TouchableWithoutFeedback, Animated, FlatList, PanResponder, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import { getStatusBarHeight } from "react-native-status-bar-height";
@@ -8,7 +8,10 @@ import HTML from 'react-native-render-html';
 
 const { width, height } = Dimensions.get('window')
 
-const iosStatusBarHeight = getStatusBarHeight();
+const ratio = width/411.429
+const ratioV = height/797.714
+
+const iosStatusBarHeight =  Platform.OS === 'ios' ? getStatusBarHeight() : 20;
 
 function abbreviateNumber(value) {
     var newValue = value;
@@ -97,7 +100,6 @@ class ExhibitionArtworkScreen extends Component{
         return(
             <Animated.View { ...this.cardsPanResponder.panHandlers }>
             <ImageBackground style={[styles.center, styles.heightFull, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
-            <SafeAreaView style={[styles.screenHeight, styles.screenWidth]}>
                 {exhibition ? (
                     <Fragment>
                         <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.widthFull, styles.px15, {height: 40, position: 'absolute', top: iosStatusBarHeight + 15}]}>
@@ -116,8 +118,9 @@ class ExhibitionArtworkScreen extends Component{
                             )}
                         </View>
                         <FlatList 
-                        style={[styles.mt40]}
-                        contentContainerStyle={[{height: height - 40}]}
+                        style={[{marginTop: 60}]}
+                        contentContainerStyle={[{height: Platform.OS === 'ios' ? height - 60 - iosStatusBarHeight : height - 60 - 40, alignSelf: 'flex-end'}]}
+                        showsVerticalScrollIndicator={false}
                         scrollEnabled={true}
                         horizontal={true}
                         pagingEnabled={true}
@@ -140,7 +143,7 @@ class ExhibitionArtworkScreen extends Component{
                         renderItem={({item, index, separators}) => {
                             if(index === (artworks.length - 1)){
                                 return(
-                                    <ScrollView alwaysBounceVertical={false} showsVerticalScrollIndicator={false} style={[{height: height - (165 + height*0.05)}, styles.screenWidth, styles.px30]}>
+                                    <ScrollView alwaysBounceVertical={false} showsVerticalScrollIndicator={false} style={[{height: height - (135 + height*0.17*ratioV)}, styles.screenWidth, styles.px30]}>
                                         <Text style={[styles.fontBold, styles.font35, styles.mt50, { maxWidth: (width - 15)/2, flexWrap: 'wrap' }]}>{exhibition.name}</Text>
                                         <View style={[styles.mt10, styles.row, styles.alignItemsCenter]}>
                                             <View style={[styles.borderRadius5, styles.borderGray91, styles.py5, styles.px15]}>
@@ -165,15 +168,13 @@ class ExhibitionArtworkScreen extends Component{
                             }
                             else{
                                 return(
-                                    <View key={index} style={[styles.center, styles.heightFull, styles.screenWidth]}>
-                                        <ArtuiumCard4 from={from} artwork={item} navigation={this.props.navigation} />
-                                    </View>
+                                    <ArtuiumCard4 key={index} from={from} artwork={item} navigation={this.props.navigation} />
                                 )
                             }
                         }}
                         scrollEventThrottle={16}
                         />
-                        <View style={[styles.alignItemsCenter, {width: width, posizion: 'absolute', bottom: height*0.05}]}>
+                        <View style={[styles.alignItemsCenter, {width: width, position: 'absolute', bottom: height*0.17*ratioV}]}>
                             {showingIndex !== (artworks.length - 1) ? (
                                 <View
                                     style={[styles.row]}
@@ -203,7 +204,7 @@ class ExhibitionArtworkScreen extends Component{
                             
                         </View>
 
-                        <View style={[styles.alignItemsCenter, {width: width, posizion: 'absolute', bottom: height*0.05}]}>
+                        <View style={[styles.alignItemsCenter, {width: width, position: 'absolute', bottom: height*0.05*ratioV}]}>
                             <TouchableWithoutFeedback onPress={showingIndex === artworks.length - 1 ? ()=> this.props.navigation.navigate('ExhibitionContent', { exhibition : exhibition, from }) : ()=> this.props.navigation.navigate('ArtworkContent', { artwork : artworks[showingIndex], from })}>
                                 <View style={[styles.mt30]}>
                                     <Image source={require('../../assets/images/arrow_up_exhibition.png')} style={[styles.upBtn]}/>
@@ -219,7 +220,6 @@ class ExhibitionArtworkScreen extends Component{
                     </View>
                 )}
                 
-            </SafeAreaView>
             </ImageBackground>
             </Animated.View>
         )
