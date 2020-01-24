@@ -10,6 +10,7 @@ import EditProfileScreen from '../screens/EditProfileScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ArtworkDetailScreen from '../screens/ArtworkDetailScreen';
 import ArtworkContentScreen from '../screens/ArtworkContentScreen';
+import AlertScreen from '../screens/AlertScreen';
 import OthersProfileScreen from '../screens/OthersProfileScreen';
 import LikeListScreen from '../screens/LikeListScreen';
 
@@ -64,6 +65,12 @@ const GeneralNavigation = createStackNavigator({
     },
     LikeList: {
         screen: LikeListScreen,
+        navigationOptions: ({screenProps, navigation}) => ({
+            header: null
+        })
+    },
+    Alert: {
+        screen: AlertScreen,
         navigationOptions: ({screenProps, navigation}) => ({
             header: null
         })

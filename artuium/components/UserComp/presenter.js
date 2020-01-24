@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { View, Text, Image, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 const { width, height } = Dimensions.get('window')
 
@@ -10,7 +11,8 @@ class UserComp extends Component{
         user: PropTypes.object.isRequired,
         is_following: PropTypes.bool.isRequired,
         is_me: PropTypes.bool.isRequired,
-        size: PropTypes.string
+        size: PropTypes.string,
+        reportUser: PropTypes.func.isRequired
     }
 
     _handleGoToProfile = () => {
@@ -61,7 +63,18 @@ class UserComp extends Component{
                             </TouchableWithoutFeedback>
                         </View>
                     )}
-                    <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                    {is_me ? (
+                        <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                    ) : (
+                        <ModalDropdown options={['신고하기']}
+                        showsVerticalScrollIndicator={false}
+                        dropdownStyle={{height: Platform.OS === 'ios' ? 30 :  40}}
+                        dropdownTextStyle={{fontSize: 10, height: Platform.OS === 'ios' ? 30 :  40}}
+                        onSelect={this.props.reportUser}
+                        >
+                            <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                        </ModalDropdown>
+                    )}
                 </View>
             </View>
         )

@@ -812,7 +812,7 @@ const styles = StyleSheet.create({
     },
     artworkImage: {
         width: '100%',
-        height: 125
+        height: 80
     },
     artworkImageLg: {
         width: '100%',
@@ -951,6 +951,21 @@ const styles = StyleSheet.create({
         height: 8,
         borderRadius: 4,
     },
+    sliderDotGray: {
+        borderColor: '#c9c9c9',
+        borderWidth: 1,
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+        backgroundColor: '#c9c9c9'
+    },
+    sliderDotGrayEmpty: {
+        borderColor: '#c9c9c9',
+        borderWidth: 1,
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+    },
     exhibitionFull: {
         flexDirection: 'row',
         borderWidth: 1,
@@ -1001,9 +1016,7 @@ const styles = StyleSheet.create({
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#676767',
         borderRadius: 25,
-        opacity: 0.2,
     },
     divView: {
         width: "100%",

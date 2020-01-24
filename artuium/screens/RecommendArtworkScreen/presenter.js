@@ -59,6 +59,7 @@ class RecommendArtworkScreen extends Component{
                                 {users && users.length > 0 ? (
                                     <ScrollView
                                         horizontal={true}
+                                        alwaysBounceVertical={false}
                                         pagingEnabled={true}
                                         showsHorizontalScrollIndicator={false}
                                         onScroll={Animated.event(

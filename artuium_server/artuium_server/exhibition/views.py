@@ -27,8 +27,13 @@ class InitialExhibition(APIView):
 
         new_exhibitions = exhibitions.filter(open_date__lte = today).order_by('-open_date')[:5]
         recommended_exhibitions = exhibitions.filter(recommended = True)[:5]
-        hot_exhibitions = sorted(exhibitions, key=lambda t: t.like_count + t.review_count, reverse=True)
-        past_exhibitions = exhibitions.filter(close_date__lte = today)[:5]
+        hot_exhibitions = sorted(exhibitions, key=lambda t: t.like_count + t.review_count, reverse=True)[:5]
+
+        views = models.ExhibitionView.objects.filter(user = user).order_by('-viewed_at').values_list('exhibition', flat = True)[:5]
+        past_exhibitions = []
+        for view in views:
+            past_exhibitions.append(models.Exhibition.objects.get(id = view))
+        # past_exhibitions = exhibitions.filter(close_date__lte = today)[:5]
 
         return Response(status = status.HTTP_200_OK, data = {
             'status': 'ok',
@@ -125,5 +130,26 @@ class ExhibitionDetailByArtwork(APIView):
                     return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
             except:
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+
+
+class ExhibitionView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, format = None):
+        exhibition_id = request.data.get('exhibitionId', None)
+        user = request.user
+        if exhibition_id:
+            try:
+                exhibition = models.Exhibition.objects.get(id = exhibition_id)
+                pre = models.ExhibitionView.objects.filter(user = user, exhibition = exhibition)
+                if pre.count() > 0:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                else:
+                    view = models.ExhibitionView.objects.create(user = user, exhibition = exhibition)
+                    view.save()
+                    return Response(status = status.HTTP_200_OK)
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '전시가 존재하지 않습니다.'})
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})

@@ -16,6 +16,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         initialReview: () => {
             dispatch(reviewActions.initialReview())
+        },
+        reportUser: (userId) => {
+            return dispatch(userActions.reportUser(userId))
         }
     }
 }

@@ -6,9 +6,6 @@ import ExhibitionCard2 from '../../components/ExhibitionCard2'
 import ExhibitionCard3 from '../../components/ExhibitionCard3'
 import PropTypes from 'prop-types';
 import styles from '../../styles';
-import NoticeScreen from '../../screens/NoticeScreen';
-import NotificationScreen from '../../screens/NotificationScreen';
-import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
 const iosStatusBarHeight = getStatusBarHeight()
 
@@ -44,25 +41,10 @@ class ExhibitionScreen extends React.Component {
         recommendedExhibitions: PropTypes.array,
         hotExhibitions: PropTypes.array,
         pastExhibitions: PropTypes.array,
-        showNoticeModal: PropTypes.bool.isRequired,
-        openNoticeModal: PropTypes.func.isRequired,
-        closeNoticeModal: PropTypes.func.isRequired,
         handleNoticeNewChange: PropTypes.func.isRequired,
         handleNotificationNewChange: PropTypes.func.isRequired,
         refresh: PropTypes.func.isRequired,
         refreshing: PropTypes.bool.isRequired
-    }
-
-    _renderNoticeRouter = () => {
-        return (
-            <NoticeScreen handleNoticeNewChange={this.props.handleNoticeNewChange} />
-        )
-    }
-
-    _renderNotificationRouter = () => {
-        return (
-            <NotificationScreen handleNotificationNewChange={this.props.handleNoticeNewChange} />
-        )
     }
 
     _handleScroll = (event) => {
@@ -95,14 +77,14 @@ class ExhibitionScreen extends React.Component {
     render() {
         let position = Animated.divide(this.state.scrollX, width);
         let position2 = Animated.divide(this.state.scrollX2, width);
-        const { noticeNew, notificationNew, newExhibitions, recommendedExhibitions, hotExhibitions, pastExhibitions, showNoticeModal, refreshing } = this.props;
+        const { noticeNew, notificationNew, newExhibitions, recommendedExhibitions, hotExhibitions, pastExhibitions, refreshing } = this.props;
         return(
             <View style={[styles.container]}>
                 <Animated.View
                     style={[styles.row, styles.alignItemsCenter, styles.spaceBetween, styles.px15,
                     {width: width, height: 50, position: 'absolute', top: getStatusBarHeight(), zIndex: 900, opacity: this.state.topOpacity}
                 ]}>
-                    <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
+                    <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Alert', { notificationNew, noticeNew, handleNoticeNewChange: this.props.handleNoticeNewChange, handleNotificationNewChange: this.props.handleNotificationNewChange })}>
                         <View>
                             {((noticeNew) || (notificationNew)) ? (
                                 <Image style={{width: 32, height: 32, zIndex: 999}} source={require('../../assets/images/notification_alert.png')} />
@@ -130,6 +112,7 @@ class ExhibitionScreen extends React.Component {
                                 <ScrollView
                                     style={[{width: width, height: 400}]}
                                     horizontal={true}
+                                    alwaysBounceVertical={false}
                                     pagingEnabled={true}
                                     showsHorizontalScrollIndicator={false}
                                     onScroll={Animated.event(
@@ -143,7 +126,7 @@ class ExhibitionScreen extends React.Component {
                                 >
                                 {recommendedExhibitions.map((exhibition, index) => {
                                     return(
-                                        <TouchableWithoutFeedback key={index} onPress={() => this.props.navigation.navigate('ExhibitionDetail', { exhibition, from: 'Exhibition' })}>
+                                        <TouchableWithoutFeedback key={index} onPress={() => this.props.navigation.navigate('ExhibitionArtwork', { exhibition, from: 'Exhibition' })}>
                                             <View style={[{zIndex: 999}]}>
                                                 <ExhibitionCard3 from={'Exhibition'} exhibition={exhibition} navigation={this.props.navigation} />
                                             </View>
@@ -220,6 +203,7 @@ class ExhibitionScreen extends React.Component {
                             {recommendedExhibitions && recommendedExhibitions.length > 0 ? (
                                 <ScrollView
                                 horizontal={true}
+                                alwaysBounceVertical={false}
                                 pagingEnabled={true}
                                 showsHorizontalScrollIndicator={false}
                                 onScroll={Animated.event(
@@ -288,7 +272,7 @@ class ExhibitionScreen extends React.Component {
                         </View>
                         <View style={{height: 280}}>
                             {newExhibitions && newExhibitions.length > 0 ? (
-                                <ScrollView contentContainerStyle={[styles.pl15]} horizontal={true} showsHorizontalScrollIndicator={false}>
+                                <ScrollView contentContainerStyle={[styles.pl15]} alwaysBounceVertical={false} horizontal={true} showsHorizontalScrollIndicator={false}>
                                 {newExhibitions.map((exhibition, index) => {
                                     return(
                                         <ExhibitionCard2 from={'Exhibition'} key={index} exhibition={exhibition} navigation={this.props.navigation} />
@@ -310,7 +294,7 @@ class ExhibitionScreen extends React.Component {
                         </View>
                         <View style={{height: 280}}>
                                 {hotExhibitions && hotExhibitions.length > 0 ? (
-                                    <ScrollView contentContainerStyle={[styles.pl15]} horizontal={true} showsHorizontalScrollIndicator={false}>
+                                    <ScrollView contentContainerStyle={[styles.pl15]} horizontal={true} alwaysBounceVertical={false} showsHorizontalScrollIndicator={false}>
                                     {hotExhibitions.map((exhibition, index) => {
                                         return(
                                             <ExhibitionCard2 from={'Exhibition'} key={index} exhibition={exhibition} navigation={this.props.navigation} />
@@ -330,7 +314,7 @@ class ExhibitionScreen extends React.Component {
                         </View>
                         <View style={{height: 280}}>
                                 {pastExhibitions && pastExhibitions.length > 0 ? (
-                                    <ScrollView contentContainerStyle={[styles.pl15]} horizontal={true} showsHorizontalScrollIndicator={false}>
+                                    <ScrollView contentContainerStyle={[styles.pl15]} horizontal={true} alwaysBounceVertical={false} showsHorizontalScrollIndicator={false}>
                                     {pastExhibitions.map((exhibition, index) => {
                                         return(
                                             <ExhibitionCard2 from={'Exhibition'} key={index} exhibition={exhibition} navigation={this.props.navigation} />
@@ -346,57 +330,6 @@ class ExhibitionScreen extends React.Component {
                     </View>
                 </View>
                 </ScrollView>
-                <Modal
-                visible={showNoticeModal}
-                onRequestClose={this.props.closeNoticeModal}
-                animationType={'fade'}
-                transparent={true}
-                >
-                    <View style={[styles.container, styles.bgWhite]}>
-                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentEnd, styles.px15, styles.borderBtmGrayE6, { marginTop: iosStatusBarHeight, height: 50 }]}>
-                            <TouchableWithoutFeedback onPress={this.props.closeNoticeModal}>
-                                <View>
-                                    <Text style={[styles.fontMedium, styles.font16, styles.gray93]}>
-                                        닫기
-                                    </Text>
-                                </View>
-                            </TouchableWithoutFeedback>
-                        </View>
-                        <TabView
-                            navigationState={this.state}
-                            onIndexChange={index => this.setState({ index })}
-                            swipeEnabled={false}
-                            renderScene={SceneMap({
-                                first: this._renderNotificationRouter,
-                                second: this._renderNoticeRouter
-                            })}
-                            renderTabBar={props =>
-                                <TabBar
-                                    {...props}
-                                    activeColor = {'#1162d0'}
-                                    inactiveColor = {'#e6e6e6'}
-                                    labelStyle = {[styles.font15, styles.fontMedium]}
-                                    renderLabel={({ route, focused }) => (
-                                        <View>
-                                             <Text style={[styles.fontMedium, styles.font15, focused ? styles.blue : styles.grayE6]}>
-                                                 {route.title}
-                                             </Text>
-                                             {(route.title === '공지사항') && noticeNew && (
-                                                 <View style={[styles.bgRed, styles.circle6, focused ? null : {opacity: 0.4}, {position: 'absolute', top: 0, right: -5}]} />
-                                             )}
-                                             {(route.title === '알림') && notificationNew && (
-                                                 <View style={[styles.bgRed, styles.circle6, focused ? null : {opacity: 0.4}, {position: 'absolute', top: 0, right: -5}]} />
-                                             )}
-                                        </View>
-                                      )}
-                                    bounces={false}
-                                    indicatorStyle={{ backgroundColor: '#1162d0', height: 1 }}
-                                    style={[styles.bgGrayF8]}
-                                />
-                            }
-                        />
-                    </View>
-                </Modal>
             </View>
         )
     }

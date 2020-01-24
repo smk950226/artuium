@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, Image, Dimensions, TouchableWithoutFeedback, Platform, Modal, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import StarRating from 'react-native-star-rating';
@@ -50,7 +50,8 @@ class ArtuiumCard5 extends Component{
         following_count: PropTypes.number.isRequired,
         my: PropTypes.bool,
         handleChangeMode: PropTypes.func,
-        handleOption: PropTypes.func.isRequired
+        handleOption: PropTypes.func.isRequired,
+        reportUser: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -107,39 +108,45 @@ class ArtuiumCard5 extends Component{
                 <Fragment>
                     <View style={[styles.row, styles.justifyContentBetween]}>
                         <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('list')}>
-                            <View style={[styles.ml25]}>
+                            <View style={[styles.ml25, styles.pr20]}>
                                 <Image style={[{width: 14, height: 26}]} source={require('../../assets/images/icon_back.png')} />
                             </View>
                         </TouchableWithoutFeedback>
-                        <View style={[styles.alignItemsCenter, styles.mt15]}>
-                            {review.author.profile_image ? (
-                                <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
-                            ) : (
-                                <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage40]} />
-                            )}
-                            {review.expression === 'good' && (
-                                <Image source={require('../../assets/images/icon_good.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
-                            )}
-                            {review.expression === 'soso' && (
-                                <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
-                            )}
-                            {review.expression === 'sad' && (
-                                <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
-                            )}
-                            {review.expression === 'surprise' && (
-                                <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
-                            )}
-                            {review.expression === 'thumb' && (
-                                <Image source={require('../../assets/images/icon_thumb.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
-                            )}
-                        </View>
+                        <TouchableWithoutFeedback onPress={this.props.openProfileModal}>
+                            <View style={[styles.alignItemsCenter, styles.mt15]}>
+                                {review.author.profile_image ? (
+                                    <Image source={{uri: review.author.profile_image}} style={[styles.profileImage40]} resizeMode={'cover'} />
+                                ) : (
+                                    <Image source={require('../../assets/images/empty_profile.png')} style={[styles.profileImage40]} />
+                                )}
+                                {review.expression === 'good' && (
+                                    <Image source={require('../../assets/images/icon_good.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
+                                )}
+                                {review.expression === 'soso' && (
+                                    <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
+                                )}
+                                {review.expression === 'sad' && (
+                                    <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
+                                )}
+                                {review.expression === 'surprise' && (
+                                    <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
+                                )}
+                                {review.expression === 'thumb' && (
+                                    <Image source={require('../../assets/images/icon_thumb.png')} style={[styles.emojiXl, { position: 'absolute', top: 20, left: 24 }]} resizeMode={'cover'} />
+                                )}
+                            </View>
+                        </TouchableWithoutFeedback>
                         <TouchableWithoutFeedback>
-                            <View style={[styles.mr25, styles.hidden]}>
+                            <View style={[styles.mr25, styles.pl20, styles.hidden]}>
                                 <Image style={[{width: 14, height: 26}]} source={require('../../assets/images/icon_back.png')} />
                             </View>
                         </TouchableWithoutFeedback>
                     </View>
-                    <Text style={[styles.fontBold, styles.font20, styles.mt5, styles.textCenter]}>{review.author.nickname}님의 감상</Text>
+                    <TouchableWithoutFeedback onPress={this.props.openProfileModal}>
+                        <View>
+                                <Text style={[styles.fontBold, styles.font20, styles.mt5, styles.textCenter]}>{review.author.nickname}님의 감상</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
                     <View style={[styles.row, styles.justifyContentCenter, styles.widthFull, styles.mt5]}>
                         <StarRating
                             disabled={true}
@@ -172,8 +179,8 @@ class ArtuiumCard5 extends Component{
                         </TouchableWithoutFeedback>
                         <ModalDropdown options={is_me ? ['수정하기', '삭제하기'] : ['신고하기']}
                         showsVerticalScrollIndicator={false}
-                        dropdownStyle={is_me ? {height: 80} : {height: 40}}
-                        dropdownTextStyle={{fontSize: 13}}
+                        dropdownStyle={is_me ? {height: Platform.OS === 'ios' ? 60 :  80} : {height: Platform.OS === 'ios' ? 30 :  40}}
+                        dropdownTextStyle={{fontSize: 10, height: Platform.OS === 'ios' ? 30 :  40}}
                         onSelect={this.props.handleOption}
                         >
                             <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon15, styles.ml10]} />
@@ -243,7 +250,18 @@ class ArtuiumCard5 extends Component{
                                                 </View>
                                             )
                                         }
-                                        <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                        {is_me ? (
+                                            <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                        ) : (
+                                            <ModalDropdown options={['신고하기']}
+                                            showsVerticalScrollIndicator={false}
+                                            dropdownStyle={{height: Platform.OS === 'ios' ? 30 :  40}}
+                                            dropdownTextStyle={{fontSize: 10, height: Platform.OS === 'ios' ? 30 :  40}}
+                                            onSelect={this.props.reportUser}
+                                            >
+                                                <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                            </ModalDropdown>
+                                        )}
                                     </View>
                                 </View>
                             </View>

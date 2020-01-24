@@ -93,3 +93,17 @@ class ExhibitionImage(models.Model):
             return 'square'
         else:
             return 'vertical'
+
+
+class ExhibitionView(models.Model):
+    user = models.ForeignKey('users.User', on_delete = models.CASCADE, related_name = 'exhibition_views')
+    exhibition = models.ForeignKey(Exhibition, on_delete = models.CASCADE, related_name = 'views')
+    viewed_at = models.DateTimeField(auto_now_add = True)
+
+    def __str__(self):
+        return  self.user.nickname + '-' + self.exhibition.name
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name = '전시 관람 여부'
+        verbose_name_plural = '전시 관람 여부'

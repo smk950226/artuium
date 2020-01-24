@@ -12,13 +12,13 @@ const NotificationScreen = (props) => (
             <FlatList 
             data={props.notification} 
             renderItem={({item}) => (
-                <Notification notification={item} handleNotificationNewChange={props.handleNotificationNewChange} />
+                <Notification clearNotification={props.clearNotification}  navigation={props.navigation} notification={item} handleNotificationNewChange={props.handleNotificationNewChange} />
             )} 
             numColumns={1} 
             keyExtractor={item => String(item.id)} 
             refreshing={props.refreshing} 
             onRefresh={props.refresh} 
-            onEndReached={props.hasNextPage ? props.noticeMore : null} 
+            onEndReached={props.hasNextPage ? props.notificationMore : null} 
             onEndReachedThreshold={0.5} 
             bounces={true} 
             ListFooterComponent={props.isLoadingMore ? (

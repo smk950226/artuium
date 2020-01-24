@@ -254,6 +254,33 @@ function updateExhibitionReview(exhibitionId, reviewId, rating, expression, cont
     }
 }
 
+function deleteExhibitionReview(exhibitionId, reviewId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/review/exhibition/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            },
+            body: JSON.stringify({
+                exhibitionId,
+                reviewId
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 function getExhibitionLikeList(userId){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
@@ -301,8 +328,32 @@ function getExhibitionLikeListMore(userId, page){
     }
 }
 
+function viewExhibition(exhibitionId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        fetch(`${FETCH_URL}/api/exhibition/exhibition/view/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            },
+            body: JSON.stringify({
+                exhibitionId
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(getLogout())
+            }
+        })
+    }
+}
+
 const initialState = {
-    
+    newExhibitions: [],
+    recommendedExhibitions: [],
+    hotExhibitions: [],
+    pastExhibitions: [],
 };
 
 function reducer(state = initialState, action){
@@ -338,7 +389,9 @@ const actionCreators = {
     createExhibitionReview,
     getExhibitionLikeList,
     getExhibitionLikeListMore,
-    updateExhibitionReview
+    updateExhibitionReview,
+    deleteExhibitionReview,
+    viewExhibition
 }
 
 export { actionCreators }

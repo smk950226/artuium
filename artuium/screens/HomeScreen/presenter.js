@@ -4,9 +4,6 @@ import { Animated, View, PanResponder, Text, ScrollView, Image, Modal, Dimension
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import styles from '../../styles';
 import ArtuiumCard from '../../components/ArtuiumCard';
-import NoticeScreen from '../../screens/NoticeScreen';
-import NotificationScreen from '../../screens/NotificationScreen';
-import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
 const iosStatusBarHeight = getStatusBarHeight()
 
@@ -14,48 +11,34 @@ const { width, height } = Dimensions.get('window')
 
 class HomeScreen extends Component {
     static propTypes = {
+        banners: PropTypes.array,
         newReviews: PropTypes.array,
         recommendedReviews: PropTypes.array,
         followingReviews: PropTypes.array,
-        openNoticeModal: PropTypes.func.isRequired,
-        closeNoticeModal: PropTypes.func.isRequired,
-        showNoticeModal :PropTypes.bool.isRequired,
         noticeNew: PropTypes.bool.isRequired,
         notificationNew: PropTypes.bool.isRequired
     }
 
     constructor(props){
-        super(props)
+        super(props);
         this.state = {
-            index: 0,
-            routes: [
-                { key: 'first', title: '알림' },
-                { key: 'second', title: '공지사항' },
-            ],
+            scrollX: new Animated.Value(0),
+            scrollX2: new Animated.Value(0),
         }
     }
 
-    _renderNoticeRouter = () => {
-        return (
-            <NoticeScreen handleNoticeNewChange={this.props.handleNoticeNewChange} />
-        )
-    }
-
-    _renderNotificationRouter = () => {
-        return (
-            <NotificationScreen handleNotificationNewChange={this.props.handleNotificationNewChange} />
-        )
-    }
-
     render() {
-        const { newReviews, recommendedReviews, followingReviews, showNoticeModal, noticeNew, notificationNew } = this.props;
+        const { banners, newReviews, recommendedReviews, followingReviews, noticeNew, notificationNew } = this.props;
+        let position = Animated.divide(this.state.scrollX, width);
+        let position2 = Animated.divide(this.state.scrollX2, width);
+
         return (
             <View style={[styles.container, styles.paddingIOS]}>
                 <View
                     style={[styles.row, styles.alignItemsCenter, styles.spaceBetween, styles.px15,
                     {width: width, height: 50, zIndex: 998}
                 ]}>
-                    <TouchableWithoutFeedback onPress={this.props.openNoticeModal}>
+                    <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Alert', { notificationNew, noticeNew, handleNoticeNewChange: this.props.handleNoticeNewChange, handleNotificationNewChange: this.props.handleNotificationNewChange })}>
                         <View style={[styles.flex1]}>
                             {((noticeNew) || (notificationNew)) ? (
                                 <Image style={{width: 32, height: 32, zIndex: 999}} source={require('../../assets/images/notification_alert.png')} />
@@ -74,11 +57,23 @@ class HomeScreen extends Component {
                 </View>
                 <View style={[styles.container]}>
                     <ScrollView>
-                        <ScrollView scrollEventThrottle={16} horizontal={true} pagingEnabled={true} style={[styles.bgWhite, {width, height: 280, zIndex: 10}]} >
-                            <Image resizeMode={'cover'} source={require('../../assets/images/mona.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
-                            <Image resizeMode={'cover'} source={require('../../assets/images/monc.jpg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
-                            <Image resizeMode={'cover'} source={require('../../assets/images/goh.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
-                        </ScrollView>
+                        {banners && banners.length > 0 ? (
+                            <ScrollView alwaysBounceVertical={false} alwaysBounceVertical={false} horizontal={true} pagingEnabled={true} style={[styles.bgWhite, {width, height: 280, zIndex: 10}]} >
+                                {banners.map((ban, index) => (
+                                    <TouchableWithoutFeedback key={index} onPress={() => this.props.navigation.navigate('Alert', { notificationNew, noticeNew, handleNoticeNewChange: this.props.handleNoticeNewChange, handleNotificationNewChange: this.props.handleNotificationNewChange, index: 1 })}>
+                                        <View>
+                                            <Image resizeMode={'cover'} source={{uri: ban.image ? ban.image : ''}} resizeMode={'cover'} style={[{height: '100%', width}]} />
+                                        </View>
+                                    </TouchableWithoutFeedback>
+                                ))}
+                            </ScrollView>
+                        ) : (
+                            <ScrollView alwaysBounceVertical={false} scrollEventThrottle={16} alwaysBounceVertical={false} horizontal={true} pagingEnabled={true} style={[styles.bgWhite, {width, height: 280, zIndex: 10}]} >
+                                <Image resizeMode={'cover'} source={require('../../assets/images/mona.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
+                                <Image resizeMode={'cover'} source={require('../../assets/images/monc.jpg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
+                                <Image resizeMode={'cover'} source={require('../../assets/images/goh.jpeg')} resizeMode={'cover'} style={[{height: '100%', width}]} />
+                            </ScrollView>
+                        )}
                         <View style={[styles.center, styles.alignSelfCenter, styles.bgWhite, styles.homeMenuShadow,
                             {width: width*0.9, height: 80, borderRadius: 10, marginTop: -40, zIndex: 999 },
                         ]}>
@@ -129,9 +124,18 @@ class HomeScreen extends Component {
                             </View>
                             <ScrollView
                                 horizontal={(newReviews && (newReviews.length > 0)) ? true : false}
+                                alwaysBounceVertical={false}
                                 pagingEnabled={(newReviews && (newReviews.length > 0)) ? true : false}
                                 scrollEnabled={(newReviews && (newReviews.length > 0)) ? true : false}
                                 showsHorizontalScrollIndicator={false}
+                                onScroll={Animated.event(
+                                    [{ nativeEvent: {
+                                        contentOffset: {
+                                            x: this.state.scrollX
+                                        }
+                                    }}]
+                                )}
+                                scrollEventThrottle={16}
                             >
                                 {(newReviews && (newReviews.length > 0)) ? (
                                     newReviews.map((review, index) => (
@@ -141,6 +145,28 @@ class HomeScreen extends Component {
                                     <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
                                 )}
                             </ScrollView>
+                            <View style={[styles.center, styles.mt10]}>
+                                <View
+                                    style={{ flexDirection: 'row' }}
+                                >
+                                    {newReviews && newReviews.length > 0 && (
+                                        newReviews.map((_, i) => {
+                                            let opacity = position.interpolate({
+                                                inputRange: [i - 1, i, i + 1],
+                                                outputRange: [0, 1, 0],
+                                                extrapolate: 'clamp'
+                                            });
+                                            return (
+                                                <View key={i} style={[styles.sliderDotGrayEmpty, styles.center, {marginRight: 6}]}>
+                                                    <Animated.View
+                                                        style={[styles.sliderDotGray, {opacity}]}
+                                                    />
+                                                </View>
+                                            );
+                                        })
+                                    )}
+                                </View>
+                            </View>
                             <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15]}>
                                 <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AllArtwork')}>
                                     <View style={[styles.bgBlack, styles.borderRadius5, styles.py10, { width: 220 }]}>
@@ -159,7 +185,16 @@ class HomeScreen extends Component {
                             horizontal={(followingReviews && (followingReviews.length > 0)) ? true : false}
                             pagingEnabled={(followingReviews && (followingReviews.length > 0)) ? true : false}
                             scrollEnabled={(followingReviews && (followingReviews.length > 0)) ? true : false}
+                            alwaysBounceVertical={false}
                             showsHorizontalScrollIndicator={false}
+                            onScroll={Animated.event(
+                                [{ nativeEvent: {
+                                    contentOffset: {
+                                        x: this.state.scrollX2
+                                    }
+                                }}]
+                            )}
+                            scrollEventThrottle={16}
                             >
                                 {(followingReviews && (followingReviews.length > 0)) ? (
                                     followingReviews.map((review, index) => (
@@ -169,6 +204,28 @@ class HomeScreen extends Component {
                                     <Text style={[styles.fontMedium, styles.font15, styles.mt40, styles.grayA7, styles.textCenter]}>감상이 없습니다.</Text>
                                 )}
                             </ScrollView>
+                            <View style={[styles.center, styles.mt10]}>
+                                <View
+                                    style={{ flexDirection: 'row' }}
+                                >
+                                    {followingReviews && followingReviews.length > 0 && (
+                                        followingReviews.map((_, i) => {
+                                            let opacity = position2.interpolate({
+                                                inputRange: [i - 1, i, i + 1],
+                                                outputRange: [0, 1, 0],
+                                                extrapolate: 'clamp'
+                                            });
+                                            return (
+                                                <View key={i} style={[styles.sliderDotGrayEmpty, styles.center, {marginRight: 6}]}>
+                                                    <Animated.View
+                                                        style={[styles.sliderDotGray, {opacity}]}
+                                                    />
+                                                </View>
+                                            );
+                                        })
+                                    )}
+                                </View>
+                            </View>
                             <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.mt15, { marginBottom: 60 }]}>
                                 <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('FollowArtwork')}>
                                     <View style={[styles.bgBlack, styles.borderRadius5, styles.py10, { width: 220 }]}>
@@ -179,57 +236,6 @@ class HomeScreen extends Component {
                         </View>
                     </ScrollView>
                 </View>
-                <Modal
-                visible={showNoticeModal}
-                onRequestClose={this.props.closeNoticeModal}
-                animationType={'fade'}
-                transparent={true}
-                >
-                    <View style={[styles.container, styles.bgWhite]}>
-                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentEnd, styles.px15, styles.borderBtmGrayE6, { marginTop: iosStatusBarHeight, height: 50 }]}>
-                            <TouchableWithoutFeedback onPress={this.props.closeNoticeModal}>
-                                <View>
-                                    <Text style={[styles.fontMedium, styles.font16, styles.gray93]}>
-                                        닫기
-                                    </Text>
-                                </View>
-                            </TouchableWithoutFeedback>
-                        </View>
-                        <TabView
-                            navigationState={this.state}
-                            onIndexChange={index => this.setState({ index })}
-                            swipeEnabled={false}
-                            renderScene={SceneMap({
-                                first: this._renderNotificationRouter,
-                                second: this._renderNoticeRouter
-                            })}
-                            renderTabBar={props =>
-                                <TabBar
-                                    {...props}
-                                    activeColor = {'#1162d0'}
-                                    inactiveColor = {'#e6e6e6'}
-                                    labelStyle = {[styles.font15, styles.fontMedium]}
-                                    renderLabel={({ route, focused }) => (
-                                        <View>
-                                             <Text style={[styles.fontMedium, styles.font15, focused ? styles.blue : styles.grayE6]}>
-                                                 {route.title}
-                                             </Text>
-                                             {(route.title === '공지사항') && noticeNew && (
-                                                 <View style={[styles.bgRed, styles.circle6, focused ? null : {opacity: 0.4}, {position: 'absolute', top: 0, right: -5}]} />
-                                             )}
-                                             {(route.title === '알림') && notificationNew && (
-                                                 <View style={[styles.bgRed, styles.circle6, focused ? null : {opacity: 0.4}, {position: 'absolute', top: 0, right: -5}]} />
-                                             )}
-                                        </View>
-                                      )}
-                                    bounces={false}
-                                    indicatorStyle={{ backgroundColor: '#1162d0', height: 1 }}
-                                    style={[styles.bgGrayF8]}
-                                />
-                            }
-                        />
-                    </View>
-                </Modal>
             </View>
         );
     }

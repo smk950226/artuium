@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { View, Text, ScrollView, FlatList, RefreshControl, ActivityIndicator, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform, TextInput } from 'react-native';
+import { View, Text, ScrollView, FlatList, RefreshControl, ActivityIndicator, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform, TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
@@ -86,7 +86,8 @@ class ExhibitionContentScreen extends React.Component {
         selectReply: PropTypes.func.isRequired,
         selectedReply: PropTypes.object.isRequired,
         update: PropTypes.func.isRequired,
-        handleUpdateMode: PropTypes.func.isRequired
+        handleUpdateMode: PropTypes.func.isRequired,
+        deleteReview: PropTypes.func.isRequired
     }
     constructor(props){
         super(props);
@@ -94,8 +95,28 @@ class ExhibitionContentScreen extends React.Component {
 
         this.state = {
             index: initialMode ? ((initialMode === 'review') || (initialMode === 'list') || (initialMode === 'create')) ? 1 : 0 : 0,
-            initialMode
+            initialMode,
+            keyboardHeight: 0
         }
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+    }
+
+    componentWillUnmount = () => {
+        this.keyboardDidShowListener.remove()
+        this.keyboardDidHideListener.remove()
+    }
+
+    _keyboardDidShow = (e) => {
+        this.setState({
+            keyboardHeight: e.endCoordinates.height
+        })
+    }
+
+    _keyboardDidHide = () => {
+        this.setState({
+            keyboardHeight: 0
+        })
     }
 
     _goUpdate = (review) => {
@@ -108,7 +129,7 @@ class ExhibitionContentScreen extends React.Component {
 
     render(){
         const { exhibition, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from } = this.props;
-        const { initialMode } = this.state;
+        const { initialMode, keyboardHeight } = this.state;
         return(
             exhibition ? (
                 <View style={[styles.container]}>
@@ -140,7 +161,7 @@ class ExhibitionContentScreen extends React.Component {
                                         </View>
                                     </TouchableWithoutFeedback>
                                 </View>
-                                <View style={[styles.flexWrap, {width: 200}]}>
+                                <View style={[styles.flexWrap]}>
                                     <Text style={[styles.fontBold, styles.font30, styles.white]}><Text style={[styles.fontBold, styles.font30, styles.yellow]}>{'전시 '}</Text>{exhibition.name}</Text>
                                 </View>
                                 <Text style={[styles.fontMedium, styles.font14, styles.white]}>{exhibition.gallery.name}, {`${exhibition.open_date.slice(8,10)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} ~ ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
@@ -184,26 +205,26 @@ class ExhibitionContentScreen extends React.Component {
                                             <View style={[styles.bgGrayf0, styles.py20, styles.px30, styles.mt15]}>
                                                 <View style={[styles.row]}>
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>전시 기간</Text>
-                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{`${exhibition.open_date.slice(0,4)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} - ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
+                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10, { width: width - 180 }]}>{`${exhibition.open_date.slice(0,4)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} - ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>전시 장소</Text>
                                                     <View style={[styles.ml10]}>
-                                                        <Text style={[styles.fontRegular, styles.font14]}>{exhibition.gallery.name}</Text>
-                                                        <Text style={[styles.fontRegular, styles.font14, styles.mt5]}>{exhibition.gallery.address}</Text>
+                                                        <Text style={[styles.fontRegular, styles.font14, { width: width - 180 }]}>{exhibition.gallery.name}</Text>
+                                                        <Text style={[styles.fontRegular, styles.font14, styles.mt5, { width: width - 180 }]}>{exhibition.gallery.address}</Text>
                                                     </View>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>관람 시간</Text>
-                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{`${exhibition.open_time.slice(0,5)} - ${exhibition.close_time.slice(0,5)}`}</Text>
+                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10, { width: width - 180 }]}>{`${exhibition.open_time.slice(0,5)} - ${exhibition.close_time.slice(0,5)}`}</Text>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>입장료</Text>
-                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{exhibition.fee}</Text>
+                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10, { width: width - 180 }]}>{exhibition.fee}</Text>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
                                                     <Text style={[{width: 60}, styles.fontBold, styles.font14]}>휴관일</Text>
-                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10]}>{exhibition.notopendate ? exhibition.notopendate : '없음'}</Text>
+                                                    <Text style={[styles.fontRegular, styles.font14, styles.ml10, { width: width - 180 }]}>{exhibition.notopendate ? exhibition.notopendate : '없음'}</Text>
                                                 </View>
                                             </View>
                                             <View style={[{marginTop: 25}]}>
@@ -227,11 +248,12 @@ class ExhibitionContentScreen extends React.Component {
                                                                     scrollEnabled={myReviews.length > 1 ? true : false}
                                                                     pagingEnabled={true}
                                                                     horizontal={true}
+                                                                    alwaysBounceVertical={false}
                                                                     showsHorizontalScrollIndicator={false}
                                                                     style={[{height: 160}, styles.mt15]}
                                                                     >
                                                                         {myReviews.map((review, index) => (
-                                                                            <ArtuiumCard3 goUpdate={this._goUpdate} from={from} key={index} review={review} navigation={this.props.navigation} my={true} handleChangeMode={this.props.handleChangeMode} />
+                                                                            <ArtuiumCard3 deleteReview={this.props.deleteReview} goUpdate={this._goUpdate} from={from} key={index} review={review} navigation={this.props.navigation} my={true} handleChangeMode={this.props.handleChangeMode} />
                                                                         ))}
                                                                     </ScrollView>
                                                                     <View style={[styles.widthFull, styles.px15]}>
@@ -334,7 +356,7 @@ class ExhibitionContentScreen extends React.Component {
                                                             <FlatList 
                                                             data={reviews} 
                                                             renderItem={({item}) => (
-                                                                <ArtuiumCard3 goUpdate={this._goUpdate} from={from} review={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
+                                                                <ArtuiumCard3 deleteReview={this.props.deleteReview} goUpdate={this._goUpdate} from={from} review={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
                                                             )} 
                                                             numColumns={1} 
                                                             keyExtractor={item => String(item.id)} 
@@ -360,41 +382,47 @@ class ExhibitionContentScreen extends React.Component {
                                             )}
                                             {mode === 'create' && (
                                                 <Fragment>
-                                                    <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('list')}>
-                                                        <View style={[styles.ml25]}>
-                                                            <Image style={[{width: 14, height: 26}]} source={require('../../assets/images/icon_back.png')} />
+                                                    <TouchableWithoutFeedback onPress={()=>this.props.handleChangeRating(0)}>
+                                                        <View>
+                                                        <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('list')}>
+                                                            <View style={[styles.ml25, { width: 40 }]}>
+                                                                <Image style={[{width: 14, height: 26}]} source={require('../../assets/images/icon_back.png')} />
+                                                            </View>
+                                                        </TouchableWithoutFeedback>
+                                                            <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.alignSelfCenter, styles.mt15, styles.borderBtmGrayE8, styles.pb15, styles.widthFull]}>
+                                                                <Stars
+                                                                half={true}
+                                                                default={rating}
+                                                                update={(val)=>this.props.handleChangeRating(val)}
+                                                                spacing={4}
+                                                                starSize={34}
+                                                                count={5}
+                                                                emptyStar={require('../../assets/images/icon_star_disabled.png')}
+                                                                fullStar={require('../../assets/images/icon_star.png')}
+                                                                halfStar={require('../../assets/images/icon_star_half.png')}
+                                                                />
+                                                            </View>
                                                         </View>
                                                     </TouchableWithoutFeedback>
-                                                    <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.alignSelfCenter, styles.mt15, styles.borderBtmGrayE8, styles.pb15, styles.widthFull]}>
-                                                        <Stars
-                                                        half={true}
-                                                        default={rating}
-                                                        update={(val)=>this.props.handleChangeRating(val)}
-                                                        spacing={4}
-                                                        starSize={34}
-                                                        count={5}
-                                                        emptyStar={require('../../assets/images/icon_star_disabled.png')}
-                                                        fullStar={require('../../assets/images/icon_star.png')}
-                                                        halfStar={require('../../assets/images/icon_star_half.png')}
-                                                        />
-                                                    </View>
-                                                    <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.alignSelfCenter, styles.mt10, styles.borderBtmGrayE8, styles.pb15, styles.widthFull]}>
-                                                        <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('thumb')}>
-                                                            <Image source={require('../../assets/images/icon_thumb.png')} style={[styles.emojiXl, styles.mx5, expression === 'thumb' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                        </TouchableWithoutFeedback>
-                                                        <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('sad')}>
-                                                            <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emojiXl, styles.mx5, expression === 'sad' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                        </TouchableWithoutFeedback>
-                                                        <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('soso')}>
-                                                            <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emojiXl, styles.mx5, expression === 'soso' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                        </TouchableWithoutFeedback>
-                                                        <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('surprise')}>
-                                                            <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emojiXl, styles.mx5, expression === 'surprise' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                        </TouchableWithoutFeedback>
-                                                        <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('good')}>
-                                                            <Image source={require('../../assets/images/icon_good.png')} style={[styles.emojiXl, styles.mx5, expression === 'good' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                        </TouchableWithoutFeedback>
-                                                    </View>
+                                                    <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('')}>
+                                                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.alignSelfCenter, styles.mt10, styles.borderBtmGrayE8, styles.pb15, styles.widthFull]}>
+                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('thumb')}>
+                                                                <Image source={require('../../assets/images/icon_thumb.png')} style={[styles.emojiXl, styles.mx5, expression === 'thumb' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
+                                                            </TouchableWithoutFeedback>
+                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('sad')}>
+                                                                <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emojiXl, styles.mx5, expression === 'sad' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
+                                                            </TouchableWithoutFeedback>
+                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('soso')}>
+                                                                <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emojiXl, styles.mx5, expression === 'soso' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
+                                                            </TouchableWithoutFeedback>
+                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('surprise')}>
+                                                                <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emojiXl, styles.mx5, expression === 'surprise' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
+                                                            </TouchableWithoutFeedback>
+                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('good')}>
+                                                                <Image source={require('../../assets/images/icon_good.png')} style={[styles.emojiXl, styles.mx5, expression === 'good' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
+                                                            </TouchableWithoutFeedback>
+                                                        </View>
+                                                    </TouchableWithoutFeedback>
                                                     <View style={[styles.widthFull, {height: 300, borderWidth: 1, borderColor: '#e8e8e8'}]}>
                                                         <TextInput
                                                             style={[styles.font15, styles.widthFull, styles.px25, styles.py10, styles.widthFull, {height: 300, minHeight: 300, flex: 1}]}
@@ -411,7 +439,7 @@ class ExhibitionContentScreen extends React.Component {
                                                         />
                                                         <Text style={[styles.fontMedium, styles.font14, { position: 'absolute', bottom: 15, right: 25 }]}>{content.length}<Text style={[styles.grayD1]}>/500자</Text></Text>
                                                     </View>
-                                                    <View style={[styles.mt30, styles.alignItemsCenter, { marginBottom: 70 }]}>
+                                                    <View style={[styles.mt30, styles.alignItemsCenter, { marginBottom: Platform.OS === 'ios' ? 70 + keyboardHeight : 70 }]}>
                                                         <TouchableWithoutFeedback onPress={initialMode === 'create' ? this.props.update : this.props.submit}>
                                                             <View style={[styles.bgBlack, styles.borderRadius5, styles.px30, styles.py5, isSubmittingReview ? styles.opacity07 : null]}>
                                                                 <Text style={[styles.fontMedium, styles.font16, styles.white]}>{initialMode === 'create' ? `수정하기` : `등록하기`}</Text>
@@ -422,7 +450,7 @@ class ExhibitionContentScreen extends React.Component {
                                             )}
                                             {mode === 'review' && (
                                                 <View style={[styles.pb30]}>
-                                                    <ArtuiumCard5 goUpdate={this._goUpdate} from={from} review={showingReview} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
+                                                    <ArtuiumCard5 deleteReview={this.props.deleteReview} goUpdate={this._goUpdate} from={from} review={showingReview} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
                                                     <View style={[styles.divView, styles.mt15]} />
                                                     <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px30, styles.pt20, styles.mb15]}>
                                                         <Text style={[styles.font20, styles.fontBold, {color: '#382a2a'}]}>댓글</Text>
@@ -479,24 +507,46 @@ class ExhibitionContentScreen extends React.Component {
                         null
                     )}
                     {this.state.index === 1 && mode === 'review' && (
-                        <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, Platform.OS === 'ios' ? {paddingBottom: 20} : null, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
-                            <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
-                                <TextInput
-                                    style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
-                                    autoCapitalize={'none'} 
-                                    autoCorrect={false} 
-                                    value={contentReply} 
-                                    onChangeText={this.props.handleChangeContentReply} 
-                                    returnKeyType={'done'} 
-                                    placeholderTextColor={'#000000'}
-                                />
-                            </View>
-                            <TouchableWithoutFeedback onPress={this.props.createReview}>
-                                <View style={[styles.flex2, styles.bgGray33, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.py5, styles.borderRadius5, isSubmittingReply ? { opacity: .4 } : null]}>
-                                    <Text style={[styles.fontMedium, styles.font16, styles.white]}>등록</Text>
+                        Platform.OS === 'ios' ? (
+                            <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, styles.pb10, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
+                                <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
+                                    <TextInput
+                                        style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
+                                        autoCapitalize={'none'} 
+                                        autoCorrect={false} 
+                                        value={contentReply} 
+                                        onChangeText={this.props.handleChangeContentReply} 
+                                        returnKeyType={'done'} 
+                                        placeholderTextColor={'#000000'}
+                                    />
                                 </View>
-                            </TouchableWithoutFeedback>
-                        </KeyboardAvoidingView>
+                                <TouchableWithoutFeedback onPress={this.props.createReview}>
+                                    <View style={[styles.flex2, styles.bgGray33, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.py5, styles.borderRadius5, isSubmittingReply ? { opacity: .4 } : null]}>
+                                        <Text style={[styles.fontMedium, styles.font16, styles.white]}>등록</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </KeyboardAvoidingView>
+                        ) : (
+                            <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, styles.pb10, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
+                                <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
+                                    <TextInput
+                                        style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
+                                        autoCapitalize={'none'} 
+                                        autoCorrect={false} 
+                                        value={contentReply} 
+                                        onChangeText={this.props.handleChangeContentReply} 
+                                        returnKeyType={'done'} 
+                                        placeholderTextColor={'#000000'}
+                                    />
+                                </View>
+                                <TouchableWithoutFeedback onPress={this.props.createReview}>
+                                    <View style={[styles.flex2, styles.bgGray33, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.py5, styles.borderRadius5, isSubmittingReply ? { opacity: .4 } : null]}>
+                                        <Text style={[styles.fontMedium, styles.font16, styles.white]}>등록</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </View>
+                        )
+                        
                     )}
                     
                 </View>

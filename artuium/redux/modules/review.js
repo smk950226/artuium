@@ -193,7 +193,10 @@ function reportReview(reviewId){
 }
 
 const initialState = {
-    
+    banners: [],
+    newReviews: [],
+    recommendedReviews: [],
+    followingReviews: []
 };
 
 function reducer(state = initialState, action){
@@ -209,6 +212,7 @@ function applySetInitialReview(state, action){
     const { initial } = action;
     return {
         ...state,
+        banners: initial.banners,
         initialStatus: initial.status,
         newReviews: initial.new_reviews,
         recommendedReviews: initial.recommended_reviews,

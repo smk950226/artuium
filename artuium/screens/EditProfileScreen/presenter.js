@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, SafeAreaView, Image, ScrollView, KeyboardAvoidingView, TextInput, Dimensions, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
+import { View, Text, Platform, Image, ScrollView, KeyboardAvoidingView, TextInput, Dimensions, TouchableWithoutFeedback, TouchableOpacity, Keyboard } from 'react-native';
 import PropTypes from 'prop-types';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import styles from '../../styles';
@@ -8,20 +8,52 @@ const iosStatusBarHeight = getStatusBarHeight()
 const { width, height } = Dimensions.get('window')
 
 class EditProfileScreen extends React.Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            keyboardHeight: 0
+        }
+
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+    }
+
+    componentWillUnmount = () => {
+        this.keyboardDidShowListener.remove()
+        this.keyboardDidHideListener.remove()
+    }
+
+    _keyboardDidShow = (e) => {
+        this.setState({
+            keyboardHeight: e.endCoordinates.height
+        })
+    }
+
+    _keyboardDidHide = () => {
+        this.setState({
+            keyboardHeight: 0
+        })
+    }
+
     render(){
+        const { keyboardHeight } = this.state;
         return(
             <View style={[styles.container, styles.bgGrayf0]}>
                 <View style={[styles.row, styles.justifyContentBetween, styles.alignItemsCenter, styles.px25, styles.bgWhite, {width, height: iosStatusBarHeight+50, paddingTop: iosStatusBarHeight}]}>
                     <TouchableWithoutFeedback onPress={() => this.props.navigation.goBack(null)}>
-                        <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
+                        <View style={[styles.pr20]}>
+                            <Image source={require('../../assets/images/icon_back.png')} style={[{width: 9*1.6, height: 17*1.6}]} />
+                        </View>
                     </TouchableWithoutFeedback>
                     <Text style={[styles.fontBold, styles.font20]}>프로필 변경</Text>
                     <TouchableOpacity onPress={() => this.props.handleChangeProfile()}>
-                        <Text style={[styles.fontMedium, styles.font16, {color: '#044ae6'}]}>완료</Text>
+                        <View style={[styles.pl20]}>
+                            <Text style={[styles.fontMedium, styles.font16, {color: '#044ae6'}]}>완료</Text>
+                        </View>
                     </TouchableOpacity>
                 </View>
                 <ScrollView bounces={false}>
-                    <KeyboardAvoidingView behavior={'padding'}>
+                    <View>
                         <View style={[styles.alignItemsCenter]}>
                             {this.props.savedBackgroundImg ? 
                                 <Image
@@ -66,14 +98,14 @@ class EditProfileScreen extends React.Component {
                             </TouchableWithoutFeedback>
                         </View>
                         <View style={[styles.divGray]} />
-                        <View style={[styles.borderBtmGrayD1]}>
+                        <View style={[styles.borderBtmGrayD1, { marginBottom: Platform.OS === 'ios' ? keyboardHeight : 0 }]}>
                             <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px30, styles.pt30]}>
                                 <View style={[styles.flex1]}>
                                     <Text style={[styles.fontMedium, styles.font16]}>이름</Text>
                                 </View>
-                                <View style={[styles.flex3]}>
+                                <View style={[styles.flex3, styles.justifyContentCenter]}>
                                     <TextInput
-                                        style={[styles.font16, {height: 43, paddingVertical: 0}]}
+                                        style={[styles.font16]}
                                         underlineColorAndroid={'transparent'} 
                                         autoCapitalize={'none'} 
                                         autoCorrect={false} 
@@ -122,7 +154,7 @@ class EditProfileScreen extends React.Component {
                                 </View>
                             </View>
                         </View>
-                    </KeyboardAvoidingView>
+                    </View>
                 </ScrollView>
             </View>
         )

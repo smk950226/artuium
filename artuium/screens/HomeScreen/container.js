@@ -8,6 +8,7 @@ import { NavigationEvents } from "react-navigation";
 
 class Container extends Component{
     static propTypes = {
+        banners: PropTypes.array,
         newReviews: PropTypes.array,
         recommendedReviews: PropTypes.array,
         followingReviews: PropTypes.array,
@@ -17,21 +18,20 @@ class Container extends Component{
         setPushToken: PropTypes.func.isRequired,
         getNoticeNew: PropTypes.func.isRequired,
         getNotificationNew: PropTypes.func.isRequired,
-        noticeNew: PropTypes.bool.isRequired,
-        notificationNew: PropTypes.bool.isRequired
+        noticeNew: PropTypes.bool,
+        notificationNew: PropTypes.bool
     }
 
     constructor(props){
         super(props);
         const { noticeNew, notificationNew } = props;
         this.state = {
-            loading: true,
+            loading: false,
             fetchedProfile: false,
             fetchedNew: false,
             fetchedRecommended: false,
             fetchedFollowing: false,
             fetchClear: false,
-            showNoticeModal: false,
             noticeNew,
             notificationNew,
             pushPermission: false
@@ -145,7 +145,6 @@ class Container extends Component{
     componentDidUpdate = () => {
         if(this.props.profile && this.state.fetchedNew && this.state.fetchedRecommended && this.state.fetchedFollowing && this.state.fetchedProfile && !this.state.fetchClear){
             this.setState({
-                loading: false,
                 fetchClear: true
             })
             if(this.state.pushPermission){
@@ -154,17 +153,6 @@ class Container extends Component{
         }
     }
 
-    _openNoticeModal = () => {
-        this.setState({
-            showNoticeModal: true
-        })
-    }
-
-    _closeNoticeModal = () => {
-        this.setState({
-            showNoticeModal: false
-        })
-    }
     _handleNoticeNewChange = (noticeNew) => {
         this.props.getNoticeNew(noticeNew)
         this.setState({
@@ -230,8 +218,6 @@ class Container extends Component{
                     <HomeScreen 
                         {...this.props}
                         {...this.state}
-                        openNoticeModal={this._openNoticeModal}
-                        closeNoticeModal={this._closeNoticeModal}
                         handleNoticeNewChange={this._handleNoticeNewChange}
                         handleNotificationNewChange={this._handleNotificationNewChange}
                     />

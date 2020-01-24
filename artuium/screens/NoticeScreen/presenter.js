@@ -12,7 +12,7 @@ const NoticeScreen = (props) => (
             <FlatList 
             data={props.notice} 
             renderItem={({item}) => (
-                <Notice notice={item} handleNoticeNewChange={props.handleNoticeNewChange} />
+                <Notice notice={item} clearNotice={props.clearNotice} handleNoticeNewChange={props.handleNoticeNewChange} />
             )} 
             numColumns={1} 
             keyExtractor={item => String(item.id)} 

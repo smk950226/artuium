@@ -21,7 +21,7 @@ class Container extends Component{
 
     componentDidUpdate = async(prevProps, prevState) => {
         if(!prevState.expand && this.state.expand){
-            const { checkNotice, handleNoticeNewChange, notice : { id } } = this.props;
+            const { checkNotice, handleNoticeNewChange, notice : { id }, clearNotice } = this.props;
             const { is_new, isSubmitting } = this.state;
             if(!isSubmitting){
                 if(is_new){
@@ -30,6 +30,7 @@ class Container extends Component{
                     })
                     const result = await checkNotice(id)
                     if(result === 'clear'){
+                        clearNotice()
                         handleNoticeNewChange(false)
                         this.setState({
                             is_new: false,

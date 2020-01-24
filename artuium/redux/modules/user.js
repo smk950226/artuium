@@ -1098,6 +1098,28 @@ function setPushToken(pushToken){
     }
 }
 
+function reportUser(userId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/report/user/?userId=${userId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if((response.status === 401) || (response.status === 403)){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     isLoggedIn: false,
     token: null,
@@ -1205,7 +1227,8 @@ const actionCreators = {
     createReplyReply,
     setPushToken,
     getNoticeNew,
-    getNotificationNew
+    getNotificationNew,
+    reportUser
 }
 
 export { actionCreators }

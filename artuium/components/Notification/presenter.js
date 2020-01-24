@@ -6,7 +6,7 @@ import styles from '../../styles';
 const { width, height } = Dimensions.get('window')
 
 const Notification = (props) => (
-    <TouchableWithoutFeedback onPress={props.expand ? props.closeExpand : props.openExpand}>
+    <TouchableWithoutFeedback onPress={props.openExpand}>
     <View style={[styles.borderBtmGrayE6, styles.bgGrayF8]}>
         <View style={[styles.pt25, styles.pb20, styles.px20]}>
             <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween]}>

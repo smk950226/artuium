@@ -23,3 +23,9 @@ class ExhibitionAdmin(admin.ModelAdmin):
 class ExhibitionImageAdmin(admin.ModelAdmin):
     list_display = ["id", "exhibition"]
     list_display_links = ["id", "exhibition"]
+
+
+@admin.register(models.ExhibitionView)
+class ExhibitionViewAdmin(admin.ModelAdmin):
+    list_display = ["id", "user", 'exhibition', 'viewed_at']
+    list_display_links = ["id", "user"]
