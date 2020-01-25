@@ -1131,7 +1131,7 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         backgroundColor: '#888888',
         borderRadius: 5,
-    }
+    },
 })
 
 export default styles; 

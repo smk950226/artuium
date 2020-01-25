@@ -21,4 +21,5 @@ urlpatterns = [
     path('login/kakao/', views.KakaoLogin.as_view()),
     path('login/google/', views.GoogleLogin.as_view()),
     path('login/facebook/', views.FacebookLogin.as_view()),
+    path('login/apple/', views.AppleOAuth2.as_view()),
 ]

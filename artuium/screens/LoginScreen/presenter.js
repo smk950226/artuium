@@ -3,6 +3,7 @@ import { View, Text, Alert, ImageBackground, Image, TouchableWithoutFeedback, Te
 import Modal from "react-native-modal";
 import { GoogleSigninButton } from '@react-native-community/google-signin';
 import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk';
+import { AppleButton } from '@invertase/react-native-apple-authentication';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 
@@ -240,6 +241,16 @@ class LoginScreen extends React.Component {
                                 <Text style={[styles.white, styles.fontBold, styles.font14, styles.textCenter, {marginRight: 35}]}>Facebook으로 계속하기</Text>
                             </View>
                         </TouchableWithoutFeedback>
+                        {Platform.OS === 'ios' ?
+                        <AppleButton
+                            style={[styles.mt25, {width: 300, height: 48}]}
+                            cornerRadius={5}
+                            buttonStyle={AppleButton.Style.WHITE}
+                            buttonType={AppleButton.Type.SIGN_IN}
+                            onPress={() => this.props.handleAppleSignIn()}
+                        />
+                        :
+                        null}
                     </View>
                 </View>
             </ImageBackground>

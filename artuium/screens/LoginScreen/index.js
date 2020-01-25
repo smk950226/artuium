@@ -42,6 +42,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         facebookLogin: (accessToken) => {
             return dispatch(userActions.facebookLogin(accessToken))
         },
+        appleLogin: (accessToken) => {
+            return dispatch(userActions.appleLogin(accessToken))
+        },
         logout: () => {
             dispatch(userActions.getLogout());
         },

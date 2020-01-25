@@ -6,6 +6,14 @@ import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import PropTypes from 'prop-types';
 import LoginScreen from './presenter';
 import RNKakao from 'rn-kakao-login';
+import appleAuth, {
+    AppleButton,
+    AppleAuthError,
+    AppleAuthRequestScope,
+    AppleAuthRealUserStatus,
+    AppleAuthCredentialState,
+    AppleAuthRequestOperation,
+} from '@invertase/react-native-apple-authentication';
 
 class Container extends Component{
     static propTypes = {
@@ -15,6 +23,15 @@ class Container extends Component{
         profile: PropTypes.any,
         token: PropTypes.string,
         checkEmail: PropTypes.func.isRequired
+    }
+
+    constructor() {
+        super();
+        this.authCredentialListener = null;
+        this.user = null;
+        this.state = {
+          credentialStateForUser: -1,
+        }
     }
 
     state = {
@@ -36,7 +53,106 @@ class Container extends Component{
             offlineAccess: true,
             webClientId: '834300059497-k2p01j18n5fnh11ek598nm138vh06s2m.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
         });
+        this.authCredentialListener = appleAuth.onCredentialRevoked(async () => {
+            console.warn('Credential Revoked');
+            this.fetchAndUpdateCredentialState().catch(error =>
+                this.setState({ credentialStateForUser: `Error: ${error.code}` }),
+            );
+        });
+      
+        this.fetchAndUpdateCredentialState()
+            .then(res => this.setState({ credentialStateForUser: res }))
+            .catch(error => this.setState({ credentialStateForUser: `Error: ${error.code}` }))
     }
+
+    componentWillUnmount() {
+        /**
+         * cleans up event listener
+         */
+        this.authCredentialListener();
+    }
+
+
+    _handleAppleSignIn = async () => {
+        console.warn('Beginning Apple Authentication');
+
+    // start a login request
+    try {
+        const appleAuthRequestResponse = await appleAuth.performRequest({
+            requestedOperation: AppleAuthRequestOperation.LOGIN,
+            requestedScopes: [
+                AppleAuthRequestScope.EMAIL,
+                AppleAuthRequestScope.FULL_NAME,
+            ],
+        });
+
+        console.log('appleAuthRequestResponse', appleAuthRequestResponse);
+
+        const {
+            user: newUser,
+            email,
+            nonce,
+            identityToken,
+            realUserStatus /* etc */,
+        } = appleAuthRequestResponse;
+
+        this.user = newUser;
+
+        this.fetchAndUpdateCredentialState()
+            .then(res => this.setState({ credentialStateForUser: res }))
+            .catch(error =>
+            this.setState({ credentialStateForUser: `Error: ${error.code}` }),
+            );
+
+        if (identityToken) {
+            // e.g. sign in with Firebase Auth using `nonce` & `identityToken`
+            const result = await this.props.appleLogin(identityToken)
+            if(result.token){
+                const profile = await this.props.getProfileByTokenReturn(result.token);
+                if(profile){
+                    if(profile.nickname){
+                        await this.props.getProfileByToken(result.token)
+                        await this.props.getSaveToken(result.token)
+                    }
+                    else{
+                        await this._openAddInfo()
+                        this.setState({
+                            savedToken: result.token
+                        })
+                    }
+                }
+            }
+            console.log("토큰:::::::::::::", nonce, identityToken);
+        } else {
+            // no token - failed sign-in?
+        }
+
+        if (realUserStatus === AppleAuthRealUserStatus.LIKELY_REAL) {
+            console.log("I'm a real person!");
+        }
+
+        console.warn(`Apple Authentication Completed, ${this.user}, ${email}`);
+        } catch (error) {
+            if (error.code === AppleAuthError.CANCELED) {
+                console.warn('User canceled Apple Sign in.');
+            } else {
+                console.error(error);
+            }
+        }
+    };
+
+  fetchAndUpdateCredentialState = async () => {
+    if (this.user === null) {
+        this.setState({ credentialStateForUser: 'N/A' });
+    } else {
+        const credentialState = await appleAuth.getCredentialStateForUser(this.user);
+        if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
+            this.setState({ credentialStateForUser: 'AUTHORIZED' });
+        } else {
+            this.setState({ credentialStateForUser: credentialState });
+        }
+    }
+  }
 
     _handleFacebookLogin = async(accessToken) => {
         const result = await this.props.facebookLogin(accessToken)
@@ -236,6 +352,7 @@ class Container extends Component{
             handleKakaoLogin={this._handleKakaoLogin}
             handleGoogleLogin={this._handleGoogleLogin}
             handleFacebookLogin={this._handleFacebookLogin}
+            handleAppleSignIn={this._handleAppleSignIn}
             openAddInfo={this._openAddInfo}
             closeAddInfo={this._closeAddInfo}
             addInfoEnd={this._addInfoEnd}
