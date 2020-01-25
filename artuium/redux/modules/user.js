@@ -946,6 +946,35 @@ function facebookLogin(accessToken){
    };
 }
 
+function appleLogin(accessToken){
+    return (dispatch) => {
+        if(accessToken){
+            return fetch(`${FETCH_URL}/api/users/login/apple/`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    access_token: accessToken,
+                })
+            })
+            .then(response => {
+                return response.json()
+            })
+            .then(json => {
+                if(json.token && json.user){
+                    return {
+                        token: json.token
+                    }
+                }
+                else{
+                    return false
+                }
+            })
+        }
+   };
+}
+
 function getReplyList(reviewId){
     return (dispatch, getState) => {
         const { user : { token } } = getState();
@@ -1220,6 +1249,7 @@ const actionCreators = {
     checkNotificationAll,
     googleLogin,
     facebookLogin,
+    appleLogin,
     getReplyList,
     getReplyListMore,
     getRepliesList,

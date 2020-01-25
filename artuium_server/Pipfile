@@ -42,6 +42,7 @@ awsebcli = "==3.16.0"
 requests = "==2.20.1"
 django-ckeditor = "*"
 fcm-django = "*"
+social-core = "*"
 
 [requires]
 python_version = "3.7"
