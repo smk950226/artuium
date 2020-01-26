@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
@@ -54,22 +54,26 @@ class Container extends Component{
             offlineAccess: true,
             webClientId: '834300059497-k2p01j18n5fnh11ek598nm138vh06s2m.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
         });
-        this.authCredentialListener = appleAuth.onCredentialRevoked(async () => {
-            this.fetchAndUpdateCredentialState().catch(error =>
-                this.setState({ credentialStateForUser: `Error: ${error.code}` }),
-            );
-        });
-      
-        this.fetchAndUpdateCredentialState()
-            .then(res => this.setState({ credentialStateForUser: res }))
-            .catch(error => this.setState({ credentialStateForUser: `Error: ${error.code}` }))
+        if(Platform.OS === 'ios'){
+            this.authCredentialListener = appleAuth.onCredentialRevoked(async () => {
+                this.fetchAndUpdateCredentialState().catch(error =>
+                    this.setState({ credentialStateForUser: `Error: ${error.code}` }),
+                );
+            });
+          
+            this.fetchAndUpdateCredentialState()
+                .then(res => this.setState({ credentialStateForUser: res }))
+                .catch(error => this.setState({ credentialStateForUser: `Error: ${error.code}` }))
+        }
     }
 
     componentWillUnmount() {
         /**
          * cleans up event listener
          */
-        this.authCredentialListener();
+        if(Platform.OS === 'ios'){
+            this.authCredentialListener();
+        }
     }
 
 
