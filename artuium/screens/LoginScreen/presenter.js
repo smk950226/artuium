@@ -383,52 +383,54 @@ class LoginScreen extends React.Component {
                                         </View>
                                     </View>
                                 </View>
-                                <TouchableWithoutFeedback onPress={this.props.handleChangeAgreeTerm}>
-                                    <View style={[styles.row, styles.alignItemsCenter, styles.mt10]}>
-                                        <View style={[styles.borderRadius3, styles.alignItemsCenter, styles.justifyContentCenter, styles.bgWhite, styles.loginShadow, { width: 20, height: 20 }]}>
-                                            {agreeTerm && (
-                                                <View style={[styles.borderRadius3, styles.bgBlue, { width: 12, height: 12 }]}></View>
-                                            )}
+                                <View style={[styles.alignSelfCenter]}>
+                                    <TouchableWithoutFeedback onPress={this.props.handleChangeAgreeTerm}>
+                                        <View style={[styles.row, styles.alignItemsCenter, styles.mt10]}>
+                                            <View style={[styles.borderRadius3, styles.alignItemsCenter, styles.justifyContentCenter, styles.bgWhite, styles.loginShadow, { width: 20, height: 20 }]}>
+                                                {agreeTerm && (
+                                                    <View style={[styles.borderRadius3, styles.bgBlue, { width: 12, height: 12 }]}></View>
+                                                )}
+                                            </View>
+                                            <Text style={[styles.fontMedium, styles.font13, styles.ml15]}>
+                                                <TouchableWithoutFeedback onPress={this.props.handleChangeShowTerm}>
+                                                    <Text style={[styles.fontBold, styles.font13, styles.blue, { zIndex: 99 }]}>
+                                                        개인정보처리방침
+                                                    </Text>
+                                                </TouchableWithoutFeedback>
+                                                에 동의합니다.
+                                            </Text>
                                         </View>
-                                        <Text style={[styles.fontMedium, styles.font13, styles.ml15]}>
-                                            <TouchableWithoutFeedback onPress={this.props.handleChangeShowTerm}>
-                                                <Text style={[styles.fontBold, styles.font13, styles.blue, { zIndex: 99 }]}>
-                                                    개인정보처리방침
-                                                </Text>
-                                            </TouchableWithoutFeedback>
-                                            에 동의합니다.
-                                        </Text>
-                                    </View>
-                                </TouchableWithoutFeedback>
-                                <TouchableWithoutFeedback onPress={this.props.handleChangeAgreeTerm2}>
-                                    <View style={[styles.row, styles.alignItemsCenter, styles.mt10]}>
-                                        <View style={[styles.borderRadius3, styles.alignItemsCenter, styles.justifyContentCenter, styles.bgWhite, styles.loginShadow, { width: 20, height: 20 }]}>
-                                            {agreeTerm2 && (
-                                                <View style={[styles.borderRadius3, styles.bgBlue, { width: 12, height: 12 }]}></View>
-                                            )}
+                                    </TouchableWithoutFeedback>
+                                    <TouchableWithoutFeedback onPress={this.props.handleChangeAgreeTerm2}>
+                                        <View style={[styles.row, styles.alignItemsCenter, styles.mt10]}>
+                                            <View style={[styles.borderRadius3, styles.alignItemsCenter, styles.justifyContentCenter, styles.bgWhite, styles.loginShadow, { width: 20, height: 20 }]}>
+                                                {agreeTerm2 && (
+                                                    <View style={[styles.borderRadius3, styles.bgBlue, { width: 12, height: 12 }]}></View>
+                                                )}
+                                            </View>
+                                            <Text style={[styles.fontMedium, styles.font13, styles.ml15]}>
+                                                <TouchableWithoutFeedback onPress={this.props.handleChangeShowTerm2}>
+                                                    <Text style={[styles.fontBold, styles.font13, styles.blue, { zIndex: 99 }]}>
+                                                        서비스이용약관
+                                                    </Text>
+                                                </TouchableWithoutFeedback>
+                                                에 동의합니다.
+                                            </Text>
                                         </View>
-                                        <Text style={[styles.fontMedium, styles.font13, styles.ml15]}>
-                                            <TouchableWithoutFeedback onPress={this.props.handleChangeShowTerm2}>
-                                                <Text style={[styles.fontBold, styles.font13, styles.blue, { zIndex: 99 }]}>
-                                                    서비스이용약관
-                                                </Text>
-                                            </TouchableWithoutFeedback>
-                                            에 동의합니다.
-                                        </Text>
-                                    </View>
-                                </TouchableWithoutFeedback>
-                                <TouchableWithoutFeedback onPress={this.props.handleChangeAgreeAll}>
-                                    <View style={[styles.row, styles.alignItemsCenter, styles.mt10]}>
-                                        <View style={[styles.borderRadius3, styles.alignItemsCenter, styles.justifyContentCenter, styles.bgWhite, styles.loginShadow, { width: 20, height: 20 }]}>
-                                            {agreeAll && (
-                                                <View style={[styles.borderRadius3, styles.bgBlue, { width: 12, height: 12 }]}></View>
-                                            )}
+                                    </TouchableWithoutFeedback>
+                                    <TouchableWithoutFeedback onPress={this.props.handleChangeAgreeAll}>
+                                        <View style={[styles.row, styles.alignItemsCenter, styles.mt10]}>
+                                            <View style={[styles.borderRadius3, styles.alignItemsCenter, styles.justifyContentCenter, styles.bgWhite, styles.loginShadow, { width: 20, height: 20 }]}>
+                                                {agreeAll && (
+                                                    <View style={[styles.borderRadius3, styles.bgBlue, { width: 12, height: 12 }]}></View>
+                                                )}
+                                            </View>
+                                            <Text style={[styles.fontMedium, styles.font13, styles.ml15]}>
+                                                전체 동의합니다.
+                                            </Text>
                                         </View>
-                                        <Text style={[styles.fontMedium, styles.font13, styles.ml15]}>
-                                            전체 동의합니다.
-                                        </Text>
-                                    </View>
-                                </TouchableWithoutFeedback>
+                                    </TouchableWithoutFeedback>
+                                </View>
                                 <View style={[styles.row]}>
                                     {this.props.checkedNickname && this.props.nicknameForm && this.props.agreeAll ? 
                                     <TouchableOpacity
