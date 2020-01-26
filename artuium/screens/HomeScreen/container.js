@@ -81,6 +81,9 @@ class Container extends Component{
         const { initApp, checkNoticeAll, checkNotificationAll, getNoticeNew, getNotificationNew } = this.props;
         const noticeNew = await checkNoticeAll()
         const notificationNew = await checkNotificationAll()
+        // this.props.resetBlockUser()
+        // this.props.resetBlockReview()
+        // this.props.resetBlockReply()
         if(noticeNew.is_new){
             getNoticeNew(true)
             this.setState({

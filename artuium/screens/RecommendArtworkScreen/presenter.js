@@ -22,7 +22,8 @@ class RecommendArtworkScreen extends Component{
         loading: PropTypes.bool.isRequired,
         users: PropTypes.array,
         artworks: PropTypes.array,
-        exhibitions: PropTypes.array
+        exhibitions: PropTypes.array,
+        remount: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -74,7 +75,7 @@ class RecommendArtworkScreen extends Component{
                                         {users.map((user, index) => {
                                             return(
                                                 <View key={index} style={[styles.borderRadius10, styles.bgWhite, {width: width - 40}, styles.mx20, styles.alignSelfCenter, styles.exMenuShadow]}>
-                                                    <UserComp user={user} size={'large'} navigation={this.props.navigation} />
+                                                    <UserComp remount={this.props.remount} user={user} size={'large'} navigation={this.props.navigation} />
                                                 </View>
                                             )
                                         })}
@@ -124,7 +125,7 @@ class RecommendArtworkScreen extends Component{
                                 {artworks && artworks.length > 0 ? (
                                     artworks.map((review, index) => {
                                         return(
-                                            <ArtuiumCard from={'RecommendArtwork'} key={index} review={review} size={'xsmall'} navigation={this.props.navigation} />
+                                            <ArtuiumCard remount={this.props.remount} from={'RecommendArtwork'} key={index} review={review} size={'xsmall'} navigation={this.props.navigation} />
                                         )
                                     })
                                 ) : (
@@ -138,7 +139,7 @@ class RecommendArtworkScreen extends Component{
                                 {exhibitions && exhibitions.length > 0 ? (
                                     exhibitions.map((review, index) => {
                                         return(
-                                            <ArtuiumCard from={'RecommendArtwork'} key={index} review={review} size={'xsmall'} navigation={this.props.navigation} />
+                                            <ArtuiumCard remount={this.props.remount} from={'RecommendArtwork'} key={index} review={review} size={'xsmall'} navigation={this.props.navigation} />
                                         )
                                     })
                                 ) : (

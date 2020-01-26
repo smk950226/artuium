@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from fcm_django.fcm import fcm_send_message
 
 from . import models, serializers
@@ -22,8 +23,10 @@ class InitialReview(APIView):
         user = request.user
 
         following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
+        blocking_review = models.Blocking.objects.filter(user = user, review__isnull = False).values_list('review__id', flat = True)
+        blocking_user = models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
 
-        reviews = models.Review.objects.filter(content__isnull = False, deleted = False).order_by('index')
+        reviews = models.Review.objects.filter(Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
 
         new_reviews = reviews.order_by('-time')[:5]
         recommended_reviews = reviews.filter(recommended = True)[:5]
@@ -44,12 +47,23 @@ class RecommendedReview(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, format = None):
         user = request.user
-        reviews = models.Review.objects.filter(content__isnull = False, deleted = False).order_by('index')
+
+        following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
+        blocking_review = models.Blocking.objects.filter(user = user, review__isnull = False).values_list('review__id', flat = True)
+        blocking_user = models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
+
+        reviews = models.Review.objects.filter(Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
+
+        new_reviews = reviews.order_by('-time')[:5]
         recommended_reviews = reviews.filter(recommended = True)[:5]
+        following_reviews = reviews.filter(author__id__in = following)[:5]
+
 
         return Response(status = status.HTTP_200_OK, data = {
             'status': 'ok',
+            'new_reviews': serializers.ReviewSerializer(new_reviews, many = True, context = {'request': request}).data,
             'recommended_reviews': serializers.ReviewSerializer(recommended_reviews, many = True, context = {'request': request}).data,
+            'following_reviews': serializers.ReviewSerializer(following_reviews, many = True, context = {'request': request}).data,
         })
 
 
@@ -57,12 +71,23 @@ class NewReview(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, format = None):
         user = request.user
-        reviews = models.Review.objects.filter(content__isnull = False, deleted = False).order_by('index')
+
+        following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
+        blocking_review = models.Blocking.objects.filter(user = user, review__isnull = False).values_list('review__id', flat = True)
+        blocking_user = models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
+
+        reviews = models.Review.objects.filter(Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
+
         new_reviews = reviews.order_by('-time')[:5]
+        recommended_reviews = reviews.filter(recommended = True)[:5]
+        following_reviews = reviews.filter(author__id__in = following)[:5]
+
 
         return Response(status = status.HTTP_200_OK, data = {
             'status': 'ok',
             'new_reviews': serializers.ReviewSerializer(new_reviews, many = True, context = {'request': request}).data,
+            'recommended_reviews': serializers.ReviewSerializer(recommended_reviews, many = True, context = {'request': request}).data,
+            'following_reviews': serializers.ReviewSerializer(following_reviews, many = True, context = {'request': request}).data,
         })
 
 
@@ -71,12 +96,22 @@ class FollowingReview(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, format = None):
         user = request.user
+
         following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
-        reviews = models.Review.objects.filter(content__isnull = False, deleted = False).order_by('index')
+        blocking_review = models.Blocking.objects.filter(user = user, review__isnull = False).values_list('review__id', flat = True)
+        blocking_user = models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
+
+        reviews = models.Review.objects.filter(Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
+
+        new_reviews = reviews.order_by('-time')[:5]
+        recommended_reviews = reviews.filter(recommended = True)[:5]
         following_reviews = reviews.filter(author__id__in = following)[:5]
+
 
         return Response(status = status.HTTP_200_OK, data = {
             'status': 'ok',
+            'new_reviews': serializers.ReviewSerializer(new_reviews, many = True, context = {'request': request}).data,
+            'recommended_reviews': serializers.ReviewSerializer(recommended_reviews, many = True, context = {'request': request}).data,
             'following_reviews': serializers.ReviewSerializer(following_reviews, many = True, context = {'request': request}).data,
         })
 
@@ -87,23 +122,25 @@ class Review(APIView):
         list_type = request.query_params.get('type', None)
         filter_type = request.query_params.get('filter', None)
         user = request.user
+        blocking_review = models.Blocking.objects.filter(user = user, review__isnull = False).values_list('review__id', flat = True)
+        blocking_user = models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
 
         reviews = []
 
         if list_type:
             if list_type == 'all':
-                reviews = models.Review.objects.filter(content__isnull = False, deleted = False).order_by('index')
+                reviews = models.Review.objects.filter(Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
             elif list_type == 'recommended':
-                reviews = models.Review.objects.filter(recommended = True, content__isnull = False, deleted = False).order_by('index')
+                reviews = models.Review.objects.filter(Q(deleted = False) & Q(recommended = True) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
             elif list_type == 'friend':
                 following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
-                reviews = models.Review.objects.filter(author__id__in = following, content__isnull = False, deleted = False).order_by('index')
+                reviews = models.Review.objects.filter(Q(author__id__in = following) & Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
             elif list_type == 'exhibition':
-                reviews = models.Review.objects.filter(exhibition__isnull = False, content__isnull = False, deleted = False).order_by('index')
+                reviews = models.Review.objects.filter(Q(exhibition__isnull = False) & Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
             else:
-                reviews = models.Review.objects.filter(content__isnull = False, deleted = False).order_by('index')
+                reviews = models.Review.objects.filter(Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
         else:
-            reviews = models.Review.objects.all(content__isnull = False, deleted = False).order_by('index')
+            reviews = models.Review.objects.all(Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
 
         if filter_type:
             if filter_type == 'new':
@@ -398,10 +435,14 @@ class ExhibitionReview(APIView):
     def get(self, request, format = None):
         exhibition_id = request.query_params.get('exhibitionId', None)
         page = request.query_params.get('page', None)
+        user = request.user
+        blocking_review = models.Blocking.objects.filter(user = user, review__isnull = False).values_list('review__id', flat = True)
+        blocking_user = models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
+
         if exhibition_id:
             try:
                 exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
-                reviews = exhibition.reviews.filter(content__isnull = False).order_by('index')
+                reviews = exhibition.reviews.filter(~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
                 reviews_count = exhibition.reviews.all().order_by('index')
 
                 paginator = MainPageNumberPagination()
@@ -409,7 +450,7 @@ class ExhibitionReview(APIView):
                 serializer = serializers.ReviewSerializer(result_page, many = True, context = {'request': request})
 
                 if page == '1':
-                    my_review = reviews.filter(author = request.user)
+                    my_review = exhibition.reviews.filter(author = request.user).order_by('index')
                     if reviews_count.count() > 0:
                         thumb = reviews_count.filter(expression = 'thumb').count()/reviews_count.count()
                         good = reviews_count.filter(expression = 'good').count()/reviews_count.count()
@@ -593,17 +634,20 @@ class ArtworkReview(APIView):
     def get(self, request, format = None):
         artwork_id = request.query_params.get('artworkId', None)
         page = request.query_params.get('page', None)
+        user = request.user
+        blocking_review = models.Blocking.objects.filter(user = user, review__isnull = False).values_list('review__id', flat = True)
+        blocking_user = models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
         if artwork_id:
             try:
                 artwork = artwork_models.Artwork.objects.get(id = artwork_id)
-                reviews = artwork.reviews.filter(content__isnull = False).order_by('index')
+                reviews = artwork.reviews.filter(~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
                 reviews_count = artwork.reviews.all().order_by('index')
                 paginator = MainPageNumberPagination()
                 result_page = paginator.paginate_queryset(reviews, request)
                 serializer = serializers.ReviewSerializer(result_page, many = True, context = {'request': request})
 
                 if page == '1':
-                    my_review = reviews.filter(author = request.user)
+                    my_review = artwork.reviews.filter(author = request.user).order_by('index')
                     if reviews_count.count() > 0:
                         thumb = reviews_count.filter(expression = 'thumb').count()/reviews_count.count()
                         good = reviews_count.filter(expression = 'good').count()/reviews_count.count()
@@ -844,10 +888,12 @@ class Reply(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, format = None):
         review_id = request.query_params.get('reviewId', None)
-
+        user = request.user
+        blocking_reply = models.Blocking.objects.filter(user = user, reply__isnull = False).values_list('reply__id', flat = True)
+        blocking_user = models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
         if review_id:
             review = models.Review.objects.get(id = review_id, deleted = False)
-            replies = review.replies.all().order_by('time')
+            replies = review.replies.filter(Q(deleted = False) & ~Q(id__in = blocking_reply) & ~Q(author__id__in = blocking_user)).order_by('time')
 
             paginator = MainPageNumberPagination()
             result_page = paginator.paginate_queryset(replies, request)
@@ -908,10 +954,12 @@ class Replies(APIView):
     def get(self, request, format = None):
         reply_id = request.query_params.get('replyId', None)
         page = int(request.query_params.get('page', None))
-
+        user = request.user
+        blocking_reply = models.Blocking.objects.filter(user = user, reply__isnull = False).values_list('reply__id', flat = True)
+        blocking_user = models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
         if reply_id and page:
             reply = models.Reply.objects.get(id = reply_id)
-            replies = reply.replies.all().order_by('time')
+            replies = reply.replies.filter(Q(deleted = False) & ~Q(id__in = blocking_reply) & ~Q(author__id__in = blocking_user)).order_by('time')
 
             total_count = replies.count()
             start = 3 + (12*(page-1))
@@ -1013,5 +1061,89 @@ class ReportUser(APIView):
                     return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
             except:
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '유저가 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+
+
+class ReportReply(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        reply_id = request.query_params.get('replyId', None)
+        user = request.user
+        if reply_id:
+            try:
+                reply = models.Reply.objects.get(id = reply_id)
+                pre = models.Reporting.objects.filter(user = user, reply = reply)
+                if pre.count() > 0:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 신고되었습니다.'})
+                else:
+                    reporting = models.Reporting.objects.create(user = user, reply = reply)
+                    reporting.save()
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+    
+
+class BlockReview(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        review_id = request.query_params.get('reviewId', None)
+        user = request.user
+        if review_id:
+            try:
+                review = models.Review.objects.get(id = review_id)
+                pre = models.Blocking.objects.filter(user = user, review = review)
+                if pre.count() > 0:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 숨김되었습니다.'})
+                else:
+                    blocking = models.Blocking.objects.create(user = user, review = review)
+                    blocking.save()
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+
+
+class BlockUser(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user_id = request.query_params.get('userId', None)
+        user = request.user
+        if user_id:
+            try:
+                to_user = User.objects.get(id = user_id)
+                pre = models.Blocking.objects.filter(user = user, to_user = to_user)
+                if pre.count() > 0:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 숨김되었습니다.'})
+                else:
+                    blocking = models.Blocking.objects.create(user = user, to_user = to_user)
+                    blocking.save()
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '유저가 존재하지 않습니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+
+
+class BlockReply(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        reply_id = request.query_params.get('replyId', None)
+        user = request.user
+        if reply_id:
+            try:
+                reply = models.Reply.objects.get(id = reply_id)
+                pre = models.Blocking.objects.filter(user = user, reply = reply)
+                if pre.count() > 0:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 숨김되었습니다.'})
+                else:
+                    blocking = models.Blocking.objects.create(user = user, reply = reply)
+                    blocking.save()
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '감상이 존재하지 않습니다.'})
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})

@@ -12,12 +12,16 @@ class Container extends Component{
         followUser: PropTypes.func.isRequired,
         unfollowUser: PropTypes.func.isRequired,
         initialReview: PropTypes.func.isRequired,
-        reportUser: PropTypes.func.isRequired
+        reportUser: PropTypes.func.isRequired,
+        reportReply: PropTypes.func.isRequired,
+        blockReply: PropTypes.func.isRequired,
+        blockUserList: PropTypes.array,
+        blockReplyList: PropTypes.array
     }
 
     constructor(props){
         super(props);
-        const { reply, reply : { author : { is_me, is_following, following_count, follower_count } } } = props;
+        const { reply, reply : { author : { is_me, is_following, following_count, follower_count }, reply_count } } = props;
         this.state = {
             is_me,
             is_following,
@@ -31,7 +35,10 @@ class Container extends Component{
             hasNextPage: true,
             isLoadingMore: false,
             reply,
-            isReporting: false
+            isReporting: false,
+            isBlocking: false,
+            hideDropdown: false,
+            reply_count
         }
     }
 
@@ -122,6 +129,12 @@ class Container extends Component{
                         })
                         initialReview()
                     }
+                    else if(result.error){
+                        this.setState({
+                            isSubmitting: false
+                        })
+                        Alert.alert(null, result.error)
+                    }
                     else{
                         this.setState({
                             isSubmitting: false
@@ -160,6 +173,151 @@ class Container extends Component{
         }
     }
 
+    _handleOption = async(index, value, replyId) => {
+        if(value === '신고하기'){
+            const { isReporting } = this.state;
+            const { reportReply, reply : { id } } = this.props;
+            if(!isReporting){
+                this.setState({
+                    isReporting: true
+                })
+                if(replyId){
+                    const result = await reportReply(replyId)
+                    if(result.status === 'ok'){
+                        this.setState({
+                            isReporting: false
+                        })
+                        Alert.alert(null, '신고되었습니다.')
+                    }
+                    else if(result.error){
+                        this.setState({
+                            isReporting: false
+                        })
+                        Alert.alert(null, result.error)
+                    }
+                    else{
+                        this.setState({
+                            isReporting: false
+                        })
+                        Alert.alert(null, '오류가 발생하였습니다.')
+                    }
+                }
+                else{
+                    const result = await reportReply(id)
+                    if(result.status === 'ok'){
+                        this.setState({
+                            isReporting: false
+                        })
+                        Alert.alert(null, '신고되었습니다.')
+                    }
+                    else if(result.error){
+                        this.setState({
+                            isReporting: false
+                        })
+                        Alert.alert(null, result.error)
+                    }
+                    else{
+                        this.setState({
+                            isReporting: false
+                        })
+                        Alert.alert(null, '오류가 발생하였습니다.')
+                    }
+                }
+            }
+        }
+        else if(value === '숨기기'){
+            const { isBlocking } = this.state;
+            const { blockReply, reply : { id } } = this.props;
+            if(!isBlocking){
+                this.setState({
+                    isBlocking: true
+                })
+                if(replyId){
+                    const result = await blockReply(replyId)
+                    if(result.status === 'ok'){
+                        if(this.props.addBlockReply){
+                            this.setState({
+                                isBlocking: false,
+                                hideDropdown: true,
+                                reply_count: this.state.reply_count - 1
+                            })
+                            this.props.addBlockReply(replyId)
+                        }
+                        else{
+                            this.setState({
+                                isBlocking: false,
+                                deleted: true,
+                                reply_count: this.state.reply_count - 1
+                            })
+                        }
+                    }
+                    else if(result.error){
+                        if(this.props.addBlockReply){
+                            this.setState({
+                                isBlocking: false,
+                                hideDropdown: true,
+                                reply_count: this.state.reply_count - 1
+                            })
+                            this.props.addBlockReply(replyId)
+                        }
+                        else{
+                            this.setState({
+                                isBlocking: false,
+                                deleted: true,
+                                reply_count: this.state.reply_count - 1
+                            })
+                        }
+                    }
+                    else{
+                        this.setState({
+                            isBlocking: false
+                        })
+                        Alert.alert(null, '오류가 발생하였습니다.')
+                    }
+                }
+                else{
+                    const result = await blockReply(id)
+                    if(result.status === 'ok'){
+                        if(this.props.addBlockReply){
+                            this.setState({
+                                isBlocking: false,
+                                hideDropdown: true
+                            })
+                            this.props.addBlockReply(id)
+                        }
+                        else{
+                            this.setState({
+                                isBlocking: false,
+                                deleted: true
+                            })
+                        }
+                    }
+                    else if(result.error){
+                        if(this.props.addBlockReply){
+                            this.setState({
+                                isBlocking: false,
+                                hideDropdown: true
+                            })
+                            this.props.addBlockReply(id)
+                        }
+                        else{
+                            this.setState({
+                                isBlocking: false,
+                                deleted: true
+                            })
+                        }
+                    }
+                    else{
+                        this.setState({
+                            isBlocking: false
+                        })
+                        Alert.alert(null, '오류가 발생하였습니다.')
+                    }
+                }
+            }
+        }
+    }
+
     _reportUser = async(index, value) => {
         if(value === '신고하기'){
             const { isReporting } = this.state;
@@ -189,6 +347,60 @@ class Container extends Component{
                 }
             }
         }
+        else if(value === '숨기기'){
+            const { isBlocking } = this.state;
+            const { blockUser, reply : { author : { id } } } = this.props;
+            if(!isBlocking){
+                this.setState({
+                    isBlocking: true
+                })
+                const result = await blockUser(id)
+                if(result.status === 'ok'){
+                    if(this.props.addBlockUser){
+                        this.setState({
+                            isBlocking: false,
+                            hideDropdown: true,
+                            showProfileModal: false,
+                            showFollowModal: false
+                        })
+                        this.props.addBlockUser(id)
+                    }
+                    else{
+                        this.setState({
+                            isBlocking: false,
+                            deleted: true,
+                            showProfileModal: false,
+                            showFollowModal: false
+                        })
+                    }
+                }
+                else if(result.error){
+                    if(this.props.addBlockUser){
+                        this.setState({
+                            isBlocking: false,
+                            hideDropdown: true,
+                            showProfileModal: false,
+                            showFollowModal: false
+                        })
+                        this.props.addBlockUser(id)
+                    }
+                    else{
+                        this.setState({
+                            isBlocking: false,
+                            deleted: true,
+                            showProfileModal: false,
+                            showFollowModal: false
+                        })
+                    }
+                }
+                else{
+                    this.setState({
+                        isBlocking: false
+                    })
+                    Alert.alert(null, '오류가 발생하였습니다.')
+                }
+            }
+        }
     }
 
     
@@ -207,6 +419,7 @@ class Container extends Component{
                 follow={this._follow}
                 unfollow={this._unfollow}
                 reportUser={this._reportUser}
+                handleOption={this._handleOption}
             />
         )
     }

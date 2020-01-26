@@ -7,7 +7,8 @@ class Container extends Component{
     static propTypes = {
         user: PropTypes.object.isRequired,
         size: PropTypes.string,
-        reportUser: PropTypes.func.isRequired
+        reportUser: PropTypes.func.isRequired,
+        blockUser: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -17,7 +18,10 @@ class Container extends Component{
             is_following,
             is_me,
             isSubmitting: false,
-            isReporting: false
+            isReporting: false,
+            isBlocking: false,
+            hideDropdown: false,
+            deleted: false
         }
     }
 
@@ -36,6 +40,12 @@ class Container extends Component{
                             is_following: true,
                             isSubmitting: false
                         })
+                    }
+                    else if(result.error){
+                        this.setState({
+                            isSubmitting: false
+                        })
+                        Alert.alert(null, result.error)
                     }
                     else{
                         this.setState({
@@ -74,6 +84,11 @@ class Container extends Component{
     }
 
     _reportUser = async(index, value) => {
+        if(this.state.hideDropdown){
+            this.setState({
+                hideDropdown: false
+            })
+        }
         if(value === '신고하기'){
             const { isReporting } = this.state;
             const { reportUser, user: { id } } = this.props;
@@ -97,6 +112,60 @@ class Container extends Component{
                 else{
                     this.setState({
                         isReporting: false
+                    })
+                    Alert.alert(null, '오류가 발생하였습니다.')
+                }
+            }
+        }
+        else if(value === '숨기기'){
+            const { isBlocking } = this.state;
+            const { blockUser, user: { id } } = this.props;
+            if(!isBlocking){
+                this.setState({
+                    isBlocking: true
+                })
+                const result = await blockUser(id)
+                if(result.status === 'ok'){
+                    if(this.props.remount){
+                        this.setState({
+                            isBlocking: false,
+                            hideDropdown: true,
+                            showProfileModal: false,
+                            showFollowModal: false
+                        })
+                        this.props.remount()
+                    }
+                    else{
+                        this.setState({
+                            isBlocking: false,
+                            deleted: true,
+                            showProfileModal: false,
+                            showFollowModal: false
+                        })
+                    }
+                }
+                else if(result.error){
+                    if(this.props.remount){
+                        this.setState({
+                            isBlocking: false,
+                            hideDropdown: true,
+                            showProfileModal: false,
+                            showFollowModal: false
+                        })
+                        this.props.remount()
+                    }
+                    else{
+                        this.setState({
+                            isBlocking: false,
+                            deleted: true,
+                            showProfileModal: false,
+                            showFollowModal: false
+                        })
+                    }
+                }
+                else{
+                    this.setState({
+                        isBlocking: false
                     })
                     Alert.alert(null, '오류가 발생하였습니다.')
                 }

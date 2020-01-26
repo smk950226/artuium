@@ -67,6 +67,17 @@ class ArtuiumCard extends Component{
         }
     }
 
+    componentDidUpdate = (prevProps, prevState) => {
+        if(!prevProps.hideDropdown && this.props.hideDropdown){
+            if(this.dropdown){
+                this.dropdown.hide()
+            }
+            if(this.dropdownuser){
+                this.dropdownuser.hide()
+            }
+        }
+    }
+
     _renderFollowerList = () => {
         return(
             <FollowerList user={this.props.review.author} />
@@ -192,9 +203,9 @@ class ArtuiumCard extends Component{
                                                 </View>
                                             </View>
                                             <View>
-                                                <ModalDropdown options={is_me ? ['수정하기', '삭제하기'] : ['신고하기']}
+                                                <ModalDropdown ref={(el) => this.dropdown = el} options={is_me ? ['수정하기', '삭제하기'] : ['신고하기', '숨기기']}
                                                 showsVerticalScrollIndicator={false}
-                                                dropdownStyle={is_me ? {height: Platform.OS === 'ios' ? 70 : 90} : {height: Platform.OS === 'ios' ? 35 : 45}}
+                                                dropdownStyle={{height: Platform.OS === 'ios' ? 70 : 90}}
                                                 dropdownTextStyle={{fontSize: 15, height: Platform.OS === 'ios' ? 35 : 45}}
                                                 onSelect={this.props.handleOption}
                                                 >
@@ -275,9 +286,9 @@ class ArtuiumCard extends Component{
                                                 </View>
                                             </View>
                                             <View>
-                                                <ModalDropdown options={is_me ? ['수정하기', '삭제하기'] : ['신고하기']}
+                                                <ModalDropdown ref={(el) => this.dropdown = el} options={is_me ? ['수정하기', '삭제하기'] : ['신고하기', '숨기기']}
                                                 showsVerticalScrollIndicator={false}
-                                                dropdownStyle={is_me ? {height: Platform.OS === 'ios' ? 70 : 90} : {height: Platform.OS === 'ios' ? 35 : 45}}
+                                                dropdownStyle={{height: Platform.OS === 'ios' ? 70 : 90}}
                                                 dropdownTextStyle={{fontSize: 15, height: Platform.OS === 'ios' ? 35 : 45}}
                                                 onSelect={this.props.handleOption}
                                                 >
@@ -379,9 +390,9 @@ class ArtuiumCard extends Component{
                                             {is_me ? (
                                                 <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
                                             ) : (
-                                                <ModalDropdown options={['신고하기']}
+                                                <ModalDropdown ref={(el) => this.dropdownuser = el} options={['신고하기', '숨기기']}
                                                 showsVerticalScrollIndicator={false}
-                                                dropdownStyle={is_me ? {height: Platform.OS === 'ios' ? 70 : 90} : {height: Platform.OS === 'ios' ? 35 : 45}}
+                                                dropdownStyle={{height: Platform.OS === 'ios' ? 70 : 90}}
                                                 dropdownTextStyle={{fontSize: 15, height: Platform.OS === 'ios' ? 35 : 45}}
                                                 onSelect={this.props.reportUser}
                                                 >

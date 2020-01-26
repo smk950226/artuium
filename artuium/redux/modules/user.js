@@ -1167,6 +1167,28 @@ function reportUser(userId){
     }
 }
 
+function blockUser(userId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/block/user/?userId=${userId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if((response.status === 401) || (response.status === 403)){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     isLoggedIn: false,
     token: null,
@@ -1277,7 +1299,8 @@ const actionCreators = {
     getNoticeNew,
     getNotificationNew,
     reportUser,
-    checkUsername
+    checkUsername,
+    blockUser
 }
 
 export { actionCreators }

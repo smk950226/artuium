@@ -52,6 +52,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         getFollowingReview: () => {
             dispatch(reviewActions.getFollowingReview())
+        },
+        resetBlockReview: () => {
+            dispatch(reviewActions.resetBlockReview())
+        },
+        resetBlockUser: () => {
+            dispatch(reviewActions.resetBlockUser())
+        },
+        resetBlockReply: () => {
+            dispatch(reviewActions.resetBlockReply())
         }
     }
 }

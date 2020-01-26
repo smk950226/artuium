@@ -14,7 +14,13 @@ class Container extends Component{
         getReplyListMore: PropTypes.func.isRequired,
         createReviewReply: PropTypes.func.isRequired,
         createReplyReply: PropTypes.func.isRequired,
-        updateExhibitionReview: PropTypes.func.isRequired
+        updateExhibitionReview: PropTypes.func.isRequired,
+        blockReviewList: PropTypes.array,
+        blockUserList: PropTypes.array,
+        blockReplyList: PropTypes.array,
+        addBlockReview: PropTypes.func.isRequired,
+        addBlockUser: PropTypes.func.isRequired,
+        addBlockReply: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -335,7 +341,7 @@ class Container extends Component{
                 const result = await createExhibitionReview(id, rating, expression, content)
                 if(result.status === 'ok'){
                     this.setState({
-                        reviews: [...this.state.reviews, result.review],
+                        reviews: [result.review, ...this.state.reviews],
                         myReviews: [result.review, ...this.state.myReviews],
                         total_rate: result.total_rate,
                         thumb: result.thumb,

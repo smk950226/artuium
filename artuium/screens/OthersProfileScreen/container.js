@@ -50,6 +50,12 @@ class Container extends Component{
                             }
                         })
                     }
+                    else if(result.error){
+                        this.setState({
+                            isSubmitting: false
+                        })
+                        Alert.alert(null, result.error)
+                    }
                     else{
                         this.setState({
                             isSubmitting: false

@@ -30,6 +30,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         reportUser: (userId) => {
             return dispatch(userActions.reportUser(userId))
+        },
+        blockReview: (reviewId) => {
+            return dispatch(reviewActions.blockReview(reviewId))
+        },
+        blockUser: (userId) => {
+            return dispatch(userActions.blockUser(userId))
         }
     }
 }

@@ -38,26 +38,30 @@ class Follow(APIView):
         if user_id:
             try:
                 follow_user = User.objects.get(id = user_id)
-                follow = statics_models.Follow.objects.filter(following = user, follower = follow_user)
-                if follow.count() > 0:
-                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 팔로잉하는 회원입니다.'})
+                blocking_user = statics_models.Blocking.objects.filter(user = user, to_user = follow_user)
+                if blocking_user.count() > 0:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '숨김한 회원입니다.'})
                 else:
-                    follow = statics_models.Follow.objects.create(following = user, follower = follow_user)
-                    follow.save()
+                    follow = statics_models.Follow.objects.filter(following = user, follower = follow_user)
+                    if follow.count() > 0:
+                        return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '이미 팔로잉하는 회원입니다.'})
+                    else:
+                        follow = statics_models.Follow.objects.create(following = user, follower = follow_user)
+                        follow.save()
 
-                    if user.id != follow_user.id:
-                        notification = statics_models.Notification.objects.create(
-                            from_user = user,
-                            to_user = follow_user,
-                            type = 'following'
-                        )
-                        notification.save()
-                        if follow_user.push_token:
-                            text = ''
-                            text += user.nickname
-                            text += ' 님이 회원님을 팔로우합니다.'
-                            fcm_send_message(registration_id = follow_user.push_token, title='팔로우 알림', body=text, android_channel_id = 'artuium', icon='ic_notification')
-                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+                        if user.id != follow_user.id:
+                            notification = statics_models.Notification.objects.create(
+                                from_user = user,
+                                to_user = follow_user,
+                                type = 'following'
+                            )
+                            notification.save()
+                            if follow_user.push_token:
+                                text = ''
+                                text += user.nickname
+                                text += ' 님이 회원님을 팔로우합니다.'
+                                fcm_send_message(registration_id = follow_user.push_token, title='팔로우 알림', body=text, android_channel_id = 'artuium', icon='ic_notification')
+                        return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
             except:
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '회원이 존재하지 않습니다.'})
         else:
@@ -118,10 +122,14 @@ class Search(APIView):
 class Recommended(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, format = None):
-        recommended_reviews = statics_models.Review.objects.filter(recommended = True, content__isnull = False, deleted = False).order_by('index')
+        user = request.user
+        blocking_review = statics_models.Blocking.objects.filter(user = user, review__isnull = False).values_list('review__id', flat = True)
+        blocking_user = statics_models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
+
+        recommended_reviews = statics_models.Review.objects.filter(Q(recommended = True) & Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
         artwork_list = recommended_reviews.filter(artwork__isnull = False)
         exhibition_list = recommended_reviews.filter(exhibition__isnull = False)
-        user_list = User.objects.filter(recommended = True)[:5]
+        user_list = User.objects.filter(Q(recommended = True) & ~Q(id__in = blocking_user))[:5]
 
         return Response(status = status.HTTP_200_OK, data = {
             'users': serializers.ProfileSerializer(user_list, many = True, context = {'request': request}).data,
@@ -176,7 +184,11 @@ class CheckUsername(APIView):
 class ReviewList(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, user_id, format = None):
-        reviews = statics_models.Review.objects.filter(author = user_id, content__isnull = False, deleted = False).order_by('index')
+        user = request.user
+        blocking_review = statics_models.Blocking.objects.filter(user = user, review__isnull = False).values_list('review__id', flat = True)
+        blocking_user = statics_models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
+
+        reviews = statics_models.Review.objects.filter(Q(author__id = user_id) & Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
         paginator = MainPageNumberPagination()
         result_page = paginator.paginate_queryset(reviews, request)
         serializer = statics_serializers.ReviewSerializer(result_page, many = True, context = {'request': request})

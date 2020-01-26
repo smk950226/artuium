@@ -4,6 +4,12 @@ const SET_INITIAL_REVIEW = 'SET_INITIAL_REVIEW';
 const SET_RECOMMENDED_REVIEW = 'SET_RECOMMENDED_REVIEW';
 const SET_NEW_REVIEW = 'SET_NEW_REVIEW';
 const SET_FOLLOWING_REVIEW = 'SET_FOLLOWING_REVIEW';
+const ADD_BLOCK_REVIEW_LIST = 'ADD_BLOCK_REVIEW_LIST';
+const ADD_BLOCK_USER_LIST = 'ADD_BLOCK_USER_LIST';
+const ADD_BLOCK_REPLY_LIST = 'ADD_BLOCK_REPLY_LIST';
+const RESET_BLOCK_REVIEW_LIST = 'RESET_BLOCK_REVIEW_LIST';
+const RESET_BLOCK_USER_LIST = 'RESET_BLOCK_USER_LIST';
+const RESET_BLOCK_REPLY_LIST = 'RESET_BLOCK_REPLY_LIST';
 
 function setInitialReview(initial){
     return {
@@ -32,6 +38,81 @@ function setFollowingReview(review){
         review
     }
 };
+
+function addBlockReviewList(reviewId){
+    return {
+        type: ADD_BLOCK_REVIEW_LIST,
+        reviewId
+    }
+}
+
+function addBlockUserList(userId){
+    return {
+        type: ADD_BLOCK_USER_LIST,
+        userId
+    }
+}
+
+function addBlockReplyList(replyId){
+    return {
+        type: ADD_BLOCK_REPLY_LIST,
+        replyId
+    }
+}
+
+function resetBlockReviewList(){
+    return {
+        type: RESET_BLOCK_REVIEW_LIST
+    }
+}
+
+function resetBlockUserList(){
+    return {
+        type: RESET_BLOCK_USER_LIST
+    }
+}
+
+function resetBlockReplyList(){
+    return {
+        type: RESET_BLOCK_REPLY_LIST
+    }
+}
+
+function addBlockReview(reviewId){
+    return (dispatch) => {
+        dispatch(addBlockReviewList(reviewId))
+    }
+}
+
+function addBlockUser(userId){
+    return (dispatch) => {
+        dispatch(addBlockUserList(userId))
+    }
+}
+
+function resetBlockReview(){
+    return (dispatch) => {
+        dispatch(resetBlockReviewList())
+    }
+}
+
+function resetBlockUser(){
+    return (dispatch) => {
+        dispatch(resetBlockUserList())
+    }
+}
+
+function addBlockReply(replyId){
+    return (dispatch) => {
+        dispatch(addBlockReplyList(replyId))
+    }
+}
+
+function resetBlockReply(){
+    return (dispatch) => {
+        dispatch(resetBlockReplyList())
+    }
+}
 
 function initialReview(){
     return (dispatch, getState) => {
@@ -258,11 +339,80 @@ function reportReview(reviewId){
     }
 }
 
+function blockReview(reviewId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/block/review/?reviewId=${reviewId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if((response.status === 401) || (response.status === 403)){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function reportReply(replyId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/report/reply/?replyId=${replyId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if((response.status === 401) || (response.status === 403)){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function blockReply(replyId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState()
+        return fetch(`${FETCH_URL}/api/statics/block/reply/?replyId=${replyId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `JWT ${token}`
+            }
+        })
+        .then(response => {
+            if((response.status === 401) || (response.status === 403)){
+                dispatch(getLogout())
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 const initialState = {
     banners: [],
     newReviews: [],
     recommendedReviews: [],
-    followingReviews: []
+    followingReviews: [],
+    blockReviewList: [],
+    blockUserList: [],
+    blockReplyList: []
 };
 
 function reducer(state = initialState, action){
@@ -275,6 +425,18 @@ function reducer(state = initialState, action){
             return applySetNewReview(state, action);
         case SET_FOLLOWING_REVIEW:
             return applySetFollowingReview(state, action);
+        case ADD_BLOCK_REVIEW_LIST:
+            return applyAddBlockReviewList(state, action);
+        case ADD_BLOCK_USER_LIST:
+            return applyAddBlockUserList(state, action);
+        case ADD_BLOCK_REPLY_LIST:
+            return applyAddBlockReplyList(state, action);
+        case RESET_BLOCK_REVIEW_LIST:
+            return applyResetBlockReviewList(state, action);
+        case RESET_BLOCK_USER_LIST:
+            return applyResetBlockUserList(state, action);
+        case RESET_BLOCK_REPLY_LIST:
+            return applyResetBlockReplyList(state, action);
         default:
            return state;
     }
@@ -296,7 +458,9 @@ function applySetRecommendedReview(state, action){
     const { review } = action;
     return {
         ...state,
+        newReviews: review.new_reviews,
         recommendedReviews: review.recommended_reviews,
+        followingReviews: review.following_reviews,
     };
 };
 
@@ -305,6 +469,8 @@ function applySetNewReview(state, action){
     return {
         ...state,
         newReviews: review.new_reviews,
+        recommendedReviews: review.recommended_reviews,
+        followingReviews: review.following_reviews,
     };
 };
 
@@ -312,9 +478,56 @@ function applySetFollowingReview(state, action){
     const { review } = action;
     return {
         ...state,
+        newReviews: review.new_reviews,
+        recommendedReviews: review.recommended_reviews,
         followingReviews: review.following_reviews,
     };
 };
+
+function applyAddBlockReviewList(state, action){
+    const { reviewId } = action;
+    return {
+        ...state,
+        blockReviewList: [...state.blockReviewList, reviewId]
+    }
+}
+
+function applyAddBlockUserList(state, action){
+    const { userId } = action;
+    return {
+        ...state,
+        blockUserList: [...state.blockUserList, userId]
+    }
+}
+
+function applyAddBlockReplyList(state, action){
+    const { replyId } = action;
+    return {
+        ...state,
+        blockReplyList: [...state.blockReplyList, replyId]
+    }
+}
+
+function applyResetBlockReviewList(state, action){
+    return {
+        ...state,
+        blockReviewList: []
+    }
+}
+
+function applyResetBlockUserList(state, action){
+    return {
+        ...state,
+        blockUserList: []
+    }
+}
+
+function applyResetBlockReplyList(state, action){
+    return {
+        ...state,
+        blockReplyList: []
+    }
+}
 
 const actionCreators = {
     initialReview,
@@ -327,7 +540,16 @@ const actionCreators = {
     reportReview,
     getRecommendedReview,
     getNewReview,
-    getFollowingReview
+    getFollowingReview,
+    blockReview,
+    addBlockReview,
+    addBlockUser,
+    resetBlockReview,
+    resetBlockUser,
+    reportReply,
+    blockReply,
+    addBlockReply,
+    resetBlockReply
 }
 
 export { actionCreators }

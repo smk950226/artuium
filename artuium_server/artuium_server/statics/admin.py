@@ -15,7 +15,7 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(models.Reply)
 class ReplyAdmin(admin.ModelAdmin):
-    list_display = ["id", "author", 'time']
+    list_display = ["id", "author", 'time', 'deleted']
     list_display_links = ["id", "author"]
 
 
@@ -51,5 +51,11 @@ class NotificationCheckAdmin(admin.ModelAdmin):
 
 @admin.register(models.Reporting)
 class ReportingAdmin(admin.ModelAdmin):
-    list_display = ["id", "user", 'review', 'to_user']
+    list_display = ["id", "user", 'review', 'to_user', 'reply']
+    list_display_links = ["id", 'user']
+
+
+@admin.register(models.Blocking)
+class BlockingAdmin(admin.ModelAdmin):
+    list_display = ["id", "user", 'review', 'to_user', 'reply']
     list_display_links = ["id", 'user']

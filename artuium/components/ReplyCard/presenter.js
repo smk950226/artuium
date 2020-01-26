@@ -47,7 +47,11 @@ class ReplyCard extends Component{
         following_count: PropTypes.number.isRequired,
         follower_count: PropTypes.number.isRequired,
         mode: PropTypes.string.isRequired,
-        reportUser: PropTypes.func.isRequired
+        reportUser: PropTypes.func.isRequired,
+        handleOption: PropTypes.func.isRequired,
+        blockUserList: PropTypes.array,
+        blockReplyList: PropTypes.array,
+        reply_count: PropTypes.number
     }
 
     state = {
@@ -56,6 +60,17 @@ class ReplyCard extends Component{
             { key: 'first', title: '팔로워' },
             { key: 'second', title: '팔로잉' },
         ],
+    }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        if(!prevProps.hideDropdown && this.props.hideDropdown){
+            if(this.dropdown){
+                this.dropdown.hide()
+            }
+            if(this.dropdownuser){
+                this.dropdownuser.hide()
+            }
+        }
     }
 
     _renderFollowerList = () => {
@@ -95,7 +110,7 @@ class ReplyCard extends Component{
     }
 
     render(){
-        const { reply, isLoadingMore, hasNextPage, selectedReply, showFollowModal, showProfileModal, is_me, is_following, following_count, follower_count, mode } = this.props;
+        const { reply, isLoadingMore, hasNextPage, selectedReply, showFollowModal, showProfileModal, is_me, is_following, following_count, follower_count, mode, blockUserList, blockReplyList, reply_count } = this.props;
         return(
             <Fragment>
                 <TouchableWithoutFeedback>
@@ -120,30 +135,63 @@ class ReplyCard extends Component{
                             <Text style={[styles.fontRegular, styles.font13, styles.mt5]}>
                                 {reply.content}
                             </Text>
-                            <TouchableWithoutFeedback onPress={() => this.props.selectReply(reply)}>
-                                <View>
-                                    <Text style={[styles.fontMedium, styles.font13, styles.grayD1, styles.mt1, styles.textUnderline, styles.textRight]}>
-                                        {`대댓글 달기(${abbreviateNumber(reply.reply_count)})`}
-                                    </Text>
-                                </View>
-                            </TouchableWithoutFeedback>
+                            <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentEnd]}>
+                                <TouchableWithoutFeedback onPress={() => this.props.selectReply(reply)}>
+                                    <View>
+                                        <Text style={[styles.fontMedium, styles.font13, styles.grayD1, styles.mt1, styles.textUnderline, styles.textRight]}>
+                                            {`대댓글 달기(${abbreviateNumber(reply_count)})`}
+                                        </Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                                {is_me ? (
+                                    <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                ) : (
+                                    <ModalDropdown ref={(el) => this.dropdown = el} options={['신고하기', '숨기기']}
+                                    showsVerticalScrollIndicator={false}
+                                    dropdownStyle={{height: Platform.OS === 'ios' ? 70 : 90}}
+                                    dropdownTextStyle={{fontSize: 15, height: Platform.OS === 'ios' ? 35 : 45}}
+                                    onSelect={this.props.handleOption}
+                                    >
+                                        <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                    </ModalDropdown>
+                                )}
+                            </View>
                         </View>
                     </View>
                     {reply.reply_count > 0 && reply.initial_replies && reply.initial_replies.length > 0 && (
                         <View style={[styles.alignItemsEnd, styles.mx25, {marginTop: -10}]}>
-                            {reply.initial_replies.map((reply,index) => (
-                                <View key={index} style={[styles.borderGrayF0, styles.bgGrayFc, styles.borderRadius5, styles.width80, styles.px10, styles.py10, styles.mb10]}>
-                                    <View style={[styles.row, styles.alignItemsCenter]}>
-                                        <Text style={[styles.fontBold, styles.font14]}>
-                                            {typeof(reply.author) === typeof('str') ? reply.author : reply.author.nickname}
-                                        </Text>
-                                        <Text style={[styles.fontMedium, styles.font14, styles.grayBa, styles.ml5]}>{`${reply.time.slice(0,4)}.${reply.time.slice(5,7)}.${reply.time.slice(8,10)}`}</Text>
-                                    </View>
-                                    <Text style={[styles.fontRegular, styles.font13, styles.mt5]}>
-                                        {reply.content}
-                                    </Text>
-                                </View>
-                            ))}
+                            {reply.initial_replies.map((reply,idx) => {
+                                if((blockUserList.findIndex(id => id === reply.author.id) >= 0) || (blockReplyList.findIndex(id => id === reply.id) >= 0)){
+                                    return null
+                                }
+                                else{
+                                    return (
+                                        <View key={idx} style={[styles.borderGrayF0, styles.bgGrayFc, styles.borderRadius5, styles.width80, styles.px10, styles.py10, styles.mb10]}>
+                                            <View style={[styles.row, styles.alignItemsCenter]}>
+                                                <Text style={[styles.fontBold, styles.font14]}>
+                                                    {typeof(reply.author) === typeof('str') ? reply.author : reply.author.nickname}
+                                                </Text>
+                                                <Text style={[styles.fontMedium, styles.font14, styles.grayBa, styles.ml5]}>{`${reply.time.slice(0,4)}.${reply.time.slice(5,7)}.${reply.time.slice(8,10)}`}</Text>
+                                                {reply.author.is_me ? (
+                                                    <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                                ) : (
+                                                    <ModalDropdown ref={(el) => this.dropdown = el} options={['신고하기', '숨기기']}
+                                                    showsVerticalScrollIndicator={false}
+                                                    dropdownStyle={{height: Platform.OS === 'ios' ? 70 : 90}}
+                                                    dropdownTextStyle={{fontSize: 15, height: Platform.OS === 'ios' ? 35 : 45}}
+                                                    onSelect={(index, value) => this.props.handleOption(index, value, reply.id)}
+                                                    >
+                                                        <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                                    </ModalDropdown>
+                                                )}
+                                            </View>
+                                            <Text style={[styles.fontRegular, styles.font13, styles.mt5]}>
+                                                {reply.content}
+                                            </Text>
+                                        </View>
+                                    )
+                                }
+                            })}
                         </View>
                     )}
                     {reply.reply_count > 3 && hasNextPage && (
@@ -225,9 +273,9 @@ class ReplyCard extends Component{
                                         {is_me ? (
                                             <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
                                         ) : (
-                                            <ModalDropdown options={['신고하기']}
+                                            <ModalDropdown ref={(el) => this.dropdownuser = el} options={['신고하기', '숨기기']}
                                             showsVerticalScrollIndicator={false}
-                                            dropdownStyle={is_me ? {height: Platform.OS === 'ios' ? 70 : 90} : {height: Platform.OS === 'ios' ? 35 : 45}}
+                                            dropdownStyle={{height: Platform.OS === 'ios' ? 70 : 90}}
                                                 dropdownTextStyle={{fontSize: 15, height: Platform.OS === 'ios' ? 35 : 45}}
                                             onSelect={this.props.reportUser}
                                             >

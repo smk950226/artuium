@@ -87,7 +87,13 @@ class ExhibitionContentScreen extends React.Component {
         selectedReply: PropTypes.object.isRequired,
         update: PropTypes.func.isRequired,
         handleUpdateMode: PropTypes.func.isRequired,
-        deleteReview: PropTypes.func.isRequired
+        deleteReview: PropTypes.func.isRequired,
+        blockReviewList: PropTypes.array,
+        blockUserList: PropTypes.array,
+        blockReplyList: PropTypes.array,
+        addBlockReview: PropTypes.func.isRequired,
+        addBlockUser: PropTypes.func.isRequired,
+        addBlockReply: PropTypes.func.isRequired,
     }
     constructor(props){
         super(props);
@@ -128,7 +134,7 @@ class ExhibitionContentScreen extends React.Component {
     }
 
     render(){
-        const { exhibition, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from } = this.props;
+        const { exhibition, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from, blockReviewList, blockUserList, blockReplyList } = this.props;
         const { initialMode, keyboardHeight } = this.state;
         return(
             exhibition ? (
@@ -252,9 +258,16 @@ class ExhibitionContentScreen extends React.Component {
                                                                     showsHorizontalScrollIndicator={false}
                                                                     style={[{height: 160}, styles.mt15]}
                                                                     >
-                                                                        {myReviews.map((review, index) => (
-                                                                            <ArtuiumCard3 deleteReview={this.props.deleteReview} goUpdate={this._goUpdate} from={from} key={index} review={review} navigation={this.props.navigation} my={true} handleChangeMode={this.props.handleChangeMode} />
-                                                                        ))}
+                                                                        {myReviews.map((review, index) => {
+                                                                            if((blockReviewList.findIndex(id => id === review.id) >= 0) || (blockUserList.findIndex(id => id === review.author.id) >= 0)){
+                                                                                return null
+                                                                            }
+                                                                            else{
+                                                                                return (
+                                                                                    <ArtuiumCard3 addBlockReview={this.props.addBlockReview} addBlockUser={this.props.addBlockUser} deleteReview={this.props.deleteReview} goUpdate={this._goUpdate} from={from} key={index} review={review} navigation={this.props.navigation} my={true} handleChangeMode={this.props.handleChangeMode} />
+                                                                                )
+                                                                            }
+                                                                        })}
                                                                     </ScrollView>
                                                                     <View style={[styles.widthFull, styles.px15]}>
                                                                         <Text style={[styles.fontBlack, styles.font13, styles.mt20, { opacity: 0.16 }]}>통계</Text>
@@ -355,9 +368,16 @@ class ExhibitionContentScreen extends React.Component {
                                                         reviews && reviews.length > 0 ? (
                                                             <FlatList 
                                                             data={reviews} 
-                                                            renderItem={({item}) => (
-                                                                <ArtuiumCard3 deleteReview={this.props.deleteReview} goUpdate={this._goUpdate} from={from} review={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
-                                                            )} 
+                                                            renderItem={({item}) => {
+                                                                if((blockReviewList.findIndex(id => id === item.id) >= 0) || (blockUserList.findIndex(id => id === item.author.id) >= 0)){
+                                                                    return null
+                                                                }
+                                                                else{
+                                                                    return (
+                                                                        <ArtuiumCard3 addBlockReview={this.props.addBlockReview} addBlockUser={this.props.addBlockUser} deleteReview={this.props.deleteReview} goUpdate={this._goUpdate} from={from} review={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
+                                                                    )
+                                                                }
+                                                            }} 
                                                             numColumns={1} 
                                                             keyExtractor={item => String(item.id)} 
                                                             refreshing={refreshing} 
@@ -450,7 +470,7 @@ class ExhibitionContentScreen extends React.Component {
                                             )}
                                             {mode === 'review' && (
                                                 <View style={[styles.pb30]}>
-                                                    <ArtuiumCard5 deleteReview={this.props.deleteReview} goUpdate={this._goUpdate} from={from} review={showingReview} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
+                                                    <ArtuiumCard5 addBlockReview={this.props.addBlockReview} addBlockUser={this.props.addBlockUser} deleteReview={this.props.deleteReview} goUpdate={this._goUpdate} from={from} review={showingReview} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} />
                                                     <View style={[styles.divView, styles.mt15]} />
                                                     <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px30, styles.pt20, styles.mb15]}>
                                                         <Text style={[styles.font20, styles.fontBold, {color: '#382a2a'}]}>댓글</Text>
@@ -464,11 +484,18 @@ class ExhibitionContentScreen extends React.Component {
                                                         replies && replies.length > 0 ? (
                                                             <FlatList 
                                                             data={replies} 
-                                                            renderItem={({item}) => (
-                                                                <View style={[item.id === selectedReply.id ? { zIndex: 9999 } : { zIndex: 10 }]}>
-                                                                    <ReplyCard reply={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} selectReply={this.props.selectReply} selectedReply={selectedReply} />
-                                                                </View>
-                                                            )} 
+                                                            renderItem={({item}) => {
+                                                                if((blockReplyList.findIndex(id => id === item.id) >= 0) || (blockUserList.findIndex(id => id === item.author.id) >= 0)){
+                                                                    return null
+                                                                }
+                                                                else{
+                                                                    return (
+                                                                        <View style={[item.id === selectedReply.id ? { zIndex: 9999 } : { zIndex: 10 }]}>
+                                                                            <ReplyCard addBlockUser={this.props.addBlockUser} addBlockReply={this.props.addBlockReply} reply={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} selectReply={this.props.selectReply} selectedReply={selectedReply} />
+                                                                        </View>
+                                                                    )
+                                                                }
+                                                            }} 
                                                             numColumns={1} 
                                                             keyExtractor={item => String(item.id)} 
                                                             refreshing={refreshingReply} 

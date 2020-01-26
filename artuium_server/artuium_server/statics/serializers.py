@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import Q
 
 from . import models
 from artuium_server.users import serializers as users_serializers
@@ -70,19 +71,58 @@ class ReplySerializer(serializers.ModelSerializer):
         fields = ['id', 'review', 'author', 'time', 'content', 'reply_count', 'initial_replies']
     
     def get_reply_count(self, obj):
-        return obj.replies.count()
+        if 'request' in self.context:
+            request = self.context['request']
+            user = request.user
+            blocking_reply = models.Blocking.objects.filter(user = user, reply__isnull = False).values_list('reply__id', flat = True)
+            blocking_user = models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
+            replies =  obj.replies.filter(Q(deleted = False) & ~Q(id__in = blocking_reply) & ~Q(author__id__in = blocking_user))
+            return replies.count()
+        else:
+            return obj.replies.count()
     
     def get_initial_replies(self, obj):
-        replies =  obj.replies.order_by('time')[:3]
-        replies_list = []
-        for reply in replies:
-            replies_list.append({
-                'id': reply.id,
-                'time': reply.time,
-                'content': reply.content,
-                'author': reply.author.nickname
-            })
-        return replies_list
+        if 'request' in self.context:
+            request = self.context['request']
+            user = request.user
+            blocking_reply = models.Blocking.objects.filter(user = user, reply__isnull = False).values_list('reply__id', flat = True)
+            blocking_user = models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
+            replies =  obj.replies.filter(Q(deleted = False) & ~Q(id__in = blocking_reply) & ~Q(author__id__in = blocking_user)).order_by('time')[:3]
+            
+            replies_list = []
+            for reply in replies:
+                is_me = False
+                if user == reply.author:
+                    is_me = True
+                replies_list.append({
+                    'id': reply.id,
+                    'time': reply.time,
+                    'content': reply.content,
+                    'author': {
+                        'id': reply.author.id,
+                        'nickname': reply.author.nickname,
+                        'is_me': is_me
+                    }
+                })
+            return replies_list
+        else:
+            replies =  obj.replies.filter(deleted = False).order_by('time')[:3]
+            replies_list = []
+            for reply in replies:
+                is_me = False
+                if user == reply.author:
+                    is_me = True
+                replies_list.append({
+                    'id': reply.id,
+                    'time': reply.time,
+                    'content': reply.content,
+                    'author': {
+                        'id': reply.author.id,
+                        'nickname': reply.author.nickname,
+                        'is_me': is_me
+                    }
+                })
+            return replies_list
 
 
 class LikeSerializer(serializers.ModelSerializer):

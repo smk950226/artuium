@@ -3,6 +3,14 @@ import Container from './container';
 import { actionCreators as userActions } from '../../redux/modules/user';
 import { actionCreators as reviewActions } from '../../redux/modules/review';
 
+const mapStateToProps = (state, ownProps) => {
+    const { review : { blockUserList, blockReplyList } } = state;
+    return{
+        blockUserList,
+        blockReplyList
+    }
+}
+
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         getRepliesList: (replyId, page) => {
@@ -19,8 +27,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         reportUser: (userId) => {
             return dispatch(userActions.reportUser(userId))
+        },
+        blockUser: (userId) => {
+            return dispatch(userActions.blockUser(userId))
+        },
+        reportReply: (replyId) => {
+            return dispatch(reviewActions.reportReply(replyId))
+        },
+        blockReply: (replyId) => {
+            return dispatch(reviewActions.blockReply(replyId))
         }
     }
 }
 
-export default connect(null, mapDispatchToProps)(Container);
+export default connect(mapStateToProps, mapDispatchToProps)(Container);

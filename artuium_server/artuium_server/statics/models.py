@@ -58,6 +58,7 @@ class Reply(models.Model):
     time = models.DateTimeField('작성일', auto_now_add = True)
     content = models.TextField('내용')    
     replies = models.ManyToManyField('self', blank = True, null = True)
+    deleted = models.BooleanField('목록 삭제 여부', default = False)
 
     def __str__(self):
         return  'reply-' + str(self.id) + '-' + self.author.nickname
@@ -150,12 +151,29 @@ class Reporting(models.Model):
     user = models.ForeignKey('users.User', verbose_name = '신고한 유저', on_delete = models.CASCADE, related_name = 'reportings')
     to_user = models.ForeignKey('users.User', verbose_name = '신고당한 유저', on_delete = models.CASCADE, related_name = 'reporteds', blank = True, null = True)
     review = models.ForeignKey(Review, verbose_name = '신고당한 감상', on_delete = models.CASCADE, blank = True, null = True)
+    reply = models.ForeignKey(Reply, verbose_name = '신고당한 답변', on_delete = models.CASCADE, blank = True, null = True)
     reported_at = models.DateTimeField(auto_now_add = True)
 
     def __str__(self):
-        return  self.user.nickname + ' - ' + str(self.review.id)
+        return  self.user.nickname + ' - ' + str(self.reported_at)
     
     class Meta:
         ordering = ['-id']
         verbose_name = '신고 목록'
         verbose_name_plural = '신고 목록'
+
+
+class Blocking(models.Model):
+    user = models.ForeignKey('users.User', verbose_name = '숨김한 유저', on_delete = models.CASCADE, related_name = 'blockings')
+    to_user = models.ForeignKey('users.User', verbose_name = '숨김당한 유저', on_delete = models.CASCADE, related_name = 'blockeds', blank = True, null = True)
+    review = models.ForeignKey(Review, verbose_name = '숨김당한 감상', on_delete = models.CASCADE, blank = True, null = True)
+    reply = models.ForeignKey(Reply, verbose_name = '숨김당한 답변', on_delete = models.CASCADE, blank = True, null = True)
+    blocked_at = models.DateTimeField(auto_now_add = True)
+
+    def __str__(self):
+        return  self.user.nickname + ' - ' + str(self.blocked_at)
+    
+    class Meta:
+        ordering = ['-id']
+        verbose_name = '숨김 목록'
+        verbose_name_plural = '숨김 목록'
