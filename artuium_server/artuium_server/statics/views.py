@@ -40,6 +40,47 @@ class InitialReview(APIView):
         })
 
 
+class RecommendedReview(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user = request.user
+        reviews = models.Review.objects.filter(content__isnull = False, deleted = False).order_by('index')
+        recommended_reviews = reviews.filter(recommended = True)[:5]
+
+        return Response(status = status.HTTP_200_OK, data = {
+            'status': 'ok',
+            'recommended_reviews': serializers.ReviewSerializer(recommended_reviews, many = True, context = {'request': request}).data,
+        })
+
+
+class NewReview(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user = request.user
+        reviews = models.Review.objects.filter(content__isnull = False, deleted = False).order_by('index')
+        new_reviews = reviews.order_by('-time')[:5]
+
+        return Response(status = status.HTTP_200_OK, data = {
+            'status': 'ok',
+            'new_reviews': serializers.ReviewSerializer(new_reviews, many = True, context = {'request': request}).data,
+        })
+
+
+
+class FollowingReview(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format = None):
+        user = request.user
+        following = models.Follow.objects.filter(following = user).values_list('follower__id', flat = True)
+        reviews = models.Review.objects.filter(content__isnull = False, deleted = False).order_by('index')
+        following_reviews = reviews.filter(author__id__in = following)[:5]
+
+        return Response(status = status.HTTP_200_OK, data = {
+            'status': 'ok',
+            'following_reviews': serializers.ReviewSerializer(following_reviews, many = True, context = {'request': request}).data,
+        })
+
+
 class Review(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, format = None):

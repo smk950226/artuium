@@ -19,7 +19,10 @@ class Container extends Component{
         getNoticeNew: PropTypes.func.isRequired,
         getNotificationNew: PropTypes.func.isRequired,
         noticeNew: PropTypes.bool,
-        notificationNew: PropTypes.bool
+        notificationNew: PropTypes.bool,
+        getRecommendedReview: PropTypes.func.isRequired,
+        getNewReview: PropTypes.func.isRequired,
+        getFollowingReview: PropTypes.func.isRequired,
     }
 
     constructor(props){
@@ -220,6 +223,7 @@ class Container extends Component{
                         {...this.state}
                         handleNoticeNewChange={this._handleNoticeNewChange}
                         handleNotificationNewChange={this._handleNotificationNewChange}
+                        remount={this._remount}
                     />
                 </Fragment>
                 

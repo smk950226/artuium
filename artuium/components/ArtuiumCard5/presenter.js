@@ -7,7 +7,7 @@ import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import FollowerList from '../FollowerList';
 import FollowingList from '../FollowingList';
 import stripHtml from "string-strip-html";
-import ModalDropdown from 'react-native-modal-dropdown';
+import ModalDropdown from '../ModalDropdown';
 
 const { width, height } = Dimensions.get('window')
 
@@ -255,8 +255,8 @@ class ArtuiumCard5 extends Component{
                                         ) : (
                                             <ModalDropdown options={['신고하기']}
                                             showsVerticalScrollIndicator={false}
-                                            dropdownStyle={{height: Platform.OS === 'ios' ? 30 :  40}}
-                                            dropdownTextStyle={{fontSize: 10, height: Platform.OS === 'ios' ? 30 :  40}}
+                                            dropdownStyle={is_me ? {height: Platform.OS === 'ios' ? 70 : 90} : {height: Platform.OS === 'ios' ? 35 : 45}}
+                                                dropdownTextStyle={{fontSize: 15, height: Platform.OS === 'ios' ? 35 : 45}}
                                             onSelect={this.props.reportUser}
                                             >
                                                 <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />

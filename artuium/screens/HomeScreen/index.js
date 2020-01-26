@@ -43,6 +43,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         getNotificationNew: (notificationNew) => {
             dispatch(userActions.getNotificationNew(notificationNew))
+        },
+        getRecommendedReview: () => {
+            dispatch(reviewActions.getRecommendedReview())
+        },
+        getNewReview: () => {
+            dispatch(reviewActions.getNewReview())
+        },
+        getFollowingReview: () => {
+            dispatch(reviewActions.getFollowingReview())
         }
     }
 }

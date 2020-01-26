@@ -249,9 +249,8 @@ class Container extends Component{
                             else if(result.error){
                                 this.setState({
                                     isDeleting: false,
-                                    deleted: false
+                                    deleted: true
                                 })
-                                Alert.alert(null, result.error)
                             }
                             else{
                                 this.setState({
@@ -288,9 +287,8 @@ class Container extends Component{
                             else if(result.error){
                                 this.setState({
                                     isDeleting: false,
-                                    deleted: false
+                                    deleted: true
                                 })
-                                Alert.alert(null, result.error)
                             }
                             else{
                                 this.setState({

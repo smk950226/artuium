@@ -23,4 +23,7 @@ urlpatterns = [
     path('replies/', views.Replies.as_view()),
     path('report/review/', views.ReportReview.as_view()),
     path('report/user/', views.ReportUser.as_view()),
+    path('review/recommended/', views.RecommendedReview.as_view()),
+    path('review/new/', views.NewReview.as_view()),
+    path('review/following/', views.FollowingReview.as_view()),
 ]
