@@ -16,8 +16,6 @@ import requests
 from datetime import timedelta
 from django.conf import settings
 from django.utils import timezone
-from social_core.backends.oauth import BaseOAuth2
-from social_core.utils import handle_http_errors
 
 
 from . import models, serializers
@@ -162,6 +160,19 @@ class CheckNickname(APIView):
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '닉네임을 입력하세요.'})
 
+
+class CheckUsername(APIView):
+    def get(self, request, format = None):
+        username = request.query_params.get('username')
+        if username:
+            if len(User.objects.filter(username = username)) > 0:
+                return Response(status = status.HTTP_200_OK, data = {'type': 'login'})
+            else:
+                return Response(status = status.HTTP_200_OK, data = {'type': 'signup'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'type': 'error'})
+            
+
 class ReviewList(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, user_id, format = None):
@@ -273,4 +284,3 @@ class GoogleLogin(SocialLoginView):
 
 class FacebookLogin(SocialLoginView):
     adapter_class = FacebookOAuth2Adapter
-    

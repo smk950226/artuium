@@ -12,11 +12,12 @@ class AccountAdapter(DefaultAccountAdapter):
 
     def save_user(self, request, user, form, commit=True):
         user = super().save_user(request, user, form, False)
-        nickname = request.data.get('nickname', False)
-        profile_image = request.data.get('profile_image', False)
-
-        user.nickname = nickname
-        user.profile_image = profile_image
+        nickname = request.data.get('nickname', None)
+        profile_image = request.data.get('profile_image', None)
+        if nickname:
+            user.nickname = nickname
+        if profile_image:
+            user.profile_image = profile_image
         user.save()
         return user
 
