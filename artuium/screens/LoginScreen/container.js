@@ -44,7 +44,10 @@ class Container extends Component{
         fetchedToken: false,
         fetchClear: false,
         agreeTerm: false,
+        agreeTerm2: false,
+        agreeAll: false,
         showTerm: false,
+        showTerm2: false,
         addInfoModal: false,
     }
 
@@ -327,16 +330,65 @@ class Container extends Component{
         }
     }
 
-    _handleChangeAgreeTerm = () => {
-        this.setState({
+    _handleChangeAgreeTerm = async() => {
+        await this.setState({
             agreeTerm: !this.state.agreeTerm
         })
+        if(this.state.agreeTerm && this.state.agreeTerm2){
+            this.setState({
+                agreeAll: true
+            })
+        }
+        else{
+            this.setState({
+                agreeAll: false
+            })
+        }
     }
 
     _handleChangeShowTerm = () => {
         this.setState({
             showTerm: !this.state.showTerm
         })
+    }
+
+    _handleChangeAgreeTerm2 = async() => {
+        await this.setState({
+            agreeTerm2: !this.state.agreeTerm2
+        })
+        if(this.state.agreeTerm && this.state.agreeTerm2){
+            this.setState({
+                agreeAll: true
+            })
+        }
+        else{
+            this.setState({
+                agreeAll: false
+            })
+        }
+    }
+
+    _handleChangeShowTerm2 = () => {
+        this.setState({
+            showTerm2: !this.state.showTerm2
+        })
+    }
+
+    _handleChangeAgreeAll = () => {
+        if(this.state.agreeAll){
+            this.setState({
+                agreeTerm: false,
+                agreeTerm2: false,
+                agreeAll: false
+            })
+        }
+        else{
+            this.setState({
+                agreeTerm: true,
+                agreeTerm2: true,
+                agreeAll: true
+            })
+        }
     }
 
     render(){
@@ -349,6 +401,9 @@ class Container extends Component{
             handleCheckNickname={this._handleCheckNickname}
             handleChangeAgreeTerm={this._handleChangeAgreeTerm}
             handleChangeShowTerm={this._handleChangeShowTerm}
+            handleChangeAgreeTerm2={this._handleChangeAgreeTerm2}
+            handleChangeShowTerm2={this._handleChangeShowTerm2}
+            handleChangeAgreeAll={this._handleChangeAgreeAll}
             handleKakaoLogin={this._handleKakaoLogin}
             handleGoogleLogin={this._handleGoogleLogin}
             handleFacebookLogin={this._handleFacebookLogin}

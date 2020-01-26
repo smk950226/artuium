@@ -177,8 +177,8 @@ class ArtuiumCard3 extends Component{
                                 </TouchableWithoutFeedback>
                                 <ModalDropdown options={is_me ? ['수정하기', '삭제하기'] : ['신고하기']}
                                 showsVerticalScrollIndicator={false}
-                                dropdownStyle={is_me ? {height: Platform.OS === 'ios' ? 60 :  80} : {height: Platform.OS === 'ios' ? 30 :  40}}
-                                dropdownTextStyle={{fontSize: 10, height: Platform.OS === 'ios' ? 30 :  40}}
+                                dropdownStyle={is_me ? {height: Platform.OS === 'ios' ? 70 : 90} : {height: Platform.OS === 'ios' ? 35 : 45}}
+                                dropdownTextStyle={{fontSize: 15, height: Platform.OS === 'ios' ? 35 : 45}}
                                 onSelect={this.props.handleOption}
                                 >
                                     <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon15, styles.ml10]} />
