@@ -42,8 +42,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         facebookLogin: (accessToken) => {
             return dispatch(userActions.facebookLogin(accessToken))
         },
-        appleLogin: (accessToken) => {
-            return dispatch(userActions.appleLogin(accessToken))
+        appleLogin: (user, password) => {
+            return dispatch(userActions.appleLogin(user, password))
         },
         logout: () => {
             dispatch(userActions.getLogout());
@@ -51,6 +51,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         addInfo: (token, nickname, profileImg) => {
             dispatch(userActions.addInfo(token, nickname, profileImg))
         },
+        checkUsername: (username) => {
+            return dispatch(userActions.checkUsername(username))
+        }
     }
 }
 

@@ -9,7 +9,7 @@ class User(AbstractUser):
 
     # First Name and Last Name do not cover name patterns
     # around the globe.
-    nickname = CharField('닉네임', max_length = 255)
+    nickname = CharField('닉네임', max_length = 255, blank = True, null = True)
     profile_image = models.ImageField('Profile Image', upload_to = 'user/profile/', blank = True, null = True)
     background_image = models.ImageField('Background Image', upload_to = 'user/background/', blank = True, null = True)
     recommended = models.BooleanField('추천 여부', default = False)

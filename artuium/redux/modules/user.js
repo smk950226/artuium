@@ -946,33 +946,51 @@ function facebookLogin(accessToken){
    };
 }
 
-function appleLogin(accessToken){
+function appleLogin(user, password){
     return (dispatch) => {
-        if(accessToken){
-            return fetch(`${FETCH_URL}/api/users/login/apple/`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    access_token: accessToken,
-                })
+        return fetch(`${FETCH_URL}/rest-auth/registration/`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: user,
+                password1: password,
+                password2: password
             })
-            .then(response => {
+        })
+        .then(response => response.json())
+        .then(json => {
+            if(json.token){
+                return {
+                    token: json.token
+                }
+            }
+            else{
+                return false
+            }
+        })
+        .catch(err => console.log(err));
+    };
+}
+
+function checkUsername(username){
+    return (dispatch) => {
+        return fetch(`${FETCH_URL}/api/users/check/username/?username=${username}`, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+            if(response.status === 200){
                 return response.json()
-            })
-            .then(json => {
-                if(json.token && json.user){
-                    return {
-                        token: json.token
-                    }
-                }
-                else{
-                    return false
-                }
-            })
-        }
-   };
+            }
+            else{
+                return false
+            }
+        })
+        .then(json => json)
+    }
 }
 
 function getReplyList(reviewId){
@@ -1258,7 +1276,8 @@ const actionCreators = {
     setPushToken,
     getNoticeNew,
     getNotificationNew,
-    reportUser
+    reportUser,
+    checkUsername
 }
 
 export { actionCreators }

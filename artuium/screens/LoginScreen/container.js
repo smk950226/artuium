@@ -22,7 +22,8 @@ class Container extends Component{
         getProfileByToken: PropTypes.func.isRequired,
         profile: PropTypes.any,
         token: PropTypes.string,
-        checkEmail: PropTypes.func.isRequired
+        checkEmail: PropTypes.func.isRequired,
+        checkUsername: PropTypes.func.isRequired
     }
 
     constructor() {
@@ -31,21 +32,18 @@ class Container extends Component{
         this.user = null;
         this.state = {
           credentialStateForUser: -1,
+          nickname: '',
+            nicknameForm: false,
+            isCheckingNickname: false,
+            checkedNickname: false,
+            isSubmitting: false,
+            fetchedProfile: false,
+            fetchedToken: false,
+            fetchClear: false,
+            agreeTerm: false,
+            showTerm: false,
+            addInfoModal: false,
         }
-    }
-
-    state = {
-        nickname: '',
-        nicknameForm: false,
-        isCheckingNickname: false,
-        checkedNickname: false,
-        isSubmitting: false,
-        fetchedProfile: false,
-        fetchedToken: false,
-        fetchClear: false,
-        agreeTerm: false,
-        showTerm: false,
-        addInfoModal: false,
     }
 
     componentDidMount = () => {
@@ -54,7 +52,6 @@ class Container extends Component{
             webClientId: '834300059497-k2p01j18n5fnh11ek598nm138vh06s2m.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
         });
         this.authCredentialListener = appleAuth.onCredentialRevoked(async () => {
-            console.warn('Credential Revoked');
             this.fetchAndUpdateCredentialState().catch(error =>
                 this.setState({ credentialStateForUser: `Error: ${error.code}` }),
             );
@@ -74,64 +71,87 @@ class Container extends Component{
 
 
     _handleAppleSignIn = async () => {
-        console.warn('Beginning Apple Authentication');
-
+        const { checkUsername } = this.props;
     // start a login request
-    try {
-        const appleAuthRequestResponse = await appleAuth.performRequest({
-            requestedOperation: AppleAuthRequestOperation.LOGIN,
-            requestedScopes: [
-                AppleAuthRequestScope.EMAIL,
-                AppleAuthRequestScope.FULL_NAME,
-            ],
-        });
+        try {
+            const appleAuthRequestResponse = await appleAuth.performRequest({
+                requestedOperation: AppleAuthRequestOperation.LOGIN,
+                requestedScopes: [
+                    AppleAuthRequestScope.EMAIL,
+                    AppleAuthRequestScope.FULL_NAME,
+                ],
+            });
 
-        console.log('appleAuthRequestResponse', appleAuthRequestResponse);
+            // console.log('appleAuthRequestResponse', appleAuthRequestResponse);
 
-        const {
-            user: newUser,
-            email,
-            nonce,
-            identityToken,
-            realUserStatus /* etc */,
-        } = appleAuthRequestResponse;
+            const {
+                fullName,
+                user: newUser,
+                email,
+                nonce,
+                identityToken,
+                realUserStatus /* etc */,
+            } = appleAuthRequestResponse;
 
-        this.user = newUser;
+            this.user = newUser;
 
-        this.fetchAndUpdateCredentialState()
-            .then(res => this.setState({ credentialStateForUser: res }))
-            .catch(error =>
-            this.setState({ credentialStateForUser: `Error: ${error.code}` }),
-            );
+            this.fetchAndUpdateCredentialState()
+                .then(res => this.setState({ credentialStateForUser: res }))
+                .catch(error =>
+                this.setState({ credentialStateForUser: `Error: ${error.code}` }),
+                );
 
-        if (identityToken) {
-            // e.g. sign in with Firebase Auth using `nonce` & `identityToken`
-            const result = await this.props.appleLogin(identityToken)
-            if(result.token){
-                const profile = await this.props.getProfileByTokenReturn(result.token);
-                if(profile){
-                    if(profile.nickname){
-                        await this.props.getProfileByToken(result.token)
-                        await this.props.getSaveToken(result.token)
+            if (identityToken) {
+                const check = await checkUsername(newUser);
+                if(check){
+                    if(check.type === 'signup'){
+                        const result = await this.props.appleLogin(newUser, `${newUser.slice(0,10)}1234`)
+                        if(result.token){
+                            const profile = await this.props.getProfileByTokenReturn(result.token);
+                            if(profile){
+                                if(profile.nickname){
+                                    await this.props.getProfileByToken(result.token)
+                                    await this.props.getSaveToken(result.token)
+                                }
+                                else{
+                                    await this._openAddInfo()
+                                    this.setState({
+                                        savedToken: result.token
+                                    })
+                                }
+                            }
+                        }
                     }
-                    else{
-                        await this._openAddInfo()
-                        this.setState({
-                            savedToken: result.token
-                        })
+                    else if(check.type === 'login'){
+                        const result = await this.props.login(newUser, `${newUser.slice(0,10)}1234`)
+                        if(result.token){
+                            const profile = await this.props.getProfileByTokenReturn(result.token);
+                            if(profile){
+                                if(profile.nickname){
+                                    await this.props.getProfileByToken(result.token)
+                                    await this.props.getSaveToken(result.token)
+                                }
+                                else{
+                                    await this._openAddInfo()
+                                    this.setState({
+                                        savedToken: result.token
+                                    })
+                                }
+                            }
+                        }
                     }
                 }
+                
+            } 
+            else {
+                // no token - failed sign-in?
             }
-            console.log("토큰:::::::::::::", nonce, identityToken);
-        } else {
-            // no token - failed sign-in?
-        }
 
-        if (realUserStatus === AppleAuthRealUserStatus.LIKELY_REAL) {
-            console.log("I'm a real person!");
-        }
+            if (realUserStatus === AppleAuthRealUserStatus.LIKELY_REAL) {
+                console.log("I'm a real person!");
+            }
 
-        console.warn(`Apple Authentication Completed, ${this.user}, ${email}`);
+            console.warn(`Apple Authentication Completed, ${this.user}, ${email}`);
         } catch (error) {
             if (error.code === AppleAuthError.CANCELED) {
                 console.warn('User canceled Apple Sign in.');
@@ -141,18 +161,18 @@ class Container extends Component{
         }
     };
 
-  fetchAndUpdateCredentialState = async () => {
-    if (this.user === null) {
-        this.setState({ credentialStateForUser: 'N/A' });
-    } else {
-        const credentialState = await appleAuth.getCredentialStateForUser(this.user);
-        if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
-            this.setState({ credentialStateForUser: 'AUTHORIZED' });
+    fetchAndUpdateCredentialState = async () => {
+        if (this.user === null) {
+            this.setState({ credentialStateForUser: 'N/A' });
         } else {
-            this.setState({ credentialStateForUser: credentialState });
+            const credentialState = await appleAuth.getCredentialStateForUser(this.user);
+            if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
+                this.setState({ credentialStateForUser: 'AUTHORIZED' });
+            } else {
+                this.setState({ credentialStateForUser: credentialState });
+            }
         }
     }
-  }
 
     _handleFacebookLogin = async(accessToken) => {
         const result = await this.props.facebookLogin(accessToken)

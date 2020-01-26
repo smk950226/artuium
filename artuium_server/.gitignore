@@ -48,6 +48,8 @@ coverage.xml
 *.cover
 .hypothesis/
 
+apple-developer-domain-association.txt
+
 # Translations
 *.mo
 *.pot
