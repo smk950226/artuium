@@ -487,7 +487,7 @@ class LoginScreen extends React.Component {
                         <AppleButton
                             style={[styles.mt25, {width: 300, height: 48}]}
                             cornerRadius={5}
-                            buttonStyle={AppleButton.Style.WHITE}
+                            buttonStyle={AppleButton.Style.BLACK}
                             buttonType={AppleButton.Type.SIGN_IN}
                             onPress={() => this.props.handleAppleSignIn()}
                         />

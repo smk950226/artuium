@@ -26,14 +26,14 @@ const TabNavigation = createBottomTabNavigator({
             )
         }
     },
-    아트워크: {
-        screen: ArtworkContainer,
-        navigationOptions: {
-            tabBarIcon: ({focused}) => (
-                <Image source={focused ? require('../assets/images/icon_artwork.png') : require('../assets/images/icon_artwork.png')} style={styles.iconTab} />
-            )
-        }
-    },
+    // 아트워크: {
+    //     screen: ArtworkContainer,
+    //     navigationOptions: {
+    //         tabBarIcon: ({focused}) => (
+    //             <Image source={focused ? require('../assets/images/icon_artwork.png') : require('../assets/images/icon_artwork.png')} style={styles.iconTab} />
+    //         )
+    //     }
+    // },
     MY: {
         screen: ProfileContainer,
         navigationOptions: {
