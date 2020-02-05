@@ -29,6 +29,7 @@ class Container extends Component{
         const mode = props.navigation.getParam('mode', null)
         const review = props.navigation.getParam('review', null)
         const from = props.navigation.getParam('from', null)
+        const to = props.navigation.getParam('to', null)
         const { is_liked, like_count, review_count, is_reviewed, total_rate } = artwork;
         this.state = {
             artwork,
@@ -62,7 +63,8 @@ class Container extends Component{
             selectedReply: {},
             initialMode: mode,
             from,
-            review
+            review,
+            to
         }
     }
 
@@ -142,6 +144,15 @@ class Container extends Component{
                     loading: false
                 })
             }
+        }
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if(prevProps !== this.props){
+            const to = this.props.navigation.getParam('to', null)
+            this.setState({
+                to
+            })
         }
     }
 

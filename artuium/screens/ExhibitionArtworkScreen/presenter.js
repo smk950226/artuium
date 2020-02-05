@@ -205,7 +205,7 @@ class ExhibitionArtworkScreen extends Component{
                         </View>
 
                         <View style={[styles.alignItemsCenter, {width: width, position: 'absolute', bottom: height*0.05*ratioV}]}>
-                            <TouchableWithoutFeedback onPress={showingIndex === artworks.length - 1 ? ()=> this.props.navigation.navigate('ExhibitionContent', { exhibition : exhibition, from }) : ()=> this.props.navigation.navigate('ArtworkContent', { artwork : artworks[showingIndex], from })}>
+                            <TouchableWithoutFeedback onPress={showingIndex === artworks.length - 1 ? ()=> this.props.navigation.navigate('ExhibitionContent', { exhibition : exhibition, from, to: 'back' }) : ()=> this.props.navigation.navigate('ArtworkContent', { artwork : artworks[showingIndex], from, to: 'back' })}>
                                 <View style={[styles.mt30]}>
                                     <Image source={require('../../assets/images/arrow_up_exhibition.png')} style={[styles.upBtn]}/>
                                 </View>

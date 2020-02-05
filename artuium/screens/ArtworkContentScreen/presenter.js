@@ -10,6 +10,7 @@ import ReplyCard from '../../components/ReplyCard'
 import HTML from 'react-native-render-html';
 import StarRating from 'react-native-star-rating';
 import Stars from 'react-native-stars';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 const iosStatusBarHeight = getStatusBarHeight()
 
@@ -133,7 +134,7 @@ class ArtworkContentScreen extends React.Component {
     }
 
     render(){
-        const { artwork, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from, blockReviewList, blockUserList, blockReplyList } = this.props;
+        const { artwork, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from, blockReviewList, blockUserList, blockReplyList, to } = this.props;
         const { initialMode, keyboardHeight } = this.state;
         if(artwork){
             return(
@@ -189,7 +190,16 @@ class ArtworkContentScreen extends React.Component {
                                             <Image source={require('../../assets/images/arrow_down_exhibition.png')} style={[styles.upBtn]}/>
                                         </View>
                                     </TouchableWithoutFeedback> */}
-                                    <TouchableWithoutFeedback style={[styles.flex1]} onPress={()=>this.props.navigation.goBack(null)}>   
+                                    <TouchableWithoutFeedback style={[styles.flex1]} onPress={(to === 'back') ? ()=>this.props.navigation.goBack(null) : ()=>this.props.navigation.dispatch(StackActions.reset({
+                                        index: 0,
+                                        actions: [NavigationActions.navigate({
+                                            routeName: 'ArtworkDetail',
+                                            params: {
+                                                artwork,
+                                                from
+                                            }
+                                        })]
+                                    }))}>   
                                         <View>
                                             <Image source={require('../../assets/images/arrow_down_exhibition.png')} style={[styles.upBtn]}/>
                                         </View>
