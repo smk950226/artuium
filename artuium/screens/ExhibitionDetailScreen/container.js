@@ -23,6 +23,15 @@ class Container extends Component{
         }
     }
 
+    componentDidUpdate = (prevProps) => {
+        if(prevProps !== this.props){
+            const from = this.props.navigation.getParam('from', null)
+            this.setState({
+                from
+            })
+        }
+    }
+
     _like = async() => {
         const { is_liked, isSubmitting, exhibition : { id } } = this.state;
         const { likeExhibition } = this.props;

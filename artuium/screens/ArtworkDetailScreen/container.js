@@ -45,6 +45,15 @@ class Container extends Component{
         }
     }
 
+    componentDidUpdate = (prevProps) => {
+        if(prevProps !== this.props){
+            const from = this.props.navigation.getParam('from', null)
+            this.setState({
+                from
+            })
+        }
+    }
+
     _like = async() => {
         const { is_liked, isSubmitting, artwork : { id } } = this.state;
         const { likeArtwork } = this.props;

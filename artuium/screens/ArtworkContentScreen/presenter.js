@@ -429,7 +429,7 @@ class ArtworkContentScreen extends React.Component {
                                                     </TouchableWithoutFeedback>
                                                     <View style={[styles.widthFull, {height: 300, borderWidth: 1, borderColor: '#e8e8e8'}]}>
                                                         <TextInput
-                                                            style={[styles.font15, styles.widthFull, styles.px25, styles.py10, styles.widthFull, {height: 300}]}
+                                                            style={[styles.font15, styles.widthFull, styles.px25, styles.py10, styles.widthFull, styles.black, {height: 300}]}
                                                             placeholder={'내용을 입력하세요.'}
                                                             autoCapitalize={'none'} 
                                                             autoCorrect={false} 
@@ -521,7 +521,7 @@ class ArtworkContentScreen extends React.Component {
                         <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, Platform.OS === 'ios' ? {paddingBottom: 20} : null, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
                             <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
                                 <TextInput
-                                    style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
+                                    style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull, styles.black]}
                                     autoCapitalize={'none'} 
                                     autoCorrect={false} 
                                     value={contentReply} 

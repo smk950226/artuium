@@ -455,7 +455,7 @@ class ExhibitionContentScreen extends React.Component {
                                                     </TouchableWithoutFeedback>
                                                     <View style={[styles.widthFull, {height: 300, borderWidth: 1, borderColor: '#e8e8e8'}]}>
                                                         <TextInput
-                                                            style={[styles.font15, styles.widthFull, styles.px25, styles.py10, styles.widthFull, {height: 300, minHeight: 300, flex: 1}]}
+                                                            style={[styles.font15, styles.widthFull, styles.px25, styles.py10, styles.black, styles.widthFull, {height: 300, minHeight: 300, flex: 1}]}
                                                             placeholder={'내용을 입력하세요.'}
                                                             autoCapitalize={'none'} 
                                                             autoCorrect={false} 
@@ -548,7 +548,7 @@ class ExhibitionContentScreen extends React.Component {
                             <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, styles.pb10, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
                                 <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
                                     <TextInput
-                                        style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
+                                        style={[styles.font13, styles.black, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
                                         autoCapitalize={'none'} 
                                         autoCorrect={false} 
                                         value={contentReply} 
@@ -567,7 +567,7 @@ class ExhibitionContentScreen extends React.Component {
                             <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, styles.pb10, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
                                 <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
                                     <TextInput
-                                        style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
+                                        style={[styles.font13, styles.black, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
                                         autoCapitalize={'none'} 
                                         autoCorrect={false} 
                                         value={contentReply} 

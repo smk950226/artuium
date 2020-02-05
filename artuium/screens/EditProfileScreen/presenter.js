@@ -105,7 +105,7 @@ class EditProfileScreen extends React.Component {
                                 </View>
                                 <View style={[styles.flex3, styles.justifyContentCenter]}>
                                     <TextInput
-                                        style={[styles.font16]}
+                                        style={[styles.font16, styles.black]}
                                         underlineColorAndroid={'transparent'} 
                                         autoCapitalize={'none'} 
                                         autoCorrect={false} 

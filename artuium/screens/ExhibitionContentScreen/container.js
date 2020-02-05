@@ -150,8 +150,10 @@ class Container extends Component{
     componentDidUpdate = (prevProps) => {
         if(prevProps !== this.props){
             const to = this.props.navigation.getParam('to', null)
+            const from = this.props.navigation.getParam('from', null)
             this.setState({
-                to
+                to,
+                from
             })
         }
     }

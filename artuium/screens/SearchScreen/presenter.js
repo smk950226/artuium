@@ -62,7 +62,7 @@ const SearchScreen = (props) => (
                 </View>
                 <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px15, styles.py10, styles.bgTransparent, {zIndex: 9}]}>
                     <TextInput 
-                    style={[styles.bgWhite, styles.borderRadius5, styles.font14, styles.pl20, styles.width90, styles.justifyContentCenter, {zIndex: 9, height: 43}]} 
+                    style={[styles.bgWhite, styles.black, styles.borderRadius5, styles.font14, styles.pl20, styles.width90, styles.justifyContentCenter, {zIndex: 9, height: 43}]} 
                     underlineColorAndroid={'transparent'} 
                     autoCapitalize={'none'} 
                     autoCorrect={false} 
