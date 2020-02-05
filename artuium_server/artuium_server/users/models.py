@@ -20,7 +20,10 @@ class User(AbstractUser):
         return reverse("users:detail", kwargs={"username": self.username})
 
     def __str__(self):
-        return self.nickname
+        if self.nickname:
+            return self.nickname
+        else:
+            return str(self.id)
     
     @property
     def following_count(self):

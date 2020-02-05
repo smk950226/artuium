@@ -1,6 +1,25 @@
 from django.contrib import admin
 from . import models
 
+class ReviewTypeFilter(admin.SimpleListFilter):
+    title = '감상 유형'
+    parameter_name = 'review_type'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('exhibition', '전시 감상'),
+            ('artwork', '작품 감상'),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == 'exhibition':
+            return queryset.filter(exhibition__isnull=False)
+        elif value == 'artwork':
+            return queryset.filter(artwork__isnull=False)
+        return queryset
+
+
 @admin.register(models.Notice)
 class NoticeAdmin(admin.ModelAdmin):
     list_display = ["id", "title", 'date', 'is_banner', 'index']
@@ -9,8 +28,15 @@ class NoticeAdmin(admin.ModelAdmin):
 
 @admin.register(models.Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ["id", "author", 'time', 'rate', 'recommended', 'index', 'deleted']
+    list_display = ["id", "author", 'review_type', 'exhibition', 'artwork', 'time', 'rate', 'recommended', 'index', 'deleted']
     list_display_links = ["id", "author"]
+    list_filter = [ReviewTypeFilter]
+
+    def review_type(self, obj):
+        if obj.exhibition:
+            return '전시 감상'
+        else:
+            return '작품 감상'
 
 
 @admin.register(models.Reply)
