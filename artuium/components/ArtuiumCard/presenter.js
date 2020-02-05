@@ -3,6 +3,7 @@ import { View, Text, Image, Dimensions, TouchableWithoutFeedback, ImageBackgroun
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import StarRating from 'react-native-star-rating';
+import LinearGradient from 'react-native-linear-gradient';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import FollowerList from '../FollowerList';
 import FollowingList from '../FollowingList';
@@ -122,7 +123,7 @@ class ArtuiumCard extends Component{
         else{
             return(
                 <Fragment>
-                    <View style={[(size === 'xsmall') ? {width: (width/2)-30} : null, (size === 'small') ? {width: (width/2)-20} : null, (size === 'large') ? { width: width-30 } : null, (size === 'xlarge') ? { width: width } : null, styles.mb10, (size === 'xlarge') ? null : styles.artworkBorder, styles.overflowHidden]}>
+                    <View style={[(size === 'xsmall') ? {width: (width/2)-30} : null, (size === 'small') ? {width: (width/2)-20} : null, (size === 'large') ? { width: width-30 } : null, (size === 'xlarge') ? { width: width } : null, styles.mb10, (size === 'xlarge') ? null : styles.artworkBorder, styles.overflowHidden, styles.justifyContentBetween]}>
                         <TouchableWithoutFeedback onPress={
                             (size === 'small') ? (
                                 review.artwork ? () => this.props.navigation.navigate('ArtworkContent', { artwork: review.artwork, mode: 'review', review: review, from }) : () => this.props.navigation.navigate('ExhibitionContent', { exhibition: review.exhibition, mode: 'review', review: review, from })
@@ -131,26 +132,35 @@ class ArtuiumCard extends Component{
                             )
                         }>
                             <View>
-                            <ImageBackground source={{uri: review.artwork ? review.artwork.image : review.exhibition ? (review.exhibition.images && (review.exhibition.images.length > 0)) ? review.exhibition.images[0].image : '' : ''}} style={[((size === 'small') || (size === 'xsmall')) ? styles.artworkImage : styles.artworkImageLg, ((size === 'small') || (size === 'xsmall')) ? styles.py5 : styles.py20, ((size === 'small') || (size === 'xsmall')) ? styles.px10 : styles.px15, styles.justifyContentEnd]} resizeMode={'cover'} >
-                                {review.artwork ? (
-                                    <Fragment>
-                                        <Text style={[styles.fontBold, ((size === 'small') || (size === 'xsmall')) ? styles.font15 : styles.font20, styles.white]}>
-                                            {review.artwork.name}
-                                        </Text>
-                                        <Text style={[styles.fontMedium, ((size === 'small') || (size === 'xsmall')) ? styles.font8 : styles.font11, styles.white]}>
-                                            {review.artwork.author.name}
-                                        </Text>
-                                    </Fragment>
-                                ) : (
-                                    <Fragment>
-                                        <Text style={[styles.fontBold, ((size === 'small') || (size === 'xsmall')) ? styles.font15 : styles.font20, styles.white]}>
-                                            <Text style={[styles.yellow]}>{'전시  '}</Text>{review.exhibition ? review.exhibition.name : ""}
-                                        </Text>
-                                        <Text style={[styles.fontMedium, ((size === 'small') || (size === 'xsmall')) ? styles.font8 : styles.font11, styles.white]}>
-                                            {review.exhibition ? `${review.exhibition.open_date.slice(0,4)}.${review.exhibition.open_date.slice(5,7)}.${review.exhibition.open_date.slice(8,10)}-${review.exhibition.close_date.slice(0,4)}.${review.exhibition.close_date.slice(5,7)}.${review.exhibition.close_date.slice(8,10)} ${review.exhibition.gallery.name}` : ""}
-                                        </Text>
-                                    </Fragment>
-                                )}
+                            <ImageBackground
+                                source={{uri: review.artwork ? review.artwork.image : review.exhibition ? (review.exhibition.images && (review.exhibition.images.length > 0)) ? review.exhibition.images[0].image : '' : ''}}
+                                style={[((size === 'small') || (size === 'xsmall')) ? styles.artworkImage : styles.artworkImageLg, styles.justifyContentEnd]}
+                                resizeMode={'cover'}
+                                >
+                                <LinearGradient
+                                    colors={['#00000000', '#000000']}
+                                    style={[((size === 'small') || (size === 'xsmall')) ? styles.py5 : styles.py20, ((size === 'small') || (size === 'xsmall')) ? styles.px10 : styles.px15]}
+                                >
+                                    {review.artwork ? (
+                                        <Fragment>
+                                            <Text style={[styles.fontBold, ((size === 'small') || (size === 'xsmall')) ? styles.font15 : styles.font20, styles.white]}>
+                                                {review.artwork.name}
+                                            </Text>
+                                            <Text style={[styles.fontMedium, ((size === 'small') || (size === 'xsmall')) ? styles.font8 : styles.font11, styles.white]}>
+                                                {review.artwork.author.name}
+                                            </Text>
+                                        </Fragment>
+                                    ) : (
+                                        <Fragment>
+                                            <Text style={[styles.fontBold, ((size === 'small') || (size === 'xsmall')) ? styles.font15 : styles.font20, styles.white]}>
+                                                <Text style={[styles.yellow]}>{'전시  '}</Text>{review.exhibition ? review.exhibition.name : ""}
+                                            </Text>
+                                            <Text style={[styles.fontMedium, ((size === 'small') || (size === 'xsmall')) ? styles.font8 : styles.font11, styles.white]}>
+                                                {review.exhibition ? `${review.exhibition.open_date.slice(0,4)}.${review.exhibition.open_date.slice(5,7)}.${review.exhibition.open_date.slice(8,10)}-${review.exhibition.close_date.slice(0,4)}.${review.exhibition.close_date.slice(5,7)}.${review.exhibition.close_date.slice(8,10)} ${review.exhibition.gallery.name}` : ""}
+                                            </Text>
+                                        </Fragment>
+                                    )}
+                                </LinearGradient>
                             </ImageBackground>
                             </View>
                         </TouchableWithoutFeedback>
