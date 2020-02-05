@@ -217,7 +217,7 @@ class ExhibitionDetailScreen extends Component{
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('ExhibitionArtwork', { exhibition, from })}>
                     <View style={[styles.relatedBtn, styles.alignItemsCenter, styles.alignSelfCenter, {position: 'absolute', bottom: height*0.17*ratioV}]}>
-                        <Text style={[styles.fontMedium, styles.font18, styles.white]}>전시 입장</Text>
+                        <Text style={[styles.fontMedium, styles.font18, styles.white]}>작품 보기</Text>
                     </View>
                 </TouchableWithoutFeedback>
                 <View style={[styles.alignItemsCenter, {width: width, position: 'absolute', bottom: height*0.05*ratioV}]}>
