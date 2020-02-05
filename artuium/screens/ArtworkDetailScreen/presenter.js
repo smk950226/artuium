@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, PanResponder, Animated, SafeAreaView, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform } from 'react-native';
+import { View, Text, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import { getStatusBarHeight } from "react-native-status-bar-height";
@@ -39,39 +39,6 @@ class ArtworkDetailScreen extends Component{
         unlike: PropTypes.func.isRequired,
     }
 
-    constructor(props){
-        super(props)
-        const { artwork, from } = props;
-        this.cardsPanResponder = PanResponder.create({
-            onStartShouldSetPanResponder: () => false,
-            onStartShouldSetPanResponderCapture: () => false,
-            onMoveShouldSetPanResponder: () => false,
-            onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
-                if(gestureState.dy < 0){
-                    if(gestureState.dy < -30){
-                        return true
-                    }
-                    else{
-                        return false
-                    }
-                }
-                else{
-                    return false
-                }
-            },
-            onPanResponderMove: ( event, gestureState ) => {
-            },
-            onPanResponderTerminationRequest: () => false,
-            onPanResponderRelease: ( event, gestureState ) => {
-                if(gestureState.dy < 0){
-                    if(gestureState.dy < -50){
-                        this.props.navigation.navigate('ArtworkContent', { artwork, from })
-                    }
-                }
-            }
-        })
-    }
-
     lastTap = null
 
     _handleDoubleTap = () => {
@@ -92,7 +59,6 @@ class ArtworkDetailScreen extends Component{
     render(){
         const { artwork, exhibition, like_count, review_count, is_liked, from } = this.props;
         return(
-            <Animated.View { ...this.cardsPanResponder.panHandlers }>
             <ImageBackground style={[styles.center, styles.screenHeight, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
                 <TouchableWithoutFeedback onPress={this._handleDoubleTap}>
                     <View>
@@ -224,7 +190,7 @@ class ArtworkDetailScreen extends Component{
                                                         </View>
                                                     </TouchableWithoutFeedback>
                                                 </View>
-                                                <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.flexWrap, {width: 200}]}>
+                                                <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.flexWrap]}>
                                                     <Text style={[styles.fontBold, styles.font30, styles.textCenter]}>{artwork.name}</Text>
                                                 </View>
                                                 <Text style={[styles.fontMedium, styles.font14]}>{artwork.author.name}, {`${artwork.created.slice(0,4)}.${artwork.created.slice(5,7)}.${artwork.created.slice(8,10)}`}, {artwork.material}</Text>
@@ -255,7 +221,6 @@ class ArtworkDetailScreen extends Component{
                     </TouchableWithoutFeedback>
                 </View>
             </ImageBackground>
-            </Animated.View>
         )
     }
 }

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, PanResponder, Animated, Platform, Image, Dimensions, TouchableWithoutFeedback, ImageBackground } from 'react-native';
+import { View, Text, Platform, Image, Dimensions, TouchableWithoutFeedback, ImageBackground } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import { getStatusBarHeight } from "react-native-status-bar-height";
@@ -39,39 +39,6 @@ class ExhibitionDetailScreen extends Component{
         unlike: PropTypes.func.isRequired,
         from: PropTypes.string
     }
-    
-    constructor(props){
-        super(props)
-        const { exhibition, from } = props;
-        this.cardsPanResponder = PanResponder.create({
-            onStartShouldSetPanResponder: () => false,
-            onStartShouldSetPanResponderCapture: () => false,
-            onMoveShouldSetPanResponder: () => false,
-            onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
-                if(gestureState.dy < 0){
-                    if(gestureState.dy < -30){
-                        return true
-                    }
-                    else{
-                        return false
-                    }
-                }
-                else{
-                    return false
-                }
-            },
-            onPanResponderMove: ( event, gestureState ) => {
-            },
-            onPanResponderTerminationRequest: () => false,
-            onPanResponderRelease: ( event, gestureState ) => {
-                if(gestureState.dy < 0){
-                    if(gestureState.dy < -50){
-                        this.props.navigation.navigate('ExhibitionContent', { exhibition, from })
-                    }
-                }
-            }
-        })
-    }
 
     lastTap = null
 
@@ -93,7 +60,6 @@ class ExhibitionDetailScreen extends Component{
     render(){
         const { exhibition, like_count, review_count, is_liked, from } = this.props;
         return(
-            <Animated.View { ...this.cardsPanResponder.panHandlers }>
             <ImageBackground style={[styles.center, styles.screenHeight, styles.screenWidth]} source={require('../../assets/images/bg_login.jpg')} resizeMode={'cover'}>
                 <TouchableWithoutFeedback onPress={this._handleDoubleTap}>
                     <View>
@@ -262,7 +228,6 @@ class ExhibitionDetailScreen extends Component{
                     </TouchableWithoutFeedback>
                 </View>
             </ImageBackground>
-            </Animated.View>
         )
     }
 }
