@@ -51,7 +51,9 @@ class ReplyCard extends Component{
         handleOption: PropTypes.func.isRequired,
         blockUserList: PropTypes.array,
         blockReplyList: PropTypes.array,
-        reply_count: PropTypes.number
+        reply_count: PropTypes.number,
+        startUpdateReply: PropTypes.func.isRequired,
+        deleted: PropTypes.bool
     }
 
     state = {
@@ -110,9 +112,10 @@ class ReplyCard extends Component{
     }
 
     render(){
-        const { reply, isLoadingMore, hasNextPage, selectedReply, showFollowModal, showProfileModal, is_me, is_following, following_count, follower_count, mode, blockUserList, blockReplyList, reply_count } = this.props;
+        const { reply, isLoadingMore, hasNextPage, selectedReply, showFollowModal, showProfileModal, is_me, is_following, following_count, follower_count, mode, blockUserList, blockReplyList, reply_count, deleted } = this.props;
         return(
-            <Fragment>
+            deleted ? null : (
+                <Fragment>
                 <TouchableWithoutFeedback>
                     <Fragment>
                     <View style={[styles.row, styles.justifyContentCenter, styles.borderRadius5, styles.borderGrayF0, styles.mx25, styles.mb20, styles.py15, styles.px20, styles.bgWhite, selectedReply.id === reply.id ? { zIndex: 9999 } : null]}>
@@ -144,7 +147,14 @@ class ReplyCard extends Component{
                                     </View>
                                 </TouchableWithoutFeedback>
                                 {is_me ? (
-                                    <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                    <ModalDropdown ref={(el) => this.dropdown = el} options={['수정하기', '삭제하기']}
+                                    showsVerticalScrollIndicator={false}
+                                    dropdownStyle={{height: Platform.OS === 'ios' ? 70 : 90}}
+                                    dropdownTextStyle={{fontSize: 15, height: Platform.OS === 'ios' ? 35 : 45}}
+                                    onSelect={this.props.handleOption}
+                                    >
+                                        <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                    </ModalDropdown>
                                 ) : (
                                     <ModalDropdown ref={(el) => this.dropdown = el} options={['신고하기', '숨기기']}
                                     showsVerticalScrollIndicator={false}
@@ -173,7 +183,14 @@ class ReplyCard extends Component{
                                                 </Text>
                                                 <Text style={[styles.fontMedium, styles.font14, styles.grayBa, styles.ml5]}>{`${reply.time.slice(0,4)}.${reply.time.slice(5,7)}.${reply.time.slice(8,10)}`}</Text>
                                                 {reply.author.is_me ? (
-                                                    <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                                    <ModalDropdown ref={(el) => this.dropdown = el} options={['수정하기', '삭제하기']}
+                                                    showsVerticalScrollIndicator={false}
+                                                    dropdownStyle={{height: Platform.OS === 'ios' ? 70 : 90}}
+                                                    dropdownTextStyle={{fontSize: 15, height: Platform.OS === 'ios' ? 35 : 45}}
+                                                    onSelect={(index, value) => this.props.handleOption(index, value, reply.id, reply.content)}
+                                                    >
+                                                        <Image source={require('../../assets/images/icon_dotted.png')} style={[styles.icon20]} />
+                                                    </ModalDropdown>
                                                 ) : (
                                                     <ModalDropdown ref={(el) => this.dropdown = el} options={['신고하기', '숨기기']}
                                                     showsVerticalScrollIndicator={false}
@@ -323,6 +340,7 @@ class ReplyCard extends Component{
                     </TouchableWithoutFeedback>
                 </Modal>
             </Fragment>
+            )
         )
     }
 }

@@ -1092,6 +1092,59 @@ function createReviewReply(reviewId, content){
     }
 }
 
+function updateReviewReply(replyId, content){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/reply/`, {
+            method: 'PUT',
+            headers: {
+                "Authorization": `JWT ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                replyId,
+                content
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(logout());
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
+function deleteReviewReply(replyId){
+    return (dispatch, getState) => {
+        const { user : { token } } = getState();
+        return fetch(`${FETCH_URL}/api/statics/reply/`, {
+            method: 'DELETE',
+            headers: {
+                "Authorization": `JWT ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                replyId
+            })
+        })
+        .then(response => {
+            if(response.status === 401){
+                dispatch(logout());
+                return false
+            }
+            else{
+                return response.json()
+            }
+        })
+        .then(json => json)
+    }
+}
+
 function createReplyReply(replyId, content){
     return (dispatch, getState) => {
         const { user : { token } } = getState();
@@ -1300,7 +1353,9 @@ const actionCreators = {
     getNotificationNew,
     reportUser,
     checkUsername,
-    blockUser
+    blockUser,
+    updateReviewReply,
+    deleteReviewReply
 }
 
 export { actionCreators }

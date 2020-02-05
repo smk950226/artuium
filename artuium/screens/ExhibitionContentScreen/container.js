@@ -20,7 +20,8 @@ class Container extends Component{
         blockReplyList: PropTypes.array,
         addBlockReview: PropTypes.func.isRequired,
         addBlockUser: PropTypes.func.isRequired,
-        addBlockReply: PropTypes.func.isRequired
+        addBlockReply: PropTypes.func.isRequired,
+        updateReviewReply: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -68,7 +69,9 @@ class Container extends Component{
             showFilterModal: false,
             filter: 'new',
             showFilterReplyModal: false,
-            filterReply: 'new'
+            filterReply: 'new',
+            reReply: false,
+            newReply: {}
         }
     }
 
@@ -765,6 +768,73 @@ class Container extends Component{
         })
     }
 
+    _startUpdateReply = (selectedReplyId, content, reReply) => {
+        this.setState({
+            selectedReplyId,
+            contentReply: content,
+            reReply
+        })
+    }
+
+    _updateReply = async() => {
+        const { contentReply, isSubmittingReply, selectedReplyId, reReply } = this.state;
+        const { updateReviewReply } = this.props;
+        if(!isSubmittingReply){
+            if(contentReply && selectedReplyId){
+                this.setState({
+                    isSubmittingReply: true
+                })
+                const result = await updateReviewReply(selectedReplyId, contentReply)
+                if(result.status === 'ok'){
+                    if(reReply){
+                        this.setState({
+                            isSubmittingReply: false,
+                            contentReply: '',
+                            selectedReplyId: null,
+                            reReply: false,
+                            newReply: result.reply
+                        })
+                    }
+                    else{
+                        let newReplies = []
+                        this.state.replies.map(rep => {
+                            if(rep.id === result.reply.id){
+                                newReplies.push(result.reply)
+                            }
+                            else{
+                                newReplies.push(rep)
+                            }
+                        })
+                        this.setState({
+                            replies: newReplies,
+                            isSubmittingReply: false,
+                            contentReply: '',
+                            selectedReplyId: null,
+                            reReply: false
+                        })
+                    }
+                }
+                else if(result.error){
+                    this.setState({
+                        isSubmittingReply: false,
+                        selectedReplyId: null
+                    })
+                    Alert.alert(null, result.error)
+                }
+                else{
+                    this.setState({
+                        isSubmittingReply: false,
+                        selectedReplyId: null
+                    })
+                    Alert.alert(null, '오류가 발생하였습니다.')
+                }
+            }
+            else{
+                Alert.alert(null, "내용을 입력해주세요.")
+            }
+        }
+    }
+
     render(){
         return(
             <ExhibitionContentScreen 
@@ -793,6 +863,8 @@ class Container extends Component{
             openFilterReplyModal={this._openFilterReplyModal}
             closeFilterReplyModal={this._closeFilterReplyModal}
             handleFilterReplyChange={this._handleFilterReplyChange}
+            updateReply={this._updateReply}
+            startUpdateReply={this._startUpdateReply}
             />
         )
     }

@@ -53,6 +53,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         addBlockReply: (replyId) => {
             dispatch(reviewActions.addBlockReply(replyId))
+        },
+        updateReviewReply: (replyId, content) => {
+            return dispatch(userActions.updateReviewReply(replyId, content))
         }
     }
 }

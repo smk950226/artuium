@@ -979,6 +979,43 @@ class Reply(APIView):
                 return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
         else:
             return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+    
+    def put(self, request, format = None):
+        reply_id = request.data.get('replyId', None)
+        user = request.user
+        content = request.data.get('content', None)
+
+        if reply_id and content:
+            try:
+                reply = models.Reply.objects.get(id = reply_id, deleted = False)
+
+                reply.content = content
+                reply.save()
+
+                serializer = serializers.ReplySerializer(reply, context = {'request': request})
+
+                return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'reply': serializer.data})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+    
+    def delete(self, request, format = None):
+        reply_id = request.data.get('replyId', None)
+        user = request.user
+        if reply_id:
+            try:
+                reply = models.Reply.objects.get(id = reply_id, deleted = False)
+                if reply.author == user:
+                    reply.delete()
+
+                    return Response(status = status.HTTP_200_OK, data = {'status': 'ok'})
+                else:
+                    return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '본인의 댓글이 아닙니다.'})
+            except:
+                return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
+        else:
+            return Response(status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, data = {'error': '잘못된 요청입니다.'})
 
 
 class Replies(APIView):

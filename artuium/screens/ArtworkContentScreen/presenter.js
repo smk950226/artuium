@@ -132,7 +132,11 @@ class ArtworkContentScreen extends React.Component {
         showFilterReplyModal: PropTypes.bool.isRequired,
         openFilterReplyModal: PropTypes.func.isRequired,
         closeFilterReplyModal: PropTypes.func.isRequired,
-        handleFilterReplyChange: PropTypes.func.isRequired
+        handleFilterReplyChange: PropTypes.func.isRequired,
+        updateReply: PropTypes.func.isRequired,
+        startUpdateReply: PropTypes.func.isRequired,
+        selectedReplyId: PropTypes.number,
+        newReply: PropTypes.object
     }
     constructor(props){
         super(props);
@@ -172,8 +176,15 @@ class ArtworkContentScreen extends React.Component {
         this.props.handleUpdateMode(review)
     }
 
+    _startUpdateReply = (selectedReplyId, content, reReply) => {
+        if(this.btmTextInput){
+            this.btmTextInput.focus()
+            this.props.startUpdateReply(selectedReplyId, content, reReply)
+        }
+    }
+
     render(){
-        const { artwork, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from, blockReviewList, blockUserList, blockReplyList, to, showFilterModal, showFilterReplyModal } = this.props;
+        const { artwork, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from, blockReviewList, blockUserList, blockReplyList, to, showFilterModal, showFilterReplyModal, selectedReplyId, newReply } = this.props;
         const { initialMode, keyboardHeight } = this.state;
         if(artwork){
             return(
@@ -522,7 +533,7 @@ class ArtworkContentScreen extends React.Component {
                                                                 else{
                                                                     return (
                                                                         <View style={[item.id === selectedReply.id ? { zIndex: 9999 } : { zIndex: 10 }]}>
-                                                                            <ReplyCard addBlockUser={this.props.addBlockUser} addBlockReply={this.props.addBlockReply} reply={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} selectReply={this.props.selectReply} selectedReply={selectedReply} />
+                                                                            <ReplyCard newReply={newReply} startUpdateReply={this._startUpdateReply} addBlockUser={this.props.addBlockUser} addBlockReply={this.props.addBlockReply} reply={item} navigation={this.props.navigation} handleChangeMode={this.props.handleChangeMode} selectReply={this.props.selectReply} selectedReply={selectedReply} />
                                                                         </View>
                                                                     )
                                                                 }
@@ -565,9 +576,10 @@ class ArtworkContentScreen extends React.Component {
                         null
                     )}
                     {this.state.index === 1 && mode === 'review' && (
-                        <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, Platform.OS === 'ios' ? {paddingBottom: 20} : null, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
+                        <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, Platform.OS === 'ios' ? {paddingBottom: 20} : null, { position: 'absolute', bottom: 0, zIndex: 9999 }]}>
                             <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
                                 <TextInput
+                                    ref={(el) => this.btmTextInput = el}
                                     style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull, styles.black]}
                                     autoCapitalize={'none'} 
                                     autoCorrect={false} 
@@ -577,9 +589,9 @@ class ArtworkContentScreen extends React.Component {
                                     placeholderTextColor={'#000000'}
                                 />
                             </View>
-                            <TouchableWithoutFeedback onPress={this.props.createReview}>
+                            <TouchableWithoutFeedback onPress={selectedReplyId ? this.props.updateReply : this.props.createReview}>
                                 <View style={[styles.flex2, styles.bgGray33, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.py5, styles.borderRadius5, isSubmittingReply ? { opacity: .4 } : null]}>
-                                    <Text style={[styles.fontMedium, styles.font16, styles.white]}>등록</Text>
+                                    <Text style={[styles.fontMedium, styles.font16, styles.white]}>{selectedReplyId ? '수정' : '등록'}</Text>
                                 </View>
                             </TouchableWithoutFeedback>
                         </KeyboardAvoidingView>

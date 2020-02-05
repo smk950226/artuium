@@ -36,6 +36,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         blockReply: (replyId) => {
             return dispatch(reviewActions.blockReply(replyId))
+        },
+        deleteReviewReply: (replyId) => {
+            return dispatch(userActions.deleteReviewReply(replyId))
         }
     }
 }

@@ -16,7 +16,10 @@ class Container extends Component{
         reportReply: PropTypes.func.isRequired,
         blockReply: PropTypes.func.isRequired,
         blockUserList: PropTypes.array,
-        blockReplyList: PropTypes.array
+        blockReplyList: PropTypes.array,
+        startUpdateReply: PropTypes.func.isRequired,
+        newReply: PropTypes.object,
+        deleteReviewReply: PropTypes.func.isRequired
     }
 
     constructor(props){
@@ -38,7 +41,8 @@ class Container extends Component{
             isReporting: false,
             isBlocking: false,
             hideDropdown: false,
-            reply_count
+            reply_count,
+            isDeleting: false
         }
     }
 
@@ -46,6 +50,25 @@ class Container extends Component{
         if(prevProps.reply !== this.props.reply){
             this.setState({
                 reply: this.props.reply
+            })
+        }
+        if(prevProps.newReply !== this.props.newReply){
+            const { reply : { initial_replies } } = this.state;
+            const { newReply } = this.props;
+            let newReplies = []
+            initial_replies.map(rep => {
+                if(rep.id === newReply.id){
+                    newReplies.push(newReply)
+                }
+                else{
+                    newReplies.push(rep)
+                }
+            })
+            this.setState({
+                reply: {
+                    ...this.state.reply,
+                    initial_replies: newReplies
+                }
             })
         }
     }
@@ -173,7 +196,7 @@ class Container extends Component{
         }
     }
 
-    _handleOption = async(index, value, replyId) => {
+    _handleOption = async(index, value, replyId, replyContent) => {
         if(value === '신고하기'){
             const { isReporting } = this.state;
             const { reportReply, reply : { id } } = this.props;
@@ -314,6 +337,97 @@ class Container extends Component{
                         Alert.alert(null, '오류가 발생하였습니다.')
                     }
                 }
+            }
+        }
+        else if(value === '수정하기'){
+            if(replyId && replyContent){
+                this.props.startUpdateReply(replyId, replyContent, true)
+            }
+            else{
+                const { reply : { id, content }, startUpdateReply } = this.props;
+                startUpdateReply(id, content)
+            }
+            
+        }
+        else if(value === '삭제하기'){
+            const { isDeleting } = this.state;
+            if(!isDeleting){
+                Alert.alert(null, '정말 삭제하시겠습니까?',
+                [
+                    {
+                        text: 'YES', 
+                        onPress: async() => {
+                            this.setState({
+                                isDeleting: true
+                            })
+                            if(replyId){
+                                const { deleteReviewReply } = this.props;
+                                const result = await deleteReviewReply(replyId);
+                                if(result.status === 'ok'){
+                                    const { reply : { initial_replies } } = this.state;
+                                    let newReplies = []
+                                    initial_replies.map(rep => {
+                                        if(rep.id === replyId){
+                                            return null
+                                        }
+                                        else{
+                                            newReplies.push(rep)
+                                        }
+                                    })
+                                    this.setState({
+                                        reply: {
+                                            ...this.state.reply,
+                                            initial_replies: newReplies
+                                        },
+                                        reply_count: this.state.reply_count - 1,
+                                        isDeleting: false
+                                    })
+                                }
+                                else if(result.error){
+                                    this.setState({
+                                        isDeleting: false
+                                    })
+                                    Alert.alert(null, result.error)
+                                }
+                                else{
+                                    this.setState({
+                                        isDeleting: false
+                                    })
+                                    Alert.alert(null, '오류가 발생하였습니다.')
+                                }
+                            }
+                            else{
+                                const { deleteReviewReply } = this.props;
+                                const { reply : { id } } = this.state;
+                                const result = await deleteReviewReply(id);
+                                if(result.status === 'ok'){
+                                    this.setState({
+                                        deleted: true,
+                                        isDeleting: false
+                                    })
+                                }
+                                else if(result.error){
+                                    this.setState({
+                                        isDeleting: false
+                                    })
+                                    Alert.alert(null, result.error)
+                                }
+                                else{
+                                    this.setState({
+                                        isDeleting: false
+                                    })
+                                    Alert.alert(null, '오류가 발생하였습니다.')
+                                }
+                            }
+                        }
+                    },
+                    {
+                        text: 'CANCEL',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    }
+                ],
+                {cancelable: false})
             }
         }
     }
