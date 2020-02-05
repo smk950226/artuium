@@ -67,6 +67,10 @@ class Reply(models.Model):
         ordering = ['-id']
         verbose_name = '답변'
         verbose_name_plural = '답변'
+    
+    @property
+    def reply_count(self):
+        return self.replies.all().count()
 
 
 class Like(models.Model):

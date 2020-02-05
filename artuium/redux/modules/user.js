@@ -993,10 +993,10 @@ function checkUsername(username){
     }
 }
 
-function getReplyList(reviewId){
+function getReplyList(reviewId, filter){
     return (dispatch, getState) => {
         const { user : { token } } = getState();
-        return fetch(`${FETCH_URL}/api/statics/reply/?reviewId=${reviewId}&page=1`, {
+        return fetch(`${FETCH_URL}/api/statics/reply/?reviewId=${reviewId}&filter=${filter}&page=1`, {
             headers: {
                 "Authorization": `JWT ${token}`,
                 "Content-Type": "application/json"
@@ -1015,10 +1015,10 @@ function getReplyList(reviewId){
     }
 }
 
-function getReplyListMore(reviewId, page){
+function getReplyListMore(reviewId, filter, page){
     return (dispatch, getState) => {
         const { user : { token } } = getState();
-        return fetch(`${FETCH_URL}/api/statics/reply/?reviewId=${reviewId}&page=${page}`, {
+        return fetch(`${FETCH_URL}/api/statics/reply/?reviewId=${reviewId}&filter=${filter}&page=${page}`, {
             headers: {
                 "Authorization": `JWT ${token}`,
                 "Content-Type": "application/json"

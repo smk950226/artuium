@@ -11,10 +11,41 @@ import HTML from 'react-native-render-html';
 import StarRating from 'react-native-star-rating';
 import Stars from 'react-native-stars';
 import { StackActions, NavigationActions } from 'react-navigation';
+import Modal from "react-native-modal";
 
 const iosStatusBarHeight = getStatusBarHeight()
 
 const { width, height } = Dimensions.get('window')
+
+const filter = [
+    {
+        label: '신규순',
+        value: 'new'
+    },
+    {
+        label: '많은 댓글 순',
+        value: 'comment'
+    },
+    {
+        label: '많은 좋아요 순',
+        value: 'like'
+    },
+    {
+        label: '높은 별점 순',
+        value: 'rate'
+    }
+]
+
+const filterReply = [
+    {
+        label: '신규순',
+        value: 'new'
+    },
+    {
+        label: '많은 댓글 순',
+        value: 'comment'
+    }
+]
 
 function abbreviateNumber(value) {
     var newValue = value;
@@ -93,7 +124,15 @@ class ArtworkContentScreen extends React.Component {
         blockReplyList: PropTypes.array,
         addBlockReview: PropTypes.func.isRequired,
         addBlockUser: PropTypes.func.isRequired,
-        addBlockReply: PropTypes.func.isRequired
+        addBlockReply: PropTypes.func.isRequired,
+        showFilterModal: PropTypes.bool.isRequired,
+        openFilterModal: PropTypes.func.isRequired,
+        closeFilterModal: PropTypes.func.isRequired,
+        handleFilterChange: PropTypes.func.isRequired,
+        showFilterReplyModal: PropTypes.bool.isRequired,
+        openFilterReplyModal: PropTypes.func.isRequired,
+        closeFilterReplyModal: PropTypes.func.isRequired,
+        handleFilterReplyChange: PropTypes.func.isRequired
     }
     constructor(props){
         super(props);
@@ -134,7 +173,7 @@ class ArtworkContentScreen extends React.Component {
     }
 
     render(){
-        const { artwork, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from, blockReviewList, blockUserList, blockReplyList, to } = this.props;
+        const { artwork, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from, blockReviewList, blockUserList, blockReplyList, to, showFilterModal, showFilterReplyModal } = this.props;
         const { initialMode, keyboardHeight } = this.state;
         if(artwork){
             return(
@@ -342,7 +381,11 @@ class ArtworkContentScreen extends React.Component {
                                                     <View style={[styles.divView]} />
                                                     <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px30, styles.pt20]}>
                                                         <Text style={[styles.font20, styles.fontBold, {color: '#382a2a'}]}>유저 감상</Text>
-                                                        <Image source={require('../../assets/images/icon_sort.png')} style={[styles.icon20]} />
+                                                        <TouchableWithoutFeedback onPress={this.props.openFilterModal}>
+                                                            <View>
+                                                                <Image source={require('../../assets/images/icon_sort.png')} style={[styles.icon20]} />
+                                                            </View>
+                                                        </TouchableWithoutFeedback>
                                                     </View>
                                                     {loading ? (
                                                         <View style={[styles.container, styles.alignItemsCenter, styles.justifyContentCenter]}>
@@ -458,7 +501,11 @@ class ArtworkContentScreen extends React.Component {
                                                     <View style={[styles.divView, styles.mt15]} />
                                                     <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px30, styles.pt20, styles.mb15]}>
                                                         <Text style={[styles.font20, styles.fontBold, {color: '#382a2a'}]}>댓글</Text>
-                                                        <Image source={require('../../assets/images/icon_sort.png')} style={[styles.icon20]} />
+                                                        <TouchableWithoutFeedback onPress={this.props.openFilterReplyModal}>
+                                                            <View>
+                                                                <Image source={require('../../assets/images/icon_sort.png')} style={[styles.icon20]} />
+                                                            </View>
+                                                        </TouchableWithoutFeedback>
                                                     </View>
                                                     {loadingReply ? (
                                                         <View style={[styles.container, styles.alignItemsCenter, styles.justifyContentCenter]}>
@@ -537,6 +584,66 @@ class ArtworkContentScreen extends React.Component {
                             </TouchableWithoutFeedback>
                         </KeyboardAvoidingView>
                     )}
+                    <Modal 
+                    isVisible={showFilterModal}
+                    backdropOpacity={0.26}
+                    onBackButtonPress={this.props.closeFilterModal}
+                    onBackdropPress={this.props.closeFilterModal}
+                    style={[styles.justifyContentEnd, {margin: 0}]}
+                    >
+                        <TouchableWithoutFeedback onPress={this.props.closeFilterModal}>
+                            <View style={[styles.container, styles.px0, styles.justifyContentEnd]}>
+                                <TouchableWithoutFeedback>
+                                    <View style={[styles.bgWhite, styles.borderTopRadius10, { paddingBottom: 150 }]}>
+                                        <View style={[styles.borderBtmGray70, styles.py10]}>
+                                            <Text style={[styles.fontMedium, styles.font17, styles.textCenter]}>
+                                                정렬
+                                            </Text>
+                                        </View>
+                                        {filter.map((fil, index) => (
+                                            <TouchableWithoutFeedback key={index} onPress={() => this.props.handleFilterChange(fil.value)}>
+                                                <View style={[styles.borderBtmGray70, styles.py10, styles.px25]}>
+                                                    <Text style={[styles.fontRegular, styles.font15]}>
+                                                        {fil.label}
+                                                    </Text>
+                                                </View>
+                                            </TouchableWithoutFeedback>
+                                        ))}
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </Modal>
+                    <Modal 
+                    isVisible={showFilterReplyModal}
+                    backdropOpacity={0.26}
+                    onBackButtonPress={this.props.closeFilterReplyModal}
+                    onBackdropPress={this.props.closeFilterReplyModal}
+                    style={[styles.justifyContentEnd, {margin: 0}]}
+                    >
+                        <TouchableWithoutFeedback onPress={this.props.closeFilterReplyModal}>
+                            <View style={[styles.container, styles.px0, styles.justifyContentEnd]}>
+                                <TouchableWithoutFeedback>
+                                    <View style={[styles.bgWhite, styles.borderTopRadius10, { paddingBottom: 150 }]}>
+                                        <View style={[styles.borderBtmGray70, styles.py10]}>
+                                            <Text style={[styles.fontMedium, styles.font17, styles.textCenter]}>
+                                                정렬
+                                            </Text>
+                                        </View>
+                                        {filterReply.map((fil, index) => (
+                                            <TouchableWithoutFeedback key={index} onPress={() => this.props.handleFilterReplyChange(fil.value)}>
+                                                <View style={[styles.borderBtmGray70, styles.py10, styles.px25]}>
+                                                    <Text style={[styles.fontRegular, styles.font15]}>
+                                                        {fil.label}
+                                                    </Text>
+                                                </View>
+                                            </TouchableWithoutFeedback>
+                                        ))}
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </Modal>
                 </View>
             )
         }

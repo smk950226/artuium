@@ -153,8 +153,6 @@ class Review(APIView):
                 reviews = reviews.order_by('-rate')
             else:
                 reviews = reviews.order_by('-time')
-        else:
-            reviews = reviews.order_by('-time')
         
         paginator = MainPageNumberPagination()
         result_page = paginator.paginate_queryset(reviews, request)
@@ -435,6 +433,7 @@ class ExhibitionReview(APIView):
     def get(self, request, format = None):
         exhibition_id = request.query_params.get('exhibitionId', None)
         page = request.query_params.get('page', None)
+        filter_type = request.query_params.get('filter', None)
         user = request.user
         blocking_review = models.Blocking.objects.filter(user = user, review__isnull = False).values_list('review__id', flat = True)
         blocking_user = models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
@@ -444,6 +443,18 @@ class ExhibitionReview(APIView):
                 exhibition = exhibition_models.Exhibition.objects.get(id = exhibition_id)
                 reviews = exhibition.reviews.filter(~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
                 reviews_count = exhibition.reviews.all().order_by('index')
+
+                if filter_type:
+                    if filter_type == 'new':
+                        reviews = reviews.order_by('-time')
+                    elif filter_type == 'like':
+                        reviews = sorted(reviews, key=lambda t: t.like_count, reverse=True)
+                    elif filter_type == 'comment':
+                        reviews = sorted(reviews, key=lambda t: t.reply_count, reverse=True)
+                    elif filter_type == 'rate':
+                        reviews = reviews.order_by('-rate')
+                    else:
+                        reviews = reviews.order_by('-time')
 
                 paginator = MainPageNumberPagination()
                 result_page = paginator.paginate_queryset(reviews, request)
@@ -633,6 +644,7 @@ class ArtworkReview(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, format = None):
         artwork_id = request.query_params.get('artworkId', None)
+        filter_type = request.query_params.get('filter', None)
         page = request.query_params.get('page', None)
         user = request.user
         blocking_review = models.Blocking.objects.filter(user = user, review__isnull = False).values_list('review__id', flat = True)
@@ -642,6 +654,16 @@ class ArtworkReview(APIView):
                 artwork = artwork_models.Artwork.objects.get(id = artwork_id)
                 reviews = artwork.reviews.filter(~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
                 reviews_count = artwork.reviews.all().order_by('index')
+                if filter_type:
+                    if filter_type == 'new':
+                        reviews = reviews.order_by('-time')
+                    elif filter_type == 'like':
+                        reviews = sorted(reviews, key=lambda t: t.like_count, reverse=True)
+                    elif filter_type == 'comment':
+                        reviews = sorted(reviews, key=lambda t: t.reply_count, reverse=True)
+                    elif filter_type == 'rate':
+                        reviews = reviews.order_by('-rate')
+
                 paginator = MainPageNumberPagination()
                 result_page = paginator.paginate_queryset(reviews, request)
                 serializer = serializers.ReviewSerializer(result_page, many = True, context = {'request': request})
@@ -888,12 +910,22 @@ class Reply(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, format = None):
         review_id = request.query_params.get('reviewId', None)
+        filter_type = request.query_params.get('filter', None)
+
         user = request.user
         blocking_reply = models.Blocking.objects.filter(user = user, reply__isnull = False).values_list('reply__id', flat = True)
         blocking_user = models.Blocking.objects.filter(user = user, to_user__isnull = False).values_list('to_user__id', flat = True)
         if review_id:
             review = models.Review.objects.get(id = review_id, deleted = False)
             replies = review.replies.filter(Q(deleted = False) & ~Q(id__in = blocking_reply) & ~Q(author__id__in = blocking_user)).order_by('time')
+
+            if filter_type:
+                if filter_type == 'new':
+                    replies = replies.order_by('-time')
+                elif filter_type == 'comment':
+                    replies = sorted(replies, key=lambda t: t.reply_count, reverse=True)
+                else:
+                    replies = replies.order_by('-time')
 
             paginator = MainPageNumberPagination()
             result_page = paginator.paginate_queryset(replies, request)

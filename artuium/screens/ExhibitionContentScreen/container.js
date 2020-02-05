@@ -64,19 +64,23 @@ class Container extends Component{
             initialMode: mode,
             from,
             review,
-            to
+            to,
+            showFilterModal: false,
+            filter: 'new',
+            showFilterReplyModal: false,
+            filterReply: 'new'
         }
     }
 
     componentDidMount = async() => {
-        const { exhibition : { id }, initialMode, showingReview } = this.state;
+        const { exhibition : { id }, initialMode, showingReview, filter, filterReply } = this.state;
         if(initialMode === 'review'){
             this.setState({
                 loadingReply: true,
                 selectedReply: {}
             })
             const { getExhibitionReviewList } = this.props;
-            const result = await getExhibitionReviewList(id)
+            const result = await getExhibitionReviewList(id, filter)
             if(result.status === 'ok'){
                 this.setState({
                     loading: false,
@@ -95,7 +99,7 @@ class Container extends Component{
                 })
             }
             const { getReplyList } = this.props;
-            const result2 = await getReplyList(showingReview.id)
+            const result2 = await getReplyList(showingReview.id, filterReply)
             if(result2.status === 'ok'){
                 this.setState({
                     replies: result2.replies,
@@ -126,7 +130,7 @@ class Container extends Component{
         }
         else{
             const { getExhibitionReviewList } = this.props;
-            const result = await getExhibitionReviewList(id)
+            const result = await getExhibitionReviewList(id, filter)
             if(result.status === 'ok'){
                 this.setState({
                     loading: false,
@@ -147,7 +151,7 @@ class Container extends Component{
         }
     }
 
-    componentDidUpdate = (prevProps) => {
+    componentDidUpdate = async(prevProps, prevState) => {
         if(prevProps !== this.props){
             const to = this.props.navigation.getParam('to', null)
             const from = this.props.navigation.getParam('from', null)
@@ -156,17 +160,85 @@ class Container extends Component{
                 from
             })
         }
+        if(prevState.filter !== this.state.filter){
+            this.setState({
+                loading: true,
+                page: 1,
+                hasNextPage: true,
+                isLoadingMore: false,
+                showFilterModal: false
+            })
+            const { getExhibitionReviewList } = this.props;
+            const { filter, exhibition : { id } } = this.state;
+            const result = await getExhibitionReviewList(id, filter)
+            if(result.status === 'ok'){
+                this.setState({
+                    loading: false,
+                    reviews: result.reviews,
+                    myReviews: result.my_review,
+                    thumb: result.thumb,
+                    good: result.good,
+                    soso: result.soso,
+                    sad: result.sad,
+                    surprise: result.surprise,
+                })
+            }
+            else{
+                this.setState({
+                    loading: false
+                })
+            }
+        }
+        if(prevState.filterReply !== this.state.filterReply){
+            this.setState({
+                loadingReply: true,
+                pageReply: 1,
+                hasNextPageReply: true,
+                isLoadingMoreReply: false,
+                showFilterReplyModal: false
+            })
+            const { getReplyList } = this.props;
+            const { filterReply, showingReview } = this.state;
+            const result = await getReplyList(showingReview.id, filterReply)
+            if(result.status === 'ok'){
+                this.setState({
+                    replies: result.replies,
+                    isLoadingMoreReply: false,
+                    hasNextPageReply: true,
+                    pageReply: 1,
+                    loadingReply: false
+                })
+            }
+            else if(result.error){
+                this.setState({
+                    isLoadingMoreReply: false,
+                    hasNextPageReply: true,
+                    pageReply: 1,
+                    loadingReply: false
+                })
+                Alert.alert(null, result.error)
+            }
+            else{
+                this.setState({
+                    isLoadingMoreReply: false,
+                    hasNextPageReply: true,
+                    pageReply: 1,
+                    loadingReply: false
+                })
+                Alert.alert(null, '오류가 발생하였습니다.')
+            }
+        }
     }
 
     _reviewListMore = async() => {
         const { getExhibitionReviewListMore } = this.props;
-        const { page, hasNextPage, isLoadingMore, exhibition : { id } } = this.state;
+        const { page, hasNextPage, isLoadingMore, exhibition : { id }, filter } = this.state;
         if(hasNextPage){
             if(!isLoadingMore){
                 await this.setState({
                     isLoadingMore: true
                 });
-                const result = await getExhibitionReviewListMore(id, page+1);
+                const result = await getExhibitionReviewListMore(id, filter, page+1);
                 if(result.status === 'ok'){
                     await this.setState({
                         page: this.state.page+1,
@@ -186,7 +258,7 @@ class Container extends Component{
 
     _refresh = async() => {
         const { getExhibitionReviewList } = this.props;
-        const { exhibition : { id } } = this.state;
+        const { exhibition : { id }, filter } = this.state;
         this.setState({
             refreshing: true,
             isLoadingMore: false,
@@ -194,7 +266,7 @@ class Container extends Component{
             hasNextPage: true,
         })
 
-        const result = await getExhibitionReviewList(id)
+        const result = await getExhibitionReviewList(id, filter)
         if(result.status === 'ok'){
             this.setState({
                 loading: false,
@@ -279,7 +351,7 @@ class Container extends Component{
                 selectedReply: {}
             })
             const { getReplyList } = this.props;
-            const result = await getReplyList(showingReview.id)
+            const result = await getReplyList(showingReview.id, this.state.filterReply)
             if(result.status === 'ok'){
                 this.setState({
                     replies: result.replies,
@@ -461,13 +533,13 @@ class Container extends Component{
 
     _replyListMore = async() => {
         const { getReplyListMore } = this.props;
-        const { pageReply, hasNextPageReply, isLoadingMoreReply, showingReview : { id } } = this.state;
+        const { pageReply, hasNextPageReply, isLoadingMoreReply, showingReview : { id }, filterReply } = this.state;
         if(hasNextPageReply){
             if(!isLoadingMoreReply){
                 await this.setState({
                     isLoadingMoreReply: true
                 });
-                const result = await getReplyListMore(id, pageReply+1);
+                const result = await getReplyListMore(id, filterReply, pageReply+1);
                 if(result.status === 'ok'){
                     await this.setState({
                         pageReply: this.state.pageReply+1,
@@ -489,7 +561,7 @@ class Container extends Component{
 
     _refreshReply = async() => {
         const { getReplyList } = this.props;
-        const { showingReview : { id } } = this.state;
+        const { showingReview : { id }, filterReply } = this.state;
         if(id){
             this.setState({
                 refreshingReply: true,
@@ -499,7 +571,7 @@ class Container extends Component{
                 selectedReply: {}
             })
     
-            const result = await getReplyList(id)
+            const result = await getReplyList(id, filterReply)
             if(result.status === 'ok'){
                 this.setState({
                     loadingReply: false,
@@ -657,6 +729,42 @@ class Container extends Component{
         }
     }
 
+    _openFilterModal = () => {
+        this.setState({
+            showFilterModal: true
+        })
+    }
+
+    _closeFilterModal = () => {
+        this.setState({
+            showFilterModal: false
+        })
+    }
+
+    _handleFilterChange = (filter) => {
+        this.setState({
+            filter
+        })
+    }
+
+    _openFilterReplyModal = () => {
+        this.setState({
+            showFilterReplyModal: true
+        })
+    }
+
+    _closeFilterReplyModal = () => {
+        this.setState({
+            showFilterReplyModal: false
+        })
+    }
+
+    _handleFilterReplyChange = (filterReply) => {
+        this.setState({
+            filterReply
+        })
+    }
+
     render(){
         return(
             <ExhibitionContentScreen 
@@ -679,6 +787,12 @@ class Container extends Component{
             update={this._update}
             handleUpdateMode={this._handleUpdateMode}
             deleteReview={this._deleteReview}
+            openFilterModal={this._openFilterModal}
+            closeFilterModal={this._closeFilterModal}
+            handleFilterChange={this._handleFilterChange}
+            openFilterReplyModal={this._openFilterReplyModal}
+            closeFilterReplyModal={this._closeFilterReplyModal}
+            handleFilterReplyChange={this._handleFilterReplyChange}
             />
         )
     }

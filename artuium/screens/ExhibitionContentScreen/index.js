@@ -21,20 +21,20 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         unlikeExhibition: (exhibitionId) => {
             return dispatch(exhibitionActions.unlikeExhibition(exhibitionId))
         },
-        getExhibitionReviewList: (exhibitionId) => {
-            return dispatch(exhibitionActions.getExhibitionReviewList(exhibitionId))
+        getExhibitionReviewList: (exhibitionId, filter) => {
+            return dispatch(exhibitionActions.getExhibitionReviewList(exhibitionId, filter))
         },
-        getExhibitionReviewListMore: (exhibitionId, page) => {
-            return dispatch(exhibitionActions.getExhibitionReviewListMore(exhibitionId, page))
+        getExhibitionReviewListMore: (exhibitionId, filter, page) => {
+            return dispatch(exhibitionActions.getExhibitionReviewListMore(exhibitionId, filter, page))
         },
         createExhibitionReview: (exhibitionId, rating, expression, content) => {
             return dispatch(exhibitionActions.createExhibitionReview(exhibitionId, rating, expression, content))
         },
-        getReplyList: (reviewId) => {
-            return dispatch(userActions.getReplyList(reviewId))
+        getReplyList: (reviewId, filter) => {
+            return dispatch(userActions.getReplyList(reviewId, filter))
         },
-        getReplyListMore: (reviewId, page) => {
-            return dispatch(userActions.getReplyListMore(reviewId, page))
+        getReplyListMore: (reviewId, filter, page) => {
+            return dispatch(userActions.getReplyListMore(reviewId, filter, page))
         },
         createReviewReply: (reviewId, content) => {
             return dispatch(userActions.createReviewReply(reviewId, content))

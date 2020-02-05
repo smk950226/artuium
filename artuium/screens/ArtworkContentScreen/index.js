@@ -21,20 +21,20 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         unlikeArtwork: (artworkId) => {
             return dispatch(artworkActions.unlikeArtwork(artworkId))
         },
-        getArtworkReviewList: (artworkId) => {
-            return dispatch(artworkActions.getArtworkReviewList(artworkId))
+        getArtworkReviewList: (artworkId, filter) => {
+            return dispatch(artworkActions.getArtworkReviewList(artworkId, filter))
         },
-        getArtworkReviewListMore: (artworkId, page) => {
-            return dispatch(artworkActions.getArtworkReviewListMore(artworkId, page))
+        getArtworkReviewListMore: (artworkId, filter, page) => {
+            return dispatch(artworkActions.getArtworkReviewListMore(artworkId, filter, page))
         },
         createArtworkReview: (artworkId, rating, expression, content) => {
             return dispatch(artworkActions.createArtworkReview(artworkId, rating, expression, content))
         },
-        getReplyList: (reviewId) => {
-            return dispatch(userActions.getReplyList(reviewId))
+        getReplyList: (reviewId, filter) => {
+            return dispatch(userActions.getReplyList(reviewId, filter))
         },
-        getReplyListMore: (reviewId, page) => {
-            return dispatch(userActions.getReplyListMore(reviewId, page))
+        getReplyListMore: (reviewId, filter, page) => {
+            return dispatch(userActions.getReplyListMore(reviewId, filter, page))
         },
         createReviewReply: (reviewId, content) => {
             return dispatch(userActions.createReviewReply(reviewId, content))

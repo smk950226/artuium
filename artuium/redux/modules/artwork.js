@@ -52,10 +52,10 @@ function unlikeArtwork(artworkId){
     }
 }
 
-function getArtworkReviewList(artworkId){
+function getArtworkReviewList(artworkId, filter){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
-        return fetch(`${FETCH_URL}/api/statics/review/artwork/?artworkId=${artworkId}&page=1`, {
+        return fetch(`${FETCH_URL}/api/statics/review/artwork/?artworkId=${artworkId}&filter=${filter}&page=1`, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `JWT ${token}`
@@ -74,10 +74,10 @@ function getArtworkReviewList(artworkId){
     }
 }
 
-function getArtworkReviewListMore(artworkId, page){
+function getArtworkReviewListMore(artworkId, filter, page){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
-        return fetch(`${FETCH_URL}/api/statics/review/artwork/?artworkId=${artworkId}&page=${page}`, {
+        return fetch(`${FETCH_URL}/api/statics/review/artwork/?artworkId=${artworkId}&filter=${filter}&page=${page}`, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `JWT ${token}`

@@ -147,10 +147,10 @@ function getExhibitionDetailByArtwork(artworkId){
     }
 }
 
-function getExhibitionReviewList(exhibitionId){
+function getExhibitionReviewList(exhibitionId, filter){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
-        return fetch(`${FETCH_URL}/api/statics/review/exhibition/?exhibitionId=${exhibitionId}&page=1`, {
+        return fetch(`${FETCH_URL}/api/statics/review/exhibition/?exhibitionId=${exhibitionId}&filter=${filter}&page=1`, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `JWT ${token}`
@@ -169,10 +169,10 @@ function getExhibitionReviewList(exhibitionId){
     }
 }
 
-function getExhibitionReviewListMore(exhibitionId, page){
+function getExhibitionReviewListMore(exhibitionId, filter, page){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
-        return fetch(`${FETCH_URL}/api/statics/review/exhibition/?exhibitionId=${exhibitionId}&page=${page}`, {
+        return fetch(`${FETCH_URL}/api/statics/review/exhibition/?exhibitionId=${exhibitionId}&filter=${filter}&page=${page}`, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `JWT ${token}`
