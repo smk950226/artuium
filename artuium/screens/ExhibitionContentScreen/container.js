@@ -46,7 +46,7 @@ class Container extends Component{
             refreshing: false,
             myReviews: [],
             mode: mode ? mode : 'list',
-            rating: mode === 'create' ? review.rate : 0,
+            rating: mode === 'create' ? review.rate : 5,
             expression: mode === 'create' ? review.expression : '',
             content: mode === 'create' ? review.content : '',
             isSubmittingReview: false,
@@ -271,7 +271,7 @@ class Container extends Component{
         if(mode === 'review'){
             this.setState({
                 mode,
-                rating: 0,
+                rating: 5,
                 expression: '',
                 content: '',
                 showingReview,
@@ -311,7 +311,7 @@ class Container extends Component{
         else{
             this.setState({
                 mode,
-                rating: 0,
+                rating: 5,
                 expression: '',
                 content: '',
                 selectedReply: {}
@@ -347,42 +347,47 @@ class Container extends Component{
         const { rating, expression, content, isSubmittingReview, exhibition : { id } } = this.state;
         const { createExhibitionReview } = this.props;
         if(!isSubmittingReview){
-            if(rating || expression || content){
-                this.setState({
-                    isSubmittingReview: true
-                })
-                const result = await createExhibitionReview(id, rating, expression, content)
-                if(result.status === 'ok'){
+            if(rating > 0){
+                if(rating || expression || content){
                     this.setState({
-                        reviews: [result.review, ...this.state.reviews],
-                        myReviews: [result.review, ...this.state.myReviews],
-                        total_rate: result.total_rate,
-                        thumb: result.thumb,
-                        good: result.good,
-                        soso: result.soso,
-                        sad: result.sad,
-                        surprise: result.surprise,
-                        isSubmittingReview: false,
-                        mode: 'list',
-                        is_reviewed: true,
-                        selectedReply: {}
+                        isSubmittingReview: true
                     })
-                }
-                else if(result.error){
-                    this.setState({
-                        isSubmittingReview: false
-                    })
-                    Alert.alert(null, result.error)
+                    const result = await createExhibitionReview(id, rating, expression, content)
+                    if(result.status === 'ok'){
+                        this.setState({
+                            reviews: [result.review, ...this.state.reviews],
+                            myReviews: [result.review, ...this.state.myReviews],
+                            total_rate: result.total_rate,
+                            thumb: result.thumb,
+                            good: result.good,
+                            soso: result.soso,
+                            sad: result.sad,
+                            surprise: result.surprise,
+                            isSubmittingReview: false,
+                            mode: 'list',
+                            is_reviewed: true,
+                            selectedReply: {}
+                        })
+                    }
+                    else if(result.error){
+                        this.setState({
+                            isSubmittingReview: false
+                        })
+                        Alert.alert(null, result.error)
+                    }
+                    else{
+                        this.setState({
+                            isSubmittingReview: false
+                        })
+                        Alert.alert(null, '오류가 발생하였습니다.')
+                    }
                 }
                 else{
-                    this.setState({
-                        isSubmittingReview: false
-                    })
-                    Alert.alert(null, '오류가 발생하였습니다.')
+                    Alert.alert(null, "감상 정보를 입력해주세요.")
                 }
             }
             else{
-                Alert.alert(null, "감상 정보를 입력해주세요.")
+                Alert.alert(null, "평점을 입력해주세요.")
             }
         }
     }
@@ -391,60 +396,65 @@ class Container extends Component{
         const { rating, expression, content, isSubmittingReview, review: { id }, exhibition } = this.state;
         const { updateExhibitionReview } = this.props;
         if(!isSubmittingReview){
-            if(rating || expression || content){
-                this.setState({
-                    isSubmittingReview: true
-                })
-                const result = await updateExhibitionReview(exhibition.id, id, rating, expression, content)
-                if(result.status === 'ok'){
-                    let newReviews = []
-                    this.state.reviews.map(rev => {
-                        if(rev.id === result.review.id){
-                            newReviews.push(result.review)
-                        }
-                        else{
-                            newReviews.push(rev)
-                        }
-                    })
-                    let newMyReviews = []
-                    this.state.myReviews.map(rev => {
-                        if(rev.id === result.review.id){
-                            newMyReviews.push(result.review)
-                        }
-                        else{
-                            newMyReviews.push(rev)
-                        }
-                    })
+            if(rating > 0){
+                if(rating || expression || content){
                     this.setState({
-                        reviews: newReviews,
-                        myReviews: newMyReviews,
-                        total_rate: result.total_rate,
-                        thumb: result.thumb,
-                        good: result.good,
-                        soso: result.soso,
-                        sad: result.sad,
-                        surprise: result.surprise,
-                        isSubmittingReview: false,
-                        mode: 'list',
-                        is_reviewed: true,
-                        selectedReply: {}
+                        isSubmittingReview: true
                     })
-                }
-                else if(result.error){
-                    this.setState({
-                        isSubmittingReview: false
-                    })
-                    Alert.alert(null, result.error)
+                    const result = await updateExhibitionReview(exhibition.id, id, rating, expression, content)
+                    if(result.status === 'ok'){
+                        let newReviews = []
+                        this.state.reviews.map(rev => {
+                            if(rev.id === result.review.id){
+                                newReviews.push(result.review)
+                            }
+                            else{
+                                newReviews.push(rev)
+                            }
+                        })
+                        let newMyReviews = []
+                        this.state.myReviews.map(rev => {
+                            if(rev.id === result.review.id){
+                                newMyReviews.push(result.review)
+                            }
+                            else{
+                                newMyReviews.push(rev)
+                            }
+                        })
+                        this.setState({
+                            reviews: newReviews,
+                            myReviews: newMyReviews,
+                            total_rate: result.total_rate,
+                            thumb: result.thumb,
+                            good: result.good,
+                            soso: result.soso,
+                            sad: result.sad,
+                            surprise: result.surprise,
+                            isSubmittingReview: false,
+                            mode: 'list',
+                            is_reviewed: true,
+                            selectedReply: {}
+                        })
+                    }
+                    else if(result.error){
+                        this.setState({
+                            isSubmittingReview: false
+                        })
+                        Alert.alert(null, result.error)
+                    }
+                    else{
+                        this.setState({
+                            isSubmittingReview: false
+                        })
+                        Alert.alert(null, '오류가 발생하였습니다.')
+                    }
                 }
                 else{
-                    this.setState({
-                        isSubmittingReview: false
-                    })
-                    Alert.alert(null, '오류가 발생하였습니다.')
+                    Alert.alert(null, "감상 정보를 입력해주세요.")
                 }
             }
             else{
-                Alert.alert(null, "감상 정보를 입력해주세요.")
+                Alert.alert(null, "평점을 입력해주세요.")
             }
         }
     }
