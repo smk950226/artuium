@@ -100,10 +100,6 @@ class Exhibition(APIView):
                 exhibitions = sorted(exhibitions, key=lambda t: t.review_count, reverse=True)
             elif filter_type == 'rate':
                 exhibitions = sorted(exhibitions, key=lambda t: t.total_rate, reverse=True)
-            else:
-                exhibitions = exhibitions.order_by('-open_date')
-        else:
-            exhibitions = exhibitions.order_by('-open_date')
         
         paginator = MainPageNumberPagination()
         result_page = paginator.paginate_queryset(exhibitions, request)
@@ -120,7 +116,7 @@ class ExhibitionDetailByArtwork(APIView):
             try:
                 artwork = artwork_models.Artwork.objects.get(id = artwork_id)
                 try:
-                    exhibition = artwork.exhibitions.order_by('-open_date').first()
+                    exhibition = artwork.exhibitions.order_by('index').first()
                     if exhibition:
                         serializer = serializers.ExhibitionSerializer(exhibition, context = {'request': request})
                         return Response(status = status.HTTP_200_OK, data = {'status': 'ok', 'exhibition': serializer.data})
