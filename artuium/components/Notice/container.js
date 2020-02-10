@@ -17,7 +17,6 @@ class Container extends Component{
             is_new,
             isSubmitting: false
         }
-        console.log(props.notice)
     }
 
     componentDidUpdate = async(prevProps, prevState) => {
@@ -51,6 +50,12 @@ class Container extends Component{
                     }
                 }
             }
+        }
+        if(prevProps.notice !== this.props.notice){
+            const { notice : { is_new } } = this.props;
+            this.setState({
+                is_new
+            })
         }
     }
 
