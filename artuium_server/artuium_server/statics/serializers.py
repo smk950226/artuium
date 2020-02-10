@@ -43,7 +43,7 @@ class NoticeSerializer(serializers.ModelSerializer):
     is_new = serializers.SerializerMethodField()
     class Meta:
         model = models.Notice
-        fields = ['id', 'title', 'date', 'content', 'image', 'is_banner', 'is_new']
+        fields = ['id', 'title', 'date', 'content', 'image', 'is_banner', 'is_new', 'image_width', 'image_height']
     
     def get_is_new(self, obj):
         if 'request' in self.context:

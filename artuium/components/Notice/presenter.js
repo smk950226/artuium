@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, TouchableWithoutFeedback, Image } from 'react-native';
+import { View, Text, TouchableWithoutFeedback, Image, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
+
+const { width, height } = Dimensions.get('window');
 
 const Notice = (props) => (
     <View style={[styles.borderBtmGrayE6, styles.bgGrayF8]}>
@@ -34,7 +36,12 @@ const Notice = (props) => (
             </View>
             {props.expand && (
                 <View style={[styles.mt15]}>
-                    <Text style={[styles.fontMedium, styles.font13, styles.gray71, { lineHeight: 20 }]}>
+                    {props.notice.image ? (
+                        <Image resizeMode={'cover'} source={{uri: props.notice.image}} resizeMode={'contain'} style={[styles.alignSelfCenter, {height: props.notice.image_width >= props.notice.image_height ? props.notice.image_height*(width - 40)/props.notice.image_width : 400, width: props.notice.image_width >= props.notice.image_height ? width - 40 : props.notice.image_width*400/props.notice.image_height}]} />
+                    ) : (
+                        null
+                    )}
+                    <Text style={[styles.fontMedium, styles.font13, styles.mt10, styles.gray71, { lineHeight: 20 }]}>
                         {props.notice.content}
                     </Text>
                 </View>

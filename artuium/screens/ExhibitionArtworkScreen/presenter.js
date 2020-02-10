@@ -51,6 +51,15 @@ class ExhibitionArtworkScreen extends Component{
         }
     }
 
+    componentDidUpdate = (prevProps) => {
+        if(prevProps.exhibition !== this.props.exhibition){
+            this.setState({
+                exhibition,
+                artworks: exhibition.artworks.concat({id: -1})
+            })
+        }
+    }
+
     _handleViewable = (info) => {
         if(info.viewableItems[0]){
             this.setState({

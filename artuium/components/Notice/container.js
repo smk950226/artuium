@@ -17,6 +17,7 @@ class Container extends Component{
             is_new,
             isSubmitting: false
         }
+        console.log(props.notice)
     }
 
     componentDidUpdate = async(prevProps, prevState) => {

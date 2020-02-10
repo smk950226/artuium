@@ -576,7 +576,8 @@ class ArtworkContentScreen extends React.Component {
                         null
                     )}
                     {this.state.index === 1 && mode === 'review' && (
-                        <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, Platform.OS === 'ios' ? {paddingBottom: 20} : null, { position: 'absolute', bottom: 0, zIndex: 9999 }]}>
+                        Platform.OS === 'ios' ? (
+                            <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, styles.pb20, { position: 'absolute', bottom: 0, zIndex: 9999 }]}>
                             <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
                                 <TextInput
                                     ref={(el) => this.btmTextInput = el}
@@ -595,6 +596,27 @@ class ArtworkContentScreen extends React.Component {
                                 </View>
                             </TouchableWithoutFeedback>
                         </KeyboardAvoidingView>
+                        ) : (
+                                <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.pb10, styles.bgWhite, styles.widthFull, { position: 'absolute', bottom: 0, zIndex: 9999 }]}>
+                                    <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
+                                        <TextInput
+                                            ref={(el) => this.btmTextInput = el}
+                                            style={[styles.font13, styles.widthFull, styles.px10, styles.py5, styles.widthFull, styles.black]}
+                                            autoCapitalize={'none'} 
+                                            autoCorrect={false} 
+                                            value={contentReply} 
+                                            onChangeText={this.props.handleChangeContentReply} 
+                                            returnKeyType={'done'} 
+                                            placeholderTextColor={'#000000'}
+                                        />
+                                    </View>
+                                    <TouchableWithoutFeedback onPress={selectedReplyId ? this.props.updateReply : this.props.createReview}>
+                                        <View style={[styles.flex2, styles.bgGray33, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.py5, styles.borderRadius5, isSubmittingReply ? { opacity: .4 } : null]}>
+                                            <Text style={[styles.fontMedium, styles.font16, styles.white]}>{selectedReplyId ? '수정' : '등록'}</Text>
+                                        </View>
+                                    </TouchableWithoutFeedback>
+                                </View>
+                        )
                     )}
                     <Modal 
                     isVisible={showFilterModal}
