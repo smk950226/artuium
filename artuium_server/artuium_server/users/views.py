@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
@@ -264,12 +265,13 @@ class ChangeProfile(APIView):
         return Response(status = status.HTTP_200_OK, data = serializer.data)
 
 class AddInfo(APIView):
+    parser_classes = [MultiPartParser, FormParser]
     def put(self, request, format = None):
         profile_image = request.data.get('profileImg', None)
         nickname = request.data.get('nickname', None)
-
         user = request.user
-        user.profile_image = compress(profile_image)
+        if profile_image:
+            user.profile_image = compress(profile_image)
         user.nickname = nickname
 
         user.save()
