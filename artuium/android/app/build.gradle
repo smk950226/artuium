@@ -131,8 +131,8 @@ android {
         applicationId "com.artuium.fov"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 17
-        versionName "1.16"
+        versionCode 18
+        versionName "1.17"
         multiDexEnabled true
     }
     splits {

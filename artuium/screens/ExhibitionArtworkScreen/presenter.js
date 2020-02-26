@@ -84,7 +84,7 @@ class ExhibitionArtworkScreen extends Component{
                                 </View>
                             </TouchableWithoutFeedback>
                             {showingIndex !== artworks.length - 1 && (
-                                <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from) : ()=>this.props.navigation.goBack()}>
+                                <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from, { 'noMount': true }) : ()=>this.props.navigation.goBack()}>
                                     <View style={[styles.exitBtn, { zIndex: 999 }]}>
                                         <Text style={[styles.fontBold, styles.font16, styles.white]}>나가기</Text>
                                     </View>
@@ -169,7 +169,7 @@ class ExhibitionArtworkScreen extends Component{
                                     })}
                                 </View>
                             ) : (
-                                <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from) : ()=>this.props.navigation.goBack()}>
+                                <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from, { 'noMount': true }) : ()=>this.props.navigation.goBack()}>
                                     <View style={[styles.relatedBtn]}>
                                         <Text style={[styles.fontMedium, styles.font18, styles.white]}>전시 나가기</Text>
                                     </View>

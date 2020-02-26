@@ -81,6 +81,7 @@ class Container extends Component{
         const { initApp, checkNoticeAll, checkNotificationAll, getNoticeNew, getNotificationNew } = this.props;
         const noticeNew = await checkNoticeAll()
         const notificationNew = await checkNotificationAll()
+        const noMount = this.props.navigation.getParam('noMount', false)
         // this.props.resetBlockUser()
         // this.props.resetBlockReview()
         // this.props.resetBlockReply()
@@ -108,7 +109,9 @@ class Container extends Component{
                 notificationNew: false
             })
         }
-        await initApp()
+        if(!noMount){
+            await initApp()
+        }
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -177,6 +180,7 @@ class Container extends Component{
         const { initApp, checkNoticeAll, checkNotificationAll, getNoticeNew, getNotificationNew } = this.props;
         const noticeNew = await checkNoticeAll()
         const notificationNew = await checkNotificationAll()
+        const noMount = this.props.navigation.getParam('noMount', false)
         if(noticeNew.is_new){
             getNoticeNew(true)
             this.setState({
@@ -201,7 +205,9 @@ class Container extends Component{
                 notificationNew: false
             })
         }
-        await initApp()
+        if(!noMount){
+            await initApp()
+        }
     }
 
     render(){

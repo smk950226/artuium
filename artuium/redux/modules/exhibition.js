@@ -100,7 +100,7 @@ function getExhibitionList(type, filter, period, scale, region){
 function getExhibitionListMore(type, filter, period, scale, region, page){
     return (dispatch, getState) => {
         const { user : { token } } = getState()
-        return fetch(`${FETCH_URL}/api/statics/review/?page=${page}&type=${type}&filter=${filter}${period ? `&period=${period}` : ``}${scale ? `&scale=${scale}` : ``}${region ? `&region=${region}` : ``}`, {
+        return fetch(`${FETCH_URL}/api/exhibition/exhibition/?page=${page}&type=${type}&filter=${filter}${period ? `&period=${period}` : ``}${scale ? `&scale=${scale}` : ``}${region ? `&region=${region}` : ``}`, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `JWT ${token}`

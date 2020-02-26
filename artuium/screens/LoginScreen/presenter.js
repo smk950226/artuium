@@ -3,7 +3,7 @@ import { View, Text, Alert, ImageBackground, Image, TouchableWithoutFeedback, Te
 import Modal from "react-native-modal";
 import { GoogleSigninButton } from '@react-native-community/google-signin';
 import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk';
-import { AppleButton } from '@invertase/react-native-apple-authentication';
+import appleAuth, { AppleButton } from '@invertase/react-native-apple-authentication';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 
@@ -484,13 +484,17 @@ class LoginScreen extends React.Component {
                             </View>
                         </TouchableWithoutFeedback>
                         {Platform.OS === 'ios' ?
-                        <AppleButton
+                        appleAuth.isSupported ? (
+                            <AppleButton
                             style={[styles.mt25, {width: 300, height: 48}]}
                             cornerRadius={5}
                             buttonStyle={AppleButton.Style.BLACK}
                             buttonType={AppleButton.Type.SIGN_IN}
                             onPress={() => this.props.handleAppleSignIn()}
                         />
+                        ) : (
+                            null
+                        )
                         :
                         null}
                     </View>
