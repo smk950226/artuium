@@ -55,15 +55,17 @@ class Container extends Component{
             webClientId: '834300059497-k2p01j18n5fnh11ek598nm138vh06s2m.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
         });
         if(Platform.OS === 'ios'){
-            this.authCredentialListener = appleAuth.onCredentialRevoked(async () => {
-                this.fetchAndUpdateCredentialState().catch(error =>
-                    this.setState({ credentialStateForUser: `Error: ${error.code}` }),
-                );
-            });
-          
-            this.fetchAndUpdateCredentialState()
-                .then(res => this.setState({ credentialStateForUser: res }))
-                .catch(error => this.setState({ credentialStateForUser: `Error: ${error.code}` }))
+            if(appleAuth.isSupported){
+                this.authCredentialListener = appleAuth.onCredentialRevoked(async () => {
+                    this.fetchAndUpdateCredentialState().catch(error =>
+                        this.setState({ credentialStateForUser: `Error: ${error.code}` }),
+                    );
+                });
+              
+                this.fetchAndUpdateCredentialState()
+                    .then(res => this.setState({ credentialStateForUser: res }))
+                    .catch(error => this.setState({ credentialStateForUser: `Error: ${error.code}` }))
+            }
         }
     }
 

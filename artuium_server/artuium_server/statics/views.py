@@ -29,8 +29,8 @@ class InitialReview(APIView):
         reviews = models.Review.objects.filter(Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
 
         new_reviews = reviews.order_by('-time')[:5]
-        recommended_reviews = reviews.filter(recommended = True)[:5]
-        following_reviews = reviews.filter(author__id__in = following)[:5]
+        recommended_reviews = reviews.filter(recommended = True).order_by('index')[:5]
+        following_reviews = reviews.filter(author__id__in = following).order_by('index')[:5]
 
         banners = models.Notice.objects.filter(is_banner = True).order_by('index')
 
@@ -55,8 +55,8 @@ class RecommendedReview(APIView):
         reviews = models.Review.objects.filter(Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
 
         new_reviews = reviews.order_by('-time')[:5]
-        recommended_reviews = reviews.filter(recommended = True)[:5]
-        following_reviews = reviews.filter(author__id__in = following)[:5]
+        recommended_reviews = reviews.filter(recommended = True).order_by('index')[:5]
+        following_reviews = reviews.filter(author__id__in = following).order_by('index')[:5]
 
 
         return Response(status = status.HTTP_200_OK, data = {
@@ -79,8 +79,8 @@ class NewReview(APIView):
         reviews = models.Review.objects.filter(Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
 
         new_reviews = reviews.order_by('-time')[:5]
-        recommended_reviews = reviews.filter(recommended = True)[:5]
-        following_reviews = reviews.filter(author__id__in = following)[:5]
+        recommended_reviews = reviews.filter(recommended = True).order_by('index')[:5]
+        following_reviews = reviews.filter(author__id__in = following).order_by('index')[:5]
 
 
         return Response(status = status.HTTP_200_OK, data = {
@@ -104,8 +104,8 @@ class FollowingReview(APIView):
         reviews = models.Review.objects.filter(Q(deleted = False) & ~Q(content = "") & ~Q(id__in = blocking_review) & ~Q(author__id__in = blocking_user)).order_by('index')
 
         new_reviews = reviews.order_by('-time')[:5]
-        recommended_reviews = reviews.filter(recommended = True)[:5]
-        following_reviews = reviews.filter(author__id__in = following)[:5]
+        recommended_reviews = reviews.filter(recommended = True).order_by('index')[:5]
+        following_reviews = reviews.filter(author__id__in = following).order_by('index')[:5]
 
 
         return Response(status = status.HTTP_200_OK, data = {
@@ -151,8 +151,6 @@ class Review(APIView):
                 reviews = sorted(reviews, key=lambda t: t.reply_count, reverse=True)
             elif filter_type == 'rate':
                 reviews = reviews.order_by('-rate')
-            else:
-                reviews = reviews.order_by('-time')
         
         paginator = MainPageNumberPagination()
         result_page = paginator.paginate_queryset(reviews, request)
@@ -453,8 +451,6 @@ class ExhibitionReview(APIView):
                         reviews = sorted(reviews, key=lambda t: t.reply_count, reverse=True)
                     elif filter_type == 'rate':
                         reviews = reviews.order_by('-rate')
-                    else:
-                        reviews = reviews.order_by('-time')
 
                 paginator = MainPageNumberPagination()
                 result_page = paginator.paginate_queryset(reviews, request)

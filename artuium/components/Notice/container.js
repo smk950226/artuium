@@ -51,6 +51,12 @@ class Container extends Component{
                 }
             }
         }
+        if(prevProps.notice !== this.props.notice){
+            const { notice : { is_new } } = this.props;
+            this.setState({
+                is_new
+            })
+        }
     }
 
     _openExpand = () => {

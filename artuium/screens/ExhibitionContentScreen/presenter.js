@@ -592,54 +592,81 @@ class ExhibitionContentScreen extends React.Component {
                             </View>
                         </View>
                     </ScrollView>
-                    {this.state.index === 1 && mode === 'review' && selectedReply.id ? (
-                        <TouchableWithoutFeedback onPress={() => this.props.selectReply({})}>
-                            <View style={[styles.screenWidth, styles.heightFull, { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.6)' }]}>
-
-                            </View>
-                        </TouchableWithoutFeedback>
-                    ) : (
-                        null
-                    )}
                     {this.state.index === 1 && mode === 'review' && (
                         Platform.OS === 'ios' ? (
-                            <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, styles.pb10, { position: 'absolute', bottom: 0, zIndex: 9999 }]}>
-                                <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
-                                    <TextInput
-                                        ref={(el) => this.btmTextInput = el}
-                                        style={[styles.font13, styles.black, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
-                                        autoCapitalize={'none'} 
-                                        autoCorrect={false} 
-                                        value={contentReply} 
-                                        onChangeText={this.props.handleChangeContentReply} 
-                                        returnKeyType={'done'} 
-                                        placeholderTextColor={'#000000'}
-                                    />
-                                </View>
-                                <TouchableWithoutFeedback onPress={selectedReplyId ? this.props.updateReply : this.props.createReview}>
-                                    <View style={[styles.flex2, styles.bgGray33, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.py5, styles.borderRadius5, isSubmittingReply ? { opacity: .4 } : null]}>
-                                        <Text style={[styles.fontMedium, styles.font16, styles.white]}>{selectedReplyId ? '수정' : '등록'}</Text>
+                            <KeyboardAvoidingView behavior={'position'} contentContainerStyle={[{ position: 'absolute', bottom: 0, zIndex: 9999 }, styles.widthFull]}>
+                                {selectedReply.id ? (
+                                    <View style={[styles.bgBlack07, styles.px10, styles.py5, styles.widthFull, styles.row, styles.alignItemsCenter, styles.justifyContentBetween]}>
+                                        <Text style={[styles.font16, styles.white]}>
+                                            {`${selectedReply.author.nickname} 님께 답글 달기`}
+                                        </Text>
+                                        <TouchableWithoutFeedback onPress={() => this.props.selectReply({})}>
+                                            <View style={[styles.pl15]}>
+                                                <Text style={[styles.font16, styles.white]}>
+                                                    취소
+                                                </Text>
+                                            </View>
+                                        </TouchableWithoutFeedback>
                                     </View>
-                                </TouchableWithoutFeedback>
+                                ) : (
+                                    null
+                                )}
+                                <View style={[styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, styles.pb10, styles.row, styles.alignItemsCenter, styles.justifyContentBetween]}>
+                                    <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
+                                        <TextInput
+                                            ref={(el) => this.btmTextInput = el}
+                                            style={[styles.font13, styles.black, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
+                                            autoCapitalize={'none'} 
+                                            autoCorrect={false} 
+                                            value={contentReply} 
+                                            onChangeText={this.props.handleChangeContentReply} 
+                                            returnKeyType={'done'} 
+                                            placeholderTextColor={'#000000'}
+                                        />
+                                    </View>
+                                    <TouchableWithoutFeedback onPress={selectedReplyId ? this.props.updateReply : this.props.createReview}>
+                                        <View style={[styles.flex2, styles.bgGray33, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.py5, styles.borderRadius5, isSubmittingReply ? { opacity: .4 } : null]}>
+                                            <Text style={[styles.fontMedium, styles.font16, styles.white]}>{selectedReplyId ? '수정' : '등록'}</Text>
+                                        </View>
+                                    </TouchableWithoutFeedback>
+                                </View>
                             </KeyboardAvoidingView>
                         ) : (
-                            <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, styles.pb10, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
-                                <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
-                                    <TextInput
-                                        style={[styles.font13, styles.black, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
-                                        autoCapitalize={'none'} 
-                                        autoCorrect={false} 
-                                        value={contentReply} 
-                                        onChangeText={this.props.handleChangeContentReply} 
-                                        returnKeyType={'done'} 
-                                        placeholderTextColor={'#000000'}
-                                    />
-                                </View>
-                                <TouchableWithoutFeedback onPress={this.props.createReview}>
-                                    <View style={[styles.flex2, styles.bgGray33, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.py5, styles.borderRadius5, isSubmittingReply ? { opacity: .4 } : null]}>
-                                        <Text style={[styles.fontMedium, styles.font16, styles.white]}>등록</Text>
+                            <View style={[styles.widthFull, { position: 'absolute', bottom: 0, zIndex: 999 }]}>
+                                {selectedReply.id ? (
+                                    <View style={[styles.bgBlack07, styles.px10, styles.py5, styles.widthFull, styles.row, styles.alignItemsCenter, styles.justifyContentBetween]}>
+                                        <Text style={[styles.font16, styles.white]}>
+                                            {`${selectedReply.author.nickname} 님께 답글 달기`}
+                                        </Text>
+                                        <TouchableWithoutFeedback onPress={() => this.props.selectReply({})}>
+                                            <View style={[styles.pl15]}>
+                                                <Text style={[styles.font16, styles.white]}>
+                                                    취소
+                                                </Text>
+                                            </View>
+                                        </TouchableWithoutFeedback>
                                     </View>
-                                </TouchableWithoutFeedback>
+                                ) : (
+                                    null
+                                )}
+                                <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentBetween, styles.px10, styles.pt10, styles.bgWhite, styles.widthFull, styles.pb10]}>
+                                    <View style={[styles.mr10, styles.borderRadius5, styles.bgGrayf0, styles.px10, styles.flex8]}>
+                                        <TextInput
+                                            style={[styles.font13, styles.black, styles.widthFull, styles.px10, styles.py5, styles.widthFull]}
+                                            autoCapitalize={'none'} 
+                                            autoCorrect={false} 
+                                            value={contentReply} 
+                                            onChangeText={this.props.handleChangeContentReply} 
+                                            returnKeyType={'done'} 
+                                            placeholderTextColor={'#000000'}
+                                        />
+                                    </View>
+                                    <TouchableWithoutFeedback onPress={this.props.createReview}>
+                                        <View style={[styles.flex2, styles.bgGray33, styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.py5, styles.borderRadius5, isSubmittingReply ? { opacity: .4 } : null]}>
+                                            <Text style={[styles.fontMedium, styles.font16, styles.white]}>등록</Text>
+                                        </View>
+                                    </TouchableWithoutFeedback>
+                                </View>
                             </View>
                         )
                         

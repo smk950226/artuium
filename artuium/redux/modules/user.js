@@ -831,6 +831,7 @@ function changeBackgroundImg(backgroundImg){
 function addInfo(token, nickname, profileImg){
     return (dispatch, getState) => {
         let formData = new FormData();
+        formData.append('nickname', nickname)
         if(profileImg){
             const temp = profileImg.type.split('/')
             const ext = temp[temp.length - 1]
@@ -840,7 +841,6 @@ function addInfo(token, nickname, profileImg){
                 name: `${uuidv1()}.` + ext
             })
         }
-        formData.append('nickname', nickname)
         fetch(`${FETCH_URL}/api/users/addinfo/`, {
             method: 'PUT',
             headers: {

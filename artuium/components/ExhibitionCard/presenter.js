@@ -13,7 +13,7 @@ const ExhibitionCard = (props) => (
                 <ImageBackground source={{uri: props.exhibition ? (props.exhibition.images && (props.exhibition.images.length > 0)) ? props.exhibition.images[0].image : '' : ''}} style={[styles.width40, styles.heightFull, props.full ? null : styles.borderLeftRadius5, styles.overflowHidden]} resizeMode={'cover'} />
                 <View style={[styles.px15, styles.py10, props.full ? styles.width60 : {width: '55%'}]}>
                     <Text style={[styles.fontBold, styles.font18]}>{props.exhibition.name}</Text>
-                    <Text style={[styles.fontMedium, styles.font10]}>{`${props.exhibition.open_date.slice(0,4)}.${props.exhibition.open_date.slice(5,7)}.${props.exhibition.open_date.slice(8,10)}-${props.exhibition.close_date.slice(0,4)}.${props.exhibition.close_date.slice(5,7)}.${props.exhibition.close_date.slice(8,10)}`}</Text>
+                    <Text style={[styles.fontMedium, styles.font10]}>{props.exhibition.open_date ? `${props.exhibition.open_date.slice(0,4)}.${props.exhibition.open_date.slice(5,7)}.${props.exhibition.open_date.slice(8,10)}-${props.exhibition.close_date.slice(0,4)}.${props.exhibition.close_date.slice(5,7)}.${props.exhibition.close_date.slice(8,10)}` : ''}</Text>
                     <Text style={[styles.fontMedium, styles.font10]}>{props.exhibition.gallery.name}</Text>
                     <View style={[styles.row, styles.mt10, styles.alignItemsCenter]}>
                         <TouchableWithoutFeedback onPress={() => props.navigation.navigate('ExhibitionContent', { exhibition: props.exhibition, mode: 'list', from: props.from })}>

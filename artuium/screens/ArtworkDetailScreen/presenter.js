@@ -193,7 +193,7 @@ class ArtworkDetailScreen extends Component{
                                                 <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.flexWrap]}>
                                                     <Text style={[styles.fontBold, styles.font30, styles.textCenter]}>{artwork.name}</Text>
                                                 </View>
-                                                <Text style={[styles.fontMedium, styles.font14]}>{artwork.author.name}, {`${artwork.created.slice(0,4)}.${artwork.created.slice(5,7)}.${artwork.created.slice(8,10)}`}, {artwork.material}</Text>
+                                                <Text style={[styles.fontMedium, styles.font14]}>{artwork.author.name}, {`${artwork.created.slice(0,4)}`}, {artwork.material}</Text>
                                             </View>
                                         </View>
                                     </View>

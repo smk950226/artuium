@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
@@ -26,8 +27,19 @@ from artuium_server.artwork import serializers as artwork_serializers
 from artuium_server.exhibition import models as exhibition_models
 from artuium_server.exhibition import serializers as exhibition_serializers
 from artuium_server.common.pagination import MainPageNumberPagination
+from django.db import models
+from io import BytesIO
+from PIL import Image
+from django.core.files import File
 
 User = get_user_model()
+
+def compress(image):
+    im = Image.open(image)
+    im_io = BytesIO() 
+    im.save(im_io, 'JPEG', quality=60) 
+    new_image = File(im_io, name=image.name)
+    return new_image
 
 class Follow(APIView):
     permission_classes = [IsAuthenticated]
@@ -200,7 +212,7 @@ class ChangeProfileImg(APIView):
         profile_image = request.data.get('profileImg', None)
 
         user = request.user
-        user.profile_image = profile_image
+        user.profile_image = compress(profile_image)
 
         user.save()
 
@@ -213,7 +225,7 @@ class ChangeBackgroundImg(APIView):
         background_image = request.data.get('backgroundImg', None)
 
         user = request.user
-        user.background_image = background_image
+        user.background_image = compress(background_image)
 
         user.save()
 
@@ -243,9 +255,9 @@ class ChangeProfile(APIView):
         user = request.user
         user.nickname = nickname
         if background_image:
-            user.background_image = background_image
+            user.background_image = compress(background_image)
         if profile_image:
-            user.profile_image = profile_image
+            user.profile_image = compress(profile_image)
         user.save()
 
         serializer = serializers.ProfileSerializer(user, context = {'request': request})
@@ -253,12 +265,13 @@ class ChangeProfile(APIView):
         return Response(status = status.HTTP_200_OK, data = serializer.data)
 
 class AddInfo(APIView):
+    parser_classes = [MultiPartParser, FormParser]
     def put(self, request, format = None):
         profile_image = request.data.get('profileImg', None)
         nickname = request.data.get('nickname', None)
-
         user = request.user
-        user.profile_image = profile_image
+        if profile_image:
+            user.profile_image = compress(profile_image)
         user.nickname = nickname
 
         user.save()

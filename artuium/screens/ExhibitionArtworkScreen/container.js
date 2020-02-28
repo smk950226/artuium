@@ -34,8 +34,11 @@ class Container extends Component{
     componentDidUpdate = (prevProps) => {
         if(prevProps !== this.props){
             const from = this.props.navigation.getParam('from', null)
+            const exhibition = props.navigation.getParam('exhibition', null)
+
             this.setState({
-                from
+                from,
+                exhibition
             })
         }
     }

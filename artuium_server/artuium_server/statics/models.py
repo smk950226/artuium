@@ -15,6 +15,20 @@ class Notice(models.Model):
         ordering = ['-date']
         verbose_name = '공지사항'
         verbose_name_plural = '공지사항'
+    
+    @property
+    def image_width(self):
+        if self.image:
+            return self.image.width
+        else:
+            return 0
+    
+    @property
+    def image_height(self):
+        if self.image:
+            return self.image.height
+        else:
+            return 0
 
 
 class Review(models.Model):
