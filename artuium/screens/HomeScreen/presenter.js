@@ -22,6 +22,7 @@ import {
 import stripHtml from 'string-strip-html';
 import {AllReviewCard} from '../../components/AllReviewCard/AllReviewCard';
 import {FollowerReviewCard} from '../../components/FollowerReviewCard/FollowerReviewCard';
+import {NoFollowerIndicator} from '../../components/NoFollowerIndicator/NoFollowerIndicator';
 
 const iosStatusBarHeight = getStatusBarHeight();
 
@@ -480,16 +481,7 @@ class HomeScreen extends Component {
                     />
                   ))
                 ) : (
-                  <Text
-                    style={[
-                      styles.fontMedium,
-                      styles.font15,
-                      styles.mt40,
-                      styles.grayA7,
-                      styles.textCenter,
-                    ]}>
-                    감상이 없습니다.
-                  </Text>
+                  <NoFollowerIndicator />
                 )}
               </ScrollView>
               <View style={[styles.center, styles.mt10, {marginBottom: 20}]}>

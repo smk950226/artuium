@@ -1,3 +1,13 @@
+import {Dimensions} from 'react-native';
+
+export const deviceInfo = {
+  OS: Platform.OS,
+  size: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
+};
+
 export const getImageUriFromReview = review => {
   return review.artwork
     ? review.artwork.image
