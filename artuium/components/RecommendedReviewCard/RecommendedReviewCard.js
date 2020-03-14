@@ -34,7 +34,7 @@ export const RecommendedReviewCard = ({
   likeNum,
   onPress,
   type,
-  title,
+  reviewTitle,
 }) => {
   return (
     <TouchableOpacity
@@ -68,7 +68,7 @@ export const RecommendedReviewCard = ({
         </View>
         <View style={style.reviewTitleAndProfileContainer}>
           <Text style={style.reviewLabel}>
-            {title ? title : '제목 없는 감상'}
+            {reviewTitle ? reviewTitle : '제목 없는 감상'}
           </Text>
           <View style={style.authorProfileContainer}>
             <Text style={style.authorName}>{authorName}</Text>

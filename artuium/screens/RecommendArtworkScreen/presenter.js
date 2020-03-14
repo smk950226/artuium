@@ -3,28 +3,22 @@ import {
   View,
   Text,
   ScrollView,
-  TouchableWithoutFeedback,
-  ImageBackground,
-  Dimensions,
   ActivityIndicator,
-  Animated,
+  SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
-import ArtuiumCard from '../../components/ArtuiumCard';
-import UserComp from '../../components/UserComp';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-import Modal from 'react-native-modal';
-
-const statusBarHeight = getStatusBarHeight();
-
-const {width, height} = Dimensions.get('window');
-
-const dummyList = [
-  {
-    id: -1,
-  },
-];
+import ArtiumHeader from '../../components/ArtiumHeader/ArtiumHeader';
+import {backArrow} from '../../assets/images';
+import {
+  getCardLabelFromReview,
+  getCardSubLabelFromReview,
+  getImageUriFromReview,
+  abbreviateNumber,
+} from '../../util';
+import {AllReviewCard} from '../../components/AllReviewCard/AllReviewCard';
+import stripHtml from 'string-strip-html';
 
 class RecommendArtworkScreen extends Component {
   static propTypes = {
@@ -38,154 +32,172 @@ class RecommendArtworkScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      scrollX: new Animated.Value(0),
+      isArtworkTabActive: false,
     };
   }
 
   render() {
     const {loading, users, artworks, exhibitions} = this.props;
-    let position = Animated.divide(this.state.scrollX, width);
     return (
       <Fragment>
-        <View style={[styles.container]}>
-          <View
-            style={[
-              {height: 50, marginTop: statusBarHeight},
-              styles.bgWhite,
-              styles.row,
-              styles.alignItemsCenter,
-              styles.justifyContentEnd,
-              styles.px25,
-              styles.borderBtmGrayDb,
-            ]}>
-            <TouchableWithoutFeedback
-              onPress={() => this.props.navigation.goBack(null)}>
-              <View>
-                <Text style={[styles.fontMedium, styles.font16, styles.gray93]}>
-                  닫기
-                </Text>
-              </View>
-            </TouchableWithoutFeedback>
+        <SafeAreaView style={[styles.container]}>
+          <ArtiumHeader
+            label={'추천 감상'}
+            leftOnPress={() => this.props.navigation.pop()}
+            leftIcon={backArrow}
+          />
+          <View style={style.artworkExihibitionTabContainer}>
+            <TouchableOpacity
+              style={
+                this.state.isArtworkTabActive
+                  ? style.inactiveTab
+                  : style.activeTab
+              }
+              onPress={() => this.setState({isArtworkTabActive: false})}>
+              <Text
+                style={
+                  this.state.isArtworkTabActive
+                    ? style.inactiveLabel
+                    : style.activeLabel
+                }>
+                전시
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={
+                this.state.isArtworkTabActive
+                  ? style.activeTab
+                  : style.inactiveTab
+              }
+              onPress={() => this.setState({isArtworkTabActive: true})}>
+              <Text
+                style={
+                  this.state.isArtworkTabActive
+                    ? style.activeLabel
+                    : style.inactiveLabel
+                }>
+                작품
+              </Text>
+            </TouchableOpacity>
           </View>
-          {loading ? (
-            <View
-              style={[
-                styles.container,
-                styles.alignItemsCenter,
-                styles.justifyContentCenter,
-              ]}>
-              <ActivityIndicator size={'small'} color={'#000'} />
-            </View>
-          ) : (
-            <ScrollView>
-              <Text
-                style={[
-                  styles.fontBold,
-                  styles.font25,
-                  styles.mt5,
-                  styles.px20,
-                ]}>
-                추천하는 작품 감상
-              </Text>
+          <ScrollView>
+            {loading ? (
               <View
                 style={[
-                  styles.mt15,
-                  styles.px20,
-                  styles.row,
-                  styles.flexWrap,
-                  styles.justifyContentBetween,
+                  styles.container,
+                  styles.alignItemsCenter,
+                  styles.justifyContentCenter,
                 ]}>
-                {artworks && artworks.length > 0 ? (
-                  artworks.map((review, index) => {
-                    return (
-                      <ArtuiumCard
-                        remount={this.props.remount}
-                        from={'RecommendArtwork'}
-                        key={index}
-                        review={review}
-                        size={'xsmall'}
-                        navigation={this.props.navigation}
-                      />
-                    );
-                  })
-                ) : (
-                  <View
-                    style={[
-                      {height: 300},
-                      styles.widthFull,
-                      styles.alignItemsCenter,
-                      styles.justifyContentCenter,
-                    ]}>
-                    <Text
-                      style={[
-                        styles.fontMedium,
-                        styles.font15,
-                        styles.mt40,
-                        styles.grayA7,
-                        styles.textCenter,
-                      ]}>
-                      작품 감상이 없습니다.
-                    </Text>
-                  </View>
-                )}
+                <ActivityIndicator size={'small'} color={'#000'} />
               </View>
-              <Text
-                style={[
-                  styles.fontBold,
-                  styles.font25,
-                  styles.mt50,
-                  styles.px20,
-                ]}>
-                추천하는 전시 감상
-              </Text>
-              <View
-                style={[
-                  styles.mt15,
-                  styles.px20,
-                  styles.row,
-                  styles.flexWrap,
-                  styles.justifyContentBetween,
-                ]}>
-                {exhibitions && exhibitions.length > 0 ? (
-                  exhibitions.map((review, index) => {
-                    return (
-                      <ArtuiumCard
-                        remount={this.props.remount}
-                        from={'RecommendArtwork'}
-                        key={index}
-                        review={review}
-                        size={'xsmall'}
-                        navigation={this.props.navigation}
+            ) : this.state.isArtworkTabActive ? (
+              artworks && artworks.length > 0 ? (
+                artworks.map((review, index) => {
+                  return (
+                    <>
+                      <AllReviewCard
+                        cardLabel={getCardLabelFromReview(review)}
+                        cardSubLabel={getCardSubLabelFromReview(review)}
+                        cardImageUri={getImageUriFromReview(review)}
+                        chatNum={abbreviateNumber(review.reply_count)}
+                        likeNum={abbreviateNumber(review.like_count)}
+                        content={stripHtml(review.content)}
+                        authorProfile={review.author.profile_image}
+                        interactionIcon={review.expression}
+                        starRateNum={review.rate}
+                        authorName={review.author.nickname}
+                        createdAt={review.time}
+                        onPress={() =>
+                          this.props.navigation.navigate('ArtworkContent', {
+                            artwork: review.artwork,
+                            mode: 'review',
+                            review: review,
+                            from: 'RecommendArtwork',
+                          })
+                        }
+                        type={'artwork'}
+                        reviewTitle={review.title}
                       />
-                    );
-                  })
-                ) : (
-                  <View
-                    style={[
-                      {height: 300},
-                      styles.widthFull,
-                      styles.alignItemsCenter,
-                      styles.justifyContentCenter,
-                    ]}>
-                    <Text
-                      style={[
-                        styles.fontMedium,
-                        styles.font15,
-                        styles.mt40,
-                        styles.grayA7,
-                        styles.textCenter,
-                      ]}>
-                      전시 감상이 없습니다.
-                    </Text>
-                  </View>
-                )}
-              </View>
-            </ScrollView>
-          )}
-        </View>
+                      <View style={{height: 20}} />
+                    </>
+                  );
+                })
+              ) : (
+                <View />
+              )
+            ) : exhibitions && exhibitions.length > 0 ? (
+              exhibitions.map((review, index) => {
+                return (
+                  <>
+                    <AllReviewCard
+                      cardLabel={getCardLabelFromReview(review)}
+                      cardSubLabel={getCardSubLabelFromReview(review)}
+                      cardImageUri={getImageUriFromReview(review)}
+                      chatNum={abbreviateNumber(review.reply_count)}
+                      likeNum={abbreviateNumber(review.like_count)}
+                      content={stripHtml(review.content)}
+                      authorProfile={review.author.profile_image}
+                      interactionIcon={review.expression}
+                      starRateNum={review.rate}
+                      authorName={review.author.nickname}
+                      createdAt={review.time}
+                      onPress={() =>
+                        this.props.navigation.navigate('ExhibitionContent', {
+                          artwork: review.exhibition,
+                          mode: 'review',
+                          review: review,
+                          from: 'RecommendArtwork',
+                        })
+                      }
+                      type={'exhibition'}
+                      reviewTitle={review.title}
+                    />
+                    <View style={{height: 20}} />
+                  </>
+                );
+              })
+            ) : (
+              <View />
+            )}
+          </ScrollView>
+        </SafeAreaView>
       </Fragment>
     );
   }
 }
 
 export default RecommendArtworkScreen;
+
+const style = {
+  artworkExihibitionTabContainer: {
+    flexDirection: 'row',
+    height: 42,
+    marginBottom: 15,
+  },
+  activeTab: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: '#fa4d2c',
+  },
+  inactiveTab: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: '#c4c4c4',
+  },
+  activeLabel: {
+    fontSize: 14,
+    color: '#fa4d2c',
+    letterSpacing: -0.24,
+    fontFamily: 'NotoSansKR-Medium',
+  },
+  inactiveLabel: {
+    fontSize: 14,
+    color: '#c4c4c4',
+    letterSpacing: -0.24,
+    fontFamily: 'NotoSansKR-Medium',
+  },
+};
