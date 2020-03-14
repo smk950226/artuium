@@ -100,7 +100,7 @@ export const RecommendedReviewCard = ({
           <Image source={heartNumIconGrey} style={{marginRight: 6}} />
           <Text style={[style.footerText, styles.fontRegular]}>{likeNum}</Text>
         </View>
-        <Text style={style.timeStamp}>몇분 전</Text>
+        <Text style={style.timeStamp}>{createdAt}</Text>
       </View>
     </TouchableOpacity>
   );

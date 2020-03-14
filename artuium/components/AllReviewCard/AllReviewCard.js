@@ -129,7 +129,7 @@ export const AllReviewCard = ({
               <Image source={heartNumIcon} style={{marginRight: 6}} />
               <Text style={style.footerText}>{likeNum}</Text>
             </View>
-            <Text style={style.createdAt}>몇분 전</Text>
+            <Text style={style.createdAt}>{createdAt}</Text>
           </View>
         </View>
       </ImageBackground>

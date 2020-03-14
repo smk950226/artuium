@@ -24,6 +24,9 @@ import {AllReviewCard} from '../../components/AllReviewCard/AllReviewCard';
 import {FollowerReviewCard} from '../../components/FollowerReviewCard/FollowerReviewCard';
 import {NoFollowerIndicator} from '../../components/NoFollowerIndicator/NoFollowerIndicator';
 
+import moment from 'moment';
+import 'moment/locale/ko';
+
 const iosStatusBarHeight = getStatusBarHeight();
 
 const {width, height} = Dimensions.get('window');
@@ -215,7 +218,7 @@ class HomeScreen extends Component {
                     interactionIcon={review.expression}
                     starRateNum={review.rate}
                     authorName={review.author.nickname}
-                    createdAt={review.time}
+                    createdAt={moment(review.time).fromNow()}
                     onPress={
                       review.artwork
                         ? () => {
@@ -324,7 +327,7 @@ class HomeScreen extends Component {
                             interactionIcon={review.expression}
                             starRateNum={review.rate}
                             authorName={review.author.nickname}
-                            createdAt={review.time}
+                            createdAt={moment(review.time).fromNow()}
                             onPress={
                               review.artwork
                                 ? () =>
@@ -463,7 +466,7 @@ class HomeScreen extends Component {
                       interactionIcon={review.expression}
                       starRateNum={review.rate}
                       authorName={review.author.nickname}
-                      createdAt={review.time}
+                      createdAt={moment(review.time).fromNow()}
                       onPress={
                         review.artwork
                           ? () =>

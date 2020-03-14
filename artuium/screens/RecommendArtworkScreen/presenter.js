@@ -19,6 +19,8 @@ import {
 } from '../../util';
 import {AllReviewCard} from '../../components/AllReviewCard/AllReviewCard';
 import stripHtml from 'string-strip-html';
+import moment from 'moment';
+import 'moment/locale/ko';
 
 class RecommendArtworkScreen extends Component {
   static propTypes = {
@@ -106,7 +108,7 @@ class RecommendArtworkScreen extends Component {
                         interactionIcon={review.expression}
                         starRateNum={review.rate}
                         authorName={review.author.nickname}
-                        createdAt={review.time}
+                        createdAt={moment(review.time).fromNow()}
                         onPress={() =>
                           this.props.navigation.navigate('ArtworkContent', {
                             artwork: review.artwork,
@@ -140,10 +142,10 @@ class RecommendArtworkScreen extends Component {
                       interactionIcon={review.expression}
                       starRateNum={review.rate}
                       authorName={review.author.nickname}
-                      createdAt={review.time}
+                      createdAt={moment(review.time).fromNow()}
                       onPress={() =>
                         this.props.navigation.navigate('ExhibitionContent', {
-                          artwork: review.exhibition,
+                          exhibition: review.exhibition,
                           mode: 'review',
                           review: review,
                           from: 'RecommendArtwork',
