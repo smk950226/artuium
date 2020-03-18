@@ -311,53 +311,48 @@ class HomeScreen extends Component {
                 ])}
                 scrollEventThrottle={16}>
                 {newReviews && newReviews.length > 0 ? (
-                  newReviews.map(
-                    (review, index) => (
-                      console.log(review, 'review'),
-                      (
-                        <>
-                          <AllReviewCard
-                            cardLabel={getCardLabelFromReview(review)}
-                            cardSubLabel={getCardSubLabelFromReview(review)}
-                            cardImageUri={getImageUriFromReview(review)}
-                            chatNum={abbreviateNumber(review.reply_count)}
-                            likeNum={abbreviateNumber(review.like_count)}
-                            content={stripHtml(review.content)}
-                            authorProfile={review.author.profile_image}
-                            interactionIcon={review.expression}
-                            starRateNum={review.rate}
-                            authorName={review.author.nickname}
-                            createdAt={moment(review.time).fromNow()}
-                            onPress={
-                              review.artwork
-                                ? () =>
-                                    this.props.navigation.navigate(
-                                      'ArtworkDetail',
-                                      {
-                                        artwork: review.artwork,
-                                        mode: 'review',
-                                        review: review,
-                                        from: 'Home',
-                                      },
-                                    )
-                                : () =>
-                                    this.props.navigation.navigate(
-                                      'ExhibitionDetail',
-                                      {
-                                        exhibition: review.exhibition,
-                                        mode: 'review',
-                                        review: review,
-                                        from: 'Home',
-                                      },
-                                    )
-                            }
-                            type={review.artwork ? 'artwork' : 'exhibition'}
-                            reviewTitle={review.title}
-                          />
-                        </>
-                      )
-                    ),
-                  )
+                  newReviews.map((review, index) => (
+                    <>
+                      <AllReviewCard
+                        cardLabel={getCardLabelFromReview(review)}
+                        cardSubLabel={getCardSubLabelFromReview(review)}
+                        cardImageUri={getImageUriFromReview(review)}
+                        chatNum={abbreviateNumber(review.reply_count)}
+                        likeNum={abbreviateNumber(review.like_count)}
+                        content={stripHtml(review.content)}
+                        authorProfile={review.author.profile_image}
+                        interactionIcon={review.expression}
+                        starRateNum={review.rate}
+                        authorName={review.author.nickname}
+                        createdAt={moment(review.time).fromNow()}
+                        onPress={
+                          review.artwork
+                            ? () =>
+                                this.props.navigation.navigate(
+                                  'ArtworkDetail',
+                                  {
+                                    artwork: review.artwork,
+                                    mode: 'review',
+                                    review: review,
+                                    from: 'Home',
+                                  },
+                                )
+                            : () =>
+                                this.props.navigation.navigate(
+                                  'ExhibitionDetail',
+                                  {
+                                    exhibition: review.exhibition,
+                                    mode: 'review',
+                                    review: review,
+                                    from: 'Home',
+                                  },
+                                )
+                        }
+                        type={review.artwork ? 'artwork' : 'exhibition'}
+                        reviewTitle={review.title}
+                      />
+                    </>
+                  ))
                 ) : (
                   <Text
                     style={[

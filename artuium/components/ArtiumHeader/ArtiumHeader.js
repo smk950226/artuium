@@ -77,6 +77,7 @@ const style = {
     height: '100%',
     marginRight: 17,
     justifyContent: 'center',
+    alignItems: 'flex-end',
   },
   label: {
     color: '#000000',
