@@ -1,20 +1,29 @@
 import React from 'react';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import {createAppContainer} from 'react-navigation';
+import {createSwitchNavigator} from 'react-navigation';
 import LoginScreen from '../screens/LoginScreen';
+import CreateProfileScreen from '../screens/CreateProfileScreen/CreateProfileScreen';
 
-const LoggedOutNavigation = createStackNavigator({
+const LoggedOutNavigation = createSwitchNavigator(
+  {
     Login: {
-        screen: LoginScreen,
-        navigationOptions: {
-            header: null
-        }
-    }
-},
-{
-    mode: 'modal'
-})
+      screen: LoginScreen,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    CreateProfile: {
+      screen: CreateProfileScreen,
+      navigationOptions: ({screenProps, navigation}) => ({
+        header: null,
+      }),
+    },
+  },
+  {
+    mode: 'modal',
+  },
+);
 
-const LoggedOutContainer = createAppContainer(LoggedOutNavigation)
+const LoggedOutContainer = createAppContainer(LoggedOutNavigation);
 
-export default LoggedOutContainer;        
+export default LoggedOutContainer;
