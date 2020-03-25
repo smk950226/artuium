@@ -52,7 +52,7 @@ export const AllReviewCard = ({
         }}
         resizeMode="cover">
         <LinearGradient
-          colors={['#00000000', '#000000']}
+          colors={['#00000043', '#000000']}
           style={[{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0}]}
         />
         <View style={style.cardTitleContainer}>
