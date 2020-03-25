@@ -42,7 +42,7 @@ export const RecommendedReviewCard = ({
       onPress={onPress}>
       <ImageBackground source={{uri: cardImageUri}} style={style.cardImage}>
         <LinearGradient
-          colors={['#00000000', '#000000']}
+          colors={['#00000043', '#000000']}
           style={[
             {
               position: 'absolute',
