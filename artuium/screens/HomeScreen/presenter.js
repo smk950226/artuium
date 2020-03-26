@@ -465,16 +465,17 @@ class HomeScreen extends Component {
                       createdAt={moment(review.time).fromNow()}
                       onPress={
                         review.artwork
-                          ? () =>
-                              this.props.navigation.navigate('ArtworkDetail', {
+                          ? () => {
+                              this.props.navigation.navigate('ArtworkContent', {
                                 artwork: review.artwork,
                                 mode: 'review',
                                 review: review,
                                 from: 'Home',
-                              })
+                              });
+                            }
                           : () =>
                               this.props.navigation.navigate(
-                                'ExhibitionDetail',
+                                'ExhibitionContent',
                                 {
                                   exhibition: review.exhibition,
                                   mode: 'review',

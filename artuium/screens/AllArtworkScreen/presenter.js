@@ -58,7 +58,7 @@ const AllArtworkScreen = props => (
         {marginTop: deviceInfo.OS === 'ios' ? iosStatusBarHeight : 0},
       ]}>
       <ArtiumHeader
-        label={'추천 감상'}
+        label={'새로운 감상'}
         leftOnPress={() => props.navigation.pop()}
         leftIcon={backArrow}
         rightIcon={filterIcon}
