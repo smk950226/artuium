@@ -89,7 +89,7 @@ export const AllReviewCard = ({
         </View>
         <View>
           <Text style={style.reviewTitle}>
-            {reviewTitle ? reviewTitle : '제목 없는 감상'}
+            {reviewTitle ? reviewTitle : ''}
           </Text>
           <View
             style={{

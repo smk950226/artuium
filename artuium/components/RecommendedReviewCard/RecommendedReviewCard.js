@@ -68,7 +68,7 @@ export const RecommendedReviewCard = ({
         </View>
         <View style={style.reviewTitleAndProfileContainer}>
           <Text style={style.reviewLabel}>
-            {reviewTitle ? reviewTitle : '제목 없는 감상'}
+            {reviewTitle ? reviewTitle : ''}
           </Text>
           <View style={style.authorProfileContainer}>
             <Text style={style.authorName}>{authorName}</Text>
