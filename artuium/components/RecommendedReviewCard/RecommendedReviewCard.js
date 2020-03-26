@@ -93,11 +93,11 @@ export const RecommendedReviewCard = ({
         <View style={style.leftFooterContainer}>
           <Image
             source={chatNumIconGrey}
-            style={{width: 18, height: 18, marginRight: 6}}
+            style={{width: 24, height: 24, marginRight: 3}}
             resizeMode={'cover'}
           />
           <Text style={[style.footerText, styles.fontRegular]}>{chatNum}</Text>
-          <Image source={heartNumIconGrey} style={{marginRight: 6}} />
+          <Image source={heartNumIconGrey} style={{marginRight: 3}} />
           <Text style={[style.footerText, styles.fontRegular]}>{likeNum}</Text>
         </View>
         <Text style={style.timeStamp}>{createdAt}</Text>

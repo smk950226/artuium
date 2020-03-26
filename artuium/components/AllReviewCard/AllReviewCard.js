@@ -126,7 +126,7 @@ export const AllReviewCard = ({
                 resizeMode={'cover'}
               />
               <Text style={style.footerText}>{chatNum}</Text>
-              <Image source={heartNumIcon} style={{marginRight: 6}} />
+              <Image source={heartNumIcon} style={{marginRight: 3}} />
               <Text style={style.footerText}>{likeNum}</Text>
             </View>
             <Text style={style.createdAt}>{createdAt}</Text>
@@ -185,10 +185,10 @@ const style = {
     lineHeight: 20,
   },
   chatNumIcon: {
-    width: 18,
-    height: 18,
+    width: 24,
+    height: 24,
     marginLeft: 20,
-    marginRight: 6,
+    marginRight: 3,
   },
 
   footerContainer: {
