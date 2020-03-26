@@ -167,7 +167,7 @@ class HomeScreen extends Component {
             <View
               style={{
                 marginTop: 26,
-                marginHorizontal: 18,
+                marginHorizontal: 20,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 marginBottom: 10,
@@ -264,7 +264,7 @@ class HomeScreen extends Component {
                   styles.alignItemsEnd,
                   styles.justifyContentBetween,
                   styles.mb10,
-                  {paddingHorizontal: 18},
+                  {paddingHorizontal: 20},
                 ]}>
                 <Text
                   style={{
@@ -327,19 +327,20 @@ class HomeScreen extends Component {
                         createdAt={moment(review.time).fromNow()}
                         onPress={
                           review.artwork
-                            ? () =>
+                            ? () => {
                                 this.props.navigation.navigate(
-                                  'ArtworkDetail',
+                                  'ArtworkContent',
                                   {
                                     artwork: review.artwork,
                                     mode: 'review',
                                     review: review,
                                     from: 'Home',
                                   },
-                                )
+                                );
+                              }
                             : () =>
                                 this.props.navigation.navigate(
-                                  'ExhibitionDetail',
+                                  'ExhibitionContent',
                                   {
                                     exhibition: review.exhibition,
                                     mode: 'review',
@@ -398,7 +399,7 @@ class HomeScreen extends Component {
                   styles.alignItemsEnd,
                   styles.justifyContentBetween,
                   styles.mb10,
-                  {paddingHorizontal: 18},
+                  {paddingHorizontal: 20},
                 ]}>
                 <Text
                   style={{

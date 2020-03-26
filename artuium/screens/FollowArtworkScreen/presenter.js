@@ -24,6 +24,7 @@ import {
   getCardSubLabelFromReview,
   getImageUriFromReview,
   abbreviateNumber,
+  deviceInfo,
 } from '../../util';
 import stripHtml from 'string-strip-html';
 
@@ -55,7 +56,11 @@ const filter = [
 
 const FollowArtworkScreen = props => (
   <Fragment>
-    <SafeAreaView style={[styles.container]}>
+    <View
+      style={[
+        styles.container,
+        {marginTop: deviceInfo.OS === 'ios' ? statusBarHeight : 0},
+      ]}>
       <ArtiumHeader
         label={'친구들의 감상'}
         leftOnPress={() => props.navigation.pop()}
@@ -137,7 +142,7 @@ const FollowArtworkScreen = props => (
           </Text>
         </ScrollView>
       )}
-    </SafeAreaView>
+    </View>
     <Modal
       isVisible={props.showFilterModal}
       backdropOpacity={0.26}

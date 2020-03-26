@@ -25,11 +25,12 @@ import {
   getCardSubLabelFromReview,
   getImageUriFromReview,
   abbreviateNumber,
+  deviceInfo,
 } from '../../util';
 
 import moment from 'moment';
 import 'moment/locale/ko';
-
+const iosStatusBarHeight = getStatusBarHeight();
 const filter = [
   {
     label: '신규순',
@@ -51,7 +52,11 @@ const filter = [
 
 const AllArtworkScreen = props => (
   <Fragment>
-    <SafeAreaView style={[styles.container]}>
+    <View
+      style={[
+        styles.container,
+        {marginTop: deviceInfo.OS === 'ios' ? iosStatusBarHeight : 0},
+      ]}>
       <ArtiumHeader
         label={'추천 감상'}
         leftOnPress={() => props.navigation.pop()}
@@ -133,7 +138,7 @@ const AllArtworkScreen = props => (
           </Text>
         </ScrollView>
       )}
-    </SafeAreaView>
+    </View>
     <Modal
       isVisible={props.showFilterModal}
       backdropOpacity={0.26}

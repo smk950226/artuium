@@ -16,12 +16,18 @@ import {
   getCardSubLabelFromReview,
   getImageUriFromReview,
   abbreviateNumber,
+  deviceInfo,
 } from '../../util';
 import {AllReviewCard} from '../../components/AllReviewCard/AllReviewCard';
 import stripHtml from 'string-strip-html';
 import moment from 'moment';
 import 'moment/locale/ko';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
+import ArtworkScrollView from '../../components/RecommendedArtworkScreen/ArtworkScrollView';
+import ExhibitionScrollView from '../../components/RecommendedArtworkScreen/ExhibitionScrollView';
 
+const iosStatusBarHeight = getStatusBarHeight();
 class RecommendArtworkScreen extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
@@ -35,171 +41,73 @@ class RecommendArtworkScreen extends Component {
     super(props);
     this.state = {
       isArtworkTabActive: false,
+      index: 0,
+      routes: [
+        {key: 'first', title: '전시'},
+        {key: 'second', title: '작품'},
+      ],
     };
   }
 
   render() {
     const {loading, users, artworks, exhibitions} = this.props;
     return (
-      <Fragment>
-        <SafeAreaView style={[styles.container]}>
-          <ArtiumHeader
-            label={'추천 감상'}
-            leftOnPress={() => this.props.navigation.pop()}
-            leftIcon={backArrow}
-          />
-          <View style={style.artworkExihibitionTabContainer}>
-            <TouchableOpacity
-              style={
-                this.state.isArtworkTabActive
-                  ? style.inactiveTab
-                  : style.activeTab
-              }
-              onPress={() => this.setState({isArtworkTabActive: false})}>
-              <Text
-                style={
-                  this.state.isArtworkTabActive
-                    ? style.inactiveLabel
-                    : style.activeLabel
-                }>
-                전시
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={
-                this.state.isArtworkTabActive
-                  ? style.activeTab
-                  : style.inactiveTab
-              }
-              onPress={() => this.setState({isArtworkTabActive: true})}>
-              <Text
-                style={
-                  this.state.isArtworkTabActive
-                    ? style.activeLabel
-                    : style.inactiveLabel
-                }>
-                작품
-              </Text>
-            </TouchableOpacity>
+      <View
+        style={[
+          styles.container,
+          {marginTop: deviceInfo.OS === 'ios' ? iosStatusBarHeight : 0},
+        ]}>
+        <ArtiumHeader
+          label={'추천 감상'}
+          leftOnPress={() => this.props.navigation.pop()}
+          leftIcon={backArrow}
+        />
+        {loading ? (
+          <View
+            style={[
+              styles.container,
+              styles.alignItemsCenter,
+              styles.justifyContentCenter,
+            ]}>
+            <ActivityIndicator size={'small'} color={'#000'} />
           </View>
-          <ScrollView>
-            {loading ? (
-              <View
-                style={[
-                  styles.container,
-                  styles.alignItemsCenter,
-                  styles.justifyContentCenter,
-                ]}>
-                <ActivityIndicator size={'small'} color={'#000'} />
-              </View>
-            ) : this.state.isArtworkTabActive ? (
-              artworks && artworks.length > 0 ? (
-                artworks.map((review, index) => {
-                  return (
-                    <>
-                      <AllReviewCard
-                        cardLabel={getCardLabelFromReview(review)}
-                        cardSubLabel={getCardSubLabelFromReview(review)}
-                        cardImageUri={getImageUriFromReview(review)}
-                        chatNum={abbreviateNumber(review.reply_count)}
-                        likeNum={abbreviateNumber(review.like_count)}
-                        content={stripHtml(review.content)}
-                        authorProfile={review.author.profile_image}
-                        interactionIcon={review.expression}
-                        starRateNum={review.rate}
-                        authorName={review.author.nickname}
-                        createdAt={moment(review.time).fromNow()}
-                        onPress={() =>
-                          this.props.navigation.navigate('ArtworkContent', {
-                            artwork: review.artwork,
-                            mode: 'review',
-                            review: review,
-                            from: 'RecommendArtwork',
-                          })
-                        }
-                        type={'artwork'}
-                        reviewTitle={review.title}
-                      />
-                      <View style={{height: 20}} />
-                    </>
-                  );
-                })
-              ) : (
-                <View />
-              )
-            ) : exhibitions && exhibitions.length > 0 ? (
-              exhibitions.map((review, index) => {
-                return (
-                  <>
-                    <AllReviewCard
-                      cardLabel={getCardLabelFromReview(review)}
-                      cardSubLabel={getCardSubLabelFromReview(review)}
-                      cardImageUri={getImageUriFromReview(review)}
-                      chatNum={abbreviateNumber(review.reply_count)}
-                      likeNum={abbreviateNumber(review.like_count)}
-                      content={stripHtml(review.content)}
-                      authorProfile={review.author.profile_image}
-                      interactionIcon={review.expression}
-                      starRateNum={review.rate}
-                      authorName={review.author.nickname}
-                      createdAt={moment(review.time).fromNow()}
-                      onPress={() =>
-                        this.props.navigation.navigate('ExhibitionContent', {
-                          exhibition: review.exhibition,
-                          mode: 'review',
-                          review: review,
-                          from: 'RecommendArtwork',
-                        })
-                      }
-                      type={'exhibition'}
-                      reviewTitle={review.title}
-                    />
-                    <View style={{height: 20}} />
-                  </>
-                );
-              })
-            ) : (
-              <View />
+        ) : (
+          <TabView
+            navigationState={{
+              index: this.state.index,
+              routes: this.state.routes,
+            }}
+            onIndexChange={index => this.setState({index: index})}
+            renderScene={SceneMap({
+              first: () => (
+                <ArtworkScrollView
+                  artworks={artworks}
+                  navigation={this.props.navigation}
+                />
+              ),
+              second: () => (
+                <ExhibitionScrollView
+                  exhibitions={exhibitions}
+                  navigation={this.props.navigation}
+                />
+              ),
+            })}
+            renderTabBar={props => (
+              <TabBar
+                {...props}
+                activeColor={'#fa4d2c'}
+                inactiveColor={'#c4c4c4'}
+                labelStyle={[styles.font14, styles.fontMedium]}
+                bounces={false}
+                indicatorStyle={{backgroundColor: '#fa4d2c', height: 2}}
+                style={{backgroundColor: 'white'}}
+              />
             )}
-          </ScrollView>
-        </SafeAreaView>
-      </Fragment>
+          />
+        )}
+      </View>
     );
   }
 }
 
 export default RecommendArtworkScreen;
-
-const style = {
-  artworkExihibitionTabContainer: {
-    flexDirection: 'row',
-    height: 42,
-    marginBottom: 15,
-  },
-  activeTab: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderBottomWidth: 2,
-    borderBottomColor: '#fa4d2c',
-  },
-  inactiveTab: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderBottomWidth: 2,
-    borderBottomColor: '#c4c4c4',
-  },
-  activeLabel: {
-    fontSize: 14,
-    color: '#fa4d2c',
-    letterSpacing: -0.24,
-    fontFamily: 'NotoSansKR-Medium',
-  },
-  inactiveLabel: {
-    fontSize: 14,
-    color: '#c4c4c4',
-    letterSpacing: -0.24,
-    fontFamily: 'NotoSansKR-Medium',
-  },
-};
