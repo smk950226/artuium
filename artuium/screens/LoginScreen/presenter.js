@@ -16,7 +16,7 @@ const LoginButton = ({
   buttonColor,
   buttonImgSrc,
   buttonDescription,
-  buttonDescriptionColor = 'black',
+  buttonDescriptionColor = '#000000',
 }) => {
   return (
     <TouchableOpacity
@@ -33,7 +33,7 @@ const LoginButton = ({
         <Text
           style={{
             ...loginScreenStyles.loginButtonText,
-            color: buttonDescriptionColor == 'white' ? '#ffffff' : '#000000',
+            color: buttonDescriptionColor,
           }}>
           {buttonDescription}
         </Text>
@@ -89,7 +89,7 @@ class LoginScreen extends React.Component {
                 style={{marginTop: 35.5, marginLeft: -46, width: 270}}
               />
             </View>
-            <View style={{alignContext: 'end'}}>
+            <View style={{alignContent: 'flex-end'}}>
               <Image
                 source={require('../../assets/images/loginBackground2.png')}
                 style={{marginTop: 128.7, marginRight: -56.8}}
@@ -129,7 +129,7 @@ class LoginScreen extends React.Component {
                 buttonColor={'#000000'}
                 buttonImgSrc={require('../../assets/images/appleLogo.png')}
                 buttonDescription={'애플 아이디로 로그인'}
-                buttonDescriptionColor={'white'}
+                buttonDescriptionColor={'#ffffff'}
               />
             ) : null}
           </View>
