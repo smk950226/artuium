@@ -1,21 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, Text, ActivityIndicator} from 'react-native';
 
-const enterButtonStyles = {
-  container: {
-    height: 38,
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontFamily: 'NotoSansKR-Regular',
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#ffffff',
-  },
-};
-
 const EnterButton = props => {
   const {onPress, disabled, isLoading, styles} = props;
   return (
@@ -34,6 +19,21 @@ const EnterButton = props => {
       )}
     </TouchableOpacity>
   );
+};
+
+const enterButtonStyles = {
+  container: {
+    height: 38,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    fontFamily: 'NotoSansKR-Regular',
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#ffffff',
+  },
 };
 
 export default EnterButton;
