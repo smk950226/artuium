@@ -109,8 +109,8 @@ const AllArtworkScreen = props => (
                             from: 'AllArtwork',
                           })
                   }
-                  type={'artwork'}
-                  reviewTitle={review.artwork ? 'artwork' : 'exhibition'}
+                  type={review.artwork ? 'artwork' : 'exhibition'}
+                  reviewTitle={review.title}
                 />
                 <View style={{height: 20}} />
               </>
