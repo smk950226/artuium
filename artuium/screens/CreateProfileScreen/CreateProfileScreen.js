@@ -227,7 +227,9 @@ const CreateProfileScreen = props => {
                   isValidNickname !== null && isValidNickname === false
                     ? '#ff5555'
                     : '#2c2c2c',
+                color: '#2c2c2c',
               }}
+              placeholderTextColor={'#b7b7b7'}
               value={nickname}
               onChangeText={handleChangeNickname}
               autoCapitalize={'none'}
