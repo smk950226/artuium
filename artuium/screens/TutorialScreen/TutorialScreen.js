@@ -1,5 +1,12 @@
-import React, {useState} from 'react';
-import {View, Text, Image, Dimensions, ScrollView} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  Dimensions,
+  ScrollView,
+  BackHandler,
+} from 'react-native';
 import PaginationDots from '../../components/PaginationDots/PaginationDots';
 import MakeProfileButton from '../../components/MakeProfileButton/MakeProfileButton';
 
@@ -74,7 +81,35 @@ const tutorialContents = [
 
 const Tutorial = props => {
   const {closeTutorial} = props;
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, _setCurrentIndex] = useState(0);
+  const currentIndexRef = useRef(currentIndex);
+  const setCurrentIndex = index => {
+    currentIndexRef.current = index;
+    _setCurrentIndex(index);
+  };
+  const scrollView = useRef();
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      onPressBackButton,
+    );
+    return () => backHandler.remove();
+  }, []);
+
+  const onPressBackButton = () => {
+    if (currentIndexRef.current == 0) {
+      // exit app
+      return false;
+    } else {
+      scrollView.current.scrollTo({
+        x: width * (currentIndexRef.current - 1),
+        y: 0,
+        animated: true,
+      });
+      return true;
+    }
+  };
 
   const onScroll = event => {
     // Get current page's index from scoll event.
@@ -87,6 +122,7 @@ const Tutorial = props => {
   return (
     <>
       <ScrollView
+        ref={scrollView}
         style={{width, height}}
         horizontal={true}
         pagingEnabled={true}
