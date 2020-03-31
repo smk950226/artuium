@@ -29,7 +29,7 @@ const tutorialContents = [
     imgSrc: tutorialOneImageSrc,
   },
   {
-    title: '사람들과 예술적인 이야기를',
+    title: '내 손 안의 전시 감상하기',
     description: (
       <>
         아틔움을 돌아다니며{'\n'}
@@ -44,7 +44,7 @@ const tutorialContents = [
     imgSrc: tutorialTwoImageSrc,
   },
   {
-    title: '내 손 안의 전시 감상하기',
+    title: '사람들과 예술적인 이야기를',
     description: (
       <>
         진행중인 전시나 유명 작품에 대한{'\n'}사람들의 생각을 들어보세요.
@@ -130,21 +130,34 @@ const Tutorial = props => {
         onScroll={onScroll}>
         {tutorialContents.map(content => (
           <View style={{width, height}}>
-            <Image source={content.imgSrc} style={{width, marginTop: 119}} />
-            <Text
+            <View
               style={{
-                ...tutorialStyles.tutorialTitle,
-                marginTop: 4,
+                height: height - 295 - 48,
+                marginTop: 48,
+                justifyContent: 'center',
               }}>
-              {content.title}
-            </Text>
-            <Text
+              <Image source={content.imgSrc} style={{width}} />
+            </View>
+            <View
               style={{
-                ...tutorialStyles.tutorialDescription,
-                marginTop: 9,
+                position: 'absolute',
+                width,
+                top: height - 291,
               }}>
-              {content.description}
-            </Text>
+              <Text
+                style={{
+                  ...tutorialStyles.tutorialTitle,
+                }}>
+                {content.title}
+              </Text>
+              <Text
+                style={{
+                  ...tutorialStyles.tutorialDescription,
+                  marginTop: 9,
+                }}>
+                {content.description}
+              </Text>
+            </View>
           </View>
         ))}
       </ScrollView>
@@ -152,7 +165,7 @@ const Tutorial = props => {
         <Text
           style={{
             position: 'absolute',
-            top: 47,
+            top: 48,
             right: 20,
             ...tutorialStyles.skipText,
           }}
@@ -183,7 +196,6 @@ const tutorialStyles = {
     fontFamily: 'Noto Sans KR',
     fontSize: 18,
     lineHeight: 26,
-    fontWeight: 'bold',
   },
   tutorialTitle: {
     fontFamily: 'Noto Sans KR',
