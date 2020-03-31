@@ -325,6 +325,8 @@ const createProfileScreenStyles = {
     fontFamily: 'NotoSansKR-Regular',
     fontSize: 15,
     color: '#2c2c2c',
+    textAlignVertical: 'center',
+    lineHeight: 22,
   },
   nicknameInputLabel: {
     fontFamily: 'NotoSansKR-Regular',
