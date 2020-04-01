@@ -9,38 +9,9 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {AccessToken, LoginManager} from 'react-native-fbsdk';
+import {AppleButton} from '@invertase/react-native-apple-authentication';
+import LoginButton from '../../components/LoginButton/LoginButton';
 import styles from '../../styles';
-
-const LoginButton = ({
-  onPress,
-  buttonColor,
-  buttonImgSrc,
-  buttonDescription,
-  buttonDescriptionColor = '#000000',
-}) => {
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={{
-        ...loginScreenStyles.loginButton,
-        backgroundColor: buttonColor,
-        marginTop: 15,
-      }}>
-      <View style={{...loginScreenStyles.loginButtonIconContainer}}>
-        <Image source={buttonImgSrc} />
-      </View>
-      <View style={{...loginScreenStyles.loginButtonTextContainer}}>
-        <Text
-          style={{
-            ...loginScreenStyles.loginButtonText,
-            color: buttonDescriptionColor,
-          }}>
-          {buttonDescription}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
 
 class LoginScreen extends React.Component {
   static propTypes = {};
@@ -124,12 +95,12 @@ class LoginScreen extends React.Component {
               buttonDescription={'구글 로그인'}
             />
             {Platform.OS === 'ios' ? (
-              <LoginButton
+              <AppleButton
+                style={{width: '100%', height: 48, marginTop: 15}}
+                cornerRadius={3}
+                buttonStyle={AppleButton.Style.BLACK}
+                buttonType={AppleButton.Type.SIGN_IN}
                 onPress={this.props.handleAppleSignIn}
-                buttonColor={'#000000'}
-                buttonImgSrc={require('../../assets/images/appleLogo.png')}
-                buttonDescription={'애플 아이디로 로그인'}
-                buttonDescriptionColor={'#ffffff'}
               />
             ) : null}
           </View>
@@ -155,27 +126,6 @@ const loginScreenStyles = {
     bottom: 0,
     width: '100%',
     paddingHorizontal: 57,
-  },
-  loginButton: {
-    height: 48,
-    width: '100%',
-    flexDirection: 'row',
-    borderRadius: 3,
-  },
-  loginButtonIconContainer: {
-    width: '25%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  loginButtonTextContainer: {
-    width: '75%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  loginButtonText: {
-    lineHeight: 22,
-    fontSize: 14,
-    fontFamily: 'NotoSansKR-Medium',
   },
 };
 
