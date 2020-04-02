@@ -7,7 +7,7 @@ import {
   Image,
 } from 'react-native';
 
-const ArtiumHeader = ({
+const ArtuiumHeader = ({
   leftIcon,
   leftText,
   leftOnPress,
@@ -87,4 +87,4 @@ const style = {
   },
 };
 
-export default ArtiumHeader;
+export default ArtuiumHeader;
