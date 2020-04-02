@@ -220,6 +220,7 @@ const CreateProfileScreen = props => {
             <TextInput
               style={{
                 fontSize: 17,
+                color: '#333333',
                 paddingVertical: 0,
                 paddingBottom: 7.5,
                 borderBottomWidth: 1,

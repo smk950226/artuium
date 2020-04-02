@@ -8,6 +8,7 @@ import {
   Image,
   Dimensions,
   TouchableWithoutFeedback,
+  Linking,
 } from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import styles from '../../styles';
@@ -18,6 +19,7 @@ import {
   abbreviateNumber,
   getCardLabelFromReview,
   getCardSubLabelFromReview,
+  deviceInfo,
 } from '../../util';
 import stripHtml from 'string-strip-html';
 import {AllReviewCard} from '../../components/AllReviewCard/AllReviewCard';
@@ -26,6 +28,7 @@ import {NoFollowerIndicator} from '../../components/NoFollowerIndicator/NoFollow
 
 import moment from 'moment';
 import 'moment/locale/ko';
+import {TouchableOpacity} from 'react-native';
 
 const iosStatusBarHeight = getStatusBarHeight();
 
@@ -112,28 +115,31 @@ class HomeScreen extends Component {
                 alwaysBounceVertical={false}
                 horizontal={true}
                 pagingEnabled={true}
-                style={[styles.bgWhite, {width, height: 280, zIndex: 10}]}>
+                showsHorizontalScrollIndicator={false}
+                style={[
+                  styles.bgWhite,
+                  {width, height: ((deviceInfo.size.width - 36) * 85) / 339},
+                ]}>
                 {banners.map((ban, index) => (
-                  <TouchableWithoutFeedback
+                  <TouchableOpacity
                     key={index}
-                    onPress={() =>
-                      this.props.navigation.navigate('Alert', {
-                        notificationNew,
-                        noticeNew,
-                        handleNoticeNewChange: this.props.handleNoticeNewChange,
-                        handleNotificationNewChange: this.props
-                          .handleNotificationNewChange,
-                        index: 1,
-                      })
-                    }>
-                    <View>
-                      <Image
-                        source={{uri: ban.image ? ban.image : ''}}
-                        resizeMode={'stretch'}
-                        style={[{height: '100%', width}]}
-                      />
-                    </View>
-                  </TouchableWithoutFeedback>
+                    onPress={() => {
+                      ban.url ? Linking.openURL(ban.url) : null;
+                    }}>
+                    <Image
+                      source={{uri: ban.image ? ban.image : ''}}
+                      resizeMode={'stretch'}
+                      style={[
+                        {
+                          height: ((deviceInfo.size.width - 36) * 85) / 339,
+                          width: deviceInfo.size.width - 36,
+                          alignSelf: 'center',
+                          marginHorizontal: 18,
+                          borderRadius: 5,
+                        },
+                      ]}
+                    />
+                  </TouchableOpacity>
                 ))}
               </ScrollView>
             ) : (
