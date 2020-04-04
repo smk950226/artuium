@@ -9,10 +9,9 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Linking,
+  AsyncStorage,
 } from 'react-native';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
 import styles from '../../styles';
-import ArtuiumCard from '../../components/ArtuiumCard';
 import {RecommendedReviewCard} from '../../components/RecommendedReviewCard/RecommendedReviewCard';
 import {
   getImageUriFromReview,
@@ -30,8 +29,6 @@ import moment from 'moment';
 import 'moment/locale/ko';
 import {TouchableOpacity} from 'react-native';
 
-const iosStatusBarHeight = getStatusBarHeight();
-
 const {width, height} = Dimensions.get('window');
 
 class HomeScreen extends Component {
@@ -42,15 +39,41 @@ class HomeScreen extends Component {
     followingReviews: PropTypes.array,
     noticeNew: PropTypes.bool.isRequired,
     notificationNew: PropTypes.bool.isRequired,
+    token: PropTypes.string.string,
   };
-
   constructor(props) {
     super(props);
     this.state = {
       scrollX: new Animated.Value(0),
       scrollX2: new Animated.Value(0),
+      isPopUpExist: false,
+      popUpTitle: '',
+      popUpUri: '',
     };
   }
+
+  componentDidMount = () => {
+    fetch(`https://api.artuium.com/api/common/popup/`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `JWT ${this.props.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        AsyncStorage.getItem(`popup-${res.popup.id}`).then((idHide) => {
+          if (idHide === 'hide') {
+          } else {
+            this.props.navigation.navigate('PopUpModal', {
+              popUpTitle: res.popup.title,
+              popUpUri: res.popup.image,
+              popUpId: res.popup.id,
+            });
+          }
+        });
+      })
+      .catch((err) => console.log('err'));
+  };
 
   render() {
     const {
