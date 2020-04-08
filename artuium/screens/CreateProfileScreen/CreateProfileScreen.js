@@ -17,6 +17,7 @@ import DashLine from '../../components/DashLine/DashLine';
 import Checkbox from '../../components/Checkbox/Checkbox';
 import TermModal from '../../components/TermModal/TermModal';
 import EnterButton from '../../components/EnterButton/EnterButton';
+import TutorialScreen from '../TutorialScreen/TutorialScreen';
 import {PRIVACY_POLICY, SERVICE_TERM} from '../../constants';
 const {width, height} = Dimensions.get('window');
 
@@ -49,6 +50,7 @@ const CreateProfileScreen = props => {
   const [nickname, setNickname] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [keyboardShowing, setKeyboardShowing] = useState(false);
+  const [isShowingTutorial, setIsShowingTutorial] = useState(true);
 
   const scrollView = useRef();
 
@@ -145,7 +147,9 @@ const CreateProfileScreen = props => {
     };
   }, []);
 
-  return (
+  return isShowingTutorial ? (
+    <TutorialScreen closeTutorial={() => setIsShowingTutorial(false)} />
+  ) : (
     <ScrollView ref={scrollView} scrollEnabled={keyboardShowing}>
       <TermModal
         visible={serviceModalVisible}
@@ -223,7 +227,9 @@ const CreateProfileScreen = props => {
                   isValidNickname !== null && isValidNickname === false
                     ? '#ff5555'
                     : '#2c2c2c',
+                color: '#2c2c2c',
               }}
+              placeholderTextColor={'#b7b7b7'}
               value={nickname}
               onChangeText={handleChangeNickname}
               autoCapitalize={'none'}
@@ -319,6 +325,8 @@ const createProfileScreenStyles = {
     fontFamily: 'NotoSansKR-Regular',
     fontSize: 15,
     color: '#2c2c2c',
+    textAlignVertical: 'center',
+    lineHeight: 22,
   },
   nicknameInputLabel: {
     fontFamily: 'NotoSansKR-Regular',
