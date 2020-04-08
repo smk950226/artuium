@@ -244,6 +244,7 @@ class HomeScreen extends Component {
                     reviewTitle={review.title}
                   />
                 ))}
+                <View style={{width: 20}} />
               </ScrollView>
             ) : (
               <Text
