@@ -42,10 +42,7 @@ class RecommendArtworkScreen extends Component {
     this.state = {
       isArtworkTabActive: false,
       index: 0,
-      routes: [
-        {key: 'first', title: '전시'},
-        {key: 'second', title: '작품'},
-      ],
+      routes: [{key: 'first', title: '전시'}, {key: 'second', title: '작품'}],
     };
   }
 
@@ -80,14 +77,14 @@ class RecommendArtworkScreen extends Component {
             onIndexChange={index => this.setState({index: index})}
             renderScene={SceneMap({
               first: () => (
-                <ArtworkScrollView
-                  artworks={artworks}
+                <ExhibitionScrollView
+                  exhibitions={exhibitions}
                   navigation={this.props.navigation}
                 />
               ),
               second: () => (
-                <ExhibitionScrollView
-                  exhibitions={exhibitions}
+                <ArtworkScrollView
+                  artworks={artworks}
                   navigation={this.props.navigation}
                 />
               ),
