@@ -11,3 +11,5 @@ export const emptyFollowerIllust = require('./emptyFollowerIllust.png');
 
 export const backArrow = require('./backArrow.png');
 export const filterIcon = require('./filterIcon.png');
+
+export const settingIcon = require('./settingIcon.png');
