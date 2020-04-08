@@ -99,6 +99,7 @@ class ArtworkContentScreen extends React.Component {
         rating: PropTypes.number,
         handleChangeRating: PropTypes.func.isRequired,
         handleChangeContent: PropTypes.func.isRequired,
+        handleChangeTitle: PropTypes.func.isRequired,
         content: PropTypes.string.isRequired,
         isSubmittingReview: PropTypes.bool.isRequired,
         total_rate: PropTypes.number.isRequired,
@@ -184,7 +185,7 @@ class ArtworkContentScreen extends React.Component {
     }
 
     render(){
-        const { artwork, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from, blockReviewList, blockUserList, blockReplyList, to, showFilterModal, showFilterReplyModal, selectedReplyId, newReply } = this.props;
+        const { artwork, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content,title, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from, blockReviewList, blockUserList, blockReplyList, to, showFilterModal, showFilterReplyModal, selectedReplyId, newReply } = this.props;
         const { initialMode, keyboardHeight } = this.state;
         if(artwork){
             return(
@@ -462,25 +463,19 @@ class ArtworkContentScreen extends React.Component {
                                                         </View>
                                                     </View>
                                                     </TouchableWithoutFeedback>
-                                                    <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('')}>
-                                                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.alignSelfCenter, styles.mt10, styles.borderBtmGrayE8, styles.pb15, styles.widthFull]}>
-                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('thumb')}>
-                                                                <Image source={require('../../assets/images/icon_thumb.png')} style={[styles.emojiXl, styles.mx5, expression === 'thumb' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                            </TouchableWithoutFeedback>
-                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('sad')}>
-                                                                <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emojiXl, styles.mx5, expression === 'sad' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                            </TouchableWithoutFeedback>
-                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('soso')}>
-                                                                <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emojiXl, styles.mx5, expression === 'soso' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                            </TouchableWithoutFeedback>
-                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('surprise')}>
-                                                                <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emojiXl, styles.mx5, expression === 'surprise' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                            </TouchableWithoutFeedback>
-                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('good')}>
-                                                                <Image source={require('../../assets/images/icon_good.png')} style={[styles.emojiXl, styles.mx5, expression === 'good' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                            </TouchableWithoutFeedback>
+                                                        <View style={[styles.row, styles.alignItemsCenter, styles.alignSelfCenter, styles.mt15, styles.borderBtmGrayE8, styles.pb15, styles.widthFull,{justifyContent:'space-between',paddingHorizontal:25}]}>
+                                                           <TextInput
+                                                                value={title}
+                                                                onChangeText={this.props.handleChangeTitle}
+                                                                placeholder={'제목을 입력하세요.'}
+                                                                placeholderTextColor={'#000000'}
+                                                                autoCapitalize={'none'} 
+                                                                autoCorrect={false} 
+                                                                maxLength={15}
+                                                                style={[styles.font15,{width:200}]}
+                                                           />
+                                                            <Text>{title.length}/15</Text>
                                                         </View>
-                                                    </TouchableWithoutFeedback>
                                                     <View style={[styles.widthFull, {height: 300, borderWidth: 1, borderColor: '#e8e8e8'}]}>
                                                         <TextInput
                                                             style={[styles.font15, styles.widthFull, styles.px25, styles.py10, styles.widthFull, styles.black, {height: 300}]}
@@ -492,10 +487,8 @@ class ArtworkContentScreen extends React.Component {
                                                             returnKeyType={'done'} 
                                                             placeholderTextColor={'#000000'}
                                                             multiline={true}
-                                                            maxLength={500}
                                                             textAlignVertical={'top'}
                                                         />
-                                                        <Text style={[styles.fontMedium, styles.font14, { position: 'absolute', bottom: 15, right: 25 }]}>{content.length}<Text style={[styles.grayD1]}>/500자</Text></Text>
                                                     </View>
                                                     <View style={[styles.mt30, styles.alignItemsCenter, { marginBottom: Platform.OS === 'ios' ? 70 + keyboardHeight : 70 }]}>
                                                         <TouchableWithoutFeedback onPress={initialMode === 'create' ? this.props.update : this.props.submit}>
