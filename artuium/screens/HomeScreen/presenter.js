@@ -8,16 +8,17 @@ import {
   Image,
   Dimensions,
   TouchableWithoutFeedback,
+  Linking,
+  AsyncStorage,
 } from 'react-native';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
 import styles from '../../styles';
-import ArtuiumCard from '../../components/ArtuiumCard';
 import {RecommendedReviewCard} from '../../components/RecommendedReviewCard/RecommendedReviewCard';
 import {
   getImageUriFromReview,
   abbreviateNumber,
   getCardLabelFromReview,
   getCardSubLabelFromReview,
+  deviceInfo,
 } from '../../util';
 import stripHtml from 'string-strip-html';
 import {AllReviewCard} from '../../components/AllReviewCard/AllReviewCard';
@@ -26,8 +27,7 @@ import {NoFollowerIndicator} from '../../components/NoFollowerIndicator/NoFollow
 
 import moment from 'moment';
 import 'moment/locale/ko';
-
-const iosStatusBarHeight = getStatusBarHeight();
+import {TouchableOpacity} from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 
@@ -39,15 +39,41 @@ class HomeScreen extends Component {
     followingReviews: PropTypes.array,
     noticeNew: PropTypes.bool.isRequired,
     notificationNew: PropTypes.bool.isRequired,
+    token: PropTypes.string.string,
   };
-
   constructor(props) {
     super(props);
     this.state = {
       scrollX: new Animated.Value(0),
       scrollX2: new Animated.Value(0),
+      isPopUpExist: false,
+      popUpTitle: '',
+      popUpUri: '',
     };
   }
+
+  componentDidMount = () => {
+    fetch(`https://api.artuium.com/api/common/popup/`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `JWT ${this.props.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        AsyncStorage.getItem(`popup-${res.popup.id}`).then((idHide) => {
+          if (idHide === 'hide') {
+          } else {
+            this.props.navigation.navigate('PopUpModal', {
+              popUpTitle: res.popup.title,
+              popUpUri: res.popup.image,
+              popUpId: res.popup.id,
+            });
+          }
+        });
+      })
+      .catch((err) => console.log('err'));
+  };
 
   render() {
     const {
@@ -112,28 +138,31 @@ class HomeScreen extends Component {
                 alwaysBounceVertical={false}
                 horizontal={true}
                 pagingEnabled={true}
-                style={[styles.bgWhite, {width, height: 280, zIndex: 10}]}>
+                showsHorizontalScrollIndicator={false}
+                style={[
+                  styles.bgWhite,
+                  {width, height: ((deviceInfo.size.width - 36) * 85) / 339},
+                ]}>
                 {banners.map((ban, index) => (
-                  <TouchableWithoutFeedback
+                  <TouchableOpacity
                     key={index}
-                    onPress={() =>
-                      this.props.navigation.navigate('Alert', {
-                        notificationNew,
-                        noticeNew,
-                        handleNoticeNewChange: this.props.handleNoticeNewChange,
-                        handleNotificationNewChange: this.props
-                          .handleNotificationNewChange,
-                        index: 1,
-                      })
-                    }>
-                    <View>
-                      <Image
-                        source={{uri: ban.image ? ban.image : ''}}
-                        resizeMode={'stretch'}
-                        style={[{height: '100%', width}]}
-                      />
-                    </View>
-                  </TouchableWithoutFeedback>
+                    onPress={() => {
+                      ban.url ? Linking.openURL(ban.url) : null;
+                    }}>
+                    <Image
+                      source={{uri: ban.image ? ban.image : ''}}
+                      resizeMode={'stretch'}
+                      style={[
+                        {
+                          height: ((deviceInfo.size.width - 36) * 85) / 339,
+                          width: deviceInfo.size.width - 36,
+                          alignSelf: 'center',
+                          marginHorizontal: 18,
+                          borderRadius: 5,
+                        },
+                      ]}
+                    />
+                  </TouchableOpacity>
                 ))}
               </ScrollView>
             ) : (

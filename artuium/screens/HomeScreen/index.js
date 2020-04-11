@@ -12,7 +12,7 @@ const mapStateToProps = (state, ownProps) => {
       recommendedReviews,
       followingReviews,
     },
-    user: {profile, notificationNew, noticeNew},
+    user: {profile, notificationNew, noticeNew, token},
   } = state;
   return {
     initialStatus,
@@ -23,6 +23,7 @@ const mapStateToProps = (state, ownProps) => {
     profile,
     notificationNew,
     noticeNew,
+    token,
   };
 };
 
@@ -32,7 +33,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(userActions.getProfile());
       dispatch(reviewActions.initialReview());
     },
-    getInitial: initial => {
+    getInitial: (initial) => {
       return dispatch(userActions.getInitial(initial));
     },
     checkNoticeAll: () => {
@@ -41,16 +42,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     checkNotificationAll: () => {
       return dispatch(userActions.checkNotificationAll());
     },
-    setPushToken: pushToken => {
+    setPushToken: (pushToken) => {
       return dispatch(userActions.setPushToken(pushToken));
     },
     getProfile: () => {
       dispatch(userActions.getProfile());
     },
-    getNoticeNew: noticeNew => {
+    getNoticeNew: (noticeNew) => {
       dispatch(userActions.getNoticeNew(noticeNew));
     },
-    getNotificationNew: notificationNew => {
+    getNotificationNew: (notificationNew) => {
       dispatch(userActions.getNotificationNew(notificationNew));
     },
     getRecommendedReview: () => {
