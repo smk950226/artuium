@@ -5,12 +5,20 @@ import {
   ActivityIndicator,
   ScrollView,
   RefreshControl,
-  FlatList,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {actionCreators as reviewActions} from '../../redux/modules/review';
+import {actionCreators as userActions} from '../../redux/modules/user';
 import styles from '../../styles';
-import ArtuiumCard from '../../components/ArtuiumCard';
+import {AllReviewCard} from '../../components/AllReviewCard/AllReviewCard';
+import {
+  getCardLabelFromReview,
+  getCardSubLabelFromReview,
+  getImageUriFromReview,
+  abbreviateNumber,
+} from '../../util';
+import stripHtml from 'string-strip-html';
+import moment from 'moment';
+import 'moment/locale/ko';
 
 const MyReviewScreen = props => {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,15 +31,15 @@ const MyReviewScreen = props => {
   const profile = useSelector(store => store.user.profile);
   const dispatch = useDispatch();
 
-  const getReviewLikeList = userId => {
-    return dispatch(reviewActions.getReviewLikeList(userId));
+  const getReviewList = userId => {
+    return dispatch(userActions.getReviewList(userId));
   };
-  const getReviewLikeListMore = (userId, page) => {
-    return dispatch(reviewActions.getReviewLikeListMore(userId, page));
+  const getReviewListMore = (userId, page) => {
+    return dispatch(userActions.getReviewListMore(userId, page));
   };
 
   const getReviews = async () => {
-    const reviews = await getReviewLikeList(profile.id);
+    const reviews = await getReviewList(profile.id);
     setIsLoading(false);
     setMyReviews(reviews);
   };
@@ -44,8 +52,8 @@ const MyReviewScreen = props => {
     if (hasNextPage) {
       if (!isLoadingMore) {
         setIsLoadingMore(true);
-        const result = await getReviewLikeListMore(profile.id, pageNum + 1);
-        if (result) {
+        const result = await getReviewListMore(profile.id, pageNum + 1);
+        if (moreReviews) {
           setMyReviews([...myReviews, ...result]);
           setPageNum(pageNum + 1);
           setIsLoadingMore(false);
@@ -62,12 +70,11 @@ const MyReviewScreen = props => {
     setHasNextPage(true);
     setIsRefreshing(true);
     setPageNum(1);
-    const reviews = await getReviewLikeList(profile.id);
+    const reviews = await getReviewList(profile.id);
     setMyReviews(reviews);
     setIsRefreshing(false);
   };
 
-  const {navigation} = props;
   return isLoading ? (
     <View
       style={[
@@ -78,39 +85,48 @@ const MyReviewScreen = props => {
       <ActivityIndicator size={'small'} color={'#000'} />
     </View>
   ) : (
-    <View style={[styles.container]}>
+    <ScrollView style={([styles.container], {marginTop: -2})}>
+      {console.log(myReviews)}
       {myReviews && myReviews.length > 0 ? (
-        <FlatList
-          data={myReviews}
-          renderItem={({item}) => (
-            <ArtuiumCard
-              from={'ReviewLike'}
-              review={item.review}
-              size={'xlarge'}
-              navigation={navigation}
-            />
-          )}
-          numColumns={1}
-          keyExtractor={item => String(item.id)}
-          refreshing={isRefreshing}
-          onRefresh={refresh}
-          onEndReached={hasNextPage ? getMoreReviews : null}
-          onEndReachedThreshold={0.5}
-          bounces={true}
-          ListFooterComponent={
-            isLoadingMore ? (
-              <View
-                style={[
-                  styles.alignItemsCenter,
-                  styles.justifyContentCenter,
-                  styles.mt5,
-                  styles.py5,
-                ]}>
-                <ActivityIndicator size={'small'} color={'#000000'} />
-              </View>
-            ) : null
-          }
-        />
+        myReviews.map(review => {
+          return (
+            <>
+              <View style={{height: 16}} />
+              <AllReviewCard
+                cardLabel={getCardLabelFromReview(review)}
+                cardSubLabel={getCardSubLabelFromReview(review)}
+                cardImageUri={getImageUriFromReview(review)}
+                chatNum={abbreviateNumber(review.reply_count)}
+                likeNum={abbreviateNumber(review.like_count)}
+                content={stripHtml(review.content)}
+                authorProfile={review.author.profile_image}
+                interactionIcon={review.expression}
+                starRateNum={review.rate}
+                authorName={review.author.nickname}
+                createdAt={moment(review.time).fromNow()}
+                onPress={
+                  review.artwork
+                    ? () =>
+                        props.navigation.navigate('ArtworkContent', {
+                          artwork: review.artwork,
+                          mode: 'review',
+                          review: review,
+                          from: 'MyProfile',
+                        })
+                    : () =>
+                        props.navigation.navigate('ExhibitionContent', {
+                          exhibition: review.exhibition,
+                          mode: 'review',
+                          review: review,
+                          from: 'MyProfile',
+                        })
+                }
+                type={review.artwork ? 'artwork' : 'exhibition'}
+                reviewTitle={review.title}
+              />
+            </>
+          );
+        })
       ) : (
         <ScrollView
           refreshControl={
@@ -132,7 +148,7 @@ const MyReviewScreen = props => {
           </Text>
         </ScrollView>
       )}
-    </View>
+    </ScrollView>
   );
 };
 

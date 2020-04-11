@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Image, TouchableOpacity, Text} from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {actionCreators as userActions} from '../../redux/modules/user';
 import ExhibitionLikeScreen from '../ExhibitionLikeScreen';
 import ArtworkLikeScreen from '../ArtworkLikeScreen';
 import ReviewLikeScreen from '../ReviewLikeScreen';
@@ -19,14 +20,27 @@ const MyProfileScreen = props => {
   // const navigationParams = props.navigation.state.params;
 
   const [index, setIndex] = useState(0);
+  const [myReviewsNum, setMyReviewsNum] = useState(0);
   const {
     like_exhibition_count,
     like_artwork_count,
     like_review_count,
+    id,
   } = useSelector(store => store.user.profile);
 
+  const dispatch = useDispatch();
+
+  const getReviewList = userId => {
+    return dispatch(userActions.getReviewList(userId));
+  };
+  useEffect(() => {
+    getReviewList(id).then(res => {
+      console.log(res);
+      setMyReviewsNum(res.length);
+    });
+  }, []);
   const _renderMyReviewRoute = () => {
-    return <MyReviewScreen navigattion={props.navigation} />;
+    return <MyReviewScreen navigation={props.navigation} />;
   };
 
   const _renderExhibitionRoute = () => {
@@ -81,7 +95,11 @@ const MyProfileScreen = props => {
     const {route} = props;
     if (route.key === 'myReview') {
       return (
-        <TabBarLabel title={'나의 감상'} number={12345} color={props.color} />
+        <TabBarLabel
+          title={'나의 감상'}
+          number={myReviewsNum}
+          color={props.color}
+        />
       );
     } else if (route.key === 'exhibition') {
       return (
