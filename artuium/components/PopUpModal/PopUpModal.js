@@ -7,7 +7,11 @@ const iosStatusBarHeight = getStatusBarHeight();
 
 const PopUpModal = ({navigation}) => {
   return (
-    <View style={[styles.container, {paddingTop: iosStatusBarHeight}]}>
+    <View
+      style={[
+        styles.container,
+        {paddingTop: deviceInfo.OS === 'ios' ? iosStatusBarHeight : 0},
+      ]}>
       <Text style={styles.title}>{navigation.state.params.popUpTitle}</Text>
       <Image
         source={{uri: navigation.state.params.popUpUri}}
@@ -37,9 +41,9 @@ const PopUpModal = ({navigation}) => {
 
 const styles = {
   container: {
+    flex: 1,
     width: deviceInfo.size.width,
     height: deviceInfo.size.height,
-    position: 'absolute',
     backgroundColor: '#c4c4c4',
   },
   title: {
