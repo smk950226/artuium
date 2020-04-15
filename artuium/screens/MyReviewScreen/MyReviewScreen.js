@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
+  FlatList,
   View,
   Text,
   ActivityIndicator,
@@ -86,47 +87,70 @@ const MyReviewScreen = props => {
     </View>
   ) : (
     <ScrollView style={([styles.container], {marginTop: -2})}>
-      {console.log(myReviews)}
       {myReviews && myReviews.length > 0 ? (
-        myReviews.map(review => {
-          return (
-            <>
-              <View style={{height: 16}} />
-              <AllReviewCard
-                cardLabel={getCardLabelFromReview(review)}
-                cardSubLabel={getCardSubLabelFromReview(review)}
-                cardImageUri={getImageUriFromReview(review)}
-                chatNum={abbreviateNumber(review.reply_count)}
-                likeNum={abbreviateNumber(review.like_count)}
-                content={stripHtml(review.content)}
-                authorProfile={review.author.profile_image}
-                interactionIcon={review.expression}
-                starRateNum={review.rate}
-                authorName={review.author.nickname}
-                createdAt={moment(review.time).fromNow()}
-                onPress={
-                  review.artwork
-                    ? () =>
-                        props.navigation.navigate('ArtworkContent', {
-                          artwork: review.artwork,
-                          mode: 'review',
-                          review: review,
-                          from: 'MyProfile',
-                        })
-                    : () =>
-                        props.navigation.navigate('ExhibitionContent', {
-                          exhibition: review.exhibition,
-                          mode: 'review',
-                          review: review,
-                          from: 'MyProfile',
-                        })
-                }
-                type={review.artwork ? 'artwork' : 'exhibition'}
-                reviewTitle={review.title}
-              />
-            </>
-          );
-        })
+        <FlatList
+          data={myReviews}
+          renderItem={({item}) => {
+            const review = item;
+            return (
+              <>
+                <View style={{height: 16}} />
+                <AllReviewCard
+                  cardLabel={getCardLabelFromReview(review)}
+                  cardSubLabel={getCardSubLabelFromReview(review)}
+                  cardImageUri={getImageUriFromReview(review)}
+                  chatNum={abbreviateNumber(review.reply_count)}
+                  likeNum={abbreviateNumber(review.like_count)}
+                  content={stripHtml(review.content)}
+                  authorProfile={review.author.profile_image}
+                  interactionIcon={review.expression}
+                  starRateNum={review.rate}
+                  authorName={review.author.nickname}
+                  createdAt={moment(review.time).fromNow()}
+                  onPress={
+                    review.artwork
+                      ? () =>
+                          props.navigation.navigate('ArtworkContent', {
+                            artwork: review.artwork,
+                            mode: 'review',
+                            review: review,
+                            from: 'MyProfile',
+                          })
+                      : () =>
+                          props.navigation.navigate('ExhibitionContent', {
+                            exhibition: review.exhibition,
+                            mode: 'review',
+                            review: review,
+                            from: 'MyProfile',
+                          })
+                  }
+                  type={review.artwork ? 'artwork' : 'exhibition'}
+                  reviewTitle={review.title}
+                />
+              </>
+            );
+          }}
+          numColumns={1}
+          keyExtractor={item => String(item.id)}
+          refreshing={isRefreshing}
+          onRefresh={refresh}
+          onEndReached={hasNextPage ? getReviewListMore : null}
+          onEndReachedThreshold={0.5}
+          bounces={true}
+          ListFooterComponent={
+            isLoadingMore ? (
+              <View
+                style={[
+                  styles.alignItemsCenter,
+                  styles.justifyContentCenter,
+                  styles.mt5,
+                  styles.py5,
+                ]}>
+                <ActivityIndicator size={'small'} color={'#000000'} />
+              </View>
+            ) : null
+          }
+        />
       ) : (
         <ScrollView
           refreshControl={
