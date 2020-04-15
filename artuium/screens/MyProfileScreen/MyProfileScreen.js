@@ -35,7 +35,6 @@ const MyProfileScreen = props => {
   };
   useEffect(() => {
     getReviewList(id).then(res => {
-      console.log(res);
       setMyReviewsNum(res.length);
     });
   }, []);
@@ -148,6 +147,7 @@ const MyProfileScreen = props => {
             {key: 'review', title: '감상'},
           ],
         }}
+        style={{backgroundColor: 'white'}}
         onIndexChange={setIndex}
         renderScene={SceneMap({
           myReview: _renderMyReviewRoute,
