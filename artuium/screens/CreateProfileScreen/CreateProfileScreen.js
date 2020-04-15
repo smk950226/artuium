@@ -56,7 +56,7 @@ const CreateProfileScreen = props => {
 
   const handleCheckNickname = checkingNickname => {
     let reg = /^[가-힣a-zA-Z0-9]{2,10}$/;
-    let invalidChar = /[~!@#$%^&*()_+|<>?:{}]/gi;
+    let invalidChar = /[~!@#$%^&*()_+|<>?:{} ]/gi;
     setIsValidNickname(reg.test(checkingNickname));
     if (!reg.test(checkingNickname)) {
       if (invalidChar.test(checkingNickname)) {
