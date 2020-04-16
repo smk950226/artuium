@@ -3,7 +3,7 @@ import {Text, View, TouchableOpacity, Dimensions} from 'react-native';
 
 const {width} = Dimensions.get('window');
 
-const StatusMessage = ({message, showMore, setShowMore}) => {
+const StatusMessage = ({message, showMore, setShowMore, setLineNum}) => {
   const [statusMessageLineNum, setStatusMessageLineNum] = useState(-1);
   return (
     <View>
@@ -20,6 +20,7 @@ const StatusMessage = ({message, showMore, setShowMore}) => {
         style={{...statusMessageStyle.dummyForLineNumText}}
         onTextLayout={({nativeEvent: {lines}}) => {
           setStatusMessageLineNum(lines.length);
+          setLineNum(lines.length);
         }}>
         {message}
       </Text>
