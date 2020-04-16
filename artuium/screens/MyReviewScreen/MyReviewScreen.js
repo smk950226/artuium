@@ -86,7 +86,7 @@ const MyReviewScreen = props => {
       <ActivityIndicator size={'small'} color={'#000'} />
     </View>
   ) : (
-    <ScrollView style={([styles.container], {marginTop: -2})}>
+    <ScrollView style={[styles.container]}>
       {myReviews && myReviews.length > 0 ? (
         <FlatList
           data={myReviews}
@@ -94,7 +94,6 @@ const MyReviewScreen = props => {
             const review = item;
             return (
               <>
-                <View style={{height: 16}} />
                 <AllReviewCard
                   cardLabel={getCardLabelFromReview(review)}
                   cardSubLabel={getCardSubLabelFromReview(review)}
@@ -127,6 +126,7 @@ const MyReviewScreen = props => {
                   type={review.artwork ? 'artwork' : 'exhibition'}
                   reviewTitle={review.title}
                 />
+                <View style={{height: 16}} />
               </>
             );
           }}

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Image, TouchableOpacity, Text} from 'react-native';
+import {Dimensions, Image, TouchableOpacity, Text, View} from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 import {useSelector, useDispatch} from 'react-redux';
 import {actionCreators as userActions} from '../../redux/modules/user';
@@ -15,6 +15,7 @@ import {
   LikedArtworkIcon,
   LikedReviewIcon,
 } from '../../assets/images/svgs';
+const {width, height} = Dimensions.get('window');
 
 const MyProfileScreen = props => {
   // const navigationParams = props.navigation.state.params;
@@ -74,7 +75,7 @@ const MyProfileScreen = props => {
           style={{
             color,
             ...myProfileScreenStyles.tabBarLabel,
-            marginTop: -8,
+            marginTop: -7,
           }}>
           {title}
         </Text>
@@ -82,7 +83,7 @@ const MyProfileScreen = props => {
           style={{
             color,
             ...myProfileScreenStyles.tabBarNumber,
-            marginTop: -8,
+            marginTop: -7,
           }}>
           {number}
         </Text>
@@ -156,18 +157,35 @@ const MyProfileScreen = props => {
           review: _renderReviewRoute,
         })}
         renderTabBar={props => (
-          <>
+          <View
+            style={{
+              width: width - 40,
+              marginHorizontal: 20,
+            }}>
             <TabBar
               {...props}
               activeColor={'#fa4d2c'}
               inactiveColor={'#c4c4c4'}
               bounces={false}
-              indicatorStyle={{backgroundColor: '#fa4d2c', height: 1}}
-              style={{backgroundColor: 'white', marginHorizontal: 20}}
+              indicatorStyle={{
+                backgroundColor: '#fa4d2c',
+                borderColor: '#fa4d2c',
+                height: 1,
+              }}
+              style={{
+                backgroundColor: 'white',
+                shadowOffset: {height: 0, width: 0},
+                shadowColor: 'transparent',
+                shadowOpacity: 0,
+                elevation: 0,
+                marginBottom: 15,
+                borderBottomColor: '#c4c4c4',
+                borderBottomWidth: 1,
+              }}
               renderIcon={props => getTabBarIcons(props)}
               renderLabel={props => getTabBarLabels(props)}
             />
-          </>
+          </View>
         )}
       />
     </>
