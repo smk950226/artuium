@@ -17,6 +17,7 @@ import RecommendArtworkScreen from '../screens/RecommendArtworkScreen';
 import AllArtworkScreen from '../screens/AllArtworkScreen';
 import FollowArtworkScreen from '../screens/FollowArtworkScreen';
 import SettingScreen from '../screens/SettingScreen/SettingScreen';
+import PopUpModal from '../components/PopUpModal/PopUpModal';
 
 const GeneralNavigation = createStackNavigator(
   {
@@ -106,6 +107,12 @@ const GeneralNavigation = createStackNavigator(
     },
     Setting: {
       screen: SettingScreen,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    PopUpModal: {
+      screen: PopUpModal,
       navigationOptions: {
         header: null,
       },

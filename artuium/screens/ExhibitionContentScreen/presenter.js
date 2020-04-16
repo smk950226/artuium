@@ -518,10 +518,8 @@ class ExhibitionContentScreen extends React.Component {
                                                             returnKeyType={'done'} 
                                                             placeholderTextColor={'#000000'}
                                                             multiline={true}
-                                                            maxLength={500}
                                                             textAlignVertical={'top'}
                                                         />
-                                                        <Text style={[styles.fontMedium, styles.font14, { position: 'absolute', bottom: 15, right: 25 }]}>{content.length}<Text style={[styles.grayD1]}>/500자</Text></Text>
                                                     </View>
                                                     <View style={[styles.mt30, styles.alignItemsCenter, { marginBottom: Platform.OS === 'ios' ? 70 + keyboardHeight : 70 }]}>
                                                         <TouchableWithoutFeedback onPress={initialMode === 'create' ? this.props.update : this.props.submit}>
