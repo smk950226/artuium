@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   ImageBackground,
   Modal,
+  TouchableOpacity,
 } from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import ExhibitionCard from '../../components/ExhibitionCard';
@@ -17,6 +18,8 @@ import ExhibitionCard2 from '../../components/ExhibitionCard2';
 import ExhibitionCard3 from '../../components/ExhibitionCard3';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
+import {exhibitionListIcon, exhibitionReviewIcon} from '../../assets/images';
+import {deviceInfo} from '../../util';
 
 const iosStatusBarHeight = getStatusBarHeight();
 
@@ -158,10 +161,10 @@ class ExhibitionScreen extends React.Component {
           scrollEventThrottle={16}>
           <View style={[styles.widthFull]}>
             <View>
-              <View style={[{width: width, height: 400}]}>
+              <View style={[{width: width, height: 516}]}>
                 {recommendedExhibitions && recommendedExhibitions.length > 0 ? (
                   <ScrollView
-                    style={[{width: width, height: 400}]}
+                    style={{height: 516}}
                     horizontal={true}
                     alwaysBounceVertical={false}
                     pagingEnabled={true}
@@ -200,7 +203,7 @@ class ExhibitionScreen extends React.Component {
                 ) : (
                   <View
                     style={[
-                      {width, height: 400},
+                      {width, height: 516},
                       styles.alignItemsCenter,
                       styles.justifyContentCenter,
                     ]}>
@@ -269,45 +272,26 @@ class ExhibitionScreen extends React.Component {
               </View>
             </View>
             <View
-              style={[
-                styles.center,
-                styles.bgWhite,
-                styles.exMenuShadow,
-                styles.px30,
-                {width: width, height: 90},
-              ]}>
-              <View
-                style={[
-                  styles.row,
-                  styles.spaceAround,
-                  styles.width80,
-                  styles.height200,
-                ]}>
-                <TouchableWithoutFeedback
-                  onPress={() =>
-                    this.props.navigation.navigate('AllExhibition')
-                  }>
-                  <View style={[styles.center]}>
-                    <Image
-                      style={{width: 24, height: 24}}
-                      source={require('../../assets/images/total.png')}
-                    />
-                    <Text style={[styles.font12, styles.mt5]}>전체 전시</Text>
-                  </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback
-                  onPress={() =>
-                    this.props.navigation.navigate('AllExhibitionReview')
-                  }>
-                  <View style={[styles.center]}>
-                    <Image
-                      style={{width: 24, height: 24}}
-                      source={require('../../assets/images/follow.png')}
-                    />
-                    <Text style={[styles.font12, styles.mt5]}>전시 감상</Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 18,
+                marginTop: 20,
+              }}>
+              <TouchableOpacity
+                style={style.exhibitionButton}
+                onPress={() => this.props.navigation.navigate('AllExhibition')}>
+                <Image source={exhibitionListIcon} />
+                <Text style={style.buttonText}>전시 목록</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={style.exhibitionButton}
+                onPress={() =>
+                  this.props.navigation.navigate('AllExhibitionReview')
+                }>
+                <Image source={exhibitionReviewIcon} />
+                <Text style={style.buttonText}>전시 감상</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <View style={[styles.pt30]}>
@@ -583,5 +567,23 @@ class ExhibitionScreen extends React.Component {
     );
   }
 }
+
+const style = {
+  exhibitionButton: {
+    width: deviceInfo.size.width / 2 - 28,
+    height: 40,
+    backgroundColor: '#F4F4F4',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  buttonText: {
+    marginLeft: 20,
+    fontWeight: '500',
+    fontSize: 14,
+    opacity: 0.5,
+  },
+};
 
 export default ExhibitionScreen;
