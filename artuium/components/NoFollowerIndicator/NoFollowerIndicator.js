@@ -26,7 +26,6 @@ const style = {
     borderColor: '#d7d7d7',
     alignSelf: 'center',
     alignItems: 'center',
-    marginLeft: 18,
     marginBottom: 20,
   },
   illust: {
