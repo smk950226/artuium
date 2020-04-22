@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {Dimensions, Image, TouchableOpacity, Text, View} from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector, useDispatch, useStore} from 'react-redux';
 import {actionCreators as userActions} from '../../redux/modules/user';
-import ExhibitionLikeScreen from '../ExhibitionLikeScreen';
-import ArtworkLikeScreen from '../ArtworkLikeScreen';
 import ReviewLikeScreen from '../ReviewLikeScreen';
-import MyReviewScreen from '../MyReviewScreen/MyReviewScreen';
+import MyReviewList from '../../components/MyReviewList/MyReviewList';
+import LikedExhibitionList from '../../components/LikedExhibitionList/LikedExhibitionList';
+import LikedArtworkList from '../../components/LikedArtworkList/LikedArtworkList';
 import MyProfileInfo from '../../components/MyProfileInfo/MyProfileInfo';
 import {settingIcon} from '../../assets/images';
 import {
@@ -15,11 +15,10 @@ import {
   LikedArtworkIcon,
   LikedReviewIcon,
 } from '../../assets/images/svgs';
+
 const {width, height} = Dimensions.get('window');
 
 const MyProfileScreen = props => {
-  // const navigationParams = props.navigation.state.params;
-
   const [index, setIndex] = useState(0);
   const [myReviewsNum, setMyReviewsNum] = useState(0);
   const {
@@ -30,25 +29,28 @@ const MyProfileScreen = props => {
   } = useSelector(store => store.user.profile);
 
   const dispatch = useDispatch();
+  const getState = useStore().getState;
 
   const getReviewList = userId => {
-    return dispatch(userActions.getReviewList(userId));
+    return userActions.getReviewList(userId)(dispatch, getState);
   };
+
   useEffect(() => {
     getReviewList(id).then(res => {
       setMyReviewsNum(res.length);
     });
   }, []);
+
   const _renderMyReviewRoute = () => {
-    return <MyReviewScreen navigation={props.navigation} />;
+    return <MyReviewList navigation={props.navigation} />;
   };
 
   const _renderExhibitionRoute = () => {
-    return <ExhibitionLikeScreen navigation={props.navigation} />;
+    return <LikedExhibitionList navigation={props.navigation} />;
   };
 
   const _renderArtworkRoute = () => {
-    return <ArtworkLikeScreen navigation={props.navigation} />;
+    return <LikedArtworkList navigation={props.navigation} />;
   };
 
   const _renderReviewRoute = () => {
@@ -178,7 +180,6 @@ const MyProfileScreen = props => {
                 shadowColor: 'transparent',
                 shadowOpacity: 0,
                 elevation: 0,
-                marginBottom: 15,
                 borderBottomColor: '#c4c4c4',
                 borderBottomWidth: 1,
               }}

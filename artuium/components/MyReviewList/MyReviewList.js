@@ -7,7 +7,7 @@ import {
   ScrollView,
   RefreshControl,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector, useDispatch, useStore} from 'react-redux';
 import {actionCreators as userActions} from '../../redux/modules/user';
 import styles from '../../styles';
 import {AllReviewCard} from '../../components/AllReviewCard/AllReviewCard';
@@ -21,7 +21,7 @@ import stripHtml from 'string-strip-html';
 import moment from 'moment';
 import 'moment/locale/ko';
 
-const MyReviewScreen = props => {
+const MyReviewList = props => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
@@ -31,18 +31,19 @@ const MyReviewScreen = props => {
 
   const profile = useSelector(store => store.user.profile);
   const dispatch = useDispatch();
+  const getState = useStore().getState;
 
   const getReviewList = userId => {
-    return dispatch(userActions.getReviewList(userId));
+    return userActions.getReviewList(userId)(dispatch, getState);
   };
   const getReviewListMore = (userId, page) => {
-    return dispatch(userActions.getReviewListMore(userId, page));
+    return userActions.getReviewListMore(userId, page)(dispatch, getState);
   };
 
   const getReviews = async () => {
     const reviews = await getReviewList(profile.id);
-    setIsLoading(false);
     setMyReviews(reviews);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -54,7 +55,7 @@ const MyReviewScreen = props => {
       if (!isLoadingMore) {
         setIsLoadingMore(true);
         const result = await getReviewListMore(profile.id, pageNum + 1);
-        if (moreReviews) {
+        if (result) {
           setMyReviews([...myReviews, ...result]);
           setPageNum(pageNum + 1);
           setIsLoadingMore(false);
@@ -89,6 +90,7 @@ const MyReviewScreen = props => {
     <ScrollView style={[styles.container]}>
       {myReviews && myReviews.length > 0 ? (
         <FlatList
+          style={{marginTop: 14}}
           data={myReviews}
           renderItem={({item}) => {
             const review = item;
@@ -113,14 +115,12 @@ const MyReviewScreen = props => {
                             artwork: review.artwork,
                             mode: 'review',
                             review: review,
-                            from: 'MyProfile',
                           })
                       : () =>
                           props.navigation.navigate('ExhibitionContent', {
                             exhibition: review.exhibition,
                             mode: 'review',
                             review: review,
-                            from: 'MyProfile',
                           })
                   }
                   type={review.artwork ? 'artwork' : 'exhibition'}
@@ -134,7 +134,7 @@ const MyReviewScreen = props => {
           keyExtractor={item => String(item.id)}
           refreshing={isRefreshing}
           onRefresh={refresh}
-          onEndReached={hasNextPage ? getReviewListMore : null}
+          onEndReached={hasNextPage ? getMoreReviews : null}
           onEndReachedThreshold={0.5}
           bounces={true}
           ListFooterComponent={
@@ -176,4 +176,4 @@ const MyReviewScreen = props => {
   );
 };
 
-export default MyReviewScreen;
+export default MyReviewList;
