@@ -3,6 +3,7 @@ import {FETCH_URL} from '../../config/urls';
 const SET_INITIAL_EXHIBITION = 'SET_INITIAL_EXHIBITION';
 
 function setInitialExhibition(initial) {
+  console.log(initial, 'initial');
   return {
     type: SET_INITIAL_EXHIBITION,
     initial,
@@ -14,7 +15,7 @@ function initialExhibition() {
     const {
       user: {token},
     } = getState();
-    fetch(`${FETCH_URL}/api/exhibition/init/`, {
+    fetch(`${FETCH_URL}/api/exhibition/init/?v=v2`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `JWT ${token}`,
@@ -409,7 +410,7 @@ function applySetInitialExhibition(state, action) {
     ...state,
     initialStatus: initial.status,
     newExhibitions: initial.new_exhibitions,
-    recommendedExhibitions: initial.recommended_exhibitions,
+    recommendedExhibitions: initial.new_exhibitions,
     hotExhibitions: initial.hot_exhibitions,
     pastExhibitions: initial.past_exhibitions,
   };

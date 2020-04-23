@@ -16,3 +16,4 @@ export const exhibitionListIcon = require('./exhibitionListIcon.png');
 export const exhibitionReviewIcon = require('./exhibitionReviewIcon.png');
 
 export const statisticIcon = require('./statistic-icon.png');
+export const filterDownArrow = require('./filterDownArrow.png');
