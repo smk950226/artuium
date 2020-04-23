@@ -58,6 +58,7 @@ class ExhibitionScreen extends React.Component {
     handleNotificationNewChange: PropTypes.func.isRequired,
     refresh: PropTypes.func.isRequired,
     refreshing: PropTypes.bool.isRequired,
+    isShowUp: PropTypes.bool.isRequired,
   };
 
   _handleScroll = event => {
@@ -86,6 +87,8 @@ class ExhibitionScreen extends React.Component {
     }
   };
 
+  componentWillUnmount = () => {};
+
   render() {
     let position = Animated.divide(this.state.scrollX, width);
     let position2 = Animated.divide(this.state.scrollX2, width);
@@ -97,6 +100,7 @@ class ExhibitionScreen extends React.Component {
       hotExhibitions,
       pastExhibitions,
       refreshing,
+      isShowUp,
     } = this.props;
     return (
       <View style={[styles.container]}>
@@ -296,19 +300,41 @@ class ExhibitionScreen extends React.Component {
           </View>
           <View style={[styles.pt30]}>
             <View>
-              <Text
-                style={[
-                  styles.fontBold,
-                  styles.font16,
-                  {
-                    color: '#2e2e2e',
-                    letterSpacing: -0.24,
-                    marginLeft: 19,
-                    marginBottom: 8,
-                  },
-                ]}>
-                새로운 전시
-              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginBottom: 8,
+                  marginLeft: 19,
+                }}>
+                <Text
+                  style={[
+                    styles.fontBold,
+                    styles.font16,
+                    {
+                      color: '#2e2e2e',
+                      letterSpacing: -0.24,
+                    },
+                  ]}>
+                  새로운 전시
+                </Text>
+                {isShowUp && (
+                  <View
+                    style={{
+                      width: 32,
+                      height: 17,
+                      borderRadius: 5,
+                      backgroundColor: '#FA4D2C',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginLeft: 10,
+                      marginTop: 3,
+                    }}>
+                    <Text style={{fontSize: 12, color: '#fff'}}>UP!</Text>
+                  </View>
+                )}
+              </View>
+
               <View style={{height: 280}}>
                 {newExhibitions && newExhibitions.length > 0 ? (
                   <ScrollView
