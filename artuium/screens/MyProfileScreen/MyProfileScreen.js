@@ -1,16 +1,17 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useImperativeHandle} from 'react';
 import {Dimensions, Image, TouchableOpacity, Text, View} from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 import {useSelector, useDispatch, useStore} from 'react-redux';
 import {actionCreators as userActions} from '../../redux/modules/user';
-import ReviewLikeScreen from '../ReviewLikeScreen';
-import MyReviewList from '../../components/MyReviewList/MyReviewList';
+import WrittenReviewList from '../../components/WrittenReviewList/WrittenReviewList';
 import LikedExhibitionList from '../../components/LikedExhibitionList/LikedExhibitionList';
 import LikedArtworkList from '../../components/LikedArtworkList/LikedArtworkList';
+import LikedReviewList from '../../components/LikedReviewList/LikedReviewList';
 import ProfileInfo from '../../components/ProfileInfo/ProfileInfo';
+import TabBarLabel from '../../components/TabBarLabel/TabBarLabel';
 import {settingIcon} from '../../assets/images';
 import {
-  MyReviewIcon,
+  WrittenReviewIcon,
   LikedExhibitionIcon,
   LikedArtworkIcon,
   LikedReviewIcon,
@@ -18,76 +19,30 @@ import {
 
 const {width, height} = Dimensions.get('window');
 
+const getTabBarIcons = props => {
+  const {route} = props;
+  if (route.key === 'myReview') {
+    return <WrittenReviewIcon color={props.color} />;
+  } else if (route.key === 'exhibition') {
+    return <LikedExhibitionIcon color={props.color} />;
+  } else if (route.key === 'artwork') {
+    return <LikedArtworkIcon color={props.color} />;
+  } else {
+    return <LikedReviewIcon color={props.color} />;
+  }
+};
+
 const MyProfileScreen = props => {
   const [index, setIndex] = useState(0);
   const [myReviewsNum, setMyReviewsNum] = useState(0);
 
   const profile = useSelector(store => store.user.profile);
-  const userId = profile.id;
 
   const dispatch = useDispatch();
   const getState = useStore().getState;
 
-  const getReviewList = userId => {
-    return userActions.getReviewList(userId)(dispatch, getState);
-  };
-
-  useEffect(() => {
-    getReviewList(userId).then(res => {
-      setMyReviewsNum(res.length);
-    });
-  }, []);
-
-  const _renderMyReviewRoute = () => {
-    return <MyReviewList navigation={props.navigation} />;
-  };
-
-  const _renderExhibitionRoute = () => {
-    return <LikedExhibitionList navigation={props.navigation} />;
-  };
-
-  const _renderArtworkRoute = () => {
-    return <LikedArtworkList navigation={props.navigation} />;
-  };
-
-  const _renderReviewRoute = () => {
-    return <ReviewLikeScreen navigation={props.navigation} />;
-  };
-
-  const getTabBarIcons = props => {
-    const {route} = props;
-    if (route.key === 'myReview') {
-      return <MyReviewIcon color={props.color} />;
-    } else if (route.key === 'exhibition') {
-      return <LikedExhibitionIcon color={props.color} />;
-    } else if (route.key === 'artwork') {
-      return <LikedArtworkIcon color={props.color} />;
-    } else {
-      return <LikedReviewIcon color={props.color} />;
-    }
-  };
-
-  const TabBarLabel = ({color, title, number}) => {
-    return (
-      <>
-        <Text
-          style={{
-            color,
-            ...myProfileScreenStyles.tabBarLabel,
-            marginTop: -7,
-          }}>
-          {title}
-        </Text>
-        <Text
-          style={{
-            color,
-            ...myProfileScreenStyles.tabBarNumber,
-            marginTop: -7,
-          }}>
-          {number}
-        </Text>
-      </>
-    );
+  const getReviewList = id => {
+    return userActions.getReviewList(id)(dispatch, getState);
   };
 
   const getTabBarLabels = props => {
@@ -116,7 +71,7 @@ const MyProfileScreen = props => {
           color={props.color}
         />
       );
-    } else {
+    } else if (route.key === 'review') {
       return (
         <TabBarLabel
           title={'감상'}
@@ -126,6 +81,36 @@ const MyProfileScreen = props => {
       );
     }
   };
+
+  const _renderMyReviewRoute = () => {
+    return (
+      <WrittenReviewList userId={profile.id} navigation={props.navigation} />
+    );
+  };
+
+  const _renderExhibitionRoute = () => {
+    return (
+      <LikedExhibitionList userId={profile.id} navigation={props.navigation} />
+    );
+  };
+
+  const _renderArtworkRoute = () => {
+    return (
+      <LikedArtworkList userId={profile.id} navigation={props.navigation} />
+    );
+  };
+
+  const _renderReviewRoute = () => {
+    return (
+      <LikedReviewList userId={profile.id} navigation={props.navigation} />
+    );
+  };
+
+  useEffect(() => {
+    getReviewList(profile.id).then(res => {
+      setMyReviewsNum(res.length);
+    });
+  }, []);
 
   return (
     <>
@@ -142,7 +127,7 @@ const MyProfileScreen = props => {
         onPress={() => {
           props.navigation.navigate('Setting', {});
         }}>
-        <Image source={settingIcon} />
+        <Image source={settingIcon} style={{width: 24}} />
       </TouchableOpacity>
       <TabView
         navigationState={{
@@ -201,20 +186,4 @@ const tabBarProps = {
   },
 };
 
-const myProfileScreenStyles = {
-  tabBarLabel: {
-    fontFamily: 'Noto Sans KR',
-    fontSize: 10,
-    lineHeight: 20,
-    letterSpacing: -0.24,
-    textAlign: 'center',
-  },
-  tabBarNumber: {
-    fontFamily: 'Noto Sans KR',
-    fontSize: 8,
-    lineHeight: 20,
-    letterSpacing: -0.24,
-    textAlign: 'center',
-  },
-};
 export default MyProfileScreen;

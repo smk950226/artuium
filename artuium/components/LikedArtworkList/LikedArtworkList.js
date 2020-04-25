@@ -10,7 +10,7 @@ import {
   RefreshControl,
   Dimensions,
 } from 'react-native';
-import {useDispatch, useSelector, useStore} from 'react-redux';
+import {useDispatch, useStore} from 'react-redux';
 import {actionCreators as artworkActions} from '../../redux/modules/artwork';
 import MasonryList from 'react-native-masonry-list';
 import styles from '../../styles';
@@ -18,14 +18,13 @@ import styles from '../../styles';
 const {width, height} = Dimensions.get('window');
 
 const LikedArtworkList = props => {
+  const {userId} = props;
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [artworks, setArtworks] = useState([]);
   const [pageNum, setPageNum] = useState(1);
-
-  const profile = useSelector(store => store.user.profile);
 
   const dispatch = useDispatch();
   const getState = useStore().getState;
@@ -45,7 +44,7 @@ const LikedArtworkList = props => {
   }, []);
 
   const getArtworks = async () => {
-    const result = await getArtworkLikeList(profile.id);
+    const result = await getArtworkLikeList(userId);
     let resultWithImage = result.map(item => {
       return {...item, URL: item.artwork.image};
     });
@@ -57,7 +56,7 @@ const LikedArtworkList = props => {
     if (hasNextPage) {
       if (!isLoadingMore) {
         setIsLoadingMore(true);
-        const result = await getArtworkLikeListMore(profile.id, pageNum + 1);
+        const result = await getArtworkLikeListMore(userId, pageNum + 1);
         console.log(result);
         if (result) {
           let resultWithImage = [];
@@ -85,7 +84,7 @@ const LikedArtworkList = props => {
     setHasNextPage(true);
     setIsRefreshing(true);
     setPageNum(1);
-    const result = await getArtworkLikeList(profile.id);
+    const result = await getArtworkLikeList(userId);
     let resultWithImage = result.map(item => {
       return {...item, URL: item.artwork.image};
     });

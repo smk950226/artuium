@@ -1,7 +1,7 @@
 import React from 'react';
 import Svg, {G, Path, Defs, ClipPath} from 'react-native-svg';
 
-export const MyReviewIcon = props => {
+export const WrittenReviewIcon = props => {
   return (
     <Svg width={36} height={36} viewBox="0 0 36 36" fill="none">
       <Path stroke="#fff" d="M.5.5h35v35H.5z" />

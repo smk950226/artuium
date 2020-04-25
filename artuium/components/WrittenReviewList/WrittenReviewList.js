@@ -7,10 +7,10 @@ import {
   ScrollView,
   RefreshControl,
 } from 'react-native';
-import {useSelector, useDispatch, useStore} from 'react-redux';
+import {useDispatch, useStore} from 'react-redux';
 import {actionCreators as userActions} from '../../redux/modules/user';
 import styles from '../../styles';
-import {AllReviewCard} from '../../components/AllReviewCard/AllReviewCard';
+import {AllReviewCard} from '../AllReviewCard/AllReviewCard';
 import {
   getCardLabelFromReview,
   getCardSubLabelFromReview,
@@ -21,15 +21,15 @@ import stripHtml from 'string-strip-html';
 import moment from 'moment';
 import 'moment/locale/ko';
 
-const MyReviewList = props => {
+const WrittenReviewList = props => {
+  const {userId} = props;
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [myReviews, setMyReviews] = useState([]);
+  const [writtenReviews, setWrittenReviews] = useState([]);
   const [pageNum, setPageNum] = useState(1);
 
-  const profile = useSelector(store => store.user.profile);
   const dispatch = useDispatch();
   const getState = useStore().getState;
 
@@ -41,8 +41,8 @@ const MyReviewList = props => {
   };
 
   const getReviews = async () => {
-    const reviews = await getReviewList(profile.id);
-    setMyReviews(reviews);
+    const reviews = await getReviewList(userId);
+    setWrittenReviews(reviews);
     setIsLoading(false);
   };
 
@@ -54,9 +54,9 @@ const MyReviewList = props => {
     if (hasNextPage) {
       if (!isLoadingMore) {
         setIsLoadingMore(true);
-        const result = await getReviewListMore(profile.id, pageNum + 1);
+        const result = await getReviewListMore(userId, pageNum + 1);
         if (result) {
-          setMyReviews([...myReviews, ...result]);
+          setWrittenReviews([...writtenReviews, ...result]);
           setPageNum(pageNum + 1);
           setIsLoadingMore(false);
         } else {
@@ -72,8 +72,8 @@ const MyReviewList = props => {
     setHasNextPage(true);
     setIsRefreshing(true);
     setPageNum(1);
-    const reviews = await getReviewList(profile.id);
-    setMyReviews(reviews);
+    const reviews = await getReviewList(userId);
+    setWrittenReviews(reviews);
     setIsRefreshing(false);
   };
 
@@ -88,10 +88,10 @@ const MyReviewList = props => {
     </View>
   ) : (
     <ScrollView style={[styles.container]}>
-      {myReviews && myReviews.length > 0 ? (
+      {writtenReviews && writtenReviews.length > 0 ? (
         <FlatList
           style={{marginTop: 14}}
-          data={myReviews}
+          data={writtenReviews}
           renderItem={({item}) => {
             const review = item;
             return (
@@ -176,4 +176,4 @@ const MyReviewList = props => {
   );
 };
 
-export default MyReviewList;
+export default WrittenReviewList;

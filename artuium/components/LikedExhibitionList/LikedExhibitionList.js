@@ -10,13 +10,15 @@ import {
   RefreshControl,
   Dimensions,
 } from 'react-native';
-import {useDispatch, useSelector, useStore} from 'react-redux';
+import {useDispatch, useStore} from 'react-redux';
 import {actionCreators as exhibitionActions} from '../../redux/modules/exhibition';
 import styles from '../../styles';
 
 const {width, height} = Dimensions.get('window');
 
 const LikedExhibitionList = props => {
+  const {userId} = props;
+
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
@@ -24,7 +26,6 @@ const LikedExhibitionList = props => {
   const [exhibitions, setExhibitions] = useState([]);
   const [pageNum, setPageNum] = useState(1);
 
-  const profile = useSelector(store => store.user.profile);
   const dispatch = useDispatch();
   const getState = useStore().getState;
 
@@ -39,7 +40,7 @@ const LikedExhibitionList = props => {
   };
 
   const getExhibitions = async () => {
-    const result = await getExhibitionLikeList(profile.id);
+    const result = await getExhibitionLikeList(userId);
     setExhibitions(result);
     setIsLoading(false);
   };
@@ -48,7 +49,7 @@ const LikedExhibitionList = props => {
     if (hasNextPage) {
       if (!isLoadingMore) {
         setIsLoadingMore(true);
-        const result = await getExhibitionLikeListMore(profile.id, pageNum + 1);
+        const result = await getExhibitionLikeListMore(userId, pageNum + 1);
         if (result) {
           setExhibitions([...exhibitions, ...result]);
           setPageNum(pageNum + 1);
@@ -70,7 +71,7 @@ const LikedExhibitionList = props => {
     setHasNextPage(true);
     setIsRefreshing(true);
     setPageNum(1);
-    const result = await getExhibitionLikeList(profile.id);
+    const result = await getExhibitionLikeList(userId);
     setExhibitions(result);
     setIsRefreshing(false);
   };
