@@ -7,13 +7,18 @@ import {
   Text,
   Image,
 } from 'react-native';
-import {useSelector} from 'react-redux';
 import StatusMessage from '../StatusMessage/StatusMessage';
 
 const {width} = Dimensions.get('window');
 
-const MyProfileInfo = () => {
-  const profile = useSelector(store => store.user.profile);
+const ProfileInfo = ({
+  profileImage,
+  backgroundImage,
+  nickname,
+  statusMessage,
+  followerCount,
+  followingCount,
+}) => {
   const [showMore, setShowMore] = useState(null);
   const [statusMessageLineNum, setStatusMessageLineNum] = useState(-1);
   const containerHeightAnimation = useRef(new Animated.Value(275)).current;
@@ -35,13 +40,13 @@ const MyProfileInfo = () => {
   return (
     <Animated.View
       style={{
-        ...myProfileInfoStyles.backgroundImage,
+        ...profileInfoStyles.backgroundImage,
         height: containerHeightAnimation,
       }}>
       <ImageBackground
         source={
-          profile.background_image
-            ? {uri: profile.background_image}
+          backgroundImage
+            ? {uri: backgroundImage}
             : require('../../assets/images/defaultProfileBackground.png')
         }
         style={{
@@ -51,15 +56,15 @@ const MyProfileInfo = () => {
         }}
         resizeMode={'cover'}
       />
-      <View style={{...myProfileInfoStyles.blackTransparentCover}} />
+      <View style={{...profileInfoStyles.blackTransparentCover}} />
       <Image
         source={
-          profile.profile_image
-            ? {uri: profile.profile_image}
+          profileImage
+            ? {uri: profileImage}
             : require('../../assets/images/empty_profile.png')
         }
         style={{
-          ...myProfileInfoStyles.profileImage,
+          ...profileInfoStyles.profileImage,
           marginTop:
             statusMessageLineNum == -1
               ? 148
@@ -68,12 +73,12 @@ const MyProfileInfo = () => {
               : 74,
         }}
       />
-      <Text style={{...myProfileInfoStyles.nickname, marginTop: 12}}>
-        {profile.nickname}
+      <Text style={{...profileInfoStyles.nickname, marginTop: 12}}>
+        {nickname}
       </Text>
-      {profile.status_message && (
+      {statusMessage && (
         <StatusMessage
-          message={profile.status_message}
+          message={statusMessage}
           showMore={showMore}
           setShowMore={setShowMore}
           setLineNum={setStatusMessageLineNum}
@@ -85,24 +90,22 @@ const MyProfileInfo = () => {
           marginBottom: 20,
           flexDirection: 'row',
         }}>
-        <Text style={{...myProfileInfoStyles.followText, marginRight: 5}}>
+        <Text style={{...profileInfoStyles.followText, marginRight: 5}}>
           팔로워
         </Text>
-        <Text style={{...myProfileInfoStyles.followText, marginRight: 15}}>
-          {profile.follower_count}
+        <Text style={{...profileInfoStyles.followText, marginRight: 15}}>
+          {followerCount}
         </Text>
-        <Text style={{...myProfileInfoStyles.followText, marginRight: 5}}>
+        <Text style={{...profileInfoStyles.followText, marginRight: 5}}>
           팔로잉
         </Text>
-        <Text style={{...myProfileInfoStyles.followText}}>
-          {profile.following_count}
-        </Text>
+        <Text style={{...profileInfoStyles.followText}}>{followingCount}</Text>
       </View>
     </Animated.View>
   );
 };
 
-const myProfileInfoStyles = {
+const profileInfoStyles = {
   backgroundImage: {
     width,
     paddingHorizontal: 25,
@@ -136,4 +139,4 @@ const myProfileInfoStyles = {
   },
 };
 
-export default MyProfileInfo;
+export default ProfileInfo;

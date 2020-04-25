@@ -7,7 +7,7 @@ import ReviewLikeScreen from '../ReviewLikeScreen';
 import MyReviewList from '../../components/MyReviewList/MyReviewList';
 import LikedExhibitionList from '../../components/LikedExhibitionList/LikedExhibitionList';
 import LikedArtworkList from '../../components/LikedArtworkList/LikedArtworkList';
-import MyProfileInfo from '../../components/MyProfileInfo/MyProfileInfo';
+import ProfileInfo from '../../components/ProfileInfo/ProfileInfo';
 import {settingIcon} from '../../assets/images';
 import {
   MyReviewIcon,
@@ -21,12 +21,9 @@ const {width, height} = Dimensions.get('window');
 const MyProfileScreen = props => {
   const [index, setIndex] = useState(0);
   const [myReviewsNum, setMyReviewsNum] = useState(0);
-  const {
-    like_exhibition_count,
-    like_artwork_count,
-    like_review_count,
-    id,
-  } = useSelector(store => store.user.profile);
+
+  const profile = useSelector(store => store.user.profile);
+  const userId = profile.id;
 
   const dispatch = useDispatch();
   const getState = useStore().getState;
@@ -36,7 +33,7 @@ const MyProfileScreen = props => {
   };
 
   useEffect(() => {
-    getReviewList(id).then(res => {
+    getReviewList(userId).then(res => {
       setMyReviewsNum(res.length);
     });
   }, []);
@@ -107,7 +104,7 @@ const MyProfileScreen = props => {
       return (
         <TabBarLabel
           title={'전시'}
-          number={like_exhibition_count}
+          number={profile.like_exhibition_count}
           color={props.color}
         />
       );
@@ -115,7 +112,7 @@ const MyProfileScreen = props => {
       return (
         <TabBarLabel
           title={'작품'}
-          number={like_artwork_count}
+          number={profile.like_artwork_count}
           color={props.color}
         />
       );
@@ -123,7 +120,7 @@ const MyProfileScreen = props => {
       return (
         <TabBarLabel
           title={'감상'}
-          number={like_review_count}
+          number={profile.like_review_count}
           color={props.color}
         />
       );
@@ -132,7 +129,14 @@ const MyProfileScreen = props => {
 
   return (
     <>
-      <MyProfileInfo />
+      <ProfileInfo
+        profileImage={profile.profile_image}
+        backgroundImage={profile.background_image}
+        nickname={profile.nickname}
+        statusMessage={profile.status_message}
+        followerCount={profile.follower_count}
+        followingCount={profile.following_count}
+      />
       <TouchableOpacity
         style={{position: 'absolute', top: 51, right: 15.91}}
         onPress={() => {
@@ -166,23 +170,7 @@ const MyProfileScreen = props => {
             }}>
             <TabBar
               {...props}
-              activeColor={'#fa4d2c'}
-              inactiveColor={'#c4c4c4'}
-              bounces={false}
-              indicatorStyle={{
-                backgroundColor: '#fa4d2c',
-                borderColor: '#fa4d2c',
-                height: 1,
-              }}
-              style={{
-                backgroundColor: 'white',
-                shadowOffset: {height: 0, width: 0},
-                shadowColor: 'transparent',
-                shadowOpacity: 0,
-                elevation: 0,
-                borderBottomColor: '#c4c4c4',
-                borderBottomWidth: 1,
-              }}
+              {...tabBarProps}
               renderIcon={props => getTabBarIcons(props)}
               renderLabel={props => getTabBarLabels(props)}
             />
@@ -191,6 +179,26 @@ const MyProfileScreen = props => {
       />
     </>
   );
+};
+
+const tabBarProps = {
+  activeColor: '#fa4d2c',
+  inactiveColor: '#c4c4c4',
+  bounces: false,
+  indicatorStyle: {
+    backgroundColor: '#fa4d2c',
+    borderColor: '#fa4d2c',
+    height: 1,
+  },
+  style: {
+    backgroundColor: 'white',
+    shadowOffset: {height: 0, width: 0},
+    shadowColor: 'transparent',
+    shadowOpacity: 0,
+    elevation: 0,
+    borderBottomColor: '#c4c4c4',
+    borderBottomWidth: 1,
+  },
 };
 
 const myProfileScreenStyles = {
