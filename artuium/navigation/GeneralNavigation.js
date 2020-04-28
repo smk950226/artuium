@@ -11,8 +11,7 @@ import SearchScreen from '../screens/SearchScreen';
 import ArtworkDetailScreen from '../screens/ArtworkDetailScreen';
 import ArtworkContentScreen from '../screens/ArtworkContentScreen';
 import AlertScreen from '../screens/AlertScreen';
-import OthersProfileScreen from '../screens/OthersProfileScreen';
-import LikeListScreen from '../screens/LikeListScreen';
+import OthersProfileScreen from '../screens/OthersProfileScreen/OthersProfileScreen';
 import RecommendArtworkScreen from '../screens/RecommendArtworkScreen';
 import AllArtworkScreen from '../screens/AllArtworkScreen';
 import FollowArtworkScreen from '../screens/FollowArtworkScreen';
@@ -65,12 +64,6 @@ const GeneralNavigation = createStackNavigator(
     },
     OthersProfile: {
       screen: OthersProfileScreen,
-      navigationOptions: ({screenProps, navigation}) => ({
-        header: null,
-      }),
-    },
-    LikeList: {
-      screen: LikeListScreen,
       navigationOptions: ({screenProps, navigation}) => ({
         header: null,
       }),

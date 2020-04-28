@@ -18,21 +18,24 @@ const ProfileInfo = ({
   statusMessage,
   followerCount,
   followingCount,
+  others,
 }) => {
   const [showMore, setShowMore] = useState(null);
   const [statusMessageLineNum, setStatusMessageLineNum] = useState(-1);
-  const containerHeightAnimation = useRef(new Animated.Value(275)).current;
+  const containerHeightAnimation = useRef(
+    new Animated.Value(275 + (others ? 30 : 0)),
+  ).current;
 
   useEffect(() => {
     if (showMore === null) return;
     else if (showMore) {
       Animated.timing(containerHeightAnimation, {
-        toValue: 235 + 20 * statusMessageLineNum,
+        toValue: 235 + (others ? 30 : 0) + 20 * statusMessageLineNum,
         duration: 200,
       }).start();
     } else {
       Animated.timing(containerHeightAnimation, {
-        toValue: 275,
+        toValue: 275 + (others ? 30 : 0),
         duration: 200,
       }).start();
     }
@@ -51,7 +54,9 @@ const ProfileInfo = ({
         }
         style={{
           position: 'absolute',
-          height: showMore ? 235 + 20 * statusMessageLineNum : 275,
+          height: showMore
+            ? 235 + (others ? 30 : 0) + 20 * statusMessageLineNum
+            : 275 + (others ? 30 : 0),
           width,
         }}
         resizeMode={'cover'}
@@ -67,10 +72,10 @@ const ProfileInfo = ({
           ...profileInfoStyles.profileImage,
           marginTop:
             statusMessageLineNum == -1
-              ? 148
+              ? 148 + (others ? 30 : 0)
               : statusMessageLineNum == 1
-              ? 99
-              : 74,
+              ? 99 + (others ? 30 : 0)
+              : 74 + (others ? 30 : 0),
         }}
       />
       <Text style={{...profileInfoStyles.nickname, marginTop: 12}}>
