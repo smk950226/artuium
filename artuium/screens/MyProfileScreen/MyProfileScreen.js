@@ -45,6 +45,10 @@ const MyProfileScreen = props => {
     return userActions.getReviewList(id)(dispatch, getState);
   };
 
+  const getProfile = userId => {
+    return userActions.getProfile(userId)(dispatch, getState);
+  };
+
   const getTabBarLabels = props => {
     const {route} = props;
     if (route.key === 'myReview') {
@@ -106,7 +110,8 @@ const MyProfileScreen = props => {
     );
   };
 
-  useEffect(() => {
+  useEffect(async () => {
+    await getProfile();
     getReviewList(profile.id).then(res => {
       setMyReviewsNum(res.length);
     });

@@ -7,7 +7,7 @@ import {
   View,
   Image,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector, useDispatch, useStore} from 'react-redux';
 import {actionCreators as userActions} from '../../redux/modules/user';
 import ImagePickerButton from '../../components/ImagePickerButton/ImagePickerButton';
 import EditNicknameDimmer from '../../components/EditNicknameDimmer/EditNicknameDimmer';
@@ -24,20 +24,19 @@ const EditProfileScreen = props => {
 
   const profile = useSelector(store => store.user.profile);
   const dispatch = useDispatch();
+  const getState = useStore().getState;
   const changeProfile = (
     nickname,
     statusMessage,
     profileImage,
     backgroundImage,
   ) => {
-    dispatch(
-      userActions.changeProfile(
-        nickname,
-        statusMessage,
-        profileImage,
-        backgroundImage,
-      ),
-    );
+    userActions.changeProfile(
+      nickname,
+      statusMessage,
+      profileImage,
+      backgroundImage,
+    )(dispatch, getState);
   };
 
   const onPressSaveButton = () => {

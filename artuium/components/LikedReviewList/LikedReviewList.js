@@ -45,7 +45,6 @@ const LikedReviewList = props => {
 
   const getReviews = async () => {
     const reviews = await getReviewLikeList(userId);
-    console.log(reviews);
     setReviews(reviews);
     setIsLoading(false);
   };

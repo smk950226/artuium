@@ -57,7 +57,6 @@ const LikedArtworkList = props => {
       if (!isLoadingMore) {
         setIsLoadingMore(true);
         const result = await getArtworkLikeListMore(userId, pageNum + 1);
-        console.log(result);
         if (result) {
           let resultWithImage = [];
           result.map(item => {
