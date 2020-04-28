@@ -59,7 +59,7 @@ const AllArtworkScreen = props => (
       ]}>
       <ArtiumHeader
         label={'새로운 감상'}
-        leftOnPress={() => props.navigation.pop()}
+        leftOnPress={() => props.navigation.replace('Root')}
         leftIcon={backArrow}
         rightIcon={filterIcon}
         rightOnPress={props.openFilterModal}
