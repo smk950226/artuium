@@ -17,3 +17,6 @@ export const exhibitionReviewIcon = require('./exhibitionReviewIcon.png');
 
 export const statisticIcon = require('./statistic-icon.png');
 export const filterDownArrow = require('./filterDownArrow.png');
+export const settingIcon = require('./settingIcon.png');
+export const cameraIcon = require('./cameraIcon.png');
+export const backArrowWhite = require('./backArrowWhite.png');

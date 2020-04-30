@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
-import ArtiumHeader from '../../components/ArtiumHeader/ArtiumHeader';
+import ArtuiumHeader from '../../components/ArtuiumHeader/ArtuiumHeader';
 import {backArrow} from '../../assets/images';
 import {
   getCardLabelFromReview,
@@ -54,7 +54,7 @@ class RecommendArtworkScreen extends Component {
           styles.container,
           {marginTop: deviceInfo.OS === 'ios' ? iosStatusBarHeight : 0},
         ]}>
-        <ArtiumHeader
+        <ArtuiumHeader
           label={'추천 감상'}
           leftOnPress={() => this.props.navigation.pop()}
           leftIcon={backArrow}
