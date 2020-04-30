@@ -44,6 +44,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     getNotificationNew: notificationNew => {
       dispatch(userActions.getNotificationNew(notificationNew));
     },
+    removeUpMark: () => {
+      return dispatch(userActions.removeUpMark());
+    },
   };
 };
 
