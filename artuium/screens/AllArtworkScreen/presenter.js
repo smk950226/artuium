@@ -17,7 +17,7 @@ import stripHtml from 'string-strip-html';
 import ArtuiumCard from '../../components/ArtuiumCard';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import Modal from 'react-native-modal';
-import ArtiumHeader from '../../components/ArtiumHeader/ArtiumHeader';
+import ArtuiumHeader from '../../components/ArtuiumHeader/ArtuiumHeader';
 import {backArrow, filterIcon} from '../../assets/images';
 import {AllReviewCard} from '../../components/AllReviewCard/AllReviewCard';
 import {
@@ -57,7 +57,7 @@ const AllArtworkScreen = props => (
         styles.container,
         {marginTop: deviceInfo.OS === 'ios' ? iosStatusBarHeight : 0},
       ]}>
-      <ArtiumHeader
+      <ArtuiumHeader
         label={'새로운 감상'}
         leftOnPress={() => props.navigation.pop()}
         leftIcon={backArrow}

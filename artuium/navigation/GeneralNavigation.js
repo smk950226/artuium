@@ -6,16 +6,16 @@ import TabContainer from './TabNavigation';
 import ExhibitionDetailScreen from '../screens/ExhibitionDetailScreen';
 import ExhibitionContentScreen from '../screens/ExhibitionContentScreen';
 import ExhibitionArtworkScreen from '../screens/ExhibitionArtworkScreen';
-import EditProfileScreen from '../screens/EditProfileScreen';
+import EditProfileScreen from '../screens/EditProfileScreen/EditProfileScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ArtworkDetailScreen from '../screens/ArtworkDetailScreen';
 import ArtworkContentScreen from '../screens/ArtworkContentScreen';
 import AlertScreen from '../screens/AlertScreen';
-import OthersProfileScreen from '../screens/OthersProfileScreen';
-import LikeListScreen from '../screens/LikeListScreen';
+import OthersProfileScreen from '../screens/OthersProfileScreen/OthersProfileScreen';
 import RecommendArtworkScreen from '../screens/RecommendArtworkScreen';
 import AllArtworkScreen from '../screens/AllArtworkScreen';
 import FollowArtworkScreen from '../screens/FollowArtworkScreen';
+import SettingScreen from '../screens/SettingScreen/SettingScreen';
 import PopUpModal from '../components/PopUpModal/PopUpModal';
 
 const GeneralNavigation = createStackNavigator(
@@ -68,12 +68,6 @@ const GeneralNavigation = createStackNavigator(
         header: null,
       }),
     },
-    LikeList: {
-      screen: LikeListScreen,
-      navigationOptions: ({screenProps, navigation}) => ({
-        header: null,
-      }),
-    },
     Alert: {
       screen: AlertScreen,
       navigationOptions: ({screenProps, navigation}) => ({
@@ -100,6 +94,12 @@ const GeneralNavigation = createStackNavigator(
     },
     FollowArtwork: {
       screen: FollowArtworkScreen,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    Setting: {
+      screen: SettingScreen,
       navigationOptions: {
         header: null,
       },
