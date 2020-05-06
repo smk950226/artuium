@@ -102,6 +102,7 @@ const Notice = props => (
                       ? width - 52
                       : (props.notice.image_width * 400) /
                         props.notice.image_height,
+                  borderRadius: 5,
                 },
               ]}
             />

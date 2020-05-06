@@ -105,7 +105,6 @@ class AlertScreen extends Component {
                   {route.title === '공지사항' && noticeNew && (
                     <View
                       style={{
-                        opacity: focused ? 1 : 0.4,
                         position: 'absolute',
                         top: 0,
                         right: -5,
@@ -119,7 +118,6 @@ class AlertScreen extends Component {
                   {route.title === '알림' && notificationNew && (
                     <View
                       style={{
-                        opacity: focused ? 1 : 0.4,
                         position: 'absolute',
                         top: 0,
                         right: -5,

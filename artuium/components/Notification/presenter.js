@@ -166,31 +166,30 @@ const Notification = props => (
                       source={{
                         uri: props.notification.reply.author.profile_image,
                       }}
-                      style={[styles.profileImage30]}
+                      style={{width: 24, height: 24, borderRadius: 12}}
                       resizeMode={'cover'}
                     />
                   ) : (
                     <Image
                       source={require('../../assets/images/empty_profile.png')}
-                      style={[styles.profileImage30]}
+                      style={{width: 24, height: 24, borderRadius: 12}}
                     />
                   )}
-                  <Text style={[styles.fontBold, styles.font14, styles.ml5]}>
-                    {props.notification.reply.author.nickname}
-                  </Text>
                   <Text
                     style={[
                       styles.fontBold,
-                      styles.font11,
-                      styles.grayBa,
+                      styles.font14,
                       styles.ml5,
-                    ]}>{`${props.notification.reply.time.slice(
-                    0,
-                    4,
-                  )}.${props.notification.reply.time.slice(
-                    5,
-                    7,
-                  )}.${props.notification.reply.time.slice(8, 10)}`}</Text>
+                      {
+                        fontSize: 13,
+                        lineHeight: 22,
+                        letterSpacing: -0.24,
+                        color: '#2E2E2E',
+                        opacity: 0.8,
+                      },
+                    ]}>
+                    {props.notification.reply.author.nickname}
+                  </Text>
                 </View>
                 <Text
                   style={[
@@ -214,7 +213,7 @@ const Notification = props => (
                           ? props.notification.review.exhibition.images[0].image
                           : '',
                     }}
-                    style={[styles.borderRadius10, {width: 100, height: 100}]}
+                    style={{width: 100, height: 100, borderRadius: 5}}
                     resizeMode={'cover'}
                   />
                 )}
@@ -226,7 +225,7 @@ const Notification = props => (
                         : '',
                     }}
                     style={[styles.widthFull]}
-                    style={[styles.borderRadius10, {width: 100, height: 100}]}
+                    style={{width: 100, height: 100, borderRadius: 5}}
                     resizeMode={'cover'}
                   />
                 )}
