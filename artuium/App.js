@@ -1,22 +1,23 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/es/integration/react';
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/es/integration/react';
 import configureStore from './redux/configureStore';
 import AppContainer from './components/AppContainer';
-import SplashScreen from 'react-native-splash-screen'
+import SplashScreen from 'react-native-splash-screen';
+import {AsyncStorage} from 'react-native';
 
-const { persistor, store } = configureStore();
+const {persistor, store} = configureStore();
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
 class App extends React.Component {
-  componentDidMount = async() => {
-    await sleep(2000)
-    SplashScreen.hide()
-  }
+  componentDidMount = async () => {
+    await sleep(2000);
+    SplashScreen.hide();
+    AsyncStorage.setItem('popup-close', '');
+  };
 
   render() {
     return (

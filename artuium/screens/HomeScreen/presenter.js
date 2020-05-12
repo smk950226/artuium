@@ -59,20 +59,25 @@ class HomeScreen extends Component {
         Authorization: `JWT ${this.props.token}`,
       },
     })
-      .then((res) => res.json())
-      .then((res) => {
-        AsyncStorage.getItem(`popup-${res.popup.id}`).then((idHide) => {
+      .then(res => res.json())
+      .then(res => {
+        AsyncStorage.getItem(`popup-${res.popup.id}`).then(idHide => {
           if (idHide === 'hide') {
           } else {
-            this.props.navigation.navigate('PopUpModal', {
-              popUpTitle: res.popup.title,
-              popUpUri: res.popup.image,
-              popUpId: res.popup.id,
+            AsyncStorage.getItem('popup-close').then(isClose => {
+              if (isClose === 'close') {
+              } else {
+                this.props.navigation.navigate('PopUpModal', {
+                  popUpTitle: res.popup.title,
+                  popUpUri: res.popup.image,
+                  popUpId: res.popup.id,
+                });
+              }
             });
           }
         });
       })
-      .catch((err) => console.log('err'));
+      .catch(err => console.log('err'));
   };
 
   render() {
