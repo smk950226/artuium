@@ -5,15 +5,9 @@ import {
   Image,
   Dimensions,
   TouchableWithoutFeedback,
-  ImageBackground,
-  Modal,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
-import StarRating from 'react-native-star-rating';
-import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
-import FollowerList from '../FollowerList';
-import FollowingList from '../FollowingList';
 
 const {width, height} = Dimensions.get('window');
 
@@ -65,27 +59,6 @@ class ArtuiumCard4 extends Component {
       ],
     };
   }
-
-  _renderFollowerList = () => {
-    return <FollowerList user={this.props.review.author} />;
-  };
-
-  _renderFollowingList = () => {
-    return <FollowingList user={this.props.review.author} />;
-  };
-
-  _openFollowModal = mode => {
-    if (mode === 'follower') {
-      this.setState({
-        index: 0,
-      });
-    } else {
-      this.setState({
-        index: 1,
-      });
-    }
-    this.props.openFollowModal(mode);
-  };
 
   lastTap = null;
 

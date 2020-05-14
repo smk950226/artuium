@@ -26,7 +26,7 @@ class Container extends Component {
     super(props);
     const {
       review: {
-        author: {is_me, is_following, following_count, follower_count},
+        author: {is_me},
         is_liked,
         like_count,
         reply_count,
@@ -37,12 +37,7 @@ class Container extends Component {
       like_count,
       reply_count,
       is_me,
-      is_following,
-      follower_count,
-      following_count,
-      showProfileModal: false,
       mode: 'follower',
-      showFollowModal: false,
       isSubmitting: false,
       isReporting: false,
       isBlocking: false,
@@ -54,7 +49,7 @@ class Container extends Component {
     if (prevProps.review !== this.props.review) {
       const {
         review: {
-          author: {is_me, is_following, following_count, follower_count},
+          author: {is_me},
           is_liked,
           like_count,
           reply_count,
@@ -62,108 +57,10 @@ class Container extends Component {
       } = this.props;
       this.setState({
         is_me,
-        is_following,
-        following_count,
-        follower_count,
         is_liked,
         like_count,
         reply_count,
       });
-    }
-  };
-
-  _openProfileModal = () => {
-    this.setState({
-      showProfileModal: true,
-      showFollowModal: false,
-    });
-  };
-
-  _closeProfileModal = () => {
-    this.setState({
-      showProfileModal: false,
-    });
-  };
-
-  _openFollowModal = mode => {
-    this.setState({
-      showFollowModal: true,
-      showProfileModal: false,
-      mode,
-    });
-  };
-
-  _closeFollowModal = () => {
-    this.setState({
-      showFollowModal: false,
-      mode: 'follower',
-    });
-  };
-
-  _follow = async () => {
-    const {is_following, is_me, isSubmitting} = this.state;
-    const {
-      followUser,
-      review: {
-        author: {id},
-      },
-    } = this.props;
-    if (!isSubmitting) {
-      if (!is_me) {
-        if (!is_following) {
-          this.setState({
-            isSubmitting: true,
-          });
-          const result = await followUser(id);
-          if (result.status === 'ok') {
-            this.setState({
-              is_following: true,
-              isSubmitting: false,
-              follower_count: this.state.follower_count + 1,
-            });
-          } else if (result.error) {
-            this.setState({
-              isSubmitting: false,
-            });
-            Alert.alert(null, result.error);
-          } else {
-            this.setState({
-              isSubmitting: false,
-            });
-          }
-        }
-      }
-    }
-  };
-
-  _unfollow = async () => {
-    const {is_following, is_me, isSubmitting} = this.state;
-    const {
-      unfollowUser,
-      review: {
-        author: {id},
-      },
-    } = this.props;
-    if (!isSubmitting) {
-      if (!is_me) {
-        if (is_following) {
-          this.setState({
-            isSubmitting: true,
-          });
-          const result = await unfollowUser(id);
-          if (result.status === 'ok') {
-            this.setState({
-              is_following: false,
-              isSubmitting: false,
-              follower_count: this.state.follower_count - 1,
-            });
-          } else {
-            this.setState({
-              isSubmitting: false,
-            });
-          }
-        }
-      }
     }
   };
 
@@ -447,8 +344,6 @@ class Container extends Component {
             this.setState({
               isBlocking: false,
               hideDropdown: true,
-              showProfileModal: false,
-              showFollowModal: false,
             });
             this.props.handleChangeMode('list');
             this.props.addBlockUser(id);
@@ -456,8 +351,6 @@ class Container extends Component {
             this.setState({
               isBlocking: false,
               deleted: true,
-              showProfileModal: false,
-              showFollowModal: false,
             });
             this.props.handleChangeMode('list');
           }
@@ -466,8 +359,6 @@ class Container extends Component {
             this.setState({
               isBlocking: false,
               hideDropdown: true,
-              showProfileModal: false,
-              showFollowModal: false,
             });
             this.props.handleChangeMode('list');
             this.props.addBlockUser(id);
@@ -475,8 +366,6 @@ class Container extends Component {
             this.setState({
               isBlocking: false,
               deleted: true,
-              showProfileModal: false,
-              showFollowModal: false,
             });
             this.props.handleChangeMode('list');
           }
@@ -495,12 +384,6 @@ class Container extends Component {
       <ArtuiumCard5
         {...this.props}
         {...this.state}
-        openProfileModal={this._openProfileModal}
-        closeProfileModal={this._closeProfileModal}
-        openFollowModal={this._openFollowModal}
-        closeFollowModal={this._closeFollowModal}
-        follow={this._follow}
-        unfollow={this._unfollow}
         like={this._like}
         unlike={this._unlike}
         handleOption={this._handleOption}

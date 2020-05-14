@@ -27,19 +27,14 @@ class Container extends Component {
     const {
       reply,
       reply: {
-        author: {is_me, is_following, following_count, follower_count},
+        author: {is_me},
         reply_count,
       },
     } = props;
     this.state = {
       is_me,
-      is_following,
       isSubmitting: false,
-      showProfileModal: false,
-      following_count,
-      follower_count,
       mode: 'follower',
-      showFollowModal: false,
       page: 1,
       hasNextPage: true,
       isLoadingMore: false,
@@ -112,105 +107,6 @@ class Container extends Component {
             isLoadingMore: false,
             hasNextPage: false,
           });
-        }
-      }
-    }
-  };
-
-  _openProfileModal = () => {
-    this.setState({
-      showProfileModal: true,
-      showFollowModal: false,
-    });
-  };
-
-  _closeProfileModal = () => {
-    this.setState({
-      showProfileModal: false,
-    });
-  };
-
-  _openFollowModal = mode => {
-    this.setState({
-      showFollowModal: true,
-      showProfileModal: false,
-      mode,
-    });
-  };
-
-  _closeFollowModal = () => {
-    this.setState({
-      showFollowModal: false,
-      mode: 'follower',
-    });
-  };
-
-  _follow = async () => {
-    const {is_following, is_me, isSubmitting} = this.state;
-    const {
-      followUser,
-      initialReview,
-      reply: {
-        author: {id},
-      },
-    } = this.props;
-    if (!isSubmitting) {
-      if (!is_me) {
-        if (!is_following) {
-          this.setState({
-            isSubmitting: true,
-          });
-          const result = await followUser(id);
-          if (result.status === 'ok') {
-            this.setState({
-              is_following: true,
-              isSubmitting: false,
-              follower_count: this.state.follower_count + 1,
-            });
-            initialReview();
-          } else if (result.error) {
-            this.setState({
-              isSubmitting: false,
-            });
-            Alert.alert(null, result.error);
-          } else {
-            this.setState({
-              isSubmitting: false,
-            });
-          }
-        }
-      }
-    }
-  };
-
-  _unfollow = async () => {
-    const {is_following, is_me, isSubmitting} = this.state;
-    const {
-      unfollowUser,
-      initialReview,
-      reply: {
-        author: {id},
-      },
-    } = this.props;
-    if (!isSubmitting) {
-      if (!is_me) {
-        if (is_following) {
-          this.setState({
-            isSubmitting: true,
-          });
-          const result = await unfollowUser(id);
-          if (result.status === 'ok') {
-            this.setState({
-              is_following: false,
-              isSubmitting: false,
-              follower_count: this.state.follower_count - 1,
-            });
-            initialReview();
-          } else {
-            this.setState({
-              isSubmitting: false,
-            });
-          }
         }
       }
     }
@@ -492,16 +388,12 @@ class Container extends Component {
             this.setState({
               isBlocking: false,
               hideDropdown: true,
-              showProfileModal: false,
-              showFollowModal: false,
             });
             this.props.addBlockUser(id);
           } else {
             this.setState({
               isBlocking: false,
               deleted: true,
-              showProfileModal: false,
-              showFollowModal: false,
             });
           }
         } else if (result.error) {
@@ -509,16 +401,12 @@ class Container extends Component {
             this.setState({
               isBlocking: false,
               hideDropdown: true,
-              showProfileModal: false,
-              showFollowModal: false,
             });
             this.props.addBlockUser(id);
           } else {
             this.setState({
               isBlocking: false,
               deleted: true,
-              showProfileModal: false,
-              showFollowModal: false,
             });
           }
         } else {
@@ -539,12 +427,6 @@ class Container extends Component {
         {...this.state}
         reply={reply}
         replyListMore={this._replyListMore}
-        openProfileModal={this._openProfileModal}
-        closeProfileModal={this._closeProfileModal}
-        openFollowModal={this._openFollowModal}
-        closeFollowModal={this._closeFollowModal}
-        follow={this._follow}
-        unfollow={this._unfollow}
         reportUser={this._reportUser}
         handleOption={this._handleOption}
       />
