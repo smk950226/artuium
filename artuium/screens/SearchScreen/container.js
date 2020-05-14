@@ -9,8 +9,6 @@ class Container extends Component {
 
   state = {
     q: '',
-    focused: false,
-    artworks: [],
     exhibitions: [],
   };
 
@@ -21,28 +19,14 @@ class Container extends Component {
     const result = await this.props.search(q);
     if (result) {
       this.setState({
-        artworks: result.artworks,
         exhibitions: result.exhibitions,
       });
     }
   };
 
-  _onFocus = () => {
-    this.setState({
-      focused: true,
-    });
-  };
-
-  _onBlur = () => {
-    this.setState({
-      focused: false,
-    });
-  };
-
   _makeBlank = () => {
     this.setState({
       q: '',
-      artworks: [],
       exhibitions: [],
     });
   };
@@ -53,8 +37,6 @@ class Container extends Component {
         {...this.props}
         {...this.state}
         handleQChange={this._handleQChange}
-        onFocus={this._onFocus}
-        onBlur={this._onBlur}
         makeBlank={this._makeBlank}
       />
     );
