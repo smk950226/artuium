@@ -12,6 +12,8 @@ import StarRating from 'react-native-star-rating';
 import Stars from 'react-native-stars';
 import { StackActions, NavigationActions } from 'react-navigation';
 import Modal from "react-native-modal";
+import { screenEscapeIcon, chatNumIconGrey, heartNumIconGrey, writeReviewIcon } from '../../assets/images';
+import { deviceInfo, checkIsActiveExhibition } from '../../util';
 
 const iosStatusBarHeight = getStatusBarHeight()
 
@@ -184,75 +186,64 @@ class ExhibitionContentScreen extends React.Component {
         }
     }
 
+    renderDotLine = ()=>{
+        const dots =[]
+        for (let i =0; i<60; i++){
+            dots.push(<View style={{flex:1, backgroundColor:i%2 ?'#c4c4c4':'#fff'}}/>)
+        }
+        return <View style={{width:width-25,flexDirection:'row',height:1,alignSelf:'center',marginTop:38}}>
+            {dots}
+        </View>
+    }
+
     render(){
         const { exhibition, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from, blockReviewList, blockUserList, blockReplyList, to, showFilterModal, showFilterReplyModal, selectedReplyId, newReply } = this.props;
         const { initialMode, keyboardHeight } = this.state;
         return(
             exhibition ? (
                 <View style={[styles.container]}>
-                    <View style={[styles.alignItemsCenter, styles.px15, {height: 40, flexDirection: 'row-reverse', position: 'absolute', top: iosStatusBarHeight + 15, right: 0, zIndex: 99}]}>
-                        <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from) : ()=>this.props.navigation.goBack()}>
-                            <View style={[styles.transExitBtn]}>
-                                <Text style={[styles.fontBold, styles.font16, styles.white]}>나가기</Text>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </View>
+                    <TouchableWithoutFeedback onPress={()=>this.props.navigation.goBack()} >
+                        <View style={{position: 'absolute',width:36,height:36,borderRadius:18,backgroundColor:'#C4C4C4',left:13,top:42,zIndex:99,alignItems:'center',justifyContent:'center'}}>
+                            <Image
+                                source={screenEscapeIcon}
+                            />
+                        </View>
+                    </TouchableWithoutFeedback>
                     <ScrollView style={[styles.flex1]} bounces={false} showsVerticalScrollIndicator={false} ref={'scrollView'}>
-                        <ImageBackground resizeMode={'cover'} source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : '' : ''}} style={[Platform.OS === 'ios' ? styles.paddingIOS : null, styles.justifyContentEnd, {height: height*0.5}]}>
-                            <LinearGradient
-                                colors={['#00000000', '#000000']}
-                                style={[styles.pl30, styles.pb30, styles.justifyContentEnd, {height: height*0.3}]}
-                            >
-                                <View style={[styles.row, styles.mt10, styles.alignItemsCenter]}>
-                                    <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment_white.png')} />
-                                    <Text style={[styles.fontRegular, styles.font8, {color: '#fff', marginLeft: 4}]}>{abbreviateNumber(review_count)}</Text>
-                                    <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
-                                        <View style={[styles.row, styles.alignItemsCenter]}>
-                                            {is_liked ? (
-                                                <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like_active.png')} />
-                                            ) : (
-                                                <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like_white.png')} />
-
-                                            )}
-                                            <Text style={[styles.fontRegular, styles.font8, {color: '#fff', marginLeft: 4}]}>{abbreviateNumber(like_count)}</Text>
-                                        </View>
-                                    </TouchableWithoutFeedback>
-                                </View>
-                                <View style={[styles.flexWrap]}>
-                                    <Text style={[styles.fontBold, styles.font30, styles.white]}><Text style={[styles.fontBold, styles.font30, styles.yellow]}>{'전시 '}</Text>{exhibition.name}</Text>
-                                </View>
-                                <Text style={[styles.fontMedium, styles.font14, styles.white]}>{exhibition.gallery.name}, {`${exhibition.open_date.slice(0,4)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} ~ ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
-                            </LinearGradient>
+                        <ImageBackground resizeMode={'cover'} source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : '' : ''}} style={[Platform.OS === 'ios' ? styles.paddingIOS : null, styles.justifyContentEnd, {height: height*0.25}]}>
                         </ImageBackground>
-                        <View style={[styles.bgBlack, styles.px10, styles.pb10, styles.heightFull]}>
-                            <View style={[styles.bgWhite, styles.widthFull, {paddingBottom: 40, borderRadius: 5}]}>
-                                <View style={[styles.row, styles.justifyContentAround, styles.mt15]}>
+                        <View style={[styles.bgBlack, , styles.pb10, styles.heightFull]}>
+                            <View style={[styles.bgWhite, styles.widthFull, {paddingBottom: 40}]}>
+                                <View style={{marginTop:39,alignItems:'center'}}>
+                                    {
+                                        checkIsActiveExhibition(exhibition.open_date,exhibition.close_date) &&
+                                        <View style={{alignItems:'center',justifyContent:'center',height:21,backgroundColor:'#fa4d2c'}}>
+                                            <Text style={{color:'#fff',fontSize:14,fontWeight:'NotoSansKR-Regular',fontWeight:'500', letterSpacing:-0.24, marginHorizontal:4}}>진행 중인 전시</Text>
+                                        </View>
+                                    }
+                                    <Text style={{height:32,fontSize:24,fontFamily:'NotoSansKR-Bold',lineHeight:32, marginTop:5}}>{exhibition.name}</Text>
+                                    <Text style={{height:20,fontSize:14,fontFamily:'NotoSansKR-Regular',marginTop:5}}>{exhibition.gallery.name}, {`${exhibition.open_date.slice(0,4)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} ~ ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
+                                    <View style={{flexDirection:'row', marginTop:11,alignItems:'center'}}>
+                                        <Image
+                                         source={chatNumIconGrey}
+                                        />
+                                        <Text style={{marginRight:12,fontSize:13,lineHeight:20,fontFamily:'NotoSansKR-Regular',colro:'#2e2e2e',opacity:0.6}}> {abbreviateNumber(review_count)}</Text>
+                                        <Image
+                                            source={heartNumIconGrey}
+                                            style={{marginRight:6}}
+                                        />
+                                        <Text style={{fontSize:13,lineHeight:20,fontFamily:'NotoSansKR-Regular',colro:'#2e2e2e',opacity:0.6}}>{abbreviateNumber(like_count)}</Text>
+                                    </View>
+                                </View>
+                                {this.renderDotLine()}
+                                <View style={[styles.row, styles.mt15,{marginHorizontal:18}]}>
                                     <TouchableWithoutFeedback
                                         onPress={()=>this.setState({
                                             index: 0
                                         }
                                     )}>
-                                        <View style={[styles.alignItemsCenter, styles.flex6, styles.mr20, {height: 30, borderBottomWidth: 1}, this.state.index === 0 ? {borderBottomColor: '#064be6'} : {borderBottomColor: '#aaa'}]}>
-                                            <Text style={[styles.font14]}>정보</Text>
-                                        </View>
-                                    </TouchableWithoutFeedback>
-                                    {/* <TouchableWithoutFeedback style={[styles.flex1]} onPress={()=>this.props.navigation.navigate('ExhibitionDetail', { exhibition, from })}>   
-                                        <View >
-                                            <Image source={require('../../assets/images/arrow_down_exhibition.png')} style={[styles.upBtn]}/>
-                                        </View>
-                                    </TouchableWithoutFeedback> */}
-                                    <TouchableWithoutFeedback style={[styles.flex1]} onPress={(to === 'back') ? ()=>this.props.navigation.goBack(null) : ()=>this.props.navigation.dispatch(StackActions.reset({
-                                        index: 0,
-                                        actions: [NavigationActions.navigate({
-                                            routeName: 'ExhibitionDetail',
-                                            params: {
-                                                exhibition,
-                                                from
-                                            }
-                                        })]
-                                    }))}>   
-                                        <View >
-                                            <Image source={require('../../assets/images/arrow_down_exhibition.png')} style={[styles.upBtn]}/>
+                                        <View style={[styles.alignItemsCenter, {flex:1,height: 30, borderBottomWidth: 2}, this.state.index === 0 ? {borderBottomColor: '#2e2e2e'} : {borderBottomColor: '#aaa'}]}>
+                                            <Text style={[styles.font14,{color:'#000000',opacity:this.state.index===0?1:0.3}]}>정보</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
                                     <TouchableWithoutFeedback
@@ -260,43 +251,43 @@ class ExhibitionContentScreen extends React.Component {
                                             index: 1
                                         }
                                     )}>
-                                        <View style={[styles.alignItemsCenter, styles.flex6, styles.ml20, {height: 30, borderBottomWidth: 1}, this.state.index === 1 ? {borderBottomColor: '#064be6'} : {borderBottomColor: '#aaa'}]}>
-                                            <Text style={[styles.font14]}>감상</Text>
+                                        <View style={[styles.alignItemsCenter, {flex:1,height: 30, borderBottomWidth: 2}, this.state.index === 1 ? {borderBottomColor: '#2e2e2e'} : {borderBottomColor: '#aaa'}]}>
+                                            <Text style={[styles.font14,{color:'#000000',opacity:this.state.index===1?1:0.3}]}>감상</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
                                 </View>
                                 <View style={[styles.alignItemsCenter]}>
                                     {this.state.index === 0 ?
-                                        <View style={{width: width-80}}>
-                                            <View style={[styles.bgGrayf0, styles.py20, styles.px30, styles.mt15]}>
+                                        <>
+                                            <View style={[styles.bgGrayf0 ,{width:deviceInfo.size.width-36,paddingVertical:18, marginTop:17,paddingHorizontal:21}]}>
                                                 <View style={[styles.row]}>
-                                                    <Text style={[{width: 60}, styles.fontBold, styles.font14]}>전시 기간</Text>
+                                                    <Text style={[{width: 60, marginRight:20,fontWeight:'500'}, styles.fontRegular, styles.font14]}>전시 기간</Text>
                                                     <Text style={[styles.fontRegular, styles.font14, styles.ml10, { width: width - 180 }]}>{`${exhibition.open_date.slice(0,4)}.${exhibition.open_date.slice(5,7)}.${exhibition.open_date.slice(8,10)} - ${exhibition.close_date.slice(0,4)}.${exhibition.close_date.slice(5,7)}.${exhibition.close_date.slice(8,10)}`}</Text>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
-                                                    <Text style={[{width: 60}, styles.fontBold, styles.font14]}>전시 장소</Text>
+                                                    <Text style={[{width: 60, marginRight:20,  fontWeight:'500'}, styles.fontRegular, styles.font14]}>전시 장소</Text>
                                                     <View style={[styles.ml10]}>
                                                         <Text style={[styles.fontRegular, styles.font14, { width: width - 180 }]}>{exhibition.gallery.name}</Text>
                                                         <Text style={[styles.fontRegular, styles.font14, styles.mt5, { width: width - 180 }]}>{exhibition.gallery.address}</Text>
                                                     </View>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
-                                                    <Text style={[{width: 60}, styles.fontBold, styles.font14]}>관람 시간</Text>
+                                                    <Text style={[{width: 60, marginRight:20,  fontWeight:'500'}, styles.fontRegular, styles.font14]}>관람 시간</Text>
                                                     <Text style={[styles.fontRegular, styles.font14, styles.ml10, { width: width - 180 }]}>{`${exhibition.open_time.slice(0,5)} - ${exhibition.close_time.slice(0,5)}`}</Text>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
-                                                    <Text style={[{width: 60}, styles.fontBold, styles.font14]}>입장료</Text>
+                                                    <Text style={[{width: 60, marginRight:20,  fontWeight:'500'}, styles.fontRegular, styles.font14]}>입장료</Text>
                                                     <Text style={[styles.fontRegular, styles.font14, styles.ml10, { width: width - 180 }]}>{exhibition.fee}</Text>
                                                 </View>
                                                 <View style={[styles.row, styles.mt5]}>
-                                                    <Text style={[{width: 60}, styles.fontBold, styles.font14]}>휴관일</Text>
+                                                    <Text style={[{width: 60, marginRight:20,  fontWeight:'500'}, styles.fontRegular, styles.font14]}>휴관일</Text>
                                                     <Text style={[styles.fontRegular, styles.font14, styles.ml10, { width: width - 180 }]}>{exhibition.notopendate ? exhibition.notopendate : '없음'}</Text>
                                                 </View>
                                             </View>
-                                            <View style={[{marginTop: 25}]}>
+                                            <View style={[{marginTop: 25,width:width-50,alignSelf:'center'}]}>
                                                 <HTML html={exhibition.content} imagesMaxWidth={width} />
                                             </View>
-                                        </View>
+                                        </>
                                     :
                                         <View style={{width: width-20}}>
                                             {mode === 'list' && (
@@ -398,18 +389,18 @@ class ExhibitionContentScreen extends React.Component {
                                                                     </Fragment>
                                                                 ) : (
                                                                     <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('create')}>
-                                                                    <View style={[styles.center]}>
-                                                                    <Image source={require('../../assets/images/review_hide.png')} style={[{width: 60, height: 60, borderRadius: 30}, styles.mb10]} />
-                                                                        <Text style={[styles.textCenter, styles.fontMedium, styles.font12, {color: '#382a2a'}]}>리뷰를 작성하면{'\n'}통계를 볼 수 있습니다.</Text>
+                                                                    <View style={{width:width-36,paddingVertical:20,alignItems:'center',justifyContent:'center',backgroundColor:'#f1f1f1',borderRadius:5}}>
+                                                                        <Image source={writeReviewIcon} style={[{width: 60, height: 60, borderRadius: 30}, styles.mb10]} />
+                                                                        <Text style={[styles.textCenter, styles.fontMedium, styles.font13, {color: '#383838',opacity:0.5}]}>감상을 작성하면{'\n'}통계를 볼 수 있습니다.</Text>
                                                                     </View>
                                                                     </TouchableWithoutFeedback>
                                                                 )
                                                             )
                                                         ) : (
                                                             <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('create')}>
-                                                            <View style={[styles.center]}>
-                                                            <Image source={require('../../assets/images/review_hide.png')} style={[{width: 60, height: 60, borderRadius: 30}, styles.mb10]} />
-                                                                <Text style={[styles.textCenter, styles.fontMedium, styles.font12, {color: '#382a2a'}]}>리뷰를 작성하면{'\n'}통계를 볼 수 있습니다.</Text>
+                                                            <View style={{width:width-36,paddingVertical:20,alignItems:'center',justifyContent:'center',backgroundColor:'#f1f1f1',borderRadius:5}}>
+                                                                <Image source={writeReviewIcon} style={[{width: 60, height: 60, borderRadius: 30}, styles.mb10]} />
+                                                                <Text style={[styles.textCenter, styles.fontMedium, styles.font13, {color: '#383838',opacity:0.5}]}>감상을 작성하면{'\n'}통계를 볼 수 있습니다.</Text>
                                                             </View>
                                                             </TouchableWithoutFeedback>
                                                         )}

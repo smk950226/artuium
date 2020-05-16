@@ -15,3 +15,6 @@ export const filterIcon = require('./filterIcon.png');
 export const settingIcon = require('./settingIcon.png');
 export const cameraIcon = require('./cameraIcon.png');
 export const backArrowWhite = require('./backArrowWhite.png');
+
+export const screenEscapeIcon = require('./screenEscapeIcon.png');
+export const writeReviewIcon = require('./writeReviewIcon.png');

@@ -1,4 +1,4 @@
-import {Dimensions} from 'react-native';
+import {Dimensions, DatePickerAndroid} from 'react-native';
 
 export const deviceInfo = {
   OS: Platform.OS,
@@ -67,4 +67,14 @@ export const getCardSubLabelFromReview = review => {
       )}.${review.exhibition.close_date.slice(8, 10)} ${
         review.exhibition.gallery.name
       }`;
+};
+
+export const checkIsActiveExhibition = (openDate, closeDate) => {
+  const today = new Date();
+  const open = new Date(openDate);
+  const close = new Date(closeDate);
+  if (today < open || today > close) {
+    return false;
+  }
+  return true;
 };
