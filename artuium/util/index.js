@@ -70,7 +70,6 @@ export const getCardSubLabelFromReview = review => {
 };
 
 export const getGroupedExhibitionList = exhibitions => {
-  console.log(exhibitions, 'input');
   if (exhibitions.length === 0) {
     return [];
   }
@@ -97,6 +96,5 @@ export const getGroupedExhibitionList = exhibitions => {
     }
   }
 
-  console.log(groups, 'groupsgroups');
   return groups;
 };

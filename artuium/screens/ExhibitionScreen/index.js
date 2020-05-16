@@ -4,7 +4,6 @@ import {actionCreators as exhibitionActions} from '../../redux/modules/exhibitio
 import {actionCreators as userActions} from '../../redux/modules/user';
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(state, 'state');
   const {
     exhibition: {
       initialStatus,

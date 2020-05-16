@@ -12,7 +12,7 @@ const ExhibitionListCard = ({
   onPress,
 }) => {
   return (
-    <TouchableOpacity onpress={onPress} style={style.cardContainer}>
+    <TouchableOpacity onPress={onPress} style={style.cardContainer}>
       <Image
         source={{uri: imageUrl}}
         style={style.cardImage}
@@ -58,7 +58,7 @@ const style = {
     color: '#2e2e2e',
     fontSize: 15,
     fontWeight: '500',
-    lettterSpacing: -0.24,
+    letterSpacing: -0.24,
     lineHeight: 20,
   },
   galleryName: {
@@ -66,7 +66,7 @@ const style = {
     color: '#2e2e2e',
     opacity: 0.5,
     lineHeight: 20,
-    lettterSpacing: -0.24,
+    letterSpacing: -0.24,
     maxWidth: '100%',
   },
   openTerm: {
@@ -74,7 +74,7 @@ const style = {
     color: '#2e2e2e',
     opacity: 0.5,
     lineHeight: 20,
-    lettterSpacing: -0.24,
+    letterSpacing: -0.24,
     maxWidth: '100%',
   },
 };

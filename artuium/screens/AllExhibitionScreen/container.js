@@ -98,7 +98,6 @@ class Container extends Component {
           region.value,
           page + 1,
         );
-        console.log(result, '결과결과');
         if (result) {
           await this.setState({
             page: this.state.page + 1,
@@ -132,7 +131,6 @@ class Container extends Component {
       scale.value,
       region.value,
     );
-    console.log(exhibitions, 'exhibitions');
     this.setState({
       exhibitions,
       refreshing: false,

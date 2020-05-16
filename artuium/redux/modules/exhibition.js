@@ -3,7 +3,6 @@ import {FETCH_URL} from '../../config/urls';
 const SET_INITIAL_EXHIBITION = 'SET_INITIAL_EXHIBITION';
 
 function setInitialExhibition(initial) {
-  console.log(initial, 'initial');
   return {
     type: SET_INITIAL_EXHIBITION,
     initial,
