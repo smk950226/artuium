@@ -68,3 +68,33 @@ export const getCardSubLabelFromReview = review => {
         review.exhibition.gallery.name
       }`;
 };
+
+export const getGroupedExhibitionList = exhibitions => {
+  if (exhibitions.length === 0) {
+    return [];
+  }
+  if (exhibitions.length === 1) {
+    return [exhibitions];
+  }
+
+  const groups = [];
+  let group = [];
+  for (let i = 0; i < exhibitions.length; i++) {
+    if (i === 0) {
+      group.push(exhibitions[i]);
+      continue;
+    }
+    if (i % 2 === 1) {
+      group.push(exhibitions[i]);
+      groups.push(group);
+      group = [];
+    } else {
+      group.push(exhibitions[i]);
+      if (exhibitions.length - 1 === i) {
+        groups.push(group);
+      }
+    }
+  }
+
+  return groups;
+};

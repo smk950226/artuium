@@ -42,10 +42,7 @@ class RecommendArtworkScreen extends Component {
     this.state = {
       isArtworkTabActive: false,
       index: 0,
-      routes: [
-        {key: 'first', title: '전시'},
-        {key: 'second', title: '작품'},
-      ],
+      routes: [{key: 'first', title: '전시'}, {key: 'second', title: '작품'}],
     };
   }
 

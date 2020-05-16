@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   ImageBackground,
   Modal,
+  TouchableOpacity,
 } from 'react-native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import ExhibitionCard from '../../components/ExhibitionCard';
@@ -17,6 +18,8 @@ import ExhibitionCard2 from '../../components/ExhibitionCard2';
 import ExhibitionCard3 from '../../components/ExhibitionCard3';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
+import {exhibitionListIcon, exhibitionReviewIcon} from '../../assets/images';
+import {deviceInfo} from '../../util';
 
 const iosStatusBarHeight = getStatusBarHeight();
 
@@ -55,6 +58,7 @@ class ExhibitionScreen extends React.Component {
     handleNotificationNewChange: PropTypes.func.isRequired,
     refresh: PropTypes.func.isRequired,
     refreshing: PropTypes.bool.isRequired,
+    isShowUp: PropTypes.bool.isRequired,
   };
 
   _handleScroll = event => {
@@ -83,6 +87,8 @@ class ExhibitionScreen extends React.Component {
     }
   };
 
+  componentWillUnmount = () => {};
+
   render() {
     let position = Animated.divide(this.state.scrollX, width);
     let position2 = Animated.divide(this.state.scrollX2, width);
@@ -94,6 +100,7 @@ class ExhibitionScreen extends React.Component {
       hotExhibitions,
       pastExhibitions,
       refreshing,
+      isShowUp,
     } = this.props;
     return (
       <View style={[styles.container]}>
@@ -158,10 +165,10 @@ class ExhibitionScreen extends React.Component {
           scrollEventThrottle={16}>
           <View style={[styles.widthFull]}>
             <View>
-              <View style={[{width: width, height: 400}]}>
+              <View style={[{width: width, height: 516}]}>
                 {recommendedExhibitions && recommendedExhibitions.length > 0 ? (
                   <ScrollView
-                    style={[{width: width, height: 400}]}
+                    style={{height: 516}}
                     horizontal={true}
                     alwaysBounceVertical={false}
                     pagingEnabled={true}
@@ -200,7 +207,7 @@ class ExhibitionScreen extends React.Component {
                 ) : (
                   <View
                     style={[
-                      {width, height: 400},
+                      {width, height: 516},
                       styles.alignItemsCenter,
                       styles.justifyContentCenter,
                     ]}>
@@ -269,174 +276,65 @@ class ExhibitionScreen extends React.Component {
               </View>
             </View>
             <View
-              style={[
-                styles.center,
-                styles.bgWhite,
-                styles.exMenuShadow,
-                styles.px30,
-                {width: width, height: 90},
-              ]}>
-              <View
-                style={[
-                  styles.row,
-                  styles.spaceAround,
-                  styles.width80,
-                  styles.height200,
-                ]}>
-                <TouchableWithoutFeedback
-                  onPress={() =>
-                    this.props.navigation.navigate('AllExhibition')
-                  }>
-                  <View style={[styles.center]}>
-                    <Image
-                      style={{width: 24, height: 24}}
-                      source={require('../../assets/images/total.png')}
-                    />
-                    <Text style={[styles.font12, styles.mt5]}>전체 전시</Text>
-                  </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback
-                  onPress={() =>
-                    this.props.navigation.navigate('AllExhibitionReview')
-                  }>
-                  <View style={[styles.center]}>
-                    <Image
-                      style={{width: 24, height: 24}}
-                      source={require('../../assets/images/follow.png')}
-                    />
-                    <Text style={[styles.font12, styles.mt5]}>전시 감상</Text>
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 18,
+                marginTop: 20,
+              }}>
+              <TouchableOpacity
+                style={style.exhibitionButton}
+                onPress={() => this.props.navigation.navigate('AllExhibition')}>
+                <Image source={exhibitionListIcon} />
+                <Text style={style.buttonText}>전시 목록</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={style.exhibitionButton}
+                onPress={() =>
+                  this.props.navigation.navigate('AllExhibitionReview')
+                }>
+                <Image source={exhibitionReviewIcon} />
+                <Text style={style.buttonText}>전시 감상</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <View style={[styles.pt30]}>
             <View>
-              <View style={[styles.ml15, styles.mb10]}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginBottom: 8,
+                  marginLeft: 19,
+                }}>
                 <Text
                   style={[
-                    styles.fontMedium,
-                    styles.font15,
-                    {color: '#a7a7a7'},
+                    styles.fontBold,
+                    styles.font16,
+                    {
+                      color: '#2e2e2e',
+                      letterSpacing: -0.24,
+                    },
                   ]}>
-                  당신을 위한 추천
+                  새로운 전시
                 </Text>
-                <Text
-                  style={[styles.fontBold, styles.font20, {color: '#222222'}]}>
-                  추천하는 전시
-                </Text>
-              </View>
-              <ImageBackground
-                source={require('../../assets/images/gradient_small.png')}
-                style={[{width}]}>
-                <View style={[{height: 220}]}>
-                  {recommendedExhibitions &&
-                  recommendedExhibitions.length > 0 ? (
-                    <ScrollView
-                      horizontal={true}
-                      alwaysBounceVertical={false}
-                      pagingEnabled={true}
-                      showsHorizontalScrollIndicator={false}
-                      onScroll={Animated.event([
-                        {
-                          nativeEvent: {
-                            contentOffset: {
-                              x: this.state.scrollX2,
-                            },
-                          },
-                        },
-                      ])}
-                      scrollEventThrottle={16}>
-                      {recommendedExhibitions.map((exhibition, index) => {
-                        return (
-                          <ExhibitionCard
-                            from={'Exhibition'}
-                            key={index}
-                            exhibition={exhibition}
-                            navigation={this.props.navigation}
-                          />
-                        );
-                      })}
-                    </ScrollView>
-                  ) : (
-                    <View
-                      style={[
-                        {width, height: '100%'},
-                        styles.alignItemsCenter,
-                        styles.justifyContentCenter,
-                      ]}>
-                      <Text
-                        style={[
-                          styles.fontMedium,
-                          styles.font15,
-                          styles.mt40,
-                          styles.grayA7,
-                          styles.textCenter,
-                        ]}>
-                        전시가 없습니다.
-                      </Text>
-                    </View>
-                  )}
-                </View>
-                <View style={[styles.alignItemsCenter, {width: width}]}>
-                  <View style={[{flexDirection: 'row'}]}>
-                    {recommendedExhibitions && recommendedExhibitions.length > 0
-                      ? recommendedExhibitions.map((_, ind) => {
-                          let opacity2 = position2.interpolate({
-                            inputRange: [ind - 1, ind, ind + 1],
-                            outputRange: [0, 1, 0],
-                            extrapolate: 'clamp',
-                          });
-                          return (
-                            <View
-                              key={ind}
-                              style={[
-                                styles.sliderDotWhiteEmptyLg,
-                                styles.center,
-                                {margin: 4},
-                              ]}>
-                              <Animated.View
-                                style={[
-                                  styles.sliderDotWhiteLg,
-                                  {opacity: opacity2},
-                                ]}
-                              />
-                            </View>
-                          );
-                        })
-                      : dummyList.map((_, i) => {
-                          let opacity = position.interpolate({
-                            inputRange: [i - 1, i, i + 1],
-                            outputRange: [0, 1, 0],
-                            extrapolate: 'clamp',
-                          });
-                          return (
-                            <View
-                              key={i}
-                              style={[
-                                styles.sliderDotWhiteEmpty,
-                                styles.center,
-                                {marginRight: 6},
-                              ]}>
-                              <Animated.View
-                                style={[styles.sliderDotWhite, {opacity}]}
-                              />
-                            </View>
-                          );
-                        })}
+                {isShowUp && (
+                  <View
+                    style={{
+                      width: 32,
+                      height: 17,
+                      borderRadius: 5,
+                      backgroundColor: '#FA4D2C',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginLeft: 10,
+                      marginTop: 3,
+                    }}>
+                    <Text style={{fontSize: 12, color: '#fff'}}>UP!</Text>
                   </View>
-                </View>
-                <View style={[{height: 40}]} />
-              </ImageBackground>
-            </View>
-            <View style={styles.line} />
-            <View>
-              <View style={[styles.ml15, styles.mb10]}>
-                <Text
-                  style={[styles.fontBold, styles.font20, {color: '#222222'}]}>
-                  새로 열린 전시
-                </Text>
+                )}
               </View>
+
               <View style={{height: 280}}>
                 {newExhibitions && newExhibitions.length > 0 ? (
                   <ScrollView
@@ -478,20 +376,19 @@ class ExhibitionScreen extends React.Component {
             </View>
             <View style={styles.line} />
             <View>
-              <View style={[styles.ml15, styles.mb10]}>
-                <Text
-                  style={[
-                    styles.fontMedium,
-                    styles.font15,
-                    {color: '#a7a7a7'},
-                  ]}>
-                  아틔움이 주목하는
-                </Text>
-                <Text
-                  style={[styles.fontBold, styles.font20, {color: '#222222'}]}>
-                  핫한 전시
-                </Text>
-              </View>
+              <Text
+                style={[
+                  styles.fontBold,
+                  {
+                    color: '#2e2e2e',
+                    letterSpacing: -0.24,
+                    marginLeft: 19,
+                    marginBottom: 8,
+                    fontSize: 16,
+                  },
+                ]}>
+                이번 주 인기 전시
+              </Text>
               <View style={{height: 280}}>
                 {hotExhibitions && hotExhibitions.length > 0 ? (
                   <ScrollView
@@ -531,57 +428,29 @@ class ExhibitionScreen extends React.Component {
                 )}
               </View>
             </View>
-            <View style={[styles.bgGrayEb]}>
-              <View style={[styles.ml15, styles.mb10, {marginTop: 35}]}>
-                <Text
-                  style={[styles.fontBold, styles.font20, {color: '#222222'}]}>
-                  최근 지나친 전시
-                </Text>
-              </View>
-              <View style={{height: 280}}>
-                {pastExhibitions && pastExhibitions.length > 0 ? (
-                  <ScrollView
-                    contentContainerStyle={[styles.pl15]}
-                    horizontal={true}
-                    alwaysBounceVertical={false}
-                    showsHorizontalScrollIndicator={false}>
-                    {pastExhibitions.map((exhibition, index) => {
-                      return (
-                        <ExhibitionCard2
-                          from={'Exhibition'}
-                          key={index}
-                          exhibition={exhibition}
-                          navigation={this.props.navigation}
-                        />
-                      );
-                    })}
-                  </ScrollView>
-                ) : (
-                  <View
-                    style={[
-                      {width, height: '100%'},
-                      styles.alignItemsCenter,
-                      styles.justifyContentCenter,
-                    ]}>
-                    <Text
-                      style={[
-                        styles.fontMedium,
-                        styles.font15,
-                        styles.mt40,
-                        styles.grayA7,
-                        styles.textCenter,
-                      ]}>
-                      전시가 없습니다.
-                    </Text>
-                  </View>
-                )}
-              </View>
-            </View>
           </View>
         </ScrollView>
       </View>
     );
   }
 }
+
+const style = {
+  exhibitionButton: {
+    width: deviceInfo.size.width / 2 - 28,
+    height: 40,
+    backgroundColor: '#F4F4F4',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  buttonText: {
+    marginLeft: 20,
+    fontWeight: '500',
+    fontSize: 14,
+    opacity: 0.5,
+  },
+};
 
 export default ExhibitionScreen;

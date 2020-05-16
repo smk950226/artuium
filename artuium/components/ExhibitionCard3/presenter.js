@@ -31,7 +31,7 @@ const ExhibitionCard3 = props => (
           : '',
       }}
       style={[
-        {width: width, height: 400, zIndex: 999},
+        {width: width, height: 516, zIndex: 999},
         styles.justifyContentEnd,
       ]}
       blurRadius={20}>
