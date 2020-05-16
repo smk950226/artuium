@@ -367,6 +367,12 @@ const AllExhibitionScreen = props => {
                   galleryName={item[0].gallery.name}
                   openDate={item[0].open_date}
                   closeDate={item[0].close_date}
+                  onPress={() =>
+                    props.navigation.navigate('ExhibitionDetail', {
+                      exhibition: item[0],
+                      from: props.from,
+                    })
+                  }
                 />
 
                 {item[1] && (
@@ -376,6 +382,12 @@ const AllExhibitionScreen = props => {
                     galleryName={item[1].gallery.name}
                     openDate={item[1].open_date}
                     closeDate={item[1].close_date}
+                    onPress={() =>
+                      props.navigation.navigate('ExhibitionDetail', {
+                        exhibition: item[1],
+                        from: props.from,
+                      })
+                    }
                   />
                 )}
               </View>
