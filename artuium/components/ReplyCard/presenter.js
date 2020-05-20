@@ -44,7 +44,6 @@ class ReplyCard extends Component {
     hasNextPage: PropTypes.bool.isRequired,
     selectReply: PropTypes.func.isRequired,
     selectedReply: PropTypes.object,
-    follower_count: PropTypes.number.isRequired,
     mode: PropTypes.string.isRequired,
     reportUser: PropTypes.func.isRequired,
     handleOption: PropTypes.func.isRequired,
