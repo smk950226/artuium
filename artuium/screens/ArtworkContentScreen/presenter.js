@@ -12,6 +12,8 @@ import StarRating from 'react-native-star-rating';
 import Stars from 'react-native-stars';
 import { StackActions, NavigationActions } from 'react-navigation';
 import Modal from "react-native-modal";
+import { screenEscapeIcon, chatNumIconGrey, heartNumIconGrey } from '../../assets/images';
+import { checkIsActiveExhibition, deviceInfo } from '../../util';
 
 const iosStatusBarHeight = getStatusBarHeight()
 
@@ -168,6 +170,16 @@ class ArtworkContentScreen extends React.Component {
         })
     }
 
+    renderDotLine = ()=>{
+        const dots =[]
+        for (let i =0; i<60; i++){
+            dots.push(<View style={{flex:1, backgroundColor:i%2 ?'#c4c4c4':'#fff'}}/>)
+        }
+        return <View style={{width:width-25,flexDirection:'row',height:1,alignSelf:'center',marginTop:38}}>
+            {dots}
+        </View>
+    }
+
     _goUpdate = (review) => {
         this.setState({
             initialMode: 'create',
@@ -189,69 +201,42 @@ class ArtworkContentScreen extends React.Component {
         if(artwork){
             return(
                 <View style={[styles.container]}>
-                    <View style={[styles.alignItemsCenter, styles.px15, {height: 40, flexDirection: 'row-reverse', position: 'absolute', top: iosStatusBarHeight + 15, right: 0, zIndex: 99}]}>
-                        <TouchableWithoutFeedback onPress={from ? () => this.props.navigation.navigate(from) : ()=>this.props.navigation.goBack()}>
-                            <View style={[styles.transExitBtn]}>
-                                <Text style={[styles.fontBold, styles.font16, styles.white]}>나가기</Text>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </View>
+                    <TouchableWithoutFeedback onPress={()=>this.props.navigation.goBack()}>
+                        <View style={{position: 'absolute',width:36,height:36,borderRadius:18,backgroundColor:'#C4C4C4',left:13,top:42,zIndex:99,alignItems:'center',justifyContent:'center'}}>
+                            <Image
+                                source={screenEscapeIcon}
+                            />
+                        </View>
+                    </TouchableWithoutFeedback>
                     <ScrollView style={[styles.flex1]} bounces={false} showsVerticalScrollIndicator={false} ref={'scrollView'}>
-                        <ImageBackground resizeMode={'cover'} source={{uri: artwork.image ? artwork.image : ''}} style={[Platform.OS === 'ios' ? styles.paddingIOS : null, styles.justifyContentEnd, {height: height*0.5}]}>
-                            <LinearGradient
-                                colors={['#00000000', '#000000']}
-                                style={[styles.pl30, styles.pb30, styles.justifyContentEnd, {height: height*0.3}]}
-                            >
-                                    <View style={[styles.row, styles.mt10, styles.alignItemsCenter]}>
-                                        <Image style={{width: 15, height: 15}} source={require('../../assets/images/icon_comment_white.png')} />
-                                        <Text style={[styles.fontRegular, styles.font8, {color: '#fff', marginLeft: 4}]}>{abbreviateNumber(review_count)}</Text>
-                                        <TouchableWithoutFeedback onPress={is_liked ? this.props.unlike : this.props.like}>
-                                            <View style={[styles.row, styles.alignItemsCenter]}>
-                                                {is_liked ? (
-                                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like_active.png')} />
-                                                ) : (
-                                                    <Image style={[styles.ml15, {width: 13, height: 12}]} source={require('../../assets/images/icon_like_white.png')} />
-
-                                                )}
-                                                <Text style={[styles.fontRegular, styles.font8, {color: '#fff', marginLeft: 4}]}>{abbreviateNumber(like_count)}</Text>
-                                            </View>
-                                        </TouchableWithoutFeedback>
-                                    </View>
-                                    <View style={[styles.row, styles.alignItemsCenter, styles.flexWrap]}>
-                                        <Text style={[styles.fontBold, styles.font30, styles.white]}>{artwork.name}</Text>
-                                    </View>
-                                    <Text style={[styles.fontMedium, styles.font14, styles.white]}>{artwork.author.name}, {`${artwork.created.slice(0,4)}`}, {artwork.material}</Text>
-                            </LinearGradient>
+                        <ImageBackground resizeMode={'cover'} source={{uri: artwork.image ? artwork.image : ''}} style={[Platform.OS === 'ios' ? styles.paddingIOS : null, styles.justifyContentEnd, {height: height*0.25}]}>
                         </ImageBackground>
-                        <View style={[styles.bgBlack, styles.px10, styles.pb10, styles.heightFull]}>
-                            <View style={[styles.bgWhite, styles.widthFull, {paddingBottom: 40, borderRadius: 5}]}>
-                                <View style={[styles.row, styles.justifyContentAround, styles.mt15]}>
-                                    <TouchableWithoutFeedback
+                        <View style={[styles.bgBlack, styles.pb10, styles.heightFull]}>
+                            <View style={[styles.bgWhite, styles.widthFull, {paddingBottom: 40,minHeight:'100%'}]}>
+                                <View style={{marginTop:39,alignItems:'center'}}>
+                                    <Text style={{height:32,fontSize:24,fontFamily:'NotoSansKR-Bold',lineHeight:32, marginTop:5,maxWidth:deviceInfo.size.width-60}}>{artwork.name}</Text>
+                                    <Text style={{height:20,fontSize:14,fontFamily:'NotoSansKR-Regular',marginTop:5}}>{artwork.author.name}, {`${artwork.created.slice(0,4)}`}, {artwork.material}</Text>
+                                    <View style={{flexDirection:'row', marginTop:11,alignItems:'center'}}>
+                                        <Image
+                                         source={chatNumIconGrey}
+                                        />
+                                        <Text style={{marginRight:12,fontSize:13,lineHeight:20,fontFamily:'NotoSansKR-Regular',colro:'#2e2e2e',opacity:0.6}}> {abbreviateNumber(review_count)}</Text>
+                                        <Image
+                                            source={heartNumIconGrey}
+                                            style={{marginRight:6}}
+                                        />
+                                        <Text style={{fontSize:13,lineHeight:20,fontFamily:'NotoSansKR-Regular',colro:'#2e2e2e',opacity:0.6}}>{abbreviateNumber(like_count)}</Text>
+                                    </View>
+                                </View>
+                                {this.renderDotLine()}
+                                <View style={[styles.row, styles.mt15,{marginHorizontal:18}]}>
+                                <TouchableWithoutFeedback
                                         onPress={()=>this.setState({
                                             index: 0
                                         }
                                     )}>
-                                        <View style={[styles.alignItemsCenter, styles.flex6, styles.mr20, {height: 30, borderBottomWidth: 1}, this.state.index === 0 ? {borderBottomColor: '#064be6'} : {borderBottomColor: '#aaa'}]}>
-                                            <Text style={[styles.font14]}>정보</Text>
-                                        </View>
-                                    </TouchableWithoutFeedback>
-                                    {/* <TouchableWithoutFeedback style={[styles.flex1]} onPress={()=>this.props.navigation.navigate('ArtworkDetail', { artwork, from })}>   
-                                        <View>
-                                            <Image source={require('../../assets/images/arrow_down_exhibition.png')} style={[styles.upBtn]}/>
-                                        </View>
-                                    </TouchableWithoutFeedback> */}
-                                    <TouchableWithoutFeedback style={[styles.flex1]} onPress={(to === 'back') ? ()=>this.props.navigation.goBack(null) : ()=>this.props.navigation.dispatch(StackActions.reset({
-                                        index: 0,
-                                        actions: [NavigationActions.navigate({
-                                            routeName: 'ArtworkDetail',
-                                            params: {
-                                                artwork,
-                                                from
-                                            }
-                                        })]
-                                    }))}>   
-                                        <View>
-                                            <Image source={require('../../assets/images/arrow_down_exhibition.png')} style={[styles.upBtn]}/>
+                                        <View style={[styles.alignItemsCenter, {flex:1,height: 30, borderBottomWidth: 2}, this.state.index === 0 ? {borderBottomColor: '#2e2e2e'} : {borderBottomColor: '#aaa'}]}>
+                                            <Text style={[styles.font14,{color:'#000000',opacity:this.state.index===0?1:0.3}]}>정보</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
                                     <TouchableWithoutFeedback
@@ -259,8 +244,8 @@ class ArtworkContentScreen extends React.Component {
                                             index: 1
                                         }
                                     )}>
-                                        <View style={[styles.alignItemsCenter, styles.flex6, styles.ml20, {height: 30, borderBottomWidth: 1}, this.state.index === 1 ? {borderBottomColor: '#064be6'} : {borderBottomColor: '#aaa'}]}>
-                                            <Text style={[styles.font14]}>감상</Text>
+                                        <View style={[styles.alignItemsCenter, {flex:1,height: 30, borderBottomWidth: 2}, this.state.index === 1 ? {borderBottomColor: '#2e2e2e'} : {borderBottomColor: '#aaa'}]}>
+                                            <Text style={[styles.font14,{color:'#000000',opacity:this.state.index===1?1:0.3}]}>감상</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
                                 </View>
