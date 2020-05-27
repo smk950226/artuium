@@ -739,6 +739,23 @@ function changeNickname(nickname) {
   };
 }
 
+function removeUpMark() {
+  return (dispatch, getState) => {
+    const {
+      user: {token},
+    } = getState();
+    fetch(`${FETCH_URL}/api/users/showup/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `JWT ${token}`,
+      },
+    }).then(response => {
+      return response.json();
+    });
+  };
+}
+
 function changeProfileImg(profileImg) {
   return (dispatch, getState) => {
     const {
@@ -1374,6 +1391,7 @@ const actionCreators = {
   getReviewList,
   getReviewListMore,
   changeNickname,
+  removeUpMark,
   changeProfileImg,
   changeBackgroundImg,
   changeProfile,
