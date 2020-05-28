@@ -13,6 +13,7 @@ class Container extends Component {
     hotExhibitions: PropTypes.array,
     pastExhibitions: PropTypes.array,
     initialExhibition: PropTypes.func.isRequired,
+    getRecommendedExhibition: PropTypes.func.isRequired,
     checkNoticeAll: PropTypes.func.isRequired,
     checkNotificationAll: PropTypes.func.isRequired,
     getNoticeNew: PropTypes.func.isRequired,
@@ -44,6 +45,7 @@ class Container extends Component {
       checkNotificationAll,
       getNoticeNew,
       getNotificationNew,
+      getRecommendedExhibition,
     } = this.props;
     const noticeNew = await checkNoticeAll();
     const notificationNew = await checkNotificationAll();
@@ -69,6 +71,7 @@ class Container extends Component {
         notificationNew: false,
       });
     }
+    getRecommendedExhibition();
     await initialExhibition();
   };
 
@@ -111,6 +114,7 @@ class Container extends Component {
       initialExhibition,
       checkNoticeAll,
       checkNotificationAll,
+      getRecommendedExhibition,
     } = this.props;
     this.setState({
       refreshing: false,
@@ -127,6 +131,7 @@ class Container extends Component {
         notificationNew: true,
       });
     }
+    getRecommendedExhibition();
     await initialExhibition();
     this.setState({
       refreshing: false,
@@ -149,6 +154,7 @@ class Container extends Component {
 
   _remount = async () => {
     const {
+      getRecommendedExhibition,
       initialExhibition,
       checkNoticeAll,
       checkNotificationAll,
@@ -179,6 +185,7 @@ class Container extends Component {
         notificationNew: false,
       });
     }
+    getRecommendedExhibition();
     await initialExhibition();
   };
   componentWillUnmount = () => {
