@@ -4,7 +4,6 @@ const SET_INITIAL_EXHIBITION = 'SET_INITIAL_EXHIBITION';
 const SET_RECOMMENDED_EXHIBITION = 'SET_RECOMMENDED_EXHIBITION';
 
 function setInitialExhibition(initial) {
-  console.log(initial, 'initial');
   return {
     type: SET_INITIAL_EXHIBITION,
     initial,
