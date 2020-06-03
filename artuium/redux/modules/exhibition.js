@@ -219,7 +219,13 @@ function getExhibitionReviewListMore(exhibitionId, filter, page) {
   };
 }
 
-function createExhibitionReview(exhibitionId, rating, expression, content) {
+function createExhibitionReview(
+  exhibitionId,
+  rating,
+  expression,
+  content,
+  title,
+) {
   return (dispatch, getState) => {
     const {
       user: {token},
@@ -235,6 +241,7 @@ function createExhibitionReview(exhibitionId, rating, expression, content) {
         rating,
         expression,
         content,
+        title,
       }),
     })
       .then(response => {
@@ -255,6 +262,7 @@ function updateExhibitionReview(
   rating,
   expression,
   content,
+  title,
 ) {
   return (dispatch, getState) => {
     const {
@@ -272,6 +280,7 @@ function updateExhibitionReview(
         rating,
         expression,
         content,
+        title,
       }),
     })
       .then(response => {
