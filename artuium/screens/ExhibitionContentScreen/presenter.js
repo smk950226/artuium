@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { View, Text, ScrollView, FlatList, RefreshControl, ActivityIndicator, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform, TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { View, Text, ScrollView, FlatList, RefreshControl, ActivityIndicator, Image, Dimensions, TouchableWithoutFeedback, ImageBackground, Platform, TextInput, KeyboardAvoidingView, Keyboard, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
@@ -12,7 +12,7 @@ import StarRating from 'react-native-star-rating';
 import Stars from 'react-native-stars';
 import { StackActions, NavigationActions } from 'react-navigation';
 import Modal from "react-native-modal";
-import { screenEscapeIcon, chatNumIconGrey, heartNumIconGrey, writeReviewIcon } from '../../assets/images';
+import { screenEscapeIcon, chatNumIconGrey, heartNumIconGrey, writeReviewIcon, backArrow, fullStar, halfStar, emptyStar } from '../../assets/images';
 import { deviceInfo, checkIsActiveExhibition } from '../../util';
 
 const iosStatusBarHeight = getStatusBarHeight()
@@ -197,7 +197,7 @@ class ExhibitionContentScreen extends React.Component {
     }
 
     render(){
-        const { exhibition, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from, blockReviewList, blockUserList, blockReplyList, to, showFilterModal, showFilterReplyModal, selectedReplyId, newReply } = this.props;
+        const { exhibition, is_liked, like_count, review_count, reviews, isLoadingMore, hasNextPage, refreshing, loading, is_reviewed, myReviews, thumb, good, soso, sad, surprise, mode, expression, rating, title,content, isSubmittingReview, total_rate, showingReview, replies, isLoadingMoreReply, hasNextPageReply, loadingReply, refreshingReply, contentReply, isSubmittingReply, selectedReply, from, blockReviewList, blockUserList, blockReplyList, to, showFilterModal, showFilterReplyModal, selectedReplyId, newReply } = this.props;
         const { initialMode, keyboardHeight } = this.state;
         return(
             exhibition ? (
@@ -210,11 +210,12 @@ class ExhibitionContentScreen extends React.Component {
                         </View>
                     </TouchableWithoutFeedback>
                     <ScrollView style={[styles.flex1]} bounces={false} showsVerticalScrollIndicator={false} ref={'scrollView'}>
-                        <ImageBackground resizeMode={'cover'} source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : '' : ''}} style={[Platform.OS === 'ios' ? styles.paddingIOS : null, styles.justifyContentEnd, {height: height*0.25}]}>
-                        </ImageBackground>
+                        <ImageBackground resizeMode={'cover'} source={{uri: exhibition.images ? exhibition.images.length > 0 ? exhibition.images[0].image : '' : ''}} style={[Platform.OS === 'ios' ? styles.paddingIOS : null, styles.justifyContentEnd, {height: height*0.25}]}/>
                         <View style={[styles.bgBlack, , styles.pb10, styles.heightFull]}>
                             <View style={[styles.bgWhite, styles.widthFull, {paddingBottom: 40}]}>
-                                <View style={{marginTop:39,alignItems:'center'}}>
+                                {mode!=='create'&&
+                                <>
+                                    <View style={{marginTop:39,alignItems:'center'}}>
                                     {
                                         checkIsActiveExhibition(exhibition.open_date,exhibition.close_date) &&
                                         <View style={{alignItems:'center',justifyContent:'center',height:21,backgroundColor:'#fa4d2c'}}>
@@ -256,6 +257,8 @@ class ExhibitionContentScreen extends React.Component {
                                         </View>
                                     </TouchableWithoutFeedback>
                                 </View>
+                                </>
+                                }
                                 <View style={[styles.alignItemsCenter]}>
                                     {this.state.index === 0 ?
                                         <>
@@ -289,7 +292,7 @@ class ExhibitionContentScreen extends React.Component {
                                             </View>
                                         </>
                                     :
-                                        <View style={{width: width-20}}>
+                                        <View style={{width:width}}>
                                             {mode === 'list' && (
                                                 <Fragment>
                                                     <View style={[styles.bgWhite, styles.center, is_reviewed ? {width: '100%', minHeight: 185} : {width: '100%', height: 170}]}>
@@ -459,66 +462,53 @@ class ExhibitionContentScreen extends React.Component {
                                                 <Fragment>
                                                     <TouchableWithoutFeedback onPress={()=>this.props.handleChangeRating(0)}>
                                                         <View>
-                                                        <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('list')}>
-                                                            <View style={[styles.ml25, { width: 40 }]}>
-                                                                <Image style={[{width: 14, height: 26}]} source={require('../../assets/images/icon_back.png')} />
-                                                            </View>
-                                                        </TouchableWithoutFeedback>
-                                                            <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.alignSelfCenter, styles.mt15, styles.borderBtmGrayE8, styles.pb15, styles.widthFull]}>
+                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeMode('list')}>
+                                                                <Image source={backArrow} style={{marginTop:22,marginLeft:17}}/>
+                                                            </TouchableWithoutFeedback>
+                                                            <View style={[styles.alignItemsCenter, styles.justifyContentCenter, styles.alignSelfCenter, styles.borderBtmGrayE8, styles.widthFull,{marginTop:19,paddingBottom:12}]}>
                                                                 <Stars
                                                                 half={true}
                                                                 default={rating}
                                                                 update={(val)=>this.props.handleChangeRating(val)}
-                                                                spacing={4}
-                                                                starSize={34}
+                                                                spacing={0}
+                                                                starSize={30}
                                                                 count={5}
-                                                                emptyStar={require('../../assets/images/icon_star_disabled.png')}
-                                                                fullStar={require('../../assets/images/icon_star.png')}
-                                                                halfStar={require('../../assets/images/icon_star_half.png')}
+                                                                emptyStar={emptyStar}
+                                                                fullStar={fullStar}
+                                                                halfStar={halfStar}
                                                                 />
                                                             </View>
                                                         </View>
                                                     </TouchableWithoutFeedback>
-                                                    <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('')}>
-                                                        <View style={[styles.row, styles.alignItemsCenter, styles.justifyContentCenter, styles.alignSelfCenter, styles.mt10, styles.borderBtmGrayE8, styles.pb15, styles.widthFull]}>
-                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('thumb')}>
-                                                                <Image source={require('../../assets/images/icon_thumb.png')} style={[styles.emojiXl, styles.mx5, expression === 'thumb' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                            </TouchableWithoutFeedback>
-                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('sad')}>
-                                                                <Image source={require('../../assets/images/icon_sad.png')} style={[styles.emojiXl, styles.mx5, expression === 'sad' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                            </TouchableWithoutFeedback>
-                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('soso')}>
-                                                                <Image source={require('../../assets/images/icon_soso.png')} style={[styles.emojiXl, styles.mx5, expression === 'soso' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                            </TouchableWithoutFeedback>
-                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('surprise')}>
-                                                                <Image source={require('../../assets/images/icon_surprise.png')} style={[styles.emojiXl, styles.mx5, expression === 'surprise' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                            </TouchableWithoutFeedback>
-                                                            <TouchableWithoutFeedback onPress={() => this.props.handleChangeExpression('good')}>
-                                                                <Image source={require('../../assets/images/icon_good.png')} style={[styles.emojiXl, styles.mx5, expression === 'good' ? null : {opacity: 0.3}]} resizeMode={'cover'} />
-                                                            </TouchableWithoutFeedback>
-                                                        </View>
-                                                    </TouchableWithoutFeedback>
-                                                    <View style={[styles.widthFull, {height: 300, borderWidth: 1, borderColor: '#e8e8e8'}]}>
+                                                    <View >
                                                         <TextInput
-                                                            style={[styles.font15, styles.widthFull, styles.px25, styles.py10, styles.black, styles.widthFull, {height: 300, minHeight: 300, flex: 1}]}
-                                                            placeholder={'내용을 입력하세요.'}
+                                                            placeholder={'제목을 입력하세요'}
+                                                            placeholderTextColor={'#cdcdcd'}
+                                                            onChangeText={this.props.handleChangeTitle}
+                                                            value={title}
+                                                        />
+                                                        <Text>{title.length}/15</Text>
+                                                    </View>
+                                                    <View style={[styles.widthFull, {height:'100%', borderWidth: 1, borderColor: '#e8e8e8',position:'relative'}]}>
+                                                        <TextInput
+                                                            style={[styles.font15, styles.widthFull, styles.px25, styles.black, styles.widthFull, {paddingTop:16}]}
+                                                            placeholder={'당신만의 감상을 입력하세요.'}
                                                             autoCapitalize={'none'} 
                                                             autoCorrect={false} 
                                                             value={content} 
                                                             onChangeText={this.props.handleChangeContent} 
                                                             returnKeyType={'done'} 
-                                                            placeholderTextColor={'#000000'}
+                                                            placeholderTextColor={'#cdcdcd'}
                                                             multiline={true}
                                                             textAlignVertical={'top'}
                                                         />
-                                                    </View>
-                                                    <View style={[styles.mt30, styles.alignItemsCenter, { marginBottom: Platform.OS === 'ios' ? 70 + keyboardHeight : 70 }]}>
-                                                        <TouchableWithoutFeedback onPress={initialMode === 'create' ? this.props.update : this.props.submit}>
-                                                            <View style={[styles.bgBlack, styles.borderRadius5, styles.px30, styles.py5, isSubmittingReview ? styles.opacity07 : null]}>
+                                                        <TouchableOpacity onPress={initialMode === 'create' ? this.props.update : this.props.submit} style={{ zIndex:1}}>
+                                                            <View style={[ styles.borderRadius5,isSubmittingReview ? styles.opacity07 : null,{width:width-80,height:38,backgroundColor:'#FD4C1E'} ]}>
                                                                 <Text style={[styles.fontMedium, styles.font16, styles.white]}>{initialMode === 'create' ? `수정하기` : `등록하기`}</Text>
                                                             </View>
-                                                        </TouchableWithoutFeedback>
+                                                        </TouchableOpacity>
                                                     </View>
+                                                    
                                                 </Fragment>
                                             )}
                                             {mode === 'review' && (
@@ -705,4 +695,4 @@ class ExhibitionContentScreen extends React.Component {
     }
 }
 
-export default ExhibitionContentScreen
+// export default ExhibitionContentScreen
