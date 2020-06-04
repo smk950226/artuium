@@ -17,12 +17,11 @@ import styles from '../../styles';
 const {width, height} = Dimensions.get('window');
 
 const LikedExhibitionList = props => {
-  const {userId} = props;
+  const {userId, getMore} = props;
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [exhibitions, setExhibitions] = useState([]);
   const [pageNum, setPageNum] = useState(1);
 
@@ -66,15 +65,9 @@ const LikedExhibitionList = props => {
     getExhibitions();
   }, []);
 
-  const refresh = async () => {
-    setIsLoadingMore(false);
-    setHasNextPage(true);
-    setIsRefreshing(true);
-    setPageNum(1);
-    const result = await getExhibitionLikeList(userId);
-    setExhibitions(result);
-    setIsRefreshing(false);
-  };
+  useEffect(() => {
+    getMoreExhibitions();
+  }, [getMore]);
 
   return isLoading ? (
     <View
@@ -120,11 +113,6 @@ const LikedExhibitionList = props => {
       )}
       numColumns={3}
       keyExtractor={item => String(item.exhibition.id)}
-      refreshing={isRefreshing}
-      onRefresh={refresh}
-      onEndReached={hasNextPage ? getMoreExhibitions : null}
-      onEndReachedThreshold={0.5}
-      bounces={true}
       ListFooterComponent={
         isLoadingMore ? (
           <View
@@ -140,25 +128,16 @@ const LikedExhibitionList = props => {
       }
     />
   ) : (
-    <ScrollView
-      refreshControl={
-        <RefreshControl
-          refreshing={isRefreshing}
-          onRefresh={refresh}
-          tintColor={'#000000'}
-        />
-      }>
-      <Text
-        style={[
-          styles.fontMedium,
-          styles.font15,
-          styles.mt40,
-          styles.grayA7,
-          styles.textCenter,
-        ]}>
-        전시가 없습니다.
-      </Text>
-    </ScrollView>
+    <Text
+      style={[
+        styles.fontMedium,
+        styles.font15,
+        styles.mt40,
+        styles.grayA7,
+        styles.textCenter,
+      ]}>
+      전시가 없습니다.
+    </Text>
   );
 };
 

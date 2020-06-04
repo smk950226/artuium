@@ -19,6 +19,7 @@ const ProfileInfo = ({
   followerCount,
   followingCount,
   others,
+  setHeight,
 }) => {
   const [showMore, setShowMore] = useState(null);
   const [statusMessageLineNum, setStatusMessageLineNum] = useState(-1);
@@ -29,11 +30,13 @@ const ProfileInfo = ({
   useEffect(() => {
     if (showMore === null) return;
     else if (showMore) {
+      setHeight(235 + (others ? 30 : 0) + 20 * statusMessageLineNum);
       Animated.timing(containerHeightAnimation, {
         toValue: 235 + (others ? 30 : 0) + 20 * statusMessageLineNum,
         duration: 200,
       }).start();
     } else {
+      setHeight(275 + (others ? 30 : 0));
       Animated.timing(containerHeightAnimation, {
         toValue: 275 + (others ? 30 : 0),
         duration: 200,
