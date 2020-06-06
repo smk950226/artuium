@@ -5,7 +5,6 @@ import {
   Text,
   ActivityIndicator,
   ScrollView,
-  RefreshControl,
 } from 'react-native';
 import {useDispatch, useStore} from 'react-redux';
 import {actionCreators as reviewActions} from '../../redux/modules/review';
@@ -22,11 +21,10 @@ import moment from 'moment';
 import 'moment/locale/ko';
 
 const LikedReviewList = props => {
-  const {userId} = props;
+  const {userId, getMore} = props;
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [pageNum, setPageNum] = useState(1);
 
@@ -49,10 +47,6 @@ const LikedReviewList = props => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    getReviews();
-  }, []);
-
   const getMoreReviews = async () => {
     if (hasNextPage) {
       if (!isLoadingMore) {
@@ -69,16 +63,13 @@ const LikedReviewList = props => {
       }
     }
   };
+  useEffect(() => {
+    getReviews();
+  }, []);
 
-  const refresh = async () => {
-    setIsLoadingMore(false);
-    setHasNextPage(true);
-    setIsRefreshing(true);
-    setPageNum(1);
-    const reviews = await getReviewLikeList(userId);
-    setReviews(reviews);
-    setIsRefreshing(false);
-  };
+  useEffect(() => {
+    getMoreReviews();
+  }, [getMore]);
 
   return isLoading ? (
     <View
@@ -89,93 +80,74 @@ const LikedReviewList = props => {
       ]}>
       <ActivityIndicator size={'small'} color={'#000'} />
     </View>
-  ) : (
-    <ScrollView style={[styles.container]}>
-      {reviews && reviews.length > 0 ? (
-        <FlatList
-          style={{marginTop: 14}}
-          data={reviews}
-          renderItem={({item}) => {
-            const review = item.review;
-            return (
-              <>
-                <AllReviewCard
-                  cardLabel={getCardLabelFromReview(review)}
-                  cardSubLabel={getCardSubLabelFromReview(review)}
-                  cardImageUri={getImageUriFromReview(review)}
-                  chatNum={abbreviateNumber(review.reply_count)}
-                  likeNum={abbreviateNumber(review.like_count)}
-                  content={stripHtml(review.content)}
-                  authorProfile={review.author.profile_image}
-                  interactionIcon={review.expression}
-                  starRateNum={review.rate}
-                  authorName={review.author.nickname}
-                  createdAt={moment(review.time).fromNow()}
-                  onPress={
-                    review.artwork
-                      ? () =>
-                          props.navigation.navigate('ArtworkContent', {
-                            artwork: review.artwork,
-                            mode: 'review',
-                            review: review,
-                          })
-                      : () =>
-                          props.navigation.navigate('ExhibitionContent', {
-                            exhibition: review.exhibition,
-                            mode: 'review',
-                            review: review,
-                          })
-                  }
-                  type={review.artwork ? 'artwork' : 'exhibition'}
-                  reviewTitle={review.title}
-                />
-                <View style={{height: 16}} />
-              </>
-            );
-          }}
-          numColumns={1}
-          keyExtractor={item => String(item.id)}
-          refreshing={isRefreshing}
-          onRefresh={refresh}
-          onEndReached={hasNextPage ? getMoreReviews : null}
-          onEndReachedThreshold={0.5}
-          bounces={true}
-          ListFooterComponent={
-            isLoadingMore ? (
-              <View
-                style={[
-                  styles.alignItemsCenter,
-                  styles.justifyContentCenter,
-                  styles.mt5,
-                  styles.py5,
-                ]}>
-                <ActivityIndicator size={'small'} color={'#000000'} />
-              </View>
-            ) : null
-          }
-        />
-      ) : (
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={refresh}
-              tintColor={'#000000'}
+  ) : reviews && reviews.length > 0 ? (
+    <FlatList
+      style={{marginTop: 14}}
+      data={reviews}
+      renderItem={({item}) => {
+        const review = item.review;
+        return (
+          <>
+            <AllReviewCard
+              cardLabel={getCardLabelFromReview(review)}
+              cardSubLabel={getCardSubLabelFromReview(review)}
+              cardImageUri={getImageUriFromReview(review)}
+              chatNum={abbreviateNumber(review.reply_count)}
+              likeNum={abbreviateNumber(review.like_count)}
+              content={stripHtml(review.content)}
+              authorProfile={review.author.profile_image}
+              interactionIcon={review.expression}
+              starRateNum={review.rate}
+              authorName={review.author.nickname}
+              createdAt={moment(review.time).fromNow()}
+              onPress={
+                review.artwork
+                  ? () =>
+                      props.navigation.navigate('ArtworkContent', {
+                        artwork: review.artwork,
+                        mode: 'review',
+                        review: review,
+                      })
+                  : () =>
+                      props.navigation.navigate('ExhibitionContent', {
+                        exhibition: review.exhibition,
+                        mode: 'review',
+                        review: review,
+                      })
+              }
+              type={review.artwork ? 'artwork' : 'exhibition'}
+              reviewTitle={review.title}
             />
-          }>
-          <Text
+            <View style={{height: 16}} />
+          </>
+        );
+      }}
+      keyExtractor={item => String(item.id)}
+      ListFooterComponent={
+        isLoadingMore ? (
+          <View
             style={[
-              styles.fontMedium,
-              styles.font15,
-              styles.mt40,
-              styles.grayA7,
-              styles.textCenter,
+              styles.alignItemsCenter,
+              styles.justifyContentCenter,
+              styles.mt5,
+              styles.py5,
             ]}>
-            감상이 없습니다.
-          </Text>
-        </ScrollView>
-      )}
-    </ScrollView>
+            <ActivityIndicator size={'small'} color={'#000000'} />
+          </View>
+        ) : null
+      }
+    />
+  ) : (
+    <Text
+      style={[
+        styles.fontMedium,
+        styles.font15,
+        styles.mt40,
+        styles.grayA7,
+        styles.textCenter,
+      ]}>
+      감상이 없습니다.
+    </Text>
   );
 };
 

@@ -18,11 +18,10 @@ import styles from '../../styles';
 const {width, height} = Dimensions.get('window');
 
 const LikedArtworkList = props => {
-  const {userId} = props;
+  const {userId, getMore} = props;
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [artworks, setArtworks] = useState([]);
   const [pageNum, setPageNum] = useState(1);
 
@@ -38,10 +37,6 @@ const LikedArtworkList = props => {
       getState,
     );
   };
-
-  useEffect(() => {
-    getArtworks();
-  }, []);
 
   const getArtworks = async () => {
     const result = await getArtworkLikeList(userId);
@@ -78,32 +73,19 @@ const LikedArtworkList = props => {
     }
   };
 
-  const refresh = async () => {
-    setIsLoadingMore(false);
-    setHasNextPage(true);
-    setIsRefreshing(true);
-    setPageNum(1);
-    const result = await getArtworkLikeList(userId);
-    let resultWithImage = result.map(item => {
-      return {...item, URL: item.artwork.image};
-    });
-    setArtworks(resultWithImage);
-    setIsRefreshing(false);
-  };
-
   const onPressImage = item => {
     props.navigation.navigate('ArtworkDetail', {
       artwork: item.artwork,
     });
   };
 
-  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
-    const paddingToBottom = 20;
-    return (
-      layoutMeasurement.height + contentOffset.y >=
-      contentSize.height - paddingToBottom
-    );
-  };
+  useEffect(() => {
+    getArtworks();
+  }, []);
+
+  useEffect(() => {
+    getMoreArtworks();
+  }, [getMore]);
 
   return isLoading ? (
     <View
@@ -115,16 +97,7 @@ const LikedArtworkList = props => {
       <ActivityIndicator size={'small'} color={'#000'} />
     </View>
   ) : artworks && artworks.length > 0 ? (
-    <ScrollView
-      style={{paddingHorizontal: 14, paddingTop: 15}}
-      onScroll={({nativeEvent}) => {
-        if (isCloseToBottom(nativeEvent)) {
-          if (hasNextPage) {
-            getMoreArtworks();
-          }
-        }
-      }}
-      scrollEventThrottle={400}>
+    <View style={{paddingHorizontal: 14, paddingTop: 15}}>
       <MasonryList
         images={artworks}
         initialNumInColsToRender={12}
@@ -154,27 +127,18 @@ const LikedArtworkList = props => {
           <ActivityIndicator size={'small'} color={'#000000'} />
         </View>
       )}
-    </ScrollView>
+    </View>
   ) : (
-    <ScrollView
-      refreshControl={
-        <RefreshControl
-          refreshing={isRefreshing}
-          onRefresh={refresh}
-          tintColor={'#000000'}
-        />
-      }>
-      <Text
-        style={[
-          styles.fontMedium,
-          styles.font15,
-          styles.mt40,
-          styles.grayA7,
-          styles.textCenter,
-        ]}>
-        작품이 없습니다.
-      </Text>
-    </ScrollView>
+    <Text
+      style={[
+        styles.fontMedium,
+        styles.font15,
+        styles.mt40,
+        styles.grayA7,
+        styles.textCenter,
+      ]}>
+      작품이 없습니다.
+    </Text>
   );
 };
 
