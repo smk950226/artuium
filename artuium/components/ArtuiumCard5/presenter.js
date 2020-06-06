@@ -6,12 +6,14 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import StarRating from 'react-native-star-rating';
 import stripHtml from 'string-strip-html';
 import ModalDropdown from '../ModalDropdown';
+import {backArrow, emptyStar, fullStar, halfStar} from '../../assets/images';
 
 const {width, height} = Dimensions.get('window');
 
@@ -89,92 +91,35 @@ class ArtuiumCard5 extends Component {
   render() {
     const {review, is_liked, like_count, reply_count, is_me, my} = this.props;
     return (
-      <Fragment>
-        <View style={[styles.row, styles.justifyContentBetween]}>
-          <TouchableWithoutFeedback
-            onPress={() => this.props.handleChangeMode('list')}>
-            <View style={[styles.ml25, styles.pr20]}>
-              <Image
-                style={[{width: 14, height: 26}]}
-                source={require('../../assets/images/icon_back.png')}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={this._handleGoOthersProfile}>
-            <View style={[styles.alignItemsCenter, styles.mt15]}>
-              {review.author.profile_image ? (
-                <Image
-                  source={{uri: review.author.profile_image}}
-                  style={[styles.profileImage40]}
-                  resizeMode={'cover'}
-                />
-              ) : (
-                <Image
-                  source={require('../../assets/images/empty_profile.png')}
-                  style={[styles.profileImage40]}
-                />
-              )}
-              {review.expression === 'good' && (
-                <Image
-                  source={require('../../assets/images/icon_good.png')}
-                  style={[
-                    styles.emojiXl,
-                    {position: 'absolute', top: 20, left: 24},
-                  ]}
-                  resizeMode={'cover'}
-                />
-              )}
-              {review.expression === 'soso' && (
-                <Image
-                  source={require('../../assets/images/icon_soso.png')}
-                  style={[
-                    styles.emojiXl,
-                    {position: 'absolute', top: 20, left: 24},
-                  ]}
-                  resizeMode={'cover'}
-                />
-              )}
-              {review.expression === 'sad' && (
-                <Image
-                  source={require('../../assets/images/icon_sad.png')}
-                  style={[
-                    styles.emojiXl,
-                    {position: 'absolute', top: 20, left: 24},
-                  ]}
-                  resizeMode={'cover'}
-                />
-              )}
-              {review.expression === 'surprise' && (
-                <Image
-                  source={require('../../assets/images/icon_surprise.png')}
-                  style={[
-                    styles.emojiXl,
-                    {position: 'absolute', top: 20, left: 24},
-                  ]}
-                  resizeMode={'cover'}
-                />
-              )}
-              {review.expression === 'thumb' && (
-                <Image
-                  source={require('../../assets/images/icon_thumb.png')}
-                  style={[
-                    styles.emojiXl,
-                    {position: 'absolute', top: 20, left: 24},
-                  ]}
-                  resizeMode={'cover'}
-                />
-              )}
-            </View>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback>
-            <View style={[styles.mr25, styles.pl20, styles.hidden]}>
-              <Image
-                style={[{width: 14, height: 26}]}
-                source={require('../../assets/images/icon_back.png')}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
+      <View>
+        <TouchableOpacity
+          onPress={() => this.props.handleChangeMode('list')}
+          style={{marginTop: 22, marginLeft: 17, marginBottom: 22}}>
+          <Image style={[{width: 24, height: 24}]} source={backArrow} />
+        </TouchableOpacity>
+        {review.title && (
+          <Text
+            style={{
+              alignSelf: 'center',
+              fontSize: 18,
+              fontFamily: 'Noto Sans KR',
+            }}>
+            {review.title}
+          </Text>
+        )}
+        <TouchableOpacity
+          onPress={this._handleGoOthersProfile}
+          style={[styles.alignItemsCenter, {marginTop: 30}]}>
+          <Image
+            source={
+              review.author.profile_image
+                ? {uri: review.author.profile_image}
+                : require('../../assets/images/empty_profile.png')
+            }
+            style={[styles.profileImage40]}
+            resizeMode={'cover'}
+          />
+        </TouchableOpacity>
         <TouchableWithoutFeedback onPress={this._handleGoOthersProfile}>
           <View>
             <Text
@@ -184,7 +129,7 @@ class ArtuiumCard5 extends Component {
                 styles.mt5,
                 styles.textCenter,
               ]}>
-              {review.author.nickname}님의 감상
+              {review.author.nickname}
             </Text>
           </View>
         </TouchableWithoutFeedback>
@@ -199,16 +144,21 @@ class ArtuiumCard5 extends Component {
             disabled={true}
             maxStars={5}
             rating={review.rate}
-            emptyStar={require('../../assets/images/icon_star_disabled.png')}
-            fullStar={require('../../assets/images/icon_star.png')}
-            halfStar={require('../../assets/images/icon_star_half.png')}
+            emptyStar={emptyStar}
+            fullStar={fullStar}
+            halfStar={halfStar}
             iconSet={'Ionicons'}
-            fullStarColor={'#FFBD07'}
-            starSize={25}
+            fullStarColor={'##FA4D2C'}
+            starSize={15}
           />
         </View>
         <Text
-          style={[styles.fontRegular, styles.font13, styles.mt20, styles.px25]}>
+          style={[
+            styles.fontRegular,
+            styles.mt20,
+            styles.px25,
+            {fontSize: 14},
+          ]}>
           {stripHtml(review.content)}
         </Text>
         <View
@@ -219,7 +169,7 @@ class ArtuiumCard5 extends Component {
             styles.mt15,
             styles.px25,
           ]}>
-          <Image
+          {/* <Image
             style={{width: 15, height: 15}}
             source={require('../../assets/images/icon_comment.png')}
           />
@@ -254,8 +204,8 @@ class ArtuiumCard5 extends Component {
                 {abbreviateNumber(like_count)}
               </Text>
             </View>
-          </TouchableWithoutFeedback>
-          <ModalDropdown
+          </TouchableWithoutFeedback> */}
+          {/* <ModalDropdown
             ref={el => (this.dropdown = el)}
             options={is_me ? ['수정하기', '삭제하기'] : ['신고하기', '숨기기']}
             showsVerticalScrollIndicator={false}
@@ -269,9 +219,9 @@ class ArtuiumCard5 extends Component {
               source={require('../../assets/images/icon_dotted.png')}
               style={[styles.icon15, styles.ml10]}
             />
-          </ModalDropdown>
+          </ModalDropdown> */}
         </View>
-      </Fragment>
+      </View>
     );
   }
 }

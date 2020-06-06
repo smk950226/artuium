@@ -37,6 +37,9 @@ import {
   fullStar,
   halfStar,
   emptyStar,
+  reviewSortDropDown,
+  heartNumIconBlack,
+  chatNumIconBlack,
 } from '../../assets/images';
 import {deviceInfo, checkIsActiveExhibition} from '../../util';
 
@@ -44,7 +47,7 @@ const {width, height} = Dimensions.get('window');
 
 const filter = [
   {
-    label: '신규순',
+    label: '최신 순',
     value: 'new',
   },
   {
@@ -185,6 +188,8 @@ class ExhibitionContentScreen extends React.Component {
         : 0,
       initialMode,
       keyboardHeight: 0,
+      filterLabel: '최신 순',
+      isReviewEditingEnable: false,
     };
     this.keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -339,7 +344,7 @@ class ExhibitionContentScreen extends React.Component {
           />
           <View style={[styles.pb10, {flex: 1, width: '100%'}]}>
             <View style={[styles.bgWhite, styles.widthFull, {flex: 1}]}>
-              {mode !== 'create' && (
+              {mode !== 'create' && mode !== 'review' && (
                 <>
                   <View style={{marginTop: 39, alignItems: 'center'}}>
                     {checkIsActiveExhibition(
@@ -505,6 +510,7 @@ class ExhibitionContentScreen extends React.Component {
                           paddingVertical: 18,
                           marginTop: 17,
                           paddingHorizontal: 21,
+                          borderRadius: 5,
                           alignSelf: 'center',
                         },
                       ]}>
@@ -671,8 +677,7 @@ class ExhibitionContentScreen extends React.Component {
                                   pagingEnabled={true}
                                   horizontal={true}
                                   alwaysBounceVertical={false}
-                                  showsHorizontalScrollIndicator={false}
-                                  style={[{height: 160}, styles.mt15]}>
+                                  showsHorizontalScrollIndicator={false}>
                                   {myReviews.map((review, index) => {
                                     if (
                                       blockReviewList.findIndex(
@@ -705,7 +710,7 @@ class ExhibitionContentScreen extends React.Component {
                                     }
                                   })}
                                 </ScrollView>
-                                <View style={[styles.widthFull, styles.px15]}>
+                                {/* <View style={[styles.widthFull, styles.px15]}>
                                   <Text
                                     style={[
                                       styles.fontBlack,
@@ -890,7 +895,7 @@ class ExhibitionContentScreen extends React.Component {
                                       </View>
                                     </View>
                                   </View>
-                                </View>
+                                </View> */}
                               </Fragment>
                             ) : (
                               <TouchableWithoutFeedback
@@ -909,7 +914,7 @@ class ExhibitionContentScreen extends React.Component {
                                   <Image
                                     source={writeReviewIcon}
                                     style={[
-                                      {width: 60, height: 60, borderRadius: 30},
+                                      {width: 32, height: 32, borderRadius: 16},
                                       styles.mb10,
                                     ]}
                                   />
@@ -942,7 +947,7 @@ class ExhibitionContentScreen extends React.Component {
                                 <Image
                                   source={writeReviewIcon}
                                   style={[
-                                    {width: 60, height: 60, borderRadius: 30},
+                                    {width: 32, height: 32, borderRadius: 16},
                                     styles.mb10,
                                   ]}
                                 />
@@ -965,26 +970,37 @@ class ExhibitionContentScreen extends React.Component {
                             styles.row,
                             styles.alignItemsCenter,
                             styles.justifyContentBetween,
-                            styles.px30,
                             styles.pt20,
+                            {paddingHorizontal: 25},
                           ]}>
                           <Text
                             style={[
                               styles.font20,
-                              styles.fontBold,
+                              styles.fontMedium,
                               {color: '#382a2a'},
                             ]}>
                             감상
                           </Text>
-                          <TouchableWithoutFeedback
-                            onPress={this.props.openFilterModal}>
-                            <View>
-                              <Image
-                                source={require('../../assets/images/icon_sort.png')}
-                                style={[styles.icon20]}
-                              />
-                            </View>
-                          </TouchableWithoutFeedback>
+                          <TouchableOpacity
+                            onPress={this.props.openFilterModal}
+                            style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              height: 24,
+                            }}>
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'Noto Sans KR',
+                                color: '#FA4D2C',
+                              }}>
+                              {this.state.filterLabel}
+                            </Text>
+                            <Image
+                              source={reviewSortDropDown}
+                              style={[styles.icon20]}
+                            />
+                          </TouchableOpacity>
                         </View>
                         {loading ? (
                           <View
@@ -1010,18 +1026,27 @@ class ExhibitionContentScreen extends React.Component {
                                 return null;
                               } else {
                                 return (
-                                  <ArtuiumCard3
-                                    addBlockReview={this.props.addBlockReview}
-                                    addBlockUser={this.props.addBlockUser}
-                                    deleteReview={this.props.deleteReview}
-                                    goUpdate={this._goUpdate}
-                                    from={from}
-                                    review={item}
-                                    navigation={this.props.navigation}
-                                    handleChangeMode={
-                                      this.props.handleChangeMode
-                                    }
-                                  />
+                                  <>
+                                    <ArtuiumCard3
+                                      addBlockReview={this.props.addBlockReview}
+                                      addBlockUser={this.props.addBlockUser}
+                                      deleteReview={this.props.deleteReview}
+                                      goUpdate={this._goUpdate}
+                                      from={from}
+                                      review={item}
+                                      navigation={this.props.navigation}
+                                      handleChangeMode={
+                                        this.props.handleChangeMode
+                                      }
+                                    />
+                                    <View
+                                      style={{
+                                        width: deviceInfo.size.width,
+                                        height: 1,
+                                        backgroundColor: '#e3e3e3',
+                                      }}
+                                    />
+                                  </>
                                 );
                               }
                             }}
@@ -1218,7 +1243,13 @@ class ExhibitionContentScreen extends React.Component {
                           navigation={this.props.navigation}
                           handleChangeMode={this.props.handleChangeMode}
                         />
-                        <View style={[styles.divView, styles.mt15]} />
+                        <View
+                          style={{
+                            width: '100%',
+                            height: 1,
+                            backgroundColor: '#E3E3E3',
+                          }}
+                        />
                         <View
                           style={[
                             styles.row,
@@ -1236,15 +1267,6 @@ class ExhibitionContentScreen extends React.Component {
                             ]}>
                             댓글
                           </Text>
-                          <TouchableWithoutFeedback
-                            onPress={this.props.openFilterReplyModal}>
-                            <View>
-                              <Image
-                                source={require('../../assets/images/icon_sort.png')}
-                                style={[styles.icon20]}
-                              />
-                            </View>
-                          </TouchableWithoutFeedback>
                         </View>
                         {loadingReply ? (
                           <View
@@ -1372,65 +1394,103 @@ class ExhibitionContentScreen extends React.Component {
             <KeyboardAvoidingView
               behavior={'position'}
               contentContainerStyle={[
-                styles.row,
                 styles.alignItemsCenter,
                 styles.justifyContentBetween,
-                styles.px10,
                 styles.pt10,
                 styles.bgWhite,
                 styles.widthFull,
-                styles.pb10,
                 {position: 'absolute', bottom: 0, zIndex: 9999},
               ]}>
-              <View
-                style={[
-                  styles.mr10,
-                  styles.borderRadius5,
-                  styles.bgGrayf0,
-                  styles.px10,
-                  styles.flex8,
-                ]}>
-                <TextInput
-                  ref={el => (this.btmTextInput = el)}
-                  style={[
-                    styles.font13,
-                    styles.black,
-                    styles.widthFull,
-                    styles.px10,
-                    styles.py5,
-                    styles.widthFull,
-                  ]}
-                  autoCapitalize={'none'}
-                  autoCorrect={false}
-                  value={contentReply}
-                  onChangeText={this.props.handleChangeContentReply}
-                  returnKeyType={'done'}
-                  placeholderTextColor={'#000000'}
-                />
-              </View>
-              <TouchableWithoutFeedback
-                onPress={
-                  selectedReplyId
-                    ? this.props.updateReply
-                    : this.props.createReview
-                }>
+              {this.state.isReviewEditingEnable && (
                 <View
                   style={[
-                    styles.flex2,
-                    styles.bgGray33,
-                    styles.row,
-                    styles.alignItemsCenter,
-                    styles.justifyContentCenter,
-                    styles.py5,
-                    styles.borderRadius5,
-                    isSubmittingReply ? {opacity: 0.4} : null,
+                    styles.px10,
+                    {width: '100%', backgroundColor: '#f4f4f4'},
                   ]}>
-                  <Text
-                    style={[styles.fontMedium, styles.font16, styles.white]}>
-                    {selectedReplyId ? '수정' : '등록'}
-                  </Text>
+                  <Text />
+                  <TextInput
+                    ref={el => (this.btmTextInput = el)}
+                    style={[
+                      styles.font13,
+                      styles.black,
+                      styles.widthFull,
+                      styles.px10,
+                      styles.py5,
+                      styles.widthFull,
+                    ]}
+                    autoCapitalize={'none'}
+                    autoCorrect={false}
+                    value={contentReply}
+                    onChangeText={this.props.handleChangeContentReply}
+                    returnKeyType={'done'}
+                    placeholderTextColor={'#999999'}
+                    placeholder={
+                      '욕설이나 비방이 포함된 댓글은 삭제될 수 있습니다.'
+                    }
+                    onBlur={() => this.setState({isReviewEditingEnable: false})}
+                    autoFocus={true}
+                    multiline={true}
+                    maxLength={100}
+                  />
                 </View>
-              </TouchableWithoutFeedback>
+              )}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  height: 74,
+                  backgroundColor: '#f4f4f4',
+                  width: '100%',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: this.state.isReviewEditingEnable ? 15 : 26,
+                  paddingTop: 20,
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    height: 24,
+                    alignItems: 'center',
+                  }}>
+                  {this.state.isReviewEditingEnable ? (
+                    <Text style={{fontSize: 12, color: '#828282'}}>
+                      {contentReply.length}/100
+                    </Text>
+                  ) : (
+                    <>
+                      <Image
+                        source={chatNumIconBlack}
+                        style={{marginRight: 3}}
+                      />
+                      <Text style={{marginRight: 8, fontSize: 14}}>
+                        {abbreviateNumber(review_count)}
+                      </Text>
+                      <Image
+                        source={heartNumIconBlack}
+                        style={{marginRight: 3}}
+                      />
+                      <Text style={{marginRight: 8, fontSize: 14}}>
+                        {abbreviateNumber(like_count)}
+                      </Text>
+                    </>
+                  )}
+                </View>
+                <Text
+                  onPress={() => {
+                    if (this.state.isReviewEditingEnable) {
+                      selectedReplyId
+                        ? this.props.updateReply()
+                        : this.props.createReview();
+                    } else {
+                      this.setState({isReviewEditingEnable: true});
+                    }
+                  }}
+                  style={[styles.fontMedium, {color: '#2e2e2e', fontSize: 15}]}>
+                  {!this.state.isReviewEditingEnable
+                    ? '댓글 달기'
+                    : selectedReplyId
+                    ? '수정'
+                    : '등록'}
+                </Text>
+              </View>
             </KeyboardAvoidingView>
           ) : (
             <View
@@ -1519,7 +1579,10 @@ class ExhibitionContentScreen extends React.Component {
                   {filter.map((fil, index) => (
                     <TouchableWithoutFeedback
                       key={index}
-                      onPress={() => this.props.handleFilterChange(fil.value)}>
+                      onPress={() => {
+                        this.props.handleFilterChange(fil.value);
+                        this.setState({filterLabel: fil.label});
+                      }}>
                       <View
                         style={[
                           styles.borderBtmGray70,
