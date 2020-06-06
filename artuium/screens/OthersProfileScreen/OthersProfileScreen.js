@@ -47,10 +47,6 @@ const OthersProfileScreen = props => {
     return userActions.getReviewList(userId)(dispatch, getState);
   };
 
-  const getProfile = userId => {
-    return userActions.getProfile(userId)(dispatch, getState);
-  };
-
   const getTabBarLabels = props => {
     const {route} = props;
     if (route.key === 'writtenReview') {
@@ -134,7 +130,6 @@ const OthersProfileScreen = props => {
   };
 
   useEffect(() => {
-    getProfile();
     getReviewList(others.id).then(res => {
       setWrittenReviewsNum(res.length);
     });
@@ -144,9 +139,13 @@ const OthersProfileScreen = props => {
     <>
       <ProfileInfo
         profileImage={others.profile_image}
-        backgroundImage={others.background_image}
+        backgroundImage={
+          others.background_image ? others.backgound_image : undefined
+        }
         nickname={others.nickname}
-        statusMessage={others.status_message}
+        statusMessage={
+          others.status_message ? others.status_message : undefined
+        }
         followerCount={
           others.follower_count - isFollowingNow ? 1 : 0 + isFollowing ? 1 : 0
         }

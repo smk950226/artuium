@@ -45,8 +45,8 @@ const MyProfileScreen = props => {
     return userActions.getReviewList(id)(dispatch, getState);
   };
 
-  const getProfile = userId => {
-    return userActions.getProfile(userId)(dispatch, getState);
+  const getProfile = () => {
+    return userActions.getProfile()(dispatch, getState);
   };
 
   const getTabBarLabels = props => {
