@@ -1,37 +1,25 @@
-import React, {useState, useEffect} from 'react';
-import {Dimensions, View, Text, Image, TouchableOpacity} from 'react-native';
-import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  Dimensions,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Animated,
+} from 'react-native';
 import {useDispatch, useStore} from 'react-redux';
 import {actionCreators as userActions} from '../../redux/modules/user';
 import WrittenReviewList from '../../components/WrittenReviewList/WrittenReviewList';
 import LikedExhibitionList from '../../components/LikedExhibitionList/LikedExhibitionList';
 import LikedArtworkList from '../../components/LikedArtworkList/LikedArtworkList';
 import LikedReviewList from '../../components/LikedReviewList/LikedReviewList';
-import TabBarLabel from '../../components/TabBarLabel/TabBarLabel';
 import OthersProfileFollowButton from '../../components/OthersProfileFollowButton/OthersProfileFollowButton';
 import ProfileInfo from '../../components/ProfileInfo/ProfileInfo';
-import {
-  WrittenReviewIcon,
-  LikedExhibitionIcon,
-  LikedArtworkIcon,
-  LikedReviewIcon,
-} from '../../assets/images/svgs';
-import {backArrowWhite} from '../../assets/images';
+import ProfileTabBar from '../../components/ProfileTabBar/ProfileTabBar';
+import {backArrowWhite, backArrow} from '../../assets/images';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const {width, height} = Dimensions.get('window');
-
-const getTabBarIcons = props => {
-  const {route} = props;
-  if (route.key === 'writtenReview') {
-    return <WrittenReviewIcon color={props.color} />;
-  } else if (route.key === 'exhibition') {
-    return <LikedExhibitionIcon color={props.color} />;
-  } else if (route.key === 'artwork') {
-    return <LikedArtworkIcon color={props.color} />;
-  } else {
-    return <LikedReviewIcon color={props.color} />;
-  }
-};
 
 const OthersProfileScreen = props => {
   const others = props.navigation.getParam('others', null);
@@ -39,9 +27,12 @@ const OthersProfileScreen = props => {
   const getState = useStore().getState;
 
   const [index, setIndex] = useState(0);
+  const [profileInfoHeight, setProfileInfoHeight] = useState(275);
+  const [tabBarAtTop, setTabBarAtTop] = useState(false);
   const [writtenReviewsNum, setWrittenReviewsNum] = useState(0);
   const [isFollowing, setIsFollowing] = useState(others.is_following);
-  const isFollowingNow = others.is_following;
+  const [getMore, setGetMore] = useState(0);
+  const tabBarAnimation = useRef(new Animated.Value(0)).current;
 
   const getReviewList = userId => {
     return userActions.getReviewList(userId)(dispatch, getState);
@@ -51,43 +42,6 @@ const OthersProfileScreen = props => {
     return userActions.getProfile(userId)(dispatch, getState);
   };
 
-  const getTabBarLabels = props => {
-    const {route} = props;
-    if (route.key === 'writtenReview') {
-      return (
-        <TabBarLabel
-          title={'작성한 감상'}
-          number={writtenReviewsNum}
-          color={props.color}
-        />
-      );
-    } else if (route.key === 'exhibition') {
-      return (
-        <TabBarLabel
-          title={'전시'}
-          number={others.like_exhibition_count}
-          color={props.color}
-        />
-      );
-    } else if (route.key === 'artwork') {
-      return (
-        <TabBarLabel
-          title={'작품'}
-          number={others.like_artwork_count}
-          color={props.color}
-        />
-      );
-    } else if (route.key === 'review') {
-      return (
-        <TabBarLabel
-          title={'감상'}
-          number={others.like_review_count}
-          color={props.color}
-        />
-      );
-    }
-  };
-
   const followUser = userId => {
     return userActions.followUser(userId)(dispatch, getState);
   };
@@ -95,123 +49,125 @@ const OthersProfileScreen = props => {
     return userActions.unfollowUser(userId)(dispatch, getState);
   };
 
-  const renderWrittenReview = () => {
-    return (
-      <WrittenReviewList userId={others.id} navigation={props.navigation} />
-    );
-  };
-  const renderExhibition = () => {
-    return (
-      <LikedExhibitionList userId={others.id} navigation={props.navigation} />
-    );
-  };
-  const renderArtwork = () => {
-    return (
-      <LikedArtworkList userId={others.id} navigation={props.navigation} />
-    );
-  };
-  const renderReview = () => {
-    return <LikedReviewList userId={others.id} navigation={props.navigation} />;
-  };
-
-  const getOthersProfileRoute = () => [
-    {key: 'writtenReview', title: '작성한 감상'},
-    {key: 'exhibition', title: '전시'},
-    {key: 'artwork', title: '작품'},
-    {key: 'review', title: '감상'},
-  ];
-
   const onPressBackButton = () => props.navigation.pop();
 
   const onPressFollowButton = () => {
     setIsFollowing(!isFollowing);
-    if (isFollowing) {
+    if (!isFollowing) {
       followUser(others.id);
     } else {
       unfollowUser(others.id);
     }
+    getProfile();
   };
 
   useEffect(() => {
-    getProfile();
     getReviewList(others.id).then(res => {
       setWrittenReviewsNum(res.length);
     });
   }, []);
 
+  const onScroll = ({nativeEvent}) => {
+    if (tabBarAtTop && nativeEvent.contentOffset.y <= profileInfoHeight) {
+      Animated.timing(tabBarAnimation, {
+        toValue: 0,
+        duration: 200,
+      }).start();
+      setTabBarAtTop(false);
+    } else if (
+      !tabBarAtTop &&
+      nativeEvent.contentOffset.y > profileInfoHeight
+    ) {
+      Animated.timing(tabBarAnimation, {
+        toValue: 85,
+        duration: 200,
+      }).start();
+      setTabBarAtTop(true);
+    }
+    if (
+      nativeEvent.layoutMeasurement.height + nativeEvent.contentOffset.y ==
+      nativeEvent.contentSize.height
+    ) {
+      setGetMore(getMore + 1);
+    }
+  };
+
   return (
     <>
-      <ProfileInfo
-        profileImage={others.profile_image}
-        backgroundImage={others.background_image}
-        nickname={others.nickname}
-        statusMessage={others.status_message}
-        followerCount={
-          others.follower_count - isFollowingNow ? 1 : 0 + isFollowing ? 1 : 0
-        }
-        followingCount={others.following_count}
-        others={true}
-      />
+      <ScrollView stickyHeaderIndices={[1]} onScroll={onScroll}>
+        <ProfileInfo
+          setHeight={setProfileInfoHeight}
+          profileImage={others.profile_image}
+          backgroundImage={others.background_image}
+          nickname={others.nickname}
+          statusMessage={others.status_message}
+          followerCount={
+            others.follower_count - others.is_following
+              ? 1
+              : 0 + isFollowing
+              ? 1
+              : 0
+          }
+          followingCount={others.following_count}
+          others={true}
+        />
+        <ProfileTabBar
+          hasLine={tabBarAtTop}
+          tabBarAnimation={tabBarAnimation}
+          selected={index}
+          setSelected={setIndex}
+          tabContents={[
+            {title: '작성한 감상', number: writtenReviewsNum},
+            {title: '전시', number: others.like_exhibition_count},
+            {title: '작품', number: others.like_artwork_count},
+            {title: '감상', number: others.like_review_count},
+          ]}
+        />
+        <View style={{display: index === 0 ? 'flex' : 'none'}}>
+          <WrittenReviewList
+            getMore={Math.floor(getMore / 2)}
+            userId={others.id}
+            navigation={props.navigation}
+          />
+        </View>
+        <View style={{display: index === 1 ? 'flex' : 'none'}}>
+          <LikedExhibitionList
+            getMore={Math.floor(getMore / 2)}
+            userId={others.id}
+            navigation={props.navigation}
+          />
+        </View>
+        <View style={{display: index === 2 ? 'flex' : 'none'}}>
+          <LikedArtworkList
+            getMore={Math.floor(getMore / 2)}
+            userId={others.id}
+            navigation={props.navigation}
+          />
+        </View>
+        <View style={{display: index === 3 ? 'flex' : 'none'}}>
+          <LikedReviewList
+            getMore={Math.floor(getMore / 2)}
+            userId={others.id}
+            navigation={props.navigation}
+          />
+        </View>
+      </ScrollView>
       <TouchableOpacity
         style={{position: 'absolute', top: 48, left: 17}}
         onPress={onPressBackButton}>
-        <Image source={backArrowWhite} style={{width: 24}} />
+        <Image
+          source={tabBarAtTop ? backArrow : backArrowWhite}
+          style={{width: 24}}
+        />
       </TouchableOpacity>
       <OthersProfileFollowButton
+        isTabBarAtTop={tabBarAtTop}
         styles={{position: 'absolute', top: 50, right: 19}}
         isFollowing={isFollowing}
         onPress={onPressFollowButton}
       />
-      <TabView
-        navigationState={{
-          index,
-          routes: getOthersProfileRoute(),
-        }}
-        style={{backgroundColor: 'white'}}
-        onIndexChange={setIndex}
-        renderScene={SceneMap({
-          writtenReview: renderWrittenReview,
-          exhibition: renderExhibition,
-          artwork: renderArtwork,
-          review: renderReview,
-        })}
-        renderTabBar={props => (
-          <View
-            style={{
-              width: width - 40,
-              marginHorizontal: 20,
-            }}>
-            <TabBar
-              {...props}
-              {...tabBarProps}
-              renderIcon={props => getTabBarIcons(props)}
-              renderLabel={props => getTabBarLabels(props)}
-            />
-          </View>
-        )}
-      />
     </>
   );
-};
-
-const tabBarProps = {
-  activeColor: '#fa4d2c',
-  inactiveColor: '#c4c4c4',
-  bounces: false,
-  indicatorStyle: {
-    backgroundColor: '#fa4d2c',
-    borderColor: '#fa4d2c',
-    height: 1,
-  },
-  style: {
-    backgroundColor: 'white',
-    shadowOffset: {height: 0, width: 0},
-    shadowColor: 'transparent',
-    shadowOpacity: 0,
-    elevation: 0,
-    borderBottomColor: '#c4c4c4',
-    borderBottomWidth: 1,
-  },
 };
 
 export default OthersProfileScreen;

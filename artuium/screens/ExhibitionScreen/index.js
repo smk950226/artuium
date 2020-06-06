@@ -28,6 +28,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    getRecommendedExhibition: () => {
+      dispatch(exhibitionActions.getRecommendedExhibition());
+    },
     initialExhibition: () => {
       dispatch(exhibitionActions.initialExhibition());
     },

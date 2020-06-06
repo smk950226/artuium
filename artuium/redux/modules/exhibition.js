@@ -1,10 +1,18 @@
 import {FETCH_URL} from '../../config/urls';
 
 const SET_INITIAL_EXHIBITION = 'SET_INITIAL_EXHIBITION';
+const SET_RECOMMENDED_EXHIBITION = 'SET_RECOMMENDED_EXHIBITION';
 
 function setInitialExhibition(initial) {
   return {
     type: SET_INITIAL_EXHIBITION,
+    initial,
+  };
+}
+
+function setRecommendedExhibition(initial) {
+  return {
+    type: SET_RECOMMENDED_EXHIBITION,
     initial,
   };
 }
@@ -22,6 +30,22 @@ function initialExhibition() {
     })
       .then(response => response.json())
       .then(json => dispatch(setInitialExhibition(json)));
+  };
+}
+
+function getRecommendedExhibition() {
+  return (dispatch, getState) => {
+    const {
+      user: {token},
+    } = getState();
+    fetch(`${FETCH_URL}/api/exhibition/init/`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `JWT ${token}`,
+      },
+    })
+      .then(response => response.json())
+      .then(json => dispatch(setRecommendedExhibition(json)));
   };
 }
 
@@ -407,6 +431,8 @@ function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_INITIAL_EXHIBITION:
       return applySetInitialExhibition(state, action);
+    case SET_RECOMMENDED_EXHIBITION:
+      return applySetRecommendedExhibition(state, action);
     default:
       return state;
   }
@@ -418,14 +444,22 @@ function applySetInitialExhibition(state, action) {
     ...state,
     initialStatus: initial.status,
     newExhibitions: initial.new_exhibitions,
-    recommendedExhibitions: initial.new_exhibitions,
     hotExhibitions: initial.hot_exhibitions,
     pastExhibitions: initial.past_exhibitions,
   };
 }
 
+function applySetRecommendedExhibition(state, action) {
+  const {initial} = action;
+  return {
+    ...state,
+    recommendedExhibitions: initial.recommended_exhibitions,
+  };
+}
+
 const actionCreators = {
   initialExhibition,
+  getRecommendedExhibition,
   likeExhibition,
   unlikeExhibition,
   getExhibitionList,

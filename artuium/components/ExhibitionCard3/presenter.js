@@ -53,7 +53,7 @@ const ExhibitionCard3 = props => (
       <View
         style={[{position: 'absolute', bottom: 50, left: 30, marginRight: 30}]}>
         <Text style={[styles.fontMedium, styles.font14, styles.yellow]}>
-          {props.exhibition.name}
+          {props.exhibition.copyright}
         </Text>
         <Text style={[styles.fontBold, styles.font30, styles.white]}>
           {props.exhibition.name}
