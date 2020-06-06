@@ -11,11 +11,9 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
-import ExhibitionCard from '../../components/ExhibitionCard';
-import ArtuiumCard from '../../components/ArtuiumCard';
+import ExhibitionListCard from '../../components/ExhibitionListCard/ExhibitionListCard';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import Modal from 'react-native-modal';
-import ExhibitionListCard from '../../components/ExhibitionListCard/ExhibitionListCard';
 import {getGroupedExhibitionList} from '../../util';
 import {backArrow, filterDownArrow} from '../../assets/images';
 
@@ -351,54 +349,35 @@ const AllExhibitionScreen = props => {
           </View>
         ) : props.exhibitions && props.exhibitions.length > 0 ? (
           <FlatList
-            style={{paddingTop: 16}}
             data={getGroupedExhibitionList(props.exhibitions)}
-            renderItem={({item}) => (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  paddingHorizontal: 18,
-                  marginBottom: 21,
-                }}>
-                <ExhibitionListCard
-                  imageUrl={item[0].images[0].image}
-                  exhibitionTitle={item[0].name}
-                  galleryName={item[0].gallery.name}
-                  openDate={item[0].open_date}
-                  closeDate={item[0].close_date}
-                  onPress={() =>
-                    props.navigation.navigate('ExhibitionDetail', {
-                      exhibition: item[0],
-                      from: props.from,
-                    })
-                  }
-                />
-
-                {item[1] && (
-                  <ExhibitionListCard
-                    imageUrl={item[1].images[0].image}
-                    exhibitionTitle={item[1].name}
-                    galleryName={item[1].gallery.name}
-                    openDate={item[1].open_date}
-                    closeDate={item[1].close_date}
-                    onPress={() =>
-                      props.navigation.navigate('ExhibitionDetail', {
-                        exhibition: item[1],
-                        from: props.from,
-                      })
-                    }
-                  />
-                )}
-              </View>
-
-              // <ExhibitionCard
-              //   from={'AllExhibition'}
-              //   exhibition={item}
-              //   full={true}
-              //   navigation={props.navigation}
-              // />
-            )}
+            renderItem={({item}) => {
+              return (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 18,
+                  }}>
+                  {item.map(exhibition => {
+                    return (
+                      <ExhibitionListCard
+                        onPress={() =>
+                          props.navigation.navigate('ExhibitionDetail', {
+                            exhibition,
+                            from: 'Search',
+                          })
+                        }
+                        title={exhibition.name}
+                        place={exhibition.gallery.name}
+                        openDate={exhibition.open_date}
+                        closeDate={exhibition.close_date}
+                        imageSource={exhibition.images[0].image}
+                      />
+                    );
+                  })}
+                </View>
+              );
+            }}
             numColumns={1}
             keyExtractor={item => String(item.id)}
             refreshing={props.refreshing}
