@@ -110,8 +110,8 @@ const MyProfileScreen = props => {
     );
   };
 
-  useEffect(async () => {
-    await getProfile();
+  useEffect(() => {
+    getProfile();
     getReviewList(profile.id).then(res => {
       setMyReviewsNum(res.length);
     });
