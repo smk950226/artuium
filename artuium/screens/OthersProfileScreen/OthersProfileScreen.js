@@ -123,14 +123,14 @@ const OthersProfileScreen = props => {
 
   const onPressBackButton = () => props.navigation.pop();
 
-  const onPressFollowButton = async () => {
+  const onPressFollowButton = () => {
     setIsFollowing(!isFollowing);
     if (!isFollowing) {
-      await followUser(others.id);
+      followUser(others.id);
     } else {
-      await unfollowUser(others.id);
+      unfollowUser(others.id);
     }
-    await getProfile();
+    getProfile();
   };
 
   useEffect(() => {
