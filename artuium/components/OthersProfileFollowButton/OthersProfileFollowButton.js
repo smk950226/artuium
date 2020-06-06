@@ -22,7 +22,7 @@ const OthersProfileFollowButton = props => {
           fontFamily: 'Noto Sans KR',
           fontWeight: '500',
           fontSize: 14,
-          fontheight: 20,
+          lineHeight: 20,
           letterSpacing: -0.24,
           color: !isFollowing && isTabBarAtTop ? '#2e2e2e' : '#ffffff',
         }}>

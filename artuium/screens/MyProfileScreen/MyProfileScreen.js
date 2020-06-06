@@ -33,6 +33,7 @@ const MyProfileScreen = props => {
   const getReviewList = id => {
     return userActions.getReviewList(id)(dispatch, getState);
   };
+
   const getProfile = userId => {
     return userActions.getProfile(userId)(dispatch, getState);
   };

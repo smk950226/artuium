@@ -53,15 +53,15 @@ const OthersProfileScreen = props => {
 
   const onPressFollowButton = () => {
     setIsFollowing(!isFollowing);
-    if (isFollowing) {
+    if (!isFollowing) {
       followUser(others.id);
     } else {
       unfollowUser(others.id);
     }
+    getProfile();
   };
 
   useEffect(() => {
-    getProfile();
     getReviewList(others.id).then(res => {
       setWrittenReviewsNum(res.length);
     });
