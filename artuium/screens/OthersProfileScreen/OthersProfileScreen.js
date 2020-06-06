@@ -121,11 +121,12 @@ const OthersProfileScreen = props => {
 
   const onPressFollowButton = () => {
     setIsFollowing(!isFollowing);
-    if (isFollowing) {
+    if (!isFollowing) {
       followUser(others.id);
     } else {
       unfollowUser(others.id);
     }
+    getProfile();
   };
 
   useEffect(() => {
