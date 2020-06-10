@@ -21,6 +21,8 @@ import {
   emptyStar,
 } from '../../assets/images';
 import {deviceInfo} from '../../util';
+import moment from 'moment';
+import 'moment/locale/ko';
 
 const {width, height} = Dimensions.get('window');
 
@@ -228,10 +230,9 @@ class ArtuiumCard3 extends Component {
                 styles.font14,
                 styles.grayD1,
                 styles.ml5,
-              ]}>{`${review.time.slice(0, 4)}.${review.time.slice(
-              5,
-              7,
-            )}.${review.time.slice(8, 10)}`}</Text>
+              ]}>
+              {moment(review.time).fromNow()}
+            </Text>
 
             {/* <ModalDropdown
               ref={el => (this.dropdown = el)}

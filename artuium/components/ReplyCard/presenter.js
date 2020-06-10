@@ -10,6 +10,8 @@ import {
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import ModalDropdown from '../ModalDropdown';
+import moment from 'moment';
+import 'moment/locale/ko';
 
 const {width, height} = Dimensions.get('window');
 
@@ -129,15 +131,9 @@ class ReplyCard extends Component {
             <Text style={[styles.fontRegular, {fontSize: 13}]}>
               {reply.author.nickname}
             </Text>
-            <Text
-              style={[
-                styles.fontMedium,
-                styles.font14,
-                styles.grayBa,
-              ]}>{`${reply.time.slice(0, 4)}.${reply.time.slice(
-              5,
-              7,
-            )}.${reply.time.slice(8, 10)}`}</Text>
+            <Text style={[styles.fontMedium, styles.font14, styles.grayBa]}>
+              {moment(reply.time).fromNow()}
+            </Text>
           </View>
         </TouchableOpacity>
         <Text style={[styles.fontRegular, styles.font12, {marginTop: 10}]}>
