@@ -37,6 +37,8 @@ import {
   fullStar,
   emptyStar,
   backArrow,
+  chatNumIconBlack,
+  heartNumIconBlack,
 } from '../../assets/images';
 import {checkIsActiveExhibition, deviceInfo} from '../../util';
 
@@ -177,6 +179,7 @@ class ArtworkContentScreen extends React.Component {
         : 0,
       initialMode,
       keyboardHeight: 0,
+      isReviewEditingEnable: false,
     };
 
     this.keyboardDidShowListener = Keyboard.addListener(
@@ -1215,65 +1218,113 @@ class ArtworkContentScreen extends React.Component {
               <KeyboardAvoidingView
                 behavior={'position'}
                 contentContainerStyle={[
-                  styles.row,
                   styles.alignItemsCenter,
                   styles.justifyContentBetween,
-                  styles.px10,
                   styles.pt10,
                   styles.bgWhite,
                   styles.widthFull,
-                  styles.pb20,
                   {position: 'absolute', bottom: 0, zIndex: 9999},
                 ]}>
-                <View
-                  style={[
-                    styles.mr10,
-                    styles.borderRadius5,
-                    styles.bgGrayf0,
-                    styles.px10,
-                    styles.flex8,
-                  ]}>
-                  <TextInput
-                    ref={el => (this.btmTextInput = el)}
-                    style={[
-                      styles.font13,
-                      styles.widthFull,
-                      styles.px10,
-                      styles.py5,
-                      styles.widthFull,
-                      styles.black,
-                    ]}
-                    autoCapitalize={'none'}
-                    autoCorrect={false}
-                    value={contentReply}
-                    onChangeText={this.props.handleChangeContentReply}
-                    returnKeyType={'done'}
-                    placeholderTextColor={'#000000'}
-                  />
-                </View>
-                <TouchableWithoutFeedback
-                  onPress={
-                    selectedReplyId
-                      ? this.props.updateReply
-                      : this.props.createReview
-                  }>
+                {this.state.isReviewEditingEnable && (
                   <View
                     style={[
-                      styles.flex2,
-                      styles.bgGray33,
-                      styles.row,
-                      styles.alignItemsCenter,
-                      styles.justifyContentCenter,
-                      styles.py5,
-                      styles.borderRadius5,
-                      isSubmittingReply ? {opacity: 0.4} : null,
+                      {
+                        width: '100%',
+                        backgroundColor: '#f4f4f4',
+                        paddingHorizontal: 15,
+                        paddingTop: 10,
+                      },
                     ]}>
-                    <Text
-                      style={[styles.fontMedium, styles.font16, styles.white]}>
-                      {selectedReplyId ? '수정' : '등록'}
-                    </Text>
+                    <Text>{this.props.nickname}</Text>
+                    <TextInput
+                      ref={el => (this.btmTextInput = el)}
+                      style={[
+                        styles.font13,
+                        styles.black,
+                        styles.widthFull,
+                        styles.py5,
+                        styles.widthFull,
+                      ]}
+                      autoCapitalize={'none'}
+                      autoCorrect={false}
+                      value={contentReply}
+                      onChangeText={this.props.handleChangeContentReply}
+                      returnKeyType={'done'}
+                      placeholderTextColor={'#999999'}
+                      placeholder={
+                        '욕설이나 비방이 포함된 댓글은 삭제될 수 있습니다.'
+                      }
+                      onBlur={() =>
+                        this.setState({isReviewEditingEnable: false})
+                      }
+                      autoFocus={true}
+                      multiline={true}
+                      maxLength={100}
+                    />
                   </View>
-                </TouchableWithoutFeedback>
+                )}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    height: 74,
+                    backgroundColor: '#f4f4f4',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: this.state.isReviewEditingEnable
+                      ? 15
+                      : 26,
+                    paddingTop: 20,
+                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      height: 24,
+                      alignItems: 'center',
+                    }}>
+                    {this.state.isReviewEditingEnable ? (
+                      <Text style={{fontSize: 12, color: '#828282'}}>
+                        {contentReply.length}/100
+                      </Text>
+                    ) : (
+                      <>
+                        <Image
+                          source={chatNumIconBlack}
+                          style={{marginRight: 3}}
+                        />
+                        <Text style={{marginRight: 8, fontSize: 14}}>
+                          {abbreviateNumber(review_count)}
+                        </Text>
+                        <Image
+                          source={heartNumIconBlack}
+                          style={{marginRight: 3}}
+                        />
+                        <Text style={{marginRight: 8, fontSize: 14}}>
+                          {abbreviateNumber(like_count)}
+                        </Text>
+                      </>
+                    )}
+                  </View>
+                  <Text
+                    onPress={() => {
+                      if (this.state.isReviewEditingEnable) {
+                        selectedReplyId
+                          ? this.props.updateReply()
+                          : this.props.createReview();
+                      } else {
+                        this.setState({isReviewEditingEnable: true});
+                      }
+                    }}
+                    style={[
+                      styles.fontMedium,
+                      {color: '#2e2e2e', fontSize: 15},
+                    ]}>
+                    {!this.state.isReviewEditingEnable
+                      ? '댓글 달기'
+                      : selectedReplyId
+                      ? '수정'
+                      : '등록'}
+                  </Text>
+                </View>
               </KeyboardAvoidingView>
             ) : (
               <View

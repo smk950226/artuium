@@ -7,11 +7,15 @@ import {actionCreators as reviewActions} from '../../redux/modules/review';
 const mapStateToProps = (state, ownProps) => {
   const {
     review: {blockReviewList, blockUserList, blockReplyList},
+    user: {
+      profile: {nickname},
+    },
   } = state;
   return {
     blockReviewList,
     blockUserList,
     blockReplyList,
+    nickname,
   };
 };
 

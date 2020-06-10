@@ -1404,17 +1404,20 @@ class ExhibitionContentScreen extends React.Component {
               {this.state.isReviewEditingEnable && (
                 <View
                   style={[
-                    styles.px10,
-                    {width: '100%', backgroundColor: '#f4f4f4'},
+                    {
+                      width: '100%',
+                      backgroundColor: '#f4f4f4',
+                      paddingHorizontal: 15,
+                      paddingTop: 10,
+                    },
                   ]}>
-                  <Text />
+                  <Text>{this.props.nickname}</Text>
                   <TextInput
                     ref={el => (this.btmTextInput = el)}
                     style={[
                       styles.font13,
                       styles.black,
                       styles.widthFull,
-                      styles.px10,
                       styles.py5,
                       styles.widthFull,
                     ]}
