@@ -6,6 +6,9 @@ export const deviceInfo = {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
+  isIOSX:
+    Dimensions.get('window').height === 812 ||
+    Dimensions.get('window').height === 896,
 };
 
 export const getImageUriFromReview = review => {
