@@ -14,6 +14,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Keyboard,
+  TouchableOpacity,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
@@ -31,6 +32,11 @@ import {
   screenEscapeIcon,
   chatNumIconGrey,
   heartNumIconGrey,
+  writeReviewIcon,
+  halfStar,
+  fullStar,
+  emptyStar,
+  backArrow,
 } from '../../assets/images';
 import {checkIsActiveExhibition, deviceInfo} from '../../util';
 
@@ -258,6 +264,7 @@ class ArtworkContentScreen extends React.Component {
       expression,
       rating,
       content,
+      title,
       isSubmittingReview,
       total_rate,
       showingReview,
@@ -303,7 +310,10 @@ class ArtworkContentScreen extends React.Component {
           </TouchableWithoutFeedback>
 
           <ScrollView
-            style={[styles.flex1]}
+            contentContainerStyle={
+              mode === 'create' ? {flex: 1} : {alignItems: 'center'}
+            }
+            style={[{width: deviceInfo.size.width}]}
             bounces={false}
             showsVerticalScrollIndicator={false}
             ref={'scrollView'}>
@@ -316,12 +326,12 @@ class ArtworkContentScreen extends React.Component {
                 {height: height * 0.25},
               ]}
             />
-            <View style={[styles.bgBlack, styles.pb10, styles.heightFull]}>
+            <View style={[styles.pb10, {flex: 1, width: '100%'}]}>
               <View
                 style={[
                   styles.bgWhite,
                   styles.widthFull,
-                  {paddingBottom: 40, minHeight: '100%'},
+                  {paddingBottom: 40, minHeight: '100%', alignItems: 'center'},
                 ]}>
                 <View style={{marginTop: 39, alignItems: 'center'}}>
                   <Text
@@ -432,7 +442,7 @@ class ArtworkContentScreen extends React.Component {
                     </View>
                   </TouchableWithoutFeedback>
                 </View>
-                <View style={[styles.alignItemsCenter]}>
+                <View style={[{flex: 1}]}>
                   {this.state.index === 0 ? (
                     <View style={{width: width - 80, minHeight: 300}}>
                       <View style={[{marginTop: 25}]}>
@@ -440,7 +450,7 @@ class ArtworkContentScreen extends React.Component {
                       </View>
                     </View>
                   ) : (
-                    <View style={{width: width - 20}}>
+                    <View style={{flex: 1}}>
                       {mode === 'list' && (
                         <>
                           <View
@@ -703,14 +713,22 @@ class ArtworkContentScreen extends React.Component {
                                   onPress={() =>
                                     this.props.handleChangeMode('create')
                                   }>
-                                  <View style={[styles.center]}>
+                                  <View
+                                    style={{
+                                      width: width - 36,
+                                      paddingVertical: 20,
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      backgroundColor: '#f1f1f1',
+                                      borderRadius: 5,
+                                    }}>
                                     <Image
-                                      source={require('../../assets/images/review_hide.png')}
+                                      source={writeReviewIcon}
                                       style={[
                                         {
-                                          width: 60,
-                                          height: 60,
-                                          borderRadius: 30,
+                                          width: 32,
+                                          height: 32,
+                                          borderRadius: 16,
                                         },
                                         styles.mb10,
                                       ]}
@@ -719,10 +737,10 @@ class ArtworkContentScreen extends React.Component {
                                       style={[
                                         styles.textCenter,
                                         styles.fontMedium,
-                                        styles.font12,
-                                        {color: '#382a2a'},
+                                        styles.font13,
+                                        {color: '#383838', opacity: 0.5},
                                       ]}>
-                                      리뷰를 작성하면{'\n'}통계를 볼 수
+                                      감상을 작성하면{'\n'}작품 평점을 알 수
                                       있습니다.
                                     </Text>
                                   </View>
@@ -733,11 +751,19 @@ class ArtworkContentScreen extends React.Component {
                                 onPress={() =>
                                   this.props.handleChangeMode('create')
                                 }>
-                                <View style={[styles.center]}>
+                                <View
+                                  style={{
+                                    width: width - 36,
+                                    paddingVertical: 20,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    backgroundColor: '#f1f1f1',
+                                    borderRadius: 5,
+                                  }}>
                                   <Image
-                                    source={require('../../assets/images/review_hide.png')}
+                                    source={writeReviewIcon}
                                     style={[
-                                      {width: 60, height: 60, borderRadius: 30},
+                                      {width: 32, height: 32, borderRadius: 16},
                                       styles.mb10,
                                     ]}
                                   />
@@ -745,10 +771,11 @@ class ArtworkContentScreen extends React.Component {
                                     style={[
                                       styles.textCenter,
                                       styles.fontMedium,
-                                      styles.font12,
-                                      {color: '#382a2a'},
+                                      styles.font13,
+                                      {color: '#383838', opacity: 0.5},
                                     ]}>
-                                    리뷰를 작성하면{'\n'}통계를 볼 수 있습니다.
+                                    감상을 작성하면{'\n'}작품 평점을 알 수
+                                    있습니다.
                                   </Text>
                                 </View>
                               </TouchableWithoutFeedback>
@@ -760,8 +787,8 @@ class ArtworkContentScreen extends React.Component {
                               styles.row,
                               styles.alignItemsCenter,
                               styles.justifyContentBetween,
-                              styles.px30,
                               styles.pt20,
+                              {paddingHorizontal: 25},
                             ]}>
                             <Text
                               style={[
@@ -769,7 +796,7 @@ class ArtworkContentScreen extends React.Component {
                                 styles.fontBold,
                                 {color: '#382a2a'},
                               ]}>
-                              유저 감상
+                              감상
                             </Text>
                             <TouchableWithoutFeedback
                               onPress={this.props.openFilterModal}>
@@ -808,18 +835,29 @@ class ArtworkContentScreen extends React.Component {
                                   return null;
                                 } else {
                                   return (
-                                    <ArtuiumCard3
-                                      addBlockReview={this.props.addBlockReview}
-                                      addBlockUser={this.props.addBlockUser}
-                                      deleteReview={this.props.deleteReview}
-                                      goUpdate={this._goUpdate}
-                                      from={from}
-                                      review={item}
-                                      navigation={this.props.navigation}
-                                      handleChangeMode={
-                                        this.props.handleChangeMode
-                                      }
-                                    />
+                                    <>
+                                      <ArtuiumCard3
+                                        addBlockReview={
+                                          this.props.addBlockReview
+                                        }
+                                        addBlockUser={this.props.addBlockUser}
+                                        deleteReview={this.props.deleteReview}
+                                        goUpdate={this._goUpdate}
+                                        from={from}
+                                        review={item}
+                                        navigation={this.props.navigation}
+                                        handleChangeMode={
+                                          this.props.handleChangeMode
+                                        }
+                                      />
+                                      <View
+                                        style={{
+                                          width: deviceInfo.size.width,
+                                          height: 1,
+                                          backgroundColor: '#e3e3e3',
+                                        }}
+                                      />
+                                    </>
                                   );
                                 }
                               }}
@@ -881,22 +919,19 @@ class ArtworkContentScreen extends React.Component {
                                 onPress={() =>
                                   this.props.handleChangeMode('list')
                                 }>
-                                <View style={[styles.ml25, {width: 40}]}>
-                                  <Image
-                                    style={[{width: 14, height: 26}]}
-                                    source={require('../../assets/images/icon_back.png')}
-                                  />
-                                </View>
+                                <Image
+                                  source={backArrow}
+                                  style={{marginTop: 22, marginLeft: 17}}
+                                />
                               </TouchableWithoutFeedback>
                               <View
                                 style={[
                                   styles.alignItemsCenter,
                                   styles.justifyContentCenter,
                                   styles.alignSelfCenter,
-                                  styles.mt15,
                                   styles.borderBtmGrayE8,
-                                  styles.pb15,
                                   styles.widthFull,
+                                  {marginTop: 19, paddingBottom: 12},
                                 ]}>
                                 <Stars
                                   half={true}
@@ -904,180 +939,104 @@ class ArtworkContentScreen extends React.Component {
                                   update={val =>
                                     this.props.handleChangeRating(val)
                                   }
-                                  spacing={4}
-                                  starSize={34}
+                                  spacing={0}
+                                  starSize={30}
                                   count={5}
-                                  emptyStar={require('../../assets/images/icon_star_disabled.png')}
-                                  fullStar={require('../../assets/images/icon_star.png')}
-                                  halfStar={require('../../assets/images/icon_star_half.png')}
+                                  emptyStar={emptyStar}
+                                  fullStar={fullStar}
+                                  halfStar={halfStar}
                                 />
                               </View>
                             </View>
                           </TouchableWithoutFeedback>
-                          <TouchableWithoutFeedback
-                            onPress={() =>
-                              this.props.handleChangeExpression('')
-                            }>
-                            <View
-                              style={[
-                                styles.row,
-                                styles.alignItemsCenter,
-                                styles.justifyContentCenter,
-                                styles.alignSelfCenter,
-                                styles.mt10,
-                                styles.borderBtmGrayE8,
-                                styles.pb15,
-                                styles.widthFull,
-                              ]}>
-                              <TouchableWithoutFeedback
-                                onPress={() =>
-                                  this.props.handleChangeExpression('thumb')
-                                }>
-                                <Image
-                                  source={require('../../assets/images/icon_thumb.png')}
-                                  style={[
-                                    styles.emojiXl,
-                                    styles.mx5,
-                                    expression === 'thumb'
-                                      ? null
-                                      : {opacity: 0.3},
-                                  ]}
-                                  resizeMode={'cover'}
-                                />
-                              </TouchableWithoutFeedback>
-                              <TouchableWithoutFeedback
-                                onPress={() =>
-                                  this.props.handleChangeExpression('sad')
-                                }>
-                                <Image
-                                  source={require('../../assets/images/icon_sad.png')}
-                                  style={[
-                                    styles.emojiXl,
-                                    styles.mx5,
-                                    expression === 'sad'
-                                      ? null
-                                      : {opacity: 0.3},
-                                  ]}
-                                  resizeMode={'cover'}
-                                />
-                              </TouchableWithoutFeedback>
-                              <TouchableWithoutFeedback
-                                onPress={() =>
-                                  this.props.handleChangeExpression('soso')
-                                }>
-                                <Image
-                                  source={require('../../assets/images/icon_soso.png')}
-                                  style={[
-                                    styles.emojiXl,
-                                    styles.mx5,
-                                    expression === 'soso'
-                                      ? null
-                                      : {opacity: 0.3},
-                                  ]}
-                                  resizeMode={'cover'}
-                                />
-                              </TouchableWithoutFeedback>
-                              <TouchableWithoutFeedback
-                                onPress={() =>
-                                  this.props.handleChangeExpression('surprise')
-                                }>
-                                <Image
-                                  source={require('../../assets/images/icon_surprise.png')}
-                                  style={[
-                                    styles.emojiXl,
-                                    styles.mx5,
-                                    expression === 'surprise'
-                                      ? null
-                                      : {opacity: 0.3},
-                                  ]}
-                                  resizeMode={'cover'}
-                                />
-                              </TouchableWithoutFeedback>
-                              <TouchableWithoutFeedback
-                                onPress={() =>
-                                  this.props.handleChangeExpression('good')
-                                }>
-                                <Image
-                                  source={require('../../assets/images/icon_good.png')}
-                                  style={[
-                                    styles.emojiXl,
-                                    styles.mx5,
-                                    expression === 'good'
-                                      ? null
-                                      : {opacity: 0.3},
-                                  ]}
-                                  resizeMode={'cover'}
-                                />
-                              </TouchableWithoutFeedback>
-                            </View>
-                          </TouchableWithoutFeedback>
                           <View
-                            style={[
-                              styles.widthFull,
-                              {
-                                height: 300,
-                                borderWidth: 1,
-                                borderColor: '#e8e8e8',
-                              },
-                            ]}>
+                            style={{
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              height: 73,
+                            }}>
+                            <TextInput
+                              placeholder={'제목을 입력하세요'}
+                              style={{
+                                width: width,
+                                textAlign: 'center',
+                                fontSize: 18,
+                                fontFamily: 'NotoSansKR-Bold',
+                                marginBottom: 4,
+                              }}
+                              placeholderTextColor={'#cdcdcd'}
+                              onChangeText={this.props.handleChangeTitle}
+                              value={title}
+                              maxLength={15}
+                            />
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: 'NotoSansKR-Bold',
+                                color: '#cdcdcd',
+                              }}>
+                              {title.length}/15
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              flex: 1,
+                              borderTopWidth: 1,
+                              borderColor: '#e8e8e8',
+                              position: 'relative',
+                            }}>
                             <TextInput
                               style={[
                                 styles.font15,
                                 styles.widthFull,
                                 styles.px25,
-                                styles.py10,
-                                styles.widthFull,
                                 styles.black,
-                                {height: 300},
+                                {paddingTop: 16},
                               ]}
-                              placeholder={'내용을 입력하세요.'}
+                              placeholder={'당신만의 감상을 입력하세요.'}
                               autoCapitalize={'none'}
                               autoCorrect={false}
                               value={content}
                               onChangeText={this.props.handleChangeContent}
                               returnKeyType={'done'}
-                              placeholderTextColor={'#000000'}
+                              placeholderTextColor={'#cdcdcd'}
                               multiline={true}
                               textAlignVertical={'top'}
                             />
-                          </View>
-                          <View
-                            style={[
-                              styles.mt30,
-                              styles.alignItemsCenter,
-                              {
-                                marginBottom:
-                                  Platform.OS === 'ios'
-                                    ? 70 + keyboardHeight
-                                    : 70,
-                              },
-                            ]}>
-                            <TouchableWithoutFeedback
+                            <TouchableOpacity
+                              disabled={!content || !title}
                               onPress={
                                 initialMode === 'create'
                                   ? this.props.update
                                   : this.props.submit
-                              }>
-                              <View
+                              }
+                              style={[
+                                isSubmittingReview ? styles.opacity07 : null,
+                                {
+                                  borderRadius: 5,
+                                  position: 'absolute',
+                                  bottom: 50,
+                                  alignSelf: 'center',
+                                  width: width - 80,
+                                  height: 38,
+                                  backgroundColor:
+                                    !content || !title ? '#c4c4c4' : '#FD4C1E',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  zIndex: 1,
+                                },
+                              ]}>
+                              <Text
                                 style={[
-                                  styles.bgBlack,
-                                  styles.borderRadius5,
-                                  styles.px30,
-                                  styles.py5,
-                                  isSubmittingReview ? styles.opacity07 : null,
+                                  styles.fontMedium,
+                                  styles.font16,
+                                  styles.white,
                                 ]}>
-                                <Text
-                                  style={[
-                                    styles.fontMedium,
-                                    styles.font16,
-                                    styles.white,
-                                  ]}>
-                                  {initialMode === 'create'
-                                    ? `수정하기`
-                                    : `등록하기`}
-                                </Text>
-                              </View>
-                            </TouchableWithoutFeedback>
+                                {initialMode === 'create'
+                                  ? `수정하기`
+                                  : `감상 등록`}
+                              </Text>
+                            </TouchableOpacity>
                           </View>
                         </Fragment>
                       )}
