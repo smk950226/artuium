@@ -12,9 +12,7 @@ import {
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
-import ExhibitionSearchCard from '../../components/ExhibitionSearchCard/ExhibitionSearchCard';
-import moment from 'moment';
-import 'moment/locale/ko';
+import ExhibitionListCard from '../../components/ExhibitionListCard/ExhibitionListCard';
 
 const statusBarHeight = getStatusBarHeight();
 
@@ -79,17 +77,8 @@ const SearchScreen = props => (
           ...searchScreenStyles.resultContainer,
         }}>
         {props.exhibitions.map((exhibition, index) => {
-          const nowOpen = moment(new Date()).isBefore(exhibition.open_date)
-            ? '예정'
-            : moment(new Date()).isBefore(exhibition.close_date)
-            ? '진행'
-            : '종료';
-          const date =
-            exhibition.open_date.split('-').join('.') +
-            '-' +
-            exhibition.close_date.split('-').join('.');
           return (
-            <ExhibitionSearchCard
+            <ExhibitionListCard
               onPress={() =>
                 props.navigation.navigate('ExhibitionDetail', {
                   exhibition,
@@ -98,8 +87,8 @@ const SearchScreen = props => (
               }
               title={exhibition.name}
               place={exhibition.gallery.name}
-              date={date}
-              nowOpen={nowOpen}
+              openDate={exhibition.open_date}
+              closeDate={exhibition.close_date}
               imageSource={exhibition.images[0].image}
             />
           );
