@@ -6,12 +6,23 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../../styles';
 import StarRating from 'react-native-star-rating';
 import stripHtml from 'string-strip-html';
 import ModalDropdown from '../ModalDropdown';
+import {
+  chatNumIconGrey,
+  heartNumIconGrey,
+  fullStar,
+  halfStar,
+  emptyStar,
+} from '../../assets/images';
+import {deviceInfo} from '../../util';
+import moment from 'moment';
+import 'moment/locale/ko';
 
 const {width, height} = Dimensions.get('window');
 
@@ -101,212 +112,147 @@ class ArtuiumCard3 extends Component {
       return null;
     } else {
       return (
-        <TouchableWithoutFeedback
-          onPress={() => this.props.handleChangeMode('review', review)}>
-          <View
-            style={
-              my
-                ? [{width: width - 20, height: 160}, styles.px15, styles.center]
-                : null
-            }>
-            <View
-              style={[
-                styles.py20,
-                styles.px20,
-                styles.mx10,
-                styles.justifyContentBetween,
-                my
-                  ? [
-                      {
-                        borderRadius: 5,
-                        backgroundColor: '#f2f2f2',
-                        height: '100%',
-                      },
-                      styles.exMenuShadow,
-                      styles.widthFull,
-                    ]
-                  : {borderBottomColor: '#e6e6e6', borderBottomWidth: 1},
-              ]}>
-              <View>
-                <View style={[styles.row, styles.justifyContentBetween]}>
-                  <TouchableWithoutFeedback
-                    onPress={this._handleGoOthersProfile}>
-                    <View style={[styles.row]}>
-                      <View>
-                        {review.author.profile_image ? (
-                          <Image
-                            source={{uri: review.author.profile_image}}
-                            style={[styles.profileImage40]}
-                            resizeMode={'cover'}
-                          />
-                        ) : (
-                          <Image
-                            source={require('../../assets/images/empty_profile.png')}
-                            style={[styles.profileImage40]}
-                          />
-                        )}
-                        {review.expression === 'good' && (
-                          <Image
-                            source={require('../../assets/images/icon_good.png')}
-                            style={[
-                              styles.emoji,
-                              {position: 'absolute', top: 26, left: 24},
-                            ]}
-                            resizeMode={'cover'}
-                          />
-                        )}
-                        {review.expression === 'soso' && (
-                          <Image
-                            source={require('../../assets/images/icon_soso.png')}
-                            style={[
-                              styles.emoji,
-                              {position: 'absolute', top: 26, left: 24},
-                            ]}
-                            resizeMode={'cover'}
-                          />
-                        )}
-                        {review.expression === 'sad' && (
-                          <Image
-                            source={require('../../assets/images/icon_sad.png')}
-                            style={[
-                              styles.emoji,
-                              {position: 'absolute', top: 26, left: 24},
-                            ]}
-                            resizeMode={'cover'}
-                          />
-                        )}
-                        {review.expression === 'surprise' && (
-                          <Image
-                            source={require('../../assets/images/icon_surprise.png')}
-                            style={[
-                              styles.emoji,
-                              {position: 'absolute', top: 26, left: 24},
-                            ]}
-                            resizeMode={'cover'}
-                          />
-                        )}
-                        {review.expression === 'thumb' && (
-                          <Image
-                            source={require('../../assets/images/icon_thumb.png')}
-                            style={[
-                              styles.emoji,
-                              {position: 'absolute', top: 26, left: 24},
-                            ]}
-                            resizeMode={'cover'}
-                          />
-                        )}
-                      </View>
-                      <View style={[styles.ml10]}>
-                        <View style={[styles.row]}>
-                          <StarRating
-                            disabled={true}
-                            maxStars={5}
-                            rating={review.rate}
-                            emptyStar={require('../../assets/images/icon_star_disabled.png')}
-                            fullStar={require('../../assets/images/icon_star.png')}
-                            halfStar={require('../../assets/images/icon_star_half.png')}
-                            iconSet={'Ionicons'}
-                            fullStarColor={'#FFBD07'}
-                            starSize={14}
-                          />
-                        </View>
-                        <View style={[styles.row]}>
-                          <Text style={[styles.fontBold, styles.font14]}>
-                            {review.author.nickname}
-                          </Text>
-                          <Text
-                            style={[
-                              styles.fontMedium,
-                              styles.font14,
-                              styles.grayD1,
-                              styles.ml5,
-                            ]}>{`${review.time.slice(0, 4)}.${review.time.slice(
-                            5,
-                            7,
-                          )}.${review.time.slice(8, 10)}`}</Text>
-                        </View>
-                      </View>
-                    </View>
-                  </TouchableWithoutFeedback>
-                </View>
-                <View style={[styles.mt10]}>
-                  <Text
-                    style={[
-                      styles.fontRegular,
-                      styles.font13,
-                      styles.lineHeight20,
-                    ]}
-                    numberOfLines={4}
-                    ellipsizeMode={'tail'}>
-                    {stripHtml(review.content)}
-                  </Text>
-                </View>
-              </View>
-              <View
-                style={[
-                  styles.row,
-                  styles.alignItemsCenter,
-                  styles.justifyContentEnd,
-                ]}>
-                <Image
-                  source={require('../../assets/images/icon_comment.png')}
-                  style={[styles.icon15]}
-                />
-                <Text
-                  style={[
-                    styles.fontMedium,
-                    styles.font9,
-                    styles.grayD1,
-                    styles.ml5,
-                  ]}>
-                  {abbreviateNumber(reply_count)}
-                </Text>
-                <TouchableWithoutFeedback
-                  onPress={is_liked ? this.props.unlike : this.props.like}>
-                  <View style={[styles.row, styles.alignItemsCenter]}>
-                    {is_liked ? (
-                      <Image
-                        source={require('../../assets/images/icon_like_active.png')}
-                        style={[styles.icon15, styles.ml10]}
-                      />
-                    ) : (
-                      <Image
-                        source={require('../../assets/images/icon_like.png')}
-                        style={[styles.icon15, styles.ml10]}
-                      />
-                    )}
-                    <Text
-                      style={[
-                        styles.fontMedium,
-                        styles.font9,
-                        styles.grayD1,
-                        styles.ml5,
-                      ]}>
-                      {abbreviateNumber(like_count)}
+        <TouchableOpacity
+          onPress={() => this.props.handleChangeMode('review', review)}
+          style={{
+            marginTop: my ? 15 : 0,
+            paddingTop: 18,
+            paddingBottom: my ? 15 : 24,
+            paddingHorizontal: my ? 15 : 7,
+            width: deviceInfo.size.width - 36,
+            alignSelf: 'center',
+            backgroundColor: my ? '#f1f1f1' : '#fff',
+            borderRadius: my ? 5 : 0,
+            overflow: 'hidden',
+          }}>
+          {review.title && (
+            <Text style={{fontSize: my ? 15 : 18, marginBottom: 25}}>
+              {review.title}
+            </Text>
+          )}
+
+          <View style={[styles.row, styles.justifyContentBetween]}>
+            <TouchableWithoutFeedback onPress={this._handleGoOthersProfile}>
+              <View style={[styles.row]}>
+                {review.author.profile_image ? (
+                  <Image
+                    source={{uri: review.author.profile_image}}
+                    style={{width: 36, height: 36, borderRadius: 18}}
+                    resizeMode={'cover'}
+                  />
+                ) : (
+                  <Image
+                    source={require('../../assets/images/empty_profile.png')}
+                    style={{width: 36, height: 36, borderRadius: 18}}
+                  />
+                )}
+                <View style={{marginLeft: 5}}>
+                  <View style={[styles.row]}>
+                    <Text style={[styles.fontRegular, {fontSize: 13}]}>
+                      {review.author.nickname}
                     </Text>
                   </View>
-                </TouchableWithoutFeedback>
-                <ModalDropdown
-                  ref={el => (this.dropdown = el)}
-                  options={
-                    is_me ? ['수정하기', '삭제하기'] : ['신고하기', '숨기기']
-                  }
-                  showsVerticalScrollIndicator={false}
-                  dropdownStyle={{height: Platform.OS === 'ios' ? 70 : 90}}
-                  dropdownTextStyle={{
-                    fontSize: 15,
-                    height: Platform.OS === 'ios' ? 35 : 45,
-                  }}
-                  onSelect={this.props.handleOption}>
-                  <Image
-                    source={require('../../assets/images/icon_dotted.png')}
-                    style={[styles.icon15, styles.ml10]}
-                  />
-                </ModalDropdown>
+                  <View style={[styles.row]}>
+                    <StarRating
+                      disabled={true}
+                      maxStars={5}
+                      rating={review.rate}
+                      emptyStar={emptyStar}
+                      fullStar={fullStar}
+                      halfStar={halfStar}
+                      iconSet={'Ionicons'}
+                      fullStarColor={'#FFBD07'}
+                      starSize={15}
+                    />
+                  </View>
+                </View>
               </View>
-            </View>
+            </TouchableWithoutFeedback>
           </View>
-        </TouchableWithoutFeedback>
+          <View style={{marginTop: 14}}>
+            <Text
+              style={[
+                styles.fontRegular,
+                styles.font13,
+                styles.lineHeight20,
+                {color: '#5f5f5f'},
+              ]}
+              numberOfLines={4}
+              ellipsizeMode={'tail'}>
+              {stripHtml(review.content)}
+            </Text>
+          </View>
+
+          <View
+            style={[
+              styles.row,
+              styles.alignItemsCenter,
+              {
+                justifyContent: 'space-between',
+                marginTop: 17,
+              },
+            ]}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Image source={chatNumIconGrey} style={{width: 18, height: 18}} />
+              <Text
+                style={[
+                  styles.fontMedium,
+                  styles.grayD1,
+                  {fontSize: 13, marginLeft: 3},
+                ]}>
+                {abbreviateNumber(reply_count)}
+              </Text>
+              <TouchableWithoutFeedback
+                onPress={is_liked ? this.props.unlike : this.props.like}>
+                <View style={[styles.row, styles.alignItemsCenter]}>
+                  <Image
+                    source={
+                      is_liked
+                        ? require('../../assets/images/icon_like_active.png')
+                        : heartNumIconGrey
+                    }
+                    style={[styles.ml10, {width: 18, height: 18}]}
+                  />
+                  <Text
+                    style={[
+                      styles.fontMedium,
+                      styles.grayD1,
+                      {fontSize: 13, marginLeft: 3},
+                    ]}>
+                    {abbreviateNumber(like_count)}
+                  </Text>
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+            <Text
+              style={[
+                styles.fontMedium,
+                styles.font14,
+                styles.grayD1,
+                styles.ml5,
+              ]}>
+              {moment(review.time).fromNow()}
+            </Text>
+
+            {/* <ModalDropdown
+              ref={el => (this.dropdown = el)}
+              options={
+                is_me ? ['수정하기', '삭제하기'] : ['신고하기', '숨기기']
+              }
+              showsVerticalScrollIndicator={false}
+              dropdownStyle={{height: Platform.OS === 'ios' ? 70 : 90}}
+              dropdownTextStyle={{
+                fontSize: 15,
+                height: Platform.OS === 'ios' ? 35 : 45,
+              }}
+              onSelect={this.props.handleOption}>
+              <Image
+                source={require('../../assets/images/icon_dotted.png')}
+                style={[styles.icon15, styles.ml10]}
+              />
+            </ModalDropdown> */}
+          </View>
+        </TouchableOpacity>
       );
     }
   }

@@ -20,3 +20,9 @@ export const filterDownArrow = require('./filterDownArrow.png');
 export const settingIcon = require('./settingIcon.png');
 export const cameraIcon = require('./cameraIcon.png');
 export const backArrowWhite = require('./backArrowWhite.png');
+
+export const screenEscapeIcon = require('./screenEscapeIcon.png');
+export const writeReviewIcon = require('./writeReviewIcon.png');
+export const reviewSortDropDown = require('./reviewSortDropDown.png');
+export const chatNumIconBlack = require('./chatNumIconBlack.png');
+export const heartNumIconBlack = require('./heartNumIconBlack.png');

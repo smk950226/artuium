@@ -31,7 +31,10 @@ const PopUpModal = ({navigation}) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.pop()}>
+          onPress={() => {
+            AsyncStorage.setItem(`popup-close`, 'close');
+            navigation.pop();
+          }}>
           <Text style={styles.buttonTextBold}>닫기</Text>
         </TouchableOpacity>
       </View>
