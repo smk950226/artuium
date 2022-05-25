@@ -22,5 +22,5 @@ awsebcli==3.16.0
 requests==2.20.1
 django-ckeditor==5.8.0
 fcm-django==0.3.3
-pyjwt==1.7.1
+pyjwt==2.4.0
 cryptography==2.8
